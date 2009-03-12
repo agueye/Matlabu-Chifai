@@ -1,0 +1,13 @@
+zK7Hy9gu6Vm8
+svn checkout https://matlabulchifai.googlecode.com/svn/trunk/ matlabulchifai --username mohammedaatifali --password zK7Hy9gu6Vm8
+
+
+svn import home/aatif786/Desktop/rails_apps/matlabul --username mohammedaatifali --password zK7Hy9gu6Vm8
+
+
+svn import matlabul https://matlabulchifai.googlecode.com/svn/trunk -m 'initial import' --username mohammedaatifali --password zK7Hy9gu6Vm8
+
+svn commit -m "inital commit of skeleton along with patient migration with a migrate" --username mohammedaatifali --password zK7Hy9gu6Vm8
+
+
+
