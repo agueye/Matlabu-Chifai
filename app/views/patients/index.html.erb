@@ -4,8 +4,6 @@
   <tr>
     <th>First name</th>
     <th>Middle name</th>
-    <th>First name</th>
-    <th>Middle name</th>
     <th>Last name</th>
     <th>Arrival date</th>
     <th>Date of birth</th>
@@ -27,8 +25,6 @@
 
 <% for patient in @patients %>
   <tr>
-    <td><%=h patient.first_name %></td>
-    <td><%=h patient.middle_name %></td>
     <td><%=h patient.first_name %></td>
     <td><%=h patient.middle_name %></td>
     <td><%=h patient.last_name %></td>
