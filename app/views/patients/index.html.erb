@@ -1,6 +1,12 @@
-<h1>Listing patients</h1>
-<%= link_to 'New patient', new_patient_path %>
-<br />
+<h1>Listing Patients</h1>
+
+<% form_tag (search_path,:method => "get") do %>
+  Search: <%= text_field :search, :query %> <%= submit_tag 'Search' %>
+<% end %> 
+
+<h3><%= link_to 'Show All', patients_path %></h3>
+
+
 <table>
   <tr>
     <th>First name</th>
@@ -23,5 +29,6 @@
 </table>
 
 <br />
+<%= link_to 'New patient', new_patient_path %>
 
 
