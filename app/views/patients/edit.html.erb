@@ -1,0 +1,88 @@
+<h1>Editing patient</h1>
+
+<% form_for(@patient) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :first_name %><br />
+    <%= f.text_field :first_name %>
+  </p>
+  <p>
+    <%= f.label :middle_name %><br />
+    <%= f.text_field :middle_name %>
+  </p>
+  <p>
+    <%= f.label :last_name %><br />
+    <%= f.text_field :last_name %>
+  </p>
+  <p>
+    <%= f.label :arrival_date %><br />
+    <%= f.date_select :arrival_date %>
+  </p>
+  <p>
+    <%= f.label :date_of_birth %><br />
+    <%= f.date_select :date_of_birth %>
+  </p>
+  <p>
+    <%= f.label :gender %><br />
+    <%= f.text_field :gender %>
+  </p>
+  <p>
+    <%= f.label :address %><br />
+    <%= f.text_field :address %>
+  </p>
+  <p>
+    <%= f.label :city %><br />
+    <%= f.text_field :city %>
+  </p>
+  <p>
+    <%= f.label :state %><br />
+    <%= f.text_field :state %>
+  </p>
+  <p>
+    <%= f.label :zip %><br />
+    <%= f.text_field :zip %>
+  </p>
+  <p>
+    <%= f.label :father_first_name %><br />
+    <%= f.text_field :father_first_name %>
+  </p>
+  <p>
+    <%= f.label :father_last_name %><br />
+    <%= f.text_field :father_last_name %>
+  </p>
+  <p>
+    <%= f.label :mother_first_name %><br />
+    <%= f.text_field :mother_first_name %>
+  </p>
+  <p>
+    <%= f.label :mother_last_name %><br />
+    <%= f.text_field :mother_last_name %>
+  </p>
+  <p>
+    <%= f.label :telephone %><br />
+    <%= f.text_field :telephone %>
+  </p>
+  <p>
+    <%= f.label :emergency_contact_name %><br />
+    <%= f.text_field :emergency_contact_name %>
+  </p>
+  <p>
+    <%= f.label :emergency_contact_relationship %><br />
+    <%= f.text_field :emergency_contact_relationship %>
+  </p>
+  <p>
+    <%= f.label :emergency_contact_number %><br />
+    <%= f.text_field :emergency_contact_number %>
+  </p>
+  <p>
+    <%= f.label :patient_remarks %><br />
+    <%= f.text_field :patient_remarks %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @patient %> |
+<%= link_to 'Back', patients_path %>

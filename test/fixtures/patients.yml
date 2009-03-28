@@ -1,0 +1,23 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+neil:
+  first_name: neil
+  middle_name: a
+  last_name: bell
+  arrival_date: 2009-03-27
+  date_of_birth: 2009-03-27
+  gender: male
+  address: 42234 blaaaah street
+  city: berkeley
+  state: CA
+  zip: 94709
+  father_first_name: father_first
+  father_last_name: father_last
+  mother_first_name: mother_first
+  mother_last_name: mother_last
+  telephone: 3423424344
+  emergency_contact_name: contact
+  emergency_contact_relationship: relationship
+  emergency_contact_number: 4332243531
+  patient_remarks: remarks
+  

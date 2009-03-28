@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%" 
+	label="Login">
+	
+	<mx:Metadata>
+		[Event(name="login", type="com.matlabulchifai.events.login.LoginEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+		import com.matlabulchifai.events.login.LoginEvent;
+		import mx.rpc.events.ResultEvent;
+		import mx.controls.Alert;
+		import mx.core.Application;
+		
+		private function login():void{
+			svcAccountLogin.send({login: loginTI.text, password: passwordTI.text});
+		}
+		
+		private function handleAccountLoginResult(event:ResultEvent):void{
+			var result:Object = event.result;
+			if(result == "badlogin"){
+				Alert.show("The username or password is incorrect.", "Login Error");
+			}else{
+				dispatchEvent(new LoginEvent(XML(result)));
+			}
+		}
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="svcAccountLogin"
+		url="/session.xml/?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		method="POST"
+		result="handleAccountLoginResult(event)"/>
+		
+	<mx:Form labelWidth="150" id="loginForm">
+		
+		<mx:FormItem required="true" label="Username">
+			<mx:TextInput id="loginTI"/>
+		</mx:FormItem>
+		
+		<mx:FormItem required="true" label="Password">
+			<mx:TextInput id="passwordTI" displayAsPassword="true"/>
+		</mx:FormItem>
+		
+		<mx:FormItem>
+			<mx:Button id="loginBtn" label="Login"
+				click="login()"/>
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+</mx:VBox>
