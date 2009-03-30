@@ -17,10 +17,17 @@
 	<mx:Script>
 		<![CDATA[
 		import com.matlabulchifai.events.login.*;
+		import com.matlabulchifai.components.views.DebugPanel;
+		import com.matlabulchifai.util.DebugMessage;
 		import mx.events.MenuEvent;
 		
 		[Bindable]
 		private var _user:XML;
+		
+		public static function debug(str:String):void {
+			application.debugPanel.addMessage(
+			new DebugMessage(str));
+		}
 		
 		private function init():void{
 			mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
@@ -35,7 +42,8 @@
 		}
 		
 		private function login(user:XML):void{
-			_user = user;	
+			_user = user;
+			debug("user = " + user);
 			mainStack.selectedChild = homeBox;
 			mainMenu.enabled = true;
 		}
@@ -58,13 +66,9 @@
 				
 			mainMenu.selectedIndex = -1;
 		}
-		
-		
-	
-		
 		]]>
 	</mx:Script>
-	
+<mx:VDividedBox width="100%" height="100%">
 	<mx:VBox height="100%" width="100%">
 		<mx:Canvas width="100%" height="75">
 				<mx:VBox height="100%" width="100%" horizontalAlign="center">
@@ -91,7 +95,8 @@
 			<mlc:AdminBox id="adminBox"/>
 		</mx:ViewStack>
 	</mx:VBox>
-	
+	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>
+</mx:VDividedBox>
 
 	
 </mx:Application>

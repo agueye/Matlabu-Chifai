@@ -9,13 +9,6 @@ class PatientsController < ApplicationController
       format.xml  { render :xml => @patients }
     end
   end
-  
-  # ADDED from old code
-  def find
-    attributes = params[:search]
-    @patients = Patient.search(attributes[:query])
-    render :template => 'patients/index'
-  end
 
   # GET /patients/1
   # GET /patients/1.xml
