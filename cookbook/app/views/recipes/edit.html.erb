@@ -1,0 +1,10 @@
+<h1>Editing recipe</h1>
+
+<%= error_messages_for :recipe %>
+
+<% form_for(@recipe) do |f| %>
+  <%= render :partial => "form", :locals => { :f => f, :button => "Update"  }  %>
+<% end %>
+
+<%= link_to 'Show', @recipe %> |
+<%= link_to 'Back', recipes_path %>

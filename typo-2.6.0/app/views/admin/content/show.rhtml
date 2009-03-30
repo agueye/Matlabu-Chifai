@@ -1,0 +1,29 @@
+  <% @page_heading = 'Articles' %>
+  
+  <% content_for('tasks') do %>
+    <%= task_edit 'Edit this article', @article.id %>
+    <li><%= link_to 'View article on your blog', article_url(@article) %></li>
+  <% end %> 
+
+  <h3><%=h @article.title %></h3>
+
+  <div class="form">	
+    <div><%=@article.body_html %></div>
+    <div><%=@article.extended_html %></div>
+    <p class="meta"><label>Posted:</label> <%=h @article.created_at.to_formatted_s(:long_weekday) %> by <%=h @article.author %></p>
+    <p class="meta"><label>Lasted updated:</label> <%=h @article.updated_at.to_formatted_s(:long_weekday) %></p>    
+    <p class="meta"><label>Published:</label> <%=h (@article.published.zero? ? "No" : "Yes") %></p>
+  </div>
+    
+  <h3>Categories</h3>
+  <div class="form">  
+  <h4>Currently this article is listed in following categories:</h4>
+  <% for category in @article.categories %>
+    <%= link_to "- #{category.name}", :action => "category_remove", :id => @article.id, :category_id => category.id %><br/>
+  <% end %>
+
+  <h4>You can add it to the following categories:</h4>
+  <% for category in @categories - @article.categories %>
+    <%= link_to "+ #{category.name}", :action => "category_add", :id => @article.id, :category_id => category.id %><br/>
+  <% end %>
+

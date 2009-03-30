@@ -1,0 +1,8 @@
+  <% @page_heading = "Comments for #{ link_to @article.title, :controller => 'content', :action => 'show', :id => @article }" %>
+
+  <div class="form">	
+    <label>Author:</label> <span class="static"><%=h @comment.author %></span><br/>
+    <label>Body:</label> <span class="static"><%=h @comment.body %></span><br/>
+    <label>IP Address:</label> <span class="static"><%=h @comment.ip %></span><br/>
+    <label>Created at:</label> <span class="static"><%=h @comment.created_at %></span><br/>
+  </div>

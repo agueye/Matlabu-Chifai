@@ -1,0 +1,22 @@
+<p>
+   <b>Title</b><br />
+   <%= f.text_field :title %>
+ </p>
+
+<p><b>Category</b><br/>
+<%= select("recipe", "category_id", Category.find(:all).collect{ |c| [ c.name, c.id] }) %>
+</p>
+
+ <p>
+   <b>Description</b><br />
+   <%= f.text_area :description %>
+ </p>
+
+ <p>
+   <b>Instructions</b><br />
+   <%= f.text_area :instructions %>
+ </p>
+
+ <p>
+   <%= f.submit button %>
+ </p>

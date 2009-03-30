@@ -1,0 +1,9 @@
+  <% @page_heading = 'Users' %>
+
+  <% content_for('tasks') do %>
+    <%= task_new 'Add new user' %>
+  <% end %> 
+  <div id="users">	
+    <%= render :partial => 'user', :collection => @users  %>
+    <br clear="all" />
+  </div>

@@ -1,0 +1,2 @@
+This file is here to ensure that the log directory gets created when
+Instant Rails is exported from Subversion.

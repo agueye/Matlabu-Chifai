@@ -1,0 +1,28 @@
+<html>
+<head>
+<title> Online Cookbook </title>
+<%= stylesheet_link_tag 'application' %>
+</head>
+<body>
+
+<h1> Online Cookbook </h1>
+
+<p style='color: green' > <%= flash[:notice] %> </p>
+
+<%= yield %>
+
+<p>
+   <% if params[:controller] == 'recipe' %>
+     <%= link_to "Create new recipe", new_recipe_url %>
+   <% else %>
+     <%= link_to "Create new category", new_category_url %>
+   <% end %>
+ 
+   <%= link_to "Show all recipes", recipes_url %>
+
+   <%= link_to "Show all categories", categories_url %></p>
+
+<p> 
+
+</body>
+</html>

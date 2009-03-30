@@ -1,0 +1,27 @@
+  <% @page_heading = 'Articles' %>
+
+  <h3>Creating article</h3>
+
+  <%= start_form_tag({ :action => "new" }, :id => "article_form") %>
+  
+  
+  <div class="form">	
+    <!-- LIVE PREVIEW --> 
+    <div id="preview" class="post" style="display: none;"></div>
+    <!-- /LIVE PREVIEW -->
+    <%= render_partial "form" %>
+  </div>
+
+  <div id="operations">
+    <%= save("Save this article") %> or <%= cancel %>  
+  </div>
+
+  <%= end_form_tag %>
+
+  <%= observe_form "article_form", 
+        :frequency => 2, 
+        :update => "preview",
+        :complete => "Element.show('preview')",
+        :url => { :action => "preview" } %>      
+
+      
