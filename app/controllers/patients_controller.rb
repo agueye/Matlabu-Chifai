@@ -10,6 +10,14 @@ class PatientsController < ApplicationController
     end
   end
 
+	def find
+		@patients = Patient.search(params[:search])
+	    respond_to do |format|
+	    	format.html # index.html.erb
+			format.xml  { render :xml => @patients }
+    end
+	
+	end
   # GET /patients/1
   # GET /patients/1.xml
   def show

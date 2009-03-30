@@ -4,7 +4,7 @@
 	width="100%" 
 	height="100%"
     label="Search"
-    creationComplete="search()">
+    creationComplete="showAll()">
 	
 <mx:Script>
 <![CDATA[
@@ -14,11 +14,11 @@
     private function search():void {
     	if (searchTI.text == "") {
     		svcSearch.url = "/patients.xml";
+    		svcSearch.send();
     	} else {
-    		svcSearch.url = "/searches/" + searchTI.text + ".xml";
+    		svcSearch.url = "/patients/search.xml";
+			svcSearch.send({search: searchTI.text});
     	}
-    	
-    	svcSearch.send();
     }
     
     private function showAll():void {
@@ -43,19 +43,31 @@
 	
 	<mx:HBox>
 		<mx:Label fontWeight="bold" text="Search by Name: "></mx:Label>
-		<mx:TextInput id="searchTI"/>
+		<mx:TextInput id="searchTI" change="search()"/>
 		<mx:Button id="searchButton" label="Search" click="search()"/>
 		<mx:Button id="showAllButton" label="Show All" click="showAll()"/>
 	</mx:HBox>
 	
-	<mx:DataGrid id="patientsGrid" width="80%" height="100%" dataProvider="{patientsXLC}">
+	<mx:DataGrid id="patientsGrid" width="65%" height="100%" dataProvider="{patientsXLC}">
         <mx:columns>
-        	<mx:DataGridColumn headerText="First Name" width="300"
+        	<mx:DataGridColumn headerText="First Name"
                 dataField="first_name"/>
-            <mx:DataGridColumn headerText="Last Name" width="300"
+			<mx:DataGridColumn headerText="Middle Name"
+                dataField="middle_name"/>
+            <mx:DataGridColumn headerText="Last Name"
                 dataField="last_name"/>
-        	<mx:DataGridColumn headerText="Gender" width="300"
-                dataField="gender"/>                
+        	<mx:DataGridColumn headerText="Gender" textAlign="center" width="100"
+                dataField="gender"/>
+    		<mx:DataGridColumn headerText="Date of Birth" textAlign="center" width="100"
+                dataField="date_of_birth"/>
+			<mx:DataGridColumn headerText="" width="70"
+                    editable="false">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:Button label="Delete"/>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
         </mx:columns>
     </mx:DataGrid>
 	

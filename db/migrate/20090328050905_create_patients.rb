@@ -1,11 +1,11 @@
 class CreatePatients < ActiveRecord::Migration
   def self.up
     create_table :patients do |t|
-      t.column :first_name,                      :string, :null => false
+      t.column :first_name,                      :string
       t.column :middle_name,                     :string
-      t.column :last_name,                       :string, :null => false
-      t.column :arrival_date,                    :date,   :null => false
-      t.column :date_of_birth,                   :date,   :null => false
+      t.column :last_name,                       :string
+      t.column :arrival_date,                    :date
+      t.column :date_of_birth,                   :date
       t.column :gender,                          :string
       t.column :address,                         :string
       t.column :city,                            :string
