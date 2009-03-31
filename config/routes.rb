@@ -1,8 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-	map.search '/patients/search.:format', :controller => "patients", :action => "find"
+  map.search '/patients/search.:format', :controller => "patients", :action => "find"
 	
-	
-
   map.resources :searches
   
   map.resources :patients
@@ -15,6 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'sessions', :action => 'new'
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.search '/patients/search', :controller => 'patients', :action => 'find'
+  
   
   # The priority is based upon order of creation: first created -> highest priority.
 

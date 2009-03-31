@@ -49,6 +49,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
   before_filter :login_required
+  after_filter :flex_error_handling
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -62,7 +63,6 @@ class ApplicationController < ActionController::Base
   
   # Flex does not handle 201, 422 http response codes.
   # Need to convert them to code 200 to prevent Flex errors
-  after_filter :flex_error_handling
   def flex_error_handling
     response.headers['Status'] = interpret_status(200) if response.headers['Status'] == interpret_status(422)
     response.headers['Status'] = interpret_status(200) if response.headers['Status'] == interpret_status(201)

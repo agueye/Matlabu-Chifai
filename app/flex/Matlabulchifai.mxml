@@ -51,14 +51,23 @@
 		private function handleLogout():void{
 			// invalidate session by invoking ruby logout, possibly attach event to login box and handle there
 			mainMenu.enabled = false;
+			patientLink.visible = false;
 			mainStack.selectedChild = loginBox;
 		}
 		
-		private function handleMenuClick(e:MouseEvent):void{
+		private function newPatient():void {	
+			mainStack.selectedChild = patientForm;
+			patientLink.visible = false;
+		}
+		
+		private function handleMenuClick(e:MouseEvent):void {
+			patientLink.visible = false;
 			if(e.currentTarget.selectedIndex == 0)
 				mainStack.selectedChild = homeBox;
-			else if(e.currentTarget.selectedIndex == 1)
-				mainStack.selectedChild = searchBox;
+			else if(e.currentTarget.selectedIndex == 1){
+				mainStack.selectedChild = patientIndexBox;
+				patientLink.visible = true;
+			}
 			else if(e.currentTarget.selectedIndex == 2)
 				mainStack.selectedChild = adminBox;
 			else if(e.currentTarget.selectedIndex == 3)
@@ -78,12 +87,13 @@
 		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" enabled="false" >
 			<mx:XMLList>
 	            <menuitem label="Home"/>
-	            <menuitem label="Search"/>
+	            <menuitem label="Patients"/>
 	            <menuitem label="Administration"/>
 	            <menuitem label="Logout"/>
 	        </mx:XMLList>
 		</mx:MenuBar>
-			
+		<mx:LinkButton id="patientLink" label="New Patient" fontWeight="bold" visible="false" color="#333366"
+			click="newPatient();"/>
 		<mx:ViewStack id="mainStack" width="100%" height="100%">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" login="handleLogin(event)"/>
@@ -91,8 +101,9 @@
 			</mx:VBox>
 			
 			<mlc:HomeBox id="homeBox"/>
-			<mlc:SearchBox id="searchBox"/>
+			<mlc:PatientIndexBox id="patientIndexBox"/>
 			<mlc:AdminBox id="adminBox"/>
+			<mlc:PatientCreateBox id="patientForm"/>
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>

@@ -30,6 +30,7 @@
 		var resultXML: XML = XML(event.result);
 		Matlabulchifai.debug("search result = \n" + resultXML);	
 	}
+
 ]]>
 </mx:Script>
     <mx:HTTPService
@@ -40,7 +41,7 @@
 	<mx:XMLListCollection 
 		id="patientsXLC"
 		source="{XMLList(svcSearch.lastResult.children())}"/>
-	
+
 	<mx:HBox>
 		<mx:Label fontWeight="bold" text="Search by Name: "></mx:Label>
 		<mx:TextInput id="searchTI" change="search()"/>
