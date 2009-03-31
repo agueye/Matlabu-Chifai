@@ -24,10 +24,13 @@
 		[Bindable]
 		private var _user:XML;
 		
+		[Bindable]
+		public static var title:String = "";
+		
 		public static function debug(str:String):void {
 			application.debugPanel.addMessage(
 			new DebugMessage(str));
-		}
+		}		
 		
 		private function init():void{
 			mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
@@ -44,13 +47,14 @@
 		private function login(user:XML):void{
 			_user = user;
 			debug("user = " + user);
-			mainStack.selectedChild = homeBox;
-			mainMenu.enabled = true;
+			mainStack.selectedChild = alertBox;
+			title = "Alerts"
+			mainMenu.visible = true;
 		}
 		
 		private function handleLogout():void{
 			// invalidate session by invoking ruby logout, possibly attach event to login box and handle there
-			mainMenu.enabled = false;
+			mainMenu.visible = false;
 			patientLink.visible = false;
 			mainStack.selectedChild = loginBox;
 		}
@@ -62,14 +66,19 @@
 		
 		private function handleMenuClick(e:MouseEvent):void {
 			patientLink.visible = false;
-			if(e.currentTarget.selectedIndex == 0)
-				mainStack.selectedChild = homeBox;
-			else if(e.currentTarget.selectedIndex == 1){
+			if(e.currentTarget.selectedIndex == 0) {
+				mainStack.selectedChild = alertBox;
+				title = "Alerts";	
+			}
+			else if(e.currentTarget.selectedIndex == 1) {
 				mainStack.selectedChild = patientIndexBox;
+				title = "Patients";
 				patientLink.visible = true;
 			}
-			else if(e.currentTarget.selectedIndex == 2)
+			else if(e.currentTarget.selectedIndex == 2) {
 				mainStack.selectedChild = adminBox;
+				title = "Administration";
+			}
 			else if(e.currentTarget.selectedIndex == 3)
 				handleLogout()
 				
@@ -84,14 +93,16 @@
 					<mx:Text height="100%" width="100%" fontFamily="Comic Sans MS" fontSize="55" color="white" text="Matlabul Chifai"/>
 				</mx:VBox>
 		</mx:Canvas>
-		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" enabled="false" >
+		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false" >
 			<mx:XMLList>
-	            <menuitem label="Home"/>
+	            <menuitem label="Alerts"/>
 	            <menuitem label="Patients"/>
 	            <menuitem label="Administration"/>
 	            <menuitem label="Logout"/>
 	        </mx:XMLList>
 		</mx:MenuBar>
+		<mx:Text id="titleText" fontFamily="Comic Sans MS" fontSize="24" fontWeight="bold" 
+			color="white" letterSpacing="2" fontThickness="10" text="{title}  "/>
 		<mx:LinkButton id="patientLink" label="New Patient" fontWeight="bold" visible="false" color="#333366"
 			click="newPatient();"/>
 		<mx:ViewStack id="mainStack" width="100%" height="100%">
@@ -100,7 +111,7 @@
 				<mlc:AccountCreateBox id="accountCreateBox" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
 			
-			<mlc:HomeBox id="homeBox"/>
+			<mlc:AlertBox id="alertBox"/>
 			<mlc:PatientIndexBox id="patientIndexBox"/>
 			<mlc:AdminBox id="adminBox"/>
 			<mlc:PatientCreateBox id="patientForm"/>

@@ -1,6 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
   map.search '/patients/search.:format', :controller => "patients", :action => "find"
 	
+  map.resources :alerts
+
   map.resources :searches
   
   map.resources :patients

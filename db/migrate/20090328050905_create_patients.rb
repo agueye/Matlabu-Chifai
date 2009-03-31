@@ -1,7 +1,7 @@
 class CreatePatients < ActiveRecord::Migration
   def self.up
     create_table :patients do |t|
-
+      t.column :medical_record_number,			 :string      
       t.column :first_name,                      :string
       t.column :middle_name,                     :string
       t.column :last_name,                       :string 
