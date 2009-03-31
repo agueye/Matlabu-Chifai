@@ -3,7 +3,8 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
 	height="100%" 
-	label="Login">
+	label="Login"
+	horizontalAlign="center">
 	
 	<mx:Metadata>
 		[Event(name="login", type="com.matlabulchifai.events.login.LoginEvent")]
@@ -36,22 +37,21 @@
 		resultFormat="e4x"
 		method="POST"
 		result="handleAccountLoginResult(event)"/>
-		
-	<mx:Form labelWidth="150" id="loginForm">
-		
-		<mx:FormItem required="true" label="Username">
-			<mx:TextInput id="loginTI"/>
-		</mx:FormItem>
-		
-		<mx:FormItem required="true" label="Password">
-			<mx:TextInput id="passwordTI" displayAsPassword="true"/>
-		</mx:FormItem>
-		
-		<mx:FormItem>
-			<mx:Button id="loginBtn" label="Login"
-				click="login()"/>
-		</mx:FormItem>
-		
-	</mx:Form>
+	<mx:Panel title="Login">
+		<mx:Form id="loginForm">
+			<mx:FormItem required="true" label="Username">
+				<mx:TextInput id="loginTI"/>
+			</mx:FormItem>
+			
+			<mx:FormItem required="true" label="Password">
+				<mx:TextInput id="passwordTI" displayAsPassword="true"/>
+			</mx:FormItem>
+			
+			<mx:FormItem>
+				<mx:Button id="loginBtn" label="Login"
+					click="login()"/>
+			</mx:FormItem>	
+		</mx:Form>
+	</mx:Panel>
 	
 </mx:VBox>

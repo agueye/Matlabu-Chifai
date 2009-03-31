@@ -3,7 +3,8 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
 	height="100%"
-	label="Create Account">
+	label="Create Account"
+	horizontalAlign="center">
 
 	<mx:Metadata>
 		[Event(name="accountCreate", type="com.matlabulchifai.events.login.AccountCreateEvent")]
@@ -46,32 +47,33 @@
 			</user>
 		</mx:request>
 	</mx:HTTPService>
-	
-	<mx:Form labelWidth="150" id="accountCreateForm">
-		<mx:FormItem required="true" label="Username">
-			<mx:TextInput id="loginTI"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="First Name">
-			<mx:TextInput id="firstNameTI"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="Last Name">
-			<mx:TextInput id="lastNameTI"/>
-		</mx:FormItem>
-		
-		<mx:FormItem required="true" label="Password">
-			<mx:TextInput id="passwordTI" displayAsPassword="true"/>
-		</mx:FormItem>
-		
-		<mx:FormItem required="true" label="Confirm Password">
-			<mx:TextInput id="confirmPasswordTI" displayAsPassword="true"/>
-		</mx:FormItem>
-		
-		<mx:FormItem>
-			<mx:Button id="createAccountBtn" label="Create Account"
-				click="createAccount()"/>
-		</mx:FormItem>
-	</mx:Form>
+	<mx:Panel title="Create a New Account">
+		<mx:Form id="accountCreateForm">
+			<mx:FormItem required="true" label="Username">
+				<mx:TextInput id="loginTI"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="First Name">
+				<mx:TextInput id="firstNameTI"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Last Name">
+				<mx:TextInput id="lastNameTI"/>
+			</mx:FormItem>
+			
+			<mx:FormItem required="true" label="Password">
+				<mx:TextInput id="passwordTI" displayAsPassword="true"/>
+			</mx:FormItem>
+			
+			<mx:FormItem required="true" label="Confirm Password">
+				<mx:TextInput id="confirmPasswordTI" displayAsPassword="true"/>
+			</mx:FormItem>
+			
+			<mx:FormItem>
+				<mx:Button id="createAccountBtn" label="Create Account"
+					click="createAccount()"/>
+			</mx:FormItem>
+		</mx:Form>
+	</mx:Panel>
 	
 </mx:VBox>
