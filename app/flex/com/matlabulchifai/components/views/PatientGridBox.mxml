@@ -66,7 +66,7 @@
 			<mx:Label fontWeight="bold" text="Search by Name: "></mx:Label>
 			<mx:TextInput id="searchTI" change="search()"/>
 			<mx:Button id="searchButton" label="Search" click="search()"/>
-			<mx:Button id="showAllButton" label="Show All" click="listPatients()"/>
+			<mx:Button id="showAllButton" label="Show All" click="listPatients();searchTI.text='';"/>
 		</mx:HBox>
 		
 		<mx:Spacer height="5" />
