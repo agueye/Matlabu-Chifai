@@ -48,12 +48,12 @@ end
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
-  before_filter :login_required
+  #before_filter :login_required
   after_filter :flex_error_handling
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => 'a45a7c0279b78366fa1830d5230096a2'
+  #protect_from_forgery # :secret => 'a45a7c0279b78366fa1830d5230096a2'
   
   # See ActionController::Base for details 
   # Uncomment this to filter the contents of submitted sensitive data parameters

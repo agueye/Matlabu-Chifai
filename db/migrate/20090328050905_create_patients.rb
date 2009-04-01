@@ -21,6 +21,7 @@ class CreatePatients < ActiveRecord::Migration
       t.column :emergency_contact_relationship,  :string
       t.column :emergency_contact_number,        :string
       t.column :patient_remarks,                 :string
+      t.column :active,							 :boolean
 
       t.timestamps
     end

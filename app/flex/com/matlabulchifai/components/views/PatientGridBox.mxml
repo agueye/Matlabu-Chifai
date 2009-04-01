@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+    label="Patients"
+    creationComplete="listPatients()">
+	
+<mx:Script>
+<![CDATA[
+    import mx.controls.Alert;
+    import mx.rpc.events.ResultEvent;
+	
+    private function search():void {
+    	if (searchTI.text == "") {
+    		svcSearch.url = "/patients.xml";
+    		svcSearch.send();
+    	} else {
+    		svcSearch.url = "/patients/search.xml";
+			svcSearch.send({search: searchTI.text});
+    	}
+    }
+    
+    public function deletePatient(patient:XML):void {
+		var params:Object = new Object();
+		params['patient[active]'] = false;
+		params['_method'] = "PUT";
+		svcPatientsUpdate.url = "/patients/" + patient.id + ".xml";
+		svcPatientsUpdate.send(params);
+    }
+    
+    public function listPatients():void {
+    	svcSearch.url = "/patients.xml";
+    	svcSearch.send();
+    }
+    
+    private function handleSearchListResult(event:ResultEvent):void {
+		var resultXML: XML = XML(event.result);
+		Matlabulchifai.debug("search result = \n" + resultXML);	
+	}
+	
+	private function handlePatientsUpdateResult(event:ResultEvent):void {
+		var resultXML: XML = XML(event.result);
+		Matlabulchifai.debug("patient_updates = \n" + resultXML);
+		listPatients();
+	}
+]]>
+</mx:Script>
+    <mx:HTTPService
+        id="svcSearch"
+        resultFormat="e4x"
+        result="handleSearchListResult(event)"/>
+	<mx:XMLListCollection 
+		id="patientsXLC"
+		source="{XMLList(svcSearch.lastResult.children())}"/>
+	
+	<mx:HTTPService
+        id="svcPatientsUpdate"
+        resultFormat="e4x"
+        method="POST"
+        result="handlePatientsUpdateResult(event)"/>
+	
+	<mx:Panel title="Patient List" width="100%" height="100%" 
+		paddingTop="10" paddingLeft="5" paddingRight="5">
+		<mx:HBox>
+			<mx:Label fontWeight="bold" text="Search by Name: "></mx:Label>
+			<mx:TextInput id="searchTI" change="search()"/>
+			<mx:Button id="searchButton" label="Search" click="search()"/>
+			<mx:Button id="showAllButton" label="Show All" click="listPatients()"/>
+		</mx:HBox>
+		
+		<mx:Spacer height="5" />
+		
+		<mx:DataGrid id="patientsGrid" width="100%" height="100%" textAlign="center" 
+			dataProvider="{patientsXLC}">
+	        <mx:columns>
+	        	<mx:DataGridColumn headerText="Medical Record ID" width="115"
+	                dataField="medical_record_number"/>
+	        	<mx:DataGridColumn headerText="First Name" width="100"
+	                dataField="first_name"/>
+				<mx:DataGridColumn headerText="Middle Name" width="100"
+	                dataField="middle_name"/>
+	            <mx:DataGridColumn headerText="Last Name" width="100"
+	                dataField="last_name"/>
+	        	<mx:DataGridColumn headerText="Gender" width="100"
+	                dataField="gender"/>
+	    		<mx:DataGridColumn headerText="Date of Birth" width="100"
+	                dataField="date_of_birth"/>
+				<mx:DataGridColumn headerText=""
+	                    editable="false">
+	                    <mx:itemRenderer>
+	                        <mx:Component>
+	                            <mx:Button label="Delete" click="outerDocument.deletePatient(XML(data))"/>
+	                        </mx:Component>
+	                    </mx:itemRenderer>
+				</mx:DataGridColumn>
+	        </mx:columns>
+	    </mx:DataGrid>
+	</mx:Panel>
+</mx:VBox>

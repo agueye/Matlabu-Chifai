@@ -2,7 +2,7 @@ class AlertsController < ApplicationController
   # GET /alerts
   # GET /alerts.xml
   def index
-    @alerts = Alert.find(:all)
+    @alerts = Alert.find_all_by_active(true, :order => "alert_date")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -63,7 +63,7 @@ class AlertsController < ApplicationController
       if @alert.update_attributes(params[:alert])
         flash[:notice] = 'Alert was successfully updated.'
         format.html { redirect_to(@alert) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @alert }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @alert.errors, :status => :unprocessable_entity }
@@ -79,7 +79,7 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(alerts_url) }
-      format.xml  { head :ok }
+      format.xml  { render :xml => @alert }
     end
   end
 end

@@ -2,7 +2,7 @@ class PatientsController < ApplicationController
   # GET /patients
   # GET /patients.xml
   def index
-    @patients = Patient.find(:all)
+    @patients = Patient.find_all_by_active(true, :order => "last_name")
 
     respond_to do |format|
       format.html # index.html.erb

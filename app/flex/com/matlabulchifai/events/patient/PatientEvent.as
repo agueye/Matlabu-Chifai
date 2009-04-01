@@ -11,11 +11,11 @@
 		
 		public static const PATIENT_CREATE:String = "patientCreate";
     
-        public var task:XML;
+        public var patient:XML;
     
-        public function PatientEvent(type:String, task:XML) {
+        public function PatientEvent(type:String, patient:XML) {
             super(type);
-            this.task = task;
+            this.patient = patient;
         }
 		
 	}

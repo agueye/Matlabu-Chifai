@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+	label="Alerts"
+	creationComplete="handleCreationComplete()">
+	
+<mx:Script>
+<![CDATA[
+    import mx.rpc.events.ResultEvent;
+    import mx.collections.XMLListCollection;
+    
+    [Bindable]
+	public var patientsXLC:XMLListCollection;
+	
+	[Bindable]        
+    public var patientIdMap:Object;
+    
+    [Bindable]
+	private var alertsXLC:XMLList;
+
+    
+    public function listAlerts():void {
+    	alertsXLC = null;
+    	svcAlertList.send();
+    }
+    
+     private function getMedicalRecordNumber(item:Object, column:DataGridColumn):String {
+    	var patient:XML = patientIdMap[item.patient_id];
+    	return patient.medical_record_number;
+    }
+    
+    private function getPatientName(item:Object, column:DataGridColumn):String {
+    	var patient:XML = patientIdMap[item.patient_id];
+    	return patient.first_name + " " + patient.middle_name + " " + patient.last_name;
+    }
+    
+    public function deleteAlert(alert:XML):void {
+		var params:Object = new Object();
+		params['alert[active]'] = false;
+		params['_method'] = "PUT";
+		svcAlertsUpdate.url = "/alerts/" + alert.id + ".xml";
+		svcAlertsUpdate.send(params);
+    }
+    
+    private function handleCreationComplete():void {
+    	listAlerts();
+    }
+    
+    private function handleAlertListResult(event:ResultEvent):void {
+		var resultXML: XML = XML(event.result);
+		alertsXLC = resultXML.children();
+		Matlabulchifai.debug("alerts = \n" + resultXML);
+	}
+	
+	private function handleAlertsUpdateResult(event:ResultEvent):void {
+		var resultXML: XML = XML(event.result);
+		Matlabulchifai.debug("alert_updates = \n" + resultXML);
+		listAlerts();
+	}
+]]>
+</mx:Script>
+	
+	<mx:HTTPService
+        id="svcAlertList"
+        url="/alerts.xml"
+        resultFormat="e4x"
+        result="handleAlertListResult(event)"/>	
+	
+	<mx:HTTPService
+        id="svcAlertsUpdate"
+        resultFormat="e4x"
+        method="POST"
+        result="handleAlertsUpdateResult(event)"/>
+        
+	<mx:Panel title="Alert List" width="100%" height="100%" 
+		paddingTop="5" paddingLeft="5" paddingRight="5">
+		
+		<mx:DataGrid id="alertsGrid" width="100%" height="100%" wordWrap="true" textAlign="center"
+			variableRowHeight="true" dataProvider="{alertsXLC}">
+	        <mx:columns>
+				<mx:DataGridColumn headerText="Medical Record ID" width="115"
+					labelFunction="getMedicalRecordNumber"/>
+				<mx:DataGridColumn headerText="Patient Name" width="150"
+					labelFunction="getPatientName" />
+				<mx:DataGridColumn headerText="Alert Date" width="90"
+					dataField="alert_date"/>
+				<mx:DataGridColumn headerText="Alert Note"
+					dataField="alert_note"/>
+				<mx:DataGridColumn headerText="" width="70" 
+	                    editable="false">
+	                    <mx:itemRenderer>
+	                        <mx:Component>
+	                            <mx:Button label="Delete" click="outerDocument.deleteAlert(XML(data))" />
+	                        </mx:Component>
+	                    </mx:itemRenderer>
+				</mx:DataGridColumn>
+			</mx:columns>
+		</mx:DataGrid>
+	</mx:Panel>	
+</mx:VBox>

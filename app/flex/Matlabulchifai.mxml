@@ -12,7 +12,7 @@
 	paddingBottom="0"
 	width="100%"
 	height="100%"
-	creationComplete="init()">
+	creationComplete="handleCreationComplete()">
 	
 	<mx:Script>
 		<![CDATA[
@@ -20,6 +20,11 @@
 		import com.matlabulchifai.components.views.DebugPanel;
 		import com.matlabulchifai.util.DebugMessage;
 		import mx.events.MenuEvent;
+		import mx.events.ListEvent;
+	    import mx.controls.Alert;
+	    import mx.rpc.events.ResultEvent;
+	    import mx.collections.IViewCursor;
+	    import com.matlabulchifai.events.alert.AlertEvent;
 		
 		[Bindable]
 		private var _user:XML;
@@ -27,13 +32,28 @@
 		[Bindable]
 		public static var title:String = "";
 		
+		[Bindable]
+		private var patientIdMap:Object;
+		
 		public static function debug(str:String):void {
 			application.debugPanel.addMessage(
 			new DebugMessage(str));
 		}		
 		
-		private function init():void{
+		private function updatePatientIdMap():void {
+	    	patientIdMap = {};
+	        var patientsCursor:IViewCursor =
+	            patientsXLC.createCursor();
+	        while (!patientsCursor.afterLast) {
+	            var patient:XML = XML(patientsCursor.current);
+	            patientIdMap[patient.id] = patient;
+	            patientsCursor.moveNext();
+	        }
+	    }
+		
+		private function handleCreationComplete():void{
 			mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
+			svcPatientList.send();
 		}
 		
 		private function handleLogin(e:LoginEvent):void{
@@ -55,37 +75,46 @@
 		private function handleLogout():void{
 			// invalidate session by invoking ruby logout, possibly attach event to login box and handle there
 			mainMenu.visible = false;
-			patientLink.visible = false;
 			mainStack.selectedChild = loginBox;
 		}
 		
-		private function newPatient():void {	
-			mainStack.selectedChild = patientForm;
-			patientLink.visible = false;
-		}
-		
 		private function handleMenuClick(e:MouseEvent):void {
-			patientLink.visible = false;
 			if(e.currentTarget.selectedIndex == 0) {
 				mainStack.selectedChild = alertBox;
 				title = "Alerts";	
 			}
 			else if(e.currentTarget.selectedIndex == 1) {
-				mainStack.selectedChild = patientIndexBox;
+				mainStack.selectedChild = patientBox;
 				title = "Patients";
-				patientLink.visible = true;
 			}
 			else if(e.currentTarget.selectedIndex == 2) {
 				mainStack.selectedChild = adminBox;
 				title = "Administration";
 			}
-			else if(e.currentTarget.selectedIndex == 3)
-				handleLogout()
-				
+			else if(e.currentTarget.selectedIndex == 3) {
+				handleLogout();
+				title = "";
+			}
 			mainMenu.selectedIndex = -1;
+		}
+		
+		private function handlePatientListResult(event:ResultEvent):void {
+			var resultXML: XML = XML(event.result);
+			updatePatientIdMap();
+			debug("patients = \n" + resultXML);	
 		}
 		]]>
 	</mx:Script>
+	
+	<mx:HTTPService
+        id="svcPatientList"
+        url="/patients.xml"
+        resultFormat="e4x"
+        result="handlePatientListResult(event)"/>
+    <mx:XMLListCollection 
+    	id="patientsXLC"
+    	source="{XMLList(svcPatientList.lastResult.children())}"/>
+	
 <mx:VDividedBox width="100%" height="100%">
 	<mx:VBox height="100%" width="100%">
 		<mx:Canvas width="100%" height="75">
@@ -103,22 +132,32 @@
 		</mx:MenuBar>
 		<mx:Text id="titleText" fontFamily="Comic Sans MS" fontSize="24" fontWeight="bold" 
 			color="white" letterSpacing="2" fontThickness="10" text="{title}  "/>
-		<mx:LinkButton id="patientLink" label="New Patient" fontWeight="bold" visible="false" color="#333366"
-			click="newPatient();"/>
 		<mx:ViewStack id="mainStack" width="100%" height="100%">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" login="handleLogin(event)"/>
 				<mlc:AccountCreateBox id="accountCreateBox" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
-			
-			<mlc:AlertBox id="alertBox"/>
-			<mlc:PatientIndexBox id="patientIndexBox"/>
+			<mx:HBox id="alertBox">
+				<mlc:AlertGridBox id="alertGridBox"
+					patientsXLC="{patientsXLC}"
+					patientIdMap="{patientIdMap}" 
+					width="70%" height="90%" horizontalAlign="left"/>
+				<mlc:AlertCreateBox id="alertCreateBox"
+					alertCreate="alertGridBox.listAlerts()"
+					patientsXLC="{patientsXLC}" 
+					width="30%" height="90%" horizontalAlign="center"/>	
+			</mx:HBox>
+			<mx:HBox id="patientBox">
+				<mlc:PatientGridBox id="patientGridBox"
+					width="70%" height="90%" horizontalAlign="left"/>
+				<mlc:PatientCreateBox id="patientCreateBox"
+					patientCreate="patientGridBox.listPatients()"
+					width="30%" height="90%" horizontalAlign="center"/>	
+			</mx:HBox>
 			<mlc:AdminBox id="adminBox"/>
-			<mlc:PatientCreateBox id="patientForm"/>
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>
 </mx:VDividedBox>
-
 	
 </mx:Application>
