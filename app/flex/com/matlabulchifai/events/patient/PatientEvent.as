@@ -1,11 +1,7 @@
 ﻿package com.matlabulchifai.events.patient
 {
 	import flash.events.Event;
-	
-	/**
-	 * ...
-	 * @author ...
-	 */
+
 	public class PatientEvent extends Event 
 	{
 		
@@ -17,7 +13,6 @@
             super(type);
             this.patient = patient;
         }
-		
 	}
 	
 }

@@ -17,21 +17,20 @@
 	[Bindable]        
     public var patientIdMap:Object;
     
-    [Bindable]
-	private var alertsXLC:XMLList;
+    private var gotAlerts:Boolean = false;
 
-    
     public function listAlerts():void {
-    	alertsXLC = null;
     	svcAlertList.send();
     }
     
      private function getMedicalRecordNumber(item:Object, column:DataGridColumn):String {
+     	while(!gotAlerts){continue};
     	var patient:XML = patientIdMap[item.patient_id];
     	return patient.medical_record_number;
     }
     
     private function getPatientName(item:Object, column:DataGridColumn):String {
+    	while(!gotAlerts){continue};
     	var patient:XML = patientIdMap[item.patient_id];
     	return patient.first_name + " " + patient.middle_name + " " + patient.last_name;
     }
@@ -49,9 +48,9 @@
     }
     
     private function handleAlertListResult(event:ResultEvent):void {
-		var resultXML: XML = XML(event.result);
-		alertsXLC = resultXML.children();
+		var resultXML: XML = XML(event.result);		
 		Matlabulchifai.debug("alerts = \n" + resultXML);
+		gotAlerts = true;
 	}
 	
 	private function handleAlertsUpdateResult(event:ResultEvent):void {
@@ -66,7 +65,9 @@
         id="svcAlertList"
         url="/alerts.xml"
         resultFormat="e4x"
-        result="handleAlertListResult(event)"/>	
+        result="handleAlertListResult(event)"/>
+	<mx:XMLListCollection id="alertsXLC"
+        source="{XMLList(svcAlertList.lastResult.children())}"/>
 	
 	<mx:HTTPService
         id="svcAlertsUpdate"

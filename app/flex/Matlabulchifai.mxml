@@ -16,7 +16,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.controls.Button;
+		import mx.controls.Button;
 		import com.matlabulchifai.events.login.*;
 		import com.matlabulchifai.components.views.DebugPanel;
 		import com.matlabulchifai.util.DebugMessage;
@@ -25,7 +25,10 @@
 	    import mx.controls.Alert;
 	    import mx.rpc.events.ResultEvent;
 	    import mx.collections.IViewCursor;
+	    import mx.collections.XMLListCollection;
 	    import com.matlabulchifai.events.alert.AlertEvent;
+	    import com.matlabulchifai.events.patient.PatientEvent;
+	    import com.matlabulchifai.events.patient.SearchEvent;
 		
 		[Bindable]
 		private var _user:XML;
@@ -51,18 +54,20 @@
 	            patientsCursor.moveNext();
 	        }
 	    }
+		 
+		private function search(searchString:String):void {
+			if (searchString == "") {
+	    		listPatients();
+	    	} else {
+	    		svcPatientList.url = "/patients/search.xml";
+				svcPatientList.send({search: searchString});
+	    	}
+		}
 		
-		private function handleCreationComplete():void{
-			mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
+		private function listPatients():void {
+			//Alert.show("listPatients() Called.", "Info");
+			svcPatientList.url = "/patients.xml";
 			svcPatientList.send();
-		}
-		
-		private function handleLogin(e:LoginEvent):void{
-			login(e.user);
-		}
-		
-		private function handleAccountCreate(e:AccountCreateEvent):void{
-			login(e.user);
 		}
 		
 		private function login(user:XML):void{
@@ -71,6 +76,27 @@
 			mainStack.selectedChild = alertBox;
 			title = "Alerts"
 			mainMenu.visible = true;
+		}
+		
+		private function handleCreationComplete():void{
+			mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
+			listPatients();
+		}
+		
+		private function handleLogin(e:LoginEvent):void{
+			login(e.user);
+		}
+		
+		private function handleSearchEvent(event:SearchEvent):void {
+			search(event.searchString);
+		}
+		
+		private function handlePatientCreateEvent(event:PatientEvent):void {
+			listPatients();
+		}
+		
+		private function handleAccountCreate(e:AccountCreateEvent):void{
+			login(e.user);
 		}
 		
 		private function handleLogout():void{
@@ -105,6 +131,7 @@
 			debug("patients = \n" + resultXML);	
 		}
 		
+
 		]]>
 	</mx:Script>
 	
@@ -113,9 +140,8 @@
         url="/patients.xml"
         resultFormat="e4x"
         result="handlePatientListResult(event)"/>
-    <mx:XMLListCollection 
-    	id="patientsXLC"
-    	source="{XMLList(svcPatientList.lastResult.children())}"/>
+	<mx:XMLListCollection id="patientsXLC"
+        source="{XMLList(svcPatientList.lastResult.children())}"/>
 	
 <mx:VDividedBox width="100%" height="100%">
 	<mx:VBox height="100%" width="100%">
@@ -153,11 +179,13 @@
 			</mx:HBox>
 			<mx:HBox id="patientBox">
 				<mlc:PatientGridBox id="patientGridBox"
+					patientSearch="handleSearchEvent(event)"
+					patientsXLC="{patientsXLC}"
 					mainStackVar="{mainStack}"
 					patientInfoBoxVar="{patientInfoBox}"
 					width="70%" height="90%" horizontalAlign="left"/>
 				<mlc:PatientCreateBox id="patientCreateBox"
-					patientCreate="patientGridBox.listPatients()"
+					patientCreate="handlePatientCreateEvent(event)"
 					width="30%" height="90%" horizontalAlign="center"/>	
 			</mx:HBox>
 			<mlc:AdminBox id="adminBox"/>

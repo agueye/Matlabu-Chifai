@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:mlc="com.matlabulchifai.components.views.*" 
 	width="100%" 
 	height="100%" 
 	label="New Patient"
@@ -18,12 +19,15 @@
 		import mx.controls.Alert;
 		import mx.managers.FocusManager;
 		
+		[Bindable]
+		public var test:PatientGridBox;
+		
+		
 		private function handleNewPatientResult(event:ResultEvent):void{
 			var resultXML:XML = XML(event.result);
 			Matlabulchifai.debug("patient created = \n" + resultXML);
-			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, 
-				resultXML));
-			clearForm();
+			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, resultXML));
+			clearForm();		
 		}
 		
 		private function doPatientCreate():void{
@@ -68,6 +72,7 @@
 			result="handleNewPatientResult(event)">
 			<mx:request>
 				<patient>
+					<active>true</active>
 					<medical_record_number>{medicalrecordTI.text}</medical_record_number>
 					<first_name>{firstnameTI.text}</first_name>
 					<middle_name>{middlenameTI.text}</middle_name>

@@ -2,8 +2,10 @@ class AlertsController < ApplicationController
   # GET /alerts
   # GET /alerts.xml
   def index
-    @alerts = Alert.find_all_by_active(true, :order => "alert_date")
-
+    @alertsAll = Alert.find_all_by_active(true, :order => "alert_date")
+	
+	@alerts = @alertsAll.select {|alert| alert.patient.active }
+	
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @alerts }

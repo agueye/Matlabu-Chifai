@@ -4,31 +4,48 @@
 	xmlns:mlc="com.matlabulchifai.components.views.*" 
 	width="100%" 
 	height="100%"
-    label="Patients"
-    creationComplete="listPatients()">
+    label="Patients">
 	<mx:Metadata>
-		[Event(name="", type="com.matlabulchifai.events.patient.PatientEvent")]
+		[Event(name="patientSearch", type="com.matlabulchifai.events.patient.SearchEvent")]
 	</mx:Metadata>
 <mx:Script>
 <![CDATA[
+	import com.matlabulchifai.events.patient.SearchEvent;
 	import mx.containers.ViewStack;
     import mx.controls.Alert;
     import mx.rpc.events.ResultEvent;
+    import mx.collections.XMLListCollection;
 	
 	[Bindable]
 	public var mainStackVar:ViewStack;
-	
+			
 	[Bindable]
 	public var patientInfoBoxVar:PatientInfo;
 	
-    private function search():void {
-    	if (searchTI.text == "") {
-    		svcSearch.url = "/patients.xml";
-    		svcSearch.send();
-    	} else {
-    		svcSearch.url = "/patients/search.xml";
-			svcSearch.send({search: searchTI.text});
-    	}
+	[Bindable]
+	public var patientsXLC:XMLListCollection;
+	
+	private var now:Date;
+	private var last:Date = new Date();
+		    
+	private function search():void {
+		dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));
+		/* now = new Date();
+		if (now.time - last.time > 2000){
+			last = new Date();
+			var timeout:Date = new Date()
+			timeout.setSeconds(2,0);
+			//var timoutNow = new Date();
+			while(timeout.milliseconds > new Date().milliseconds) continue;
+			dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));
+				
+		}  */
+	}
+    
+    
+    private function showAll():void {
+    	searchTI.text='';
+    	search();
     }
     
     public function deletePatient(patient:XML):void {
@@ -38,21 +55,11 @@
 		svcPatientsUpdate.url = "/patients/" + patient.id + ".xml";
 		svcPatientsUpdate.send(params);
     }
-    
-    public function listPatients():void {
-    	svcSearch.url = "/patients.xml";
-    	svcSearch.send();
-    }
-    
-    private function handleSearchListResult(event:ResultEvent):void {
-		var resultXML: XML = XML(event.result);
-		Matlabulchifai.debug("search result = \n" + resultXML);	
-	}
 	
 	private function handlePatientsUpdateResult(event:ResultEvent):void {
 		var resultXML: XML = XML(event.result);
 		Matlabulchifai.debug("patient_updates = \n" + resultXML);
-		listPatients();
+		showAll();
 	}
 	public function selectPatient(patient:XML):void {
 		patientInfoBoxVar.init(patient.id);
@@ -61,14 +68,7 @@
 	
 ]]>
 </mx:Script>
-    <mx:HTTPService
-        id="svcSearch"
-        resultFormat="e4x"
-        result="handleSearchListResult(event)"/>
-	<mx:XMLListCollection 
-		id="patientsXLC"
-		source="{XMLList(svcSearch.lastResult.children())}"/>
-	
+        
 	<mx:HTTPService
         id="svcPatientsUpdate"
         resultFormat="e4x"
@@ -81,7 +81,7 @@
 			<mx:Label fontWeight="bold" text="Search by Name: "></mx:Label>
 			<mx:TextInput id="searchTI" change="search()"/>
 			<mx:Button id="searchButton" label="Search" click="search()"/>
-			<mx:Button id="showAllButton" label="Show All" click="listPatients();searchTI.text='';"/>
+			<mx:Button id="showAllButton" label="Show All" click="showAll()"/>
 		</mx:HBox>
 		
 		<mx:Spacer height="5" />
@@ -105,8 +105,7 @@
 	                    editable="false">
 	                   	<mx:itemRenderer>
 	                 		<mx:Component>
-	                        	<mx:Button label="View" click="outerDocument.selectPatient(XML(data))" />
-	                        </mx:Component>                                       
+	                        	<mx:Button label="View" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
 	                    </mx:itemRenderer>
 				</mx:DataGridColumn>	       	                
 				<mx:DataGridColumn headerText=""
