@@ -5,7 +5,9 @@
 	height="100%"
     label="Patients"
     creationComplete="listPatients()">
-	
+	<mx:Metadata>
+		[Event(name="", type="com.matlabulchifai.events.patient.PatientEvent")]
+	</mx:Metadata>
 <mx:Script>
 <![CDATA[
     import mx.controls.Alert;
@@ -44,6 +46,7 @@
 		Matlabulchifai.debug("patient_updates = \n" + resultXML);
 		listPatients();
 	}
+	
 ]]>
 </mx:Script>
     <mx:HTTPService
@@ -85,13 +88,21 @@
 	        	<mx:DataGridColumn headerText="Gender" width="100"
 	                dataField="gender"/>
 	    		<mx:DataGridColumn headerText="Date of Birth" width="100"
-	                dataField="date_of_birth"/>
+	                dataField="date_of_birth"/>	  
+	            <mx:DataGridColumn headerText=""
+	                    editable="false">
+	                   	<mx:itemRenderer>
+	                 		<mx:Component>
+	                        	<mx:Button label="View" click="" />
+	                        </mx:Component>                                       
+	                    </mx:itemRenderer>
+				</mx:DataGridColumn>	       	                
 				<mx:DataGridColumn headerText=""
 	                    editable="false">
 	                    <mx:itemRenderer>
 	                        <mx:Component>
 	                            <mx:Button label="Delete" click="outerDocument.deletePatient(XML(data))"/>
-	                        </mx:Component>
+	                        </mx:Component>	                                           
 	                    </mx:itemRenderer>
 				</mx:DataGridColumn>
 	        </mx:columns>
