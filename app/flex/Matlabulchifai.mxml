@@ -144,6 +144,7 @@
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" login="handleLogin(event)"/>
 				<mx:Button click="mainStack.selectedChild=patientBox;title='Patients';mainMenu.visible=true;" label="Bypass Login"/>
+				<mx:Button click="mainStack.selectedChild=patientInfoBox;title='Patient Summary';mainMenu.visible=true;" label="Patient Summary"/>
 				<mlc:AccountCreateBox id="accountCreateBox" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
 			<mx:HBox id="alertBox">
