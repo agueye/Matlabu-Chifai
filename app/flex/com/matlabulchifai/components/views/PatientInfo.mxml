@@ -4,5 +4,74 @@
 	width="100%" 
 	height="100%"
     label="PatientInfo">
-	<mx:Label text="Got here"/>
+    <mx:Script>
+    	<![CDATA[
+    		[Bindable]
+    		public var patientID:int;
+    		[Bindable]
+    		public var patientActive:Boolean;
+    		[Bindable]
+    		public var patientAddress:String;
+    		[Bindable]
+    		public var patientArrivalDate:String;
+    		[Bindable]
+    		public var patientCity:String;
+    		[Bindable]
+    		public var patientCreatedAt:String;
+    		[Bindable]
+    		public var patientDateOfBirth:String;
+    		[Bindable]
+    		public var patientEmergencyContactName:String;
+    		[Bindable]
+    		public var patientEmergencyContactNumber:String;
+    		[Bindable]
+    		public var patientEmergencyContactRelationship:String;
+    		[Bindable]
+    		public var patientFatherFirstName:String;
+    		[Bindable]
+    		public var patientFatherLastName:String;
+    		[Bindable]
+    		public var patientFirstName:String;
+    		[Bindable]
+    		public var patientGender:String;
+    		[Bindable]
+    		public var patientLastName:String;
+    		[Bindable]
+    		public var patientMiddleName:String;
+    		[Bindable]
+    		public var patientRecordNumber:int;
+    		[Bindable]
+    		public var patientMotherFirstName:String;
+    		[Bindable]
+    		public var patientMotherLastName:String;
+    		[Bindable]
+    		public var patientRemarks:String;
+    		[Bindable]
+    		public var patientState:String;
+    		[Bindable]
+    		public var patientTelephone:String;
+    		[Bindable]
+    		public var patientUpdatedAt:String;
+    		[Bindable]
+    		public var patientZip:String;
+    		
+    		[Bindable]
+    		public var patientIdMap:Object;
+    		
+    		[Bindable]
+    		public var patient:XML;
+    		
+    		public function init(idnum:int):void{
+    			patientID=idnum;    			
+    			
+    			//Patient info
+    			patient = patientIdMap[idnum];
+    	    		
+    		}
+    	]]>
+    </mx:Script>
+	<mx:Label text="{patient}"/>
+	<mx:Label text="You are currently looking at {patient['first_name']} {patient['last_name']}"/>
+	<mx:Label text="So just use the patient xml file to access the data. carry on!"/>
+	
 </mx:VBox>

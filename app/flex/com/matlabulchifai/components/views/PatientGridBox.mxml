@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:mlc="com.matlabulchifai.components.views.*" 
 	width="100%" 
 	height="100%"
     label="Patients"
@@ -10,8 +11,15 @@
 	</mx:Metadata>
 <mx:Script>
 <![CDATA[
+	import mx.containers.ViewStack;
     import mx.controls.Alert;
     import mx.rpc.events.ResultEvent;
+	
+	[Bindable]
+	public var mainStackVar:ViewStack;
+	
+	[Bindable]
+	public var patientInfoBoxVar:PatientInfo;
 	
     private function search():void {
     	if (searchTI.text == "") {
@@ -45,6 +53,10 @@
 		var resultXML: XML = XML(event.result);
 		Matlabulchifai.debug("patient_updates = \n" + resultXML);
 		listPatients();
+	}
+	public function selectPatient(patient:XML):void {
+		patientInfoBoxVar.init(patient.id);
+		mainStackVar.selectedChild=patientInfoBoxVar;	
 	}
 	
 ]]>
@@ -93,7 +105,7 @@
 	                    editable="false">
 	                   	<mx:itemRenderer>
 	                 		<mx:Component>
-	                        	<mx:Button label="View" click="" />
+	                        	<mx:Button label="View" click="outerDocument.selectPatient(XML(data))" />
 	                        </mx:Component>                                       
 	                    </mx:itemRenderer>
 				</mx:DataGridColumn>	       	                

@@ -105,12 +105,6 @@
 			debug("patients = \n" + resultXML);	
 		}
 		
-		public function viewPat(obj:Button):void{
-			//mainStack.selectedChild=patientInfoBox;
-			obj.label = 'duh';
-
-		}
-		
 		]]>
 	</mx:Script>
 	
@@ -159,13 +153,16 @@
 			</mx:HBox>
 			<mx:HBox id="patientBox">
 				<mlc:PatientGridBox id="patientGridBox"
+					mainStackVar="{mainStack}"
+					patientInfoBoxVar="{patientInfoBox}"
 					width="70%" height="90%" horizontalAlign="left"/>
 				<mlc:PatientCreateBox id="patientCreateBox"
 					patientCreate="patientGridBox.listPatients()"
 					width="30%" height="90%" horizontalAlign="center"/>	
 			</mx:HBox>
 			<mlc:AdminBox id="adminBox"/>
-			<mlc:PatientInfo id="patientInfoBox"/>
+			<mlc:PatientInfo id="patientInfoBox"
+					patientIdMap="{patientIdMap}" />
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>
