@@ -31,13 +31,16 @@
 	    import com.matlabulchifai.events.patient.SearchEvent;
 		
 		[Bindable]
-		private var _user:XML;
-		
-		[Bindable]
 		public static var title:String = "";
 		
 		[Bindable]
+		private var _user:XML;
+		
+		[Bindable]
 		private var patientIdMap:Object;
+		
+		private var rnd:Number = Math.round(Math.random()*1000);
+
 		
 		public static function debug(str:String):void {
 			application.debugPanel.addMessage(
@@ -59,14 +62,14 @@
 			if (searchString == "") {
 	    		listPatients();
 	    	} else {
-	    		svcPatientList.url = "/patients/search.xml";
+	    		svcPatientList.url = "/patients/search.xml?rnd=" + rnd;
 				svcPatientList.send({search: searchString});
 	    	}
 		}
 		
 		private function listPatients():void {
 			//Alert.show("listPatients() Called.", "Info");
-			svcPatientList.url = "/patients.xml";
+			svcPatientList.url= "/patients.xml?rnd=" + rnd;
 			svcPatientList.send();
 		}
 		
@@ -137,7 +140,6 @@
 	
 	<mx:HTTPService
         id="svcPatientList"
-        url="/patients.xml"
         resultFormat="e4x"
         result="handlePatientListResult(event)"/>
 	<mx:XMLListCollection id="patientsXLC"

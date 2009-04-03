@@ -18,8 +18,11 @@
     public var patientIdMap:Object;
     
     private var gotAlerts:Boolean = false;
+    
+    private var rnd:Number = Math.round(Math.random()*1000);
 
     public function listAlerts():void {
+    	svcAlertList.url= "/alerts.xml?rnd=" + rnd;
     	svcAlertList.send();
     }
     
@@ -63,7 +66,6 @@
 	
 	<mx:HTTPService
         id="svcAlertList"
-        url="/alerts.xml"
         resultFormat="e4x"
         result="handleAlertListResult(event)"/>
 	<mx:XMLListCollection id="alertsXLC"
