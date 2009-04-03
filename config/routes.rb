@@ -1,4 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :allergies
+
+  map.resources :visits
+
+  map.resources :vaccinations
+
   map.search '/patients/search.:format', :controller => "patients", :action => "find"
 	
   map.resources :alerts

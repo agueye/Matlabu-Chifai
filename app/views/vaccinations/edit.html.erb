@@ -1,0 +1,12 @@
+<h1>Editing vaccination</h1>
+
+<% form_for(@vaccination) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @vaccination %> |
+<%= link_to 'Back', vaccinations_path %>
