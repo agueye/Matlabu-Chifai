@@ -5,30 +5,12 @@
 	height="100%"
     label="PatientInfo">
     <mx:Script>
-    	<![CDATA[[Bindable]
-    		public var patientArrivalDate:String;
-    		[Bindable]
-    		public var patientCreatedAt:String;
-    		[Bindable]
-    		public var patientRecordNumber:int;
-    		[Bindable]
-    		public var patientMotherFirstName:String;
-    		[Bindable]
-    		public var patientMotherLastName:String;
-    		[Bindable]
-    		public var patientRemarks:String;
-    		[Bindable]
-    		public var patientState:String;
-    		[Bindable]
-    		public var patientTelephone:String;
-    		[Bindable]
-    		public var patientUpdatedAt:String;
-    		[Bindable]
-    		public var patientZip:String;
+    	<![CDATA[
     		
+    		[Bindable]
+    		public var patientID:int;
     		[Bindable]
     		public var patientIdMap:Object;
-    		
     		[Bindable]
     		public var patient:XML;
     		
@@ -41,7 +23,7 @@
     		}
     	]]>
     </mx:Script>
-    <mx:Label text="Patient Summary" fontSize="36" color="#171712"/>
+    <mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
     <mx:HBox>
     	<mx:VBox>
     		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>	
