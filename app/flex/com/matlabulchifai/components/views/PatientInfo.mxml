@@ -5,39 +5,10 @@
 	height="100%"
     label="PatientInfo">
     <mx:Script>
-    	<![CDATA[
-    		[Bindable]
-    		public var patientID:int;
-    		[Bindable]
-    		public var patientActive:Boolean;
-    		[Bindable]
-    		public var patientAddress:String;
-    		[Bindable]
+    	<![CDATA[[Bindable]
     		public var patientArrivalDate:String;
     		[Bindable]
-    		public var patientCity:String;
-    		[Bindable]
     		public var patientCreatedAt:String;
-    		[Bindable]
-    		public var patientDateOfBirth:String;
-    		[Bindable]
-    		public var patientEmergencyContactName:String;
-    		[Bindable]
-    		public var patientEmergencyContactNumber:String;
-    		[Bindable]
-    		public var patientEmergencyContactRelationship:String;
-    		[Bindable]
-    		public var patientFatherFirstName:String;
-    		[Bindable]
-    		public var patientFatherLastName:String;
-    		[Bindable]
-    		public var patientFirstName:String;
-    		[Bindable]
-    		public var patientGender:String;
-    		[Bindable]
-    		public var patientLastName:String;
-    		[Bindable]
-    		public var patientMiddleName:String;
     		[Bindable]
     		public var patientRecordNumber:int;
     		[Bindable]
@@ -70,8 +41,56 @@
     		}
     	]]>
     </mx:Script>
-	<mx:Label text="{patient}"/>
-	<mx:Label text="You are currently looking at {patient['first_name']} {patient['last_name']}"/>
-	<mx:Label text="So just use the patient xml file to access the data. carry on!"/>
-	
+    <mx:Label text="Patient Summary" fontSize="36" color="#171712"/>
+    <mx:HBox>
+    	<mx:VBox>
+    		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>	
+    	</mx:VBox>
+    	<mx:VBox>
+			<mx:Label text="General Information"  fontWeight="bold" fontSize="12"/>
+			<mx:HBox>
+    			<mx:Label text="Patient ID: {patient['id']}"  fontSize="12"/>
+				<mx:Label text="	Patient Active: {patient['patient_active']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:HBox>
+    			<mx:Label text="First Name: {patient['first_name']}"  fontSize="12"/>
+				<mx:Label text="	Middle Name: {patient['middle_name']}"  fontSize="12"/>
+				<mx:Label text="	Last Name: {patient['last_name']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="Date of Birth: {patient['date_of_birth']}"  fontSize="12"/>
+				<mx:Label text="Gender: {patient['gender']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="Address: {patient['address']}"  fontSize="12"/>
+				<mx:Label text="City: {patient['city']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="Father's First Name: {patient['father_first_name']}"  fontSize="12"/>
+				<mx:Label text="Father's Last Name: {patient['father_last_name']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="Mother's First Name: {patient['mother_first_name']}"  fontSize="12"/>
+				<mx:Label text="Mother's Last Name: {patient['mother_last_name']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:Label />
+			
+			<mx:Label text="Emergency Contact"  fontWeight="bold" fontSize="12"/>
+			<mx:HBox>
+	    		<mx:Label text="First Name: {patient['emergency_first_name']}"  fontSize="12"/>
+				<mx:Label text="Middle Name: {patient['emergency_middle_name']}"  fontSize="12"/>
+				<mx:Label text="Last Name: {patient['emergency_last_name']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="Date of Birth: {patient['date_of_birth']}"  fontSize="12"/>
+				<mx:Label text="Gender: {patient['gender']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="Address: {patient['address']}"  fontSize="12"/>
+				<mx:Label text="City: {patient['city']}"  fontSize="12"/>
+			</mx:HBox>
+			<mx:Label />
+			
+    	</mx:VBox>
+    </mx:HBox>
 </mx:VBox>
