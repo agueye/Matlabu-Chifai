@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="400" 
+	height="450"
+	title="Add New Vaccine"
+	showCloseButton="true"
+    close="PopUpManager.removePopUp(this)">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var patient:XML;
+			
+			private function processVaccinationCreate():void{
+				// add vaccination to database
+				//  on error: display error, don't close popup?
+				//  on success: remove popup, throw event to PatientInfo
+				//   to refresh datagrid
+				
+			
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</mx:Script>
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+		<mx:Form>
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}"/>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Vaccine">
+				<mx:TextInput id="vaccNameTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Date">
+				<mx:DateChooser id="vaccDateDC"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Notes">
+				<mx:TextInput id="vaccNotesTI" width="100%"/>
+			</mx:FormItem>
+		</mx:Form>
+	</mx:VBox>
+	
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+		<mx:Button label="OK" id="OKBtn" click="processVaccinationCreate()" />
+		<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>

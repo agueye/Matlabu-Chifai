@@ -6,8 +6,11 @@
     label="PatientInfo">
     <mx:Script>
     	<![CDATA[
+    		import mx.core.IFlexDisplayObject;
     		import mx.rpc.events.ResultEvent;
 			import mx.collections.XMLListCollection;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 	
     		[Bindable]
     		public var patientID:int;
@@ -29,6 +32,18 @@
     			patient = patientIdMap[idnum];
     	    		
     		}
+    		
+    		private function showVaccCreateTitleWin():void{
+    			var vaccPopUp:VaccCreateTitleWin = 
+    				VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
+    			
+    			vaccPopUp.patient = this.patient;
+    			PopUpManager.centerPopUp(vaccPopUp);
+    			
+    			// might want to raise event within vacc title window so PatientInfo
+    			// knows to refresh the datagrid after successful entry
+    		}
+    		
     	]]>
     </mx:Script>
     <mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
@@ -129,7 +144,7 @@
 					</mx:columns>
 				</mx:DataGrid>
 			</mx:Panel>
-			<mx:LinkButton label="Add new vaccination" color="#0000FF" />
+			<mx:LinkButton label="Add new vaccination" color="#0000FF" click="showVaccCreateTitleWin()"/>
 		</mx:VBox>
     </mx:HBox>
 </mx:VBox>
