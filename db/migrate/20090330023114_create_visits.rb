@@ -4,7 +4,7 @@ class CreateVisits < ActiveRecord::Migration
       t.string :reason
       t.date :dateSeen
       t.string :followUp
-      t.string :note
+      t.string :notes
 
       t.timestamps
     end

@@ -6,13 +6,21 @@
     label="PatientInfo">
     <mx:Script>
     	<![CDATA[
-    		
+    		import mx.rpc.events.ResultEvent;
+			import mx.collections.XMLListCollection;
+	
     		[Bindable]
     		public var patientID:int;
     		[Bindable]
     		public var patientIdMap:Object;
     		[Bindable]
     		public var patient:XML;
+			[Bindable]
+			public var visitsXLC:XMLListCollection;
+			[Bindable]
+			public var allergiesXLC:XMLListCollection;
+			[Bindable]
+			public var vaccinationsXLC:XMLListCollection;
     		
     		public function init(idnum:int):void{
     			patientID=idnum;    			
@@ -74,5 +82,54 @@
 			<mx:Label />
 			
     	</mx:VBox>
+		<mx:VBox paddingLeft="60">
+			<mx:Text text="Summary" fontWeight="bold" fontSize="14"/>
+			<mx:Panel title="Visits">
+				<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{visitsXLC}">
+					<mx:columns>
+						<mx:DataGridColumn headerText="Reason" width="100"
+							dataField="reason"/>
+						<mx:DataGridColumn headerText="Date Seen" width="100"
+							dataField="dateSeen"/>
+						<mx:DataGridColumn headerText="Follow Up" width="100"
+							dataField="followUp"/>
+						<mx:DataGridColumn headerText="Note" width="130"
+							dataField="note"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:Panel>
+			<mx:LinkButton label="Add new visit" color="#0000FF" />
+			<mx:Panel title="Allergies">
+				<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{allergiesXLC}">
+					<mx:columns>
+						<mx:DataGridColumn headerText="Name" width="115"
+							dataField="name"/>
+						<mx:DataGridColumn headerText="Date Observed" width="100"
+							dataField="dateObserved"/>
+						<mx:DataGridColumn headerText="Severity" width="100"
+							dataField="severity"/>
+						<mx:DataGridColumn headerText="Notes" width="130"
+							dataField="notes"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:Panel>
+			<mx:LinkButton label="Add new allergy" color="#0000FF" />
+			<mx:Panel title="Vaccinations">
+				<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{vaccinationsXLC}">
+					<mx:columns>
+						<mx:DataGridColumn headerText="Name" width="115"
+							dataField="name"/>
+						<mx:DataGridColumn headerText="Date Admined" width="100"
+							dataField="dateAdmined"/>
+						<mx:DataGridColumn headerText="Notes" width="130"
+							dataField="notes"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:Panel>
+			<mx:LinkButton label="Add new vaccination" color="#0000FF" />
+		</mx:VBox>
     </mx:HBox>
 </mx:VBox>
