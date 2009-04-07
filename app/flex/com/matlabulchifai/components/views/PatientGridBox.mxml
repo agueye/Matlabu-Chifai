@@ -15,6 +15,7 @@
     import mx.controls.Alert;
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
+    
 	
 	[Bindable]
 	public var mainStackVar:ViewStack;
@@ -27,22 +28,26 @@
 	
 	private var now:Date;
 	private var last:Date = new Date();
-		    
 	private function search():void {
-		dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));
-		/* now = new Date();
-		if (now.time - last.time > 2000){
-			last = new Date();
-			var timeout:Date = new Date()
-			timeout.setSeconds(2,0);
-			//var timoutNow = new Date();
-			while(timeout.milliseconds > new Date().milliseconds) continue;
-			dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));
-				
-		}  */
+		debounce(500);
+		//dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));
 	}
-    
-    
+    private var timeout:Number;
+    private var execAsap:Boolean = false;
+    private function debounce(threshold:int):void{
+    	if (timeout)
+        	clearTimeout(timeout);
+        
+        else if (execAsap)
+            dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));       
+        timeout = setTimeout(delayed, threshold || 100,execAsap); 
+    } 
+    private function delayed(execAsap:Boolean):Object {       
+            if (!execAsap)
+                dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));        
+            return null; 
+        }
+
     private function showAll():void {
     	searchTI.text='';
     	search();

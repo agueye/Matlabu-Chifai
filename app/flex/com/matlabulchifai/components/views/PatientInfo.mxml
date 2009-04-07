@@ -27,7 +27,6 @@
     		
     		public function init(idnum:int):void{
     			patientID=idnum;    			
-    			
     			//Patient info
     			patient = patientIdMap[idnum];
     	    		
