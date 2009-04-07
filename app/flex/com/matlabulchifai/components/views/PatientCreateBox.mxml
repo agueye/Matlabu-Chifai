@@ -18,11 +18,18 @@
 		import com.matlabulchifai.events.patient.PatientEvent;
 		import mx.controls.Alert;
 		import mx.managers.FocusManager;
+		import mx.collections.ArrayCollection;
 		
 		[Bindable]
 		public var test:PatientGridBox;
+		[Bindable]
+		private var currDate:Date = new Date();
 		
-		
+		[Bindable]
+        public var genders:ArrayCollection = new ArrayCollection(
+            [ {label:"Male", data:"Male"}, 
+			  {label:"Female", data:"Female"}]);
+
 		private function handleNewPatientResult(event:ResultEvent):void{
 			var resultXML:XML = XML(event.result);
 			Matlabulchifai.debug("patient created = \n" + resultXML);
@@ -115,15 +122,16 @@
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="Arrival Date">
-					<mx:TextInput id="arrivaldateTI"/>
+					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" />
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="Date of Birth">
-					<mx:TextInput id="birthdateTI"/>
+					<mx:DateField id="birthdateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" 
+						displayedMonth="0" displayedYear="1990" showToday="false" />
 				</mx:FormItem>
 				
 				<mx:FormItem label="Gender">
-					<mx:TextInput id="genderTI"/>
+					<mx:ComboBox id="genderTI" dataProvider="{genders}"/>
 				</mx:FormItem>
 				
 				<mx:FormItem label="Address">
