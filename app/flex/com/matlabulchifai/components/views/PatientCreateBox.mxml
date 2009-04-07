@@ -13,6 +13,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.TextArea;
 			
 		import mx.rpc.events.ResultEvent;
 		import com.matlabulchifai.events.patient.PatientEvent;
@@ -65,8 +66,27 @@
 			//refocus back on the first field
 			focusManager.setFocus(medicalrecordTI);
 		}
-		
-		
+		private var stringInvalid:String = "1234567890!@#$%^&*()-_=+[]{}|\\\'\";:,<.>`~";
+		private var numberInvalid:String = "abcdefghijklmnopqrstuvwkyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+[]{}|\\\'\";:,<.>`~";
+		private function validateString(box:TextInput,compareString:String):void{
+			if (box.text == "") {
+				box.setStyle("backgroundColor","#FF0033");
+				box.setStyle("backgroundAlpha",".1");
+				return;
+			}
+			var i:int;
+			for (i = 0; i < box.text.length; i++){
+				if (compareString.search(box.text.charAt(i)) > -1){
+					box.setStyle("backgroundColor","#FF0033");
+					box.setStyle("backgroundAlpha",".1");
+					return;
+				}
+			}
+			//If it gets here, string is ok
+			box.setStyle("backgroundColor","white");
+			box.setStyle("backgroundAlpha","1");
+			return;
+		}
 		
 		]]>
 	</mx:Script>
@@ -106,11 +126,11 @@
 	<mx:Panel title="Add Patient" horizontalAlign="center">
 		<mx:Form id="patientForm" textAlign="left">
 				<mx:FormItem required="true" label="Medical Record ID">
-					<mx:TextInput id="medicalrecordTI"/>
+					<mx:TextInput id="medicalrecordTI" focusOut="validateString(medicalrecordTI,numberInvalid)"/>
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="First Name">
-					<mx:TextInput id="firstnameTI"/>
+					<mx:TextInput id="firstnameTI" focusOut="validateString(firstnameTI,stringInvalid)"/>
 				</mx:FormItem>
 				
 				<mx:FormItem label="Middle Name">
@@ -118,7 +138,7 @@
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="Last Name">
-					<mx:TextInput id="lastnameTI"/>
+					<mx:TextInput id="lastnameTI" focusOut="validateString(lastnameTI,stringInvalid)"/>
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="Arrival Date">
