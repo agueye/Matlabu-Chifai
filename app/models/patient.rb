@@ -1,5 +1,6 @@
 class Patient < ActiveRecord::Base
   has_many :alerts
+  has_many :notes
   has_many :visits
   has_many :vaccinations
   has_many :allergies

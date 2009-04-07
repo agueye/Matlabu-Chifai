@@ -12,6 +12,7 @@
 			import mx.managers.PopUpManager;
 			import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 			import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
+			import com.matlabulchifai.components.popups.NoteCreateTitleWin;
 			
     		[Bindable]
     		public var patientID:int;
@@ -21,6 +22,8 @@
     		public var patient:XML;
 			[Bindable]
 			public var visitsXLC:XMLListCollection;
+			[Bindable]
+			public var notesXLC:XMLListCollection;
 			[Bindable]
 			public var allergiesXLC:XMLListCollection;
 			[Bindable]
@@ -50,6 +53,17 @@
     			
     			allergyPopUp.patient = this.patient;
     			PopUpManager.centerPopUp(allergyPopUp);
+    			
+    			// might want to raise event within vacc title window so PatientInfo
+    			// knows to refresh the datagrid after successful entry
+    		}
+			
+			private function showNoteCreateTitleWin():void{
+    			var notePopUp:NoteCreateTitleWin = 
+    				NoteCreateTitleWin(PopUpManager.createPopUp(this, NoteCreateTitleWin, true));
+    			
+    			notePopUp.patient = this.patient;
+    			PopUpManager.centerPopUp(notePopUp);
     			
     			// might want to raise event within vacc title window so PatientInfo
     			// knows to refresh the datagrid after successful entry
@@ -110,6 +124,16 @@
     	</mx:VBox>
 		<mx:VBox paddingLeft="60">
 			<mx:Text text="Summary" fontWeight="bold" fontSize="14"/>
+			<mx:Panel title="Notes">				
+				<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{notesXLC}">
+					<mx:columns>
+						<mx:DataGridColumn headerText="Note" width="430"
+							dataField="note"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:Panel>
+			<mx:LinkButton label="Add new note" color="#0000FF" click="showNoteCreateTitleWin()"/>
 			<mx:Panel title="Visits">
 				<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
 					dataProvider="{visitsXLC}">

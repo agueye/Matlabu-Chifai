@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="500" 
+	height="250"
+	title="Add New Note"
+	showCloseButton="true"
+    close="PopUpManager.removePopUp(this)">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var patient:XML;
+			
+			private function processNoteCreate():void{
+				// add note to database
+				//  on error: display error, don't close popup?
+				//  on success: remove popup, throw event to PatientInfo
+				//   to refresh datagrid
+				
+			
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</mx:Script>
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+		<mx:Form>
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />		
+			
+			<mx:FormItem label="Notes">
+				<mx:TextArea id="NotesTI" width="300" height="100" />
+			</mx:FormItem>
+			
+		<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
+			<mx:Button label="OK" id="OKBtn" click="processNoteCreate()" />
+			<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+		</mx:HBox>
+			
+		</mx:Form>
+	</mx:VBox>
+	
+	
+	
+	
+</mx:TitleWindow>
