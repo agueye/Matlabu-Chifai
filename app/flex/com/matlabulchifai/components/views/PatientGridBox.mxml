@@ -36,8 +36,7 @@
     private var execAsap:Boolean = false;
     private function debounce(threshold:int):void{
     	if (timeout)
-        	clearTimeout(timeout);
-        
+        	clearTimeout(timeout);        
         else if (execAsap)
             dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));       
         timeout = setTimeout(delayed, threshold || 100,execAsap); 
@@ -46,7 +45,7 @@
             if (!execAsap)
                 dispatchEvent(new SearchEvent(SearchEvent.PATIENT_SEARCH, searchTI.text));        
             return null; 
-        }
+    }
 
     private function showAll():void {
     	searchTI.text='';

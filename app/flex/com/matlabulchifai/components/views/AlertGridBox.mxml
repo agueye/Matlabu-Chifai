@@ -10,6 +10,7 @@
 <![CDATA[
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
+	import mx.containers.ViewStack;
     
     [Bindable]
 	public var patientsXLC:XMLListCollection;
@@ -61,6 +62,14 @@
 		Matlabulchifai.debug("alert_updates = \n" + resultXML);
 		listAlerts();
 	}
+	[Bindable]
+	public var mainStackVar:ViewStack;
+	[Bindable]
+	public var patientInfoBoxVar:PatientInfo;
+	public function selectPatient(alert:XML):void {
+		patientInfoBoxVar.init(alert.patient_id);
+		mainStackVar.selectedChild=patientInfoBoxVar;	
+	}
 ]]>
 </mx:Script>
 	
@@ -91,6 +100,14 @@
 					dataField="alert_date"/>
 				<mx:DataGridColumn headerText="Alert Note"
 					dataField="alert_note"/>
+				<mx:DataGridColumn headerText="" width="70" 
+	                    editable="false">
+	                    <mx:itemRenderer>
+	                        <mx:Component>
+	                            <mx:Button label="View" click="outerDocument.selectPatient(XML(data))" />
+	                        </mx:Component>
+	                    </mx:itemRenderer>
+				</mx:DataGridColumn>
 				<mx:DataGridColumn headerText="" width="70" 
 	                    editable="false">
 	                    <mx:itemRenderer>

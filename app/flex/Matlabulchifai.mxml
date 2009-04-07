@@ -173,6 +173,8 @@
 				<mlc:AlertGridBox id="alertGridBox"
 					patientsXLC="{patientsXLC}"
 					patientIdMap="{patientIdMap}" 
+					mainStackVar="{mainStack}"
+					patientInfoBoxVar="{patientInfoBox}"
 					width="70%" height="90%" horizontalAlign="left"/>
 				<mlc:AlertCreateBox id="alertCreateBox"
 					alertCreate="alertGridBox.listAlerts()"
