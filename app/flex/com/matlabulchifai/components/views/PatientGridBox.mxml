@@ -49,6 +49,7 @@
 
     private function showAll():void {
     	searchTI.text='';
+    	focusManager.setFocus(searchTI);
     	search();
     }
     
