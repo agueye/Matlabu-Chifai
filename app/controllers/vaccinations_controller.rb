@@ -2,8 +2,11 @@ class VaccinationsController < ApplicationController
   # GET /vaccinations
   # GET /vaccinations.xml
   def index
-    @vaccinations = Vaccination.find(:all)
-
+	if params[:patient_id]
+		@vaccinations = Vaccination.find(:all, :conditions => {:patient_id => params[:patient_id]})
+	else
+		@vaccinations = Vaccination.find(:all)
+	end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @vaccinations }

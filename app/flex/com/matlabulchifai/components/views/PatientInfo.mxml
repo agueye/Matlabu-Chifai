@@ -3,7 +3,8 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
 	height="100%"
-    label="PatientInfo">
+    label="PatientInfo"
+	creationComplete="listVaccinations()">
     <mx:Script>
     	<![CDATA[
     		import mx.core.IFlexDisplayObject;
@@ -16,7 +17,7 @@
 			import com.matlabulchifai.components.popups.VisitCreateTitleWin;
 			
     		[Bindable]
-    		public var patientID:int;
+    		public var patientID:Number;
     		[Bindable]
     		public var patientIdMap:Object;
     		[Bindable]
@@ -27,8 +28,6 @@
 			public var notesXLC:XMLListCollection;
 			[Bindable]
 			public var allergiesXLC:XMLListCollection;
-			[Bindable]
-			public var vaccinationsXLC:XMLListCollection;
     		
     		public function init(idnum:int):void{
     			patientID=idnum;    			
@@ -36,12 +35,25 @@
     			patient = patientIdMap[idnum];
     	    		
     		}
+			
+			public function listVaccinations():void {
+				svcVaccinationsList.url="/vaccinations.xml?patient_id=" + patientID;
+				svcVaccinationsList.send();
+			}
     		
+			private function handleVaccinationsListResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("patient_vaccinations = \n" + resultXML);
+				listVaccinations();
+				
+			}
+			
     		private function showVaccCreateTitleWin():void{
     			var vaccPopUp:VaccCreateTitleWin = 
     				VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
     			
     			vaccPopUp.patient = this.patient;
+				vaccPopUp.patientID = this.patientID;
     			PopUpManager.centerPopUp(vaccPopUp);
     			
     			// might want to raise event within vacc title window so PatientInfo
@@ -72,6 +84,17 @@
     		
     	]]>
     </mx:Script>
+	
+	
+	<mx:HTTPService
+        id="svcVaccinationsList"
+        resultFormat="e4x"
+        result="handleVaccinationsListResult(event)"/>
+	
+	<mx:XMLListCollection id="vaccinationsXLC"
+        source="{XMLList(svcVaccinationsList.lastResult.children())}"/>
+
+	
     <mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
     <mx:HBox>
     	<mx:VBox>

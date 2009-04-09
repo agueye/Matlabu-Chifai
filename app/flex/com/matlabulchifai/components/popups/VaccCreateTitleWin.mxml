@@ -10,21 +10,51 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import com.matlabulchifai.events.patient.VaccinationEvent;
 			
 			[Bindable]
 			public var patient:XML;
+			[Bindable]
+			public var patientID:int;
 			
+			// add vaccination to database
+			//  on error: display error, don't close popup?
+			//  on success: remove popup, throw event to PatientInfo
+			//  to refresh datagrid
 			private function processVaccinationCreate():void{
-				// add vaccination to database
-				//  on error: display error, don't close popup?
-				//  on success: remove popup, throw event to PatientInfo
-				//   to refresh datagrid
-				
-			
+				svcVaccinationCreate.send();
 				PopUpManager.removePopUp(this);
 			}
+			
+			
+			private function handleNewVaccinationResult(event:ResultEvent):void{
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("vaccination created = \n" + resultXML);
+				dispatchEvent(new VaccinationEvent(VaccinationEvent.VACCINATION_CREATE, resultXML));	
+			}
+			
 		]]>
 	</mx:Script>
+	
+	<mx:HTTPService
+		id="svcVaccinationCreate"
+		url="/vaccinations.xml"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewVaccinationResult(event)">
+		<mx:request>
+			<vaccination>
+				<name>{vaccNameTI.text}</name>
+				<dateAdmined>{vaccDateDF.text}</dateAdmined>
+				<notes>{vaccNotesTA.text}</notes>
+				<patient_id>{patientID}</patient_id>
+			</vaccination>
+		</mx:request>
+	</mx:HTTPService>
+	
+	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
@@ -33,12 +63,12 @@
 				<mx:TextInput id="vaccNameTI" width="100%"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date">
-				<mx:DateField id="vaccDateDC" yearNavigationEnabled="true" minYear="1980" />
+			<mx:FormItem label="Date Administered">
+				<mx:DateField id="vaccDateDF" yearNavigationEnabled="true" minYear="1980" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Notes">
-				<mx:TextArea id="vaccNotesTI" width="200" height="150" />
+				<mx:TextArea id="vaccNotesTA" width="200" height="150" />
 			</mx:FormItem>
 		</mx:Form>
 	</mx:VBox>
