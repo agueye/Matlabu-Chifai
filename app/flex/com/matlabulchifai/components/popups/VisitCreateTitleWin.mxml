@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="600" 
+	height="450"
+	title="Add New Visit"
+	showCloseButton="true"
+    close="PopUpManager.removePopUp(this)">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var patient:XML;
+			
+			private function processVisitCreate():void{
+				// add visit to database
+				//  on error: display error, don't close popup?
+				//  on success: remove popup, throw event to PatientInfo
+				//   to refresh datagrid
+				
+			
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</mx:Script>
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+		<mx:Form>
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />					
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Reason. If other, please specify.">
+				
+				<mx:ComboBox> 
+					<mx:ArrayCollection>
+					<mx:String>other</mx:String>
+					<mx:String>food coma</mx:String>
+					<mx:String>poison ivy</mx:String>
+					<mx:String>common 4</mx:String>
+					<mx:String>malaria</mx:String>
+					
+					
+					
+					</mx:ArrayCollection>
+				</mx:ComboBox>
+
+			</mx:FormItem>
+			<mx:FormItem label="Other:">
+				<mx:TextInput id="visitNameTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Follow up?. If other, specify in notes.">
+				
+				<mx:ComboBox> 
+					<mx:ArrayCollection>
+					<mx:String>yes</mx:String>
+					<mx:String>no</mx:String>					
+					
+					
+					</mx:ArrayCollection>
+				</mx:ComboBox>
+
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			
+			<mx:FormItem label="Date">
+				<mx:DateField id="visitDateDC" yearNavigationEnabled="true" minYear="1980" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Notes">
+				<mx:TextArea id="visitNotesTI" width="200" height="150" />
+			</mx:FormItem>
+		</mx:Form>
+	</mx:VBox>
+	
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+		<mx:Button label="OK" id="OKBtn" click="processVisitCreate()" />
+		<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>

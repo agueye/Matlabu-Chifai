@@ -13,6 +13,7 @@
 			import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 			import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
 			import com.matlabulchifai.components.popups.NoteCreateTitleWin;
+			import com.matlabulchifai.components.popups.VisitCreateTitleWin;
 			
     		[Bindable]
     		public var patientID:int;
