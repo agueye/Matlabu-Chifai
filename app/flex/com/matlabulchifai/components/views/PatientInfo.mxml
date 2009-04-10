@@ -4,7 +4,7 @@
 	width="100%" 
 	height="100%"
     label="PatientInfo"
-	creationComplete="listVaccinations()">
+	creationComplete="summary()">
     <mx:Script>
     	<![CDATA[
     		import mx.core.IFlexDisplayObject;
@@ -23,11 +23,7 @@
     		[Bindable]
     		public var patient:XML;
 			[Bindable]
-			public var visitsXLC:XMLListCollection;
-			[Bindable]
 			public var notesXLC:XMLListCollection;
-			[Bindable]
-			public var allergiesXLC:XMLListCollection;
     		
     		public function init(idnum:int):void{
     			patientID=idnum;    			
@@ -35,6 +31,12 @@
     			patient = patientIdMap[idnum];
     	    		
     		}
+			
+			public function summary():void {
+				listAllergies();
+				listVisits();
+				listVaccinations();
+			}
 			
 			public function listVaccinations():void {
 				svcVaccinationsList.url="/vaccinations.xml?patient_id=" + patientID;
@@ -45,7 +47,28 @@
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("patient_vaccinations = \n" + resultXML);
 				listVaccinations();
-				
+			}
+			
+			public function listAllergies():void {
+				svcAllergiesList.url="/allergies.xml?patient_id=" + patientID;
+				svcAllergiesList.send();
+			}
+    		
+			private function handleAllergiesListResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("patient_allergies = \n" + resultXML);
+				listAllergies();
+			}
+			
+			public function listVisits():void {
+				svcVisitsList.url="/visits.xml?patient_id=" + patientID;
+				svcVisitsList.send();
+			}
+    		
+			private function handleVisitsListResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("visit_allergies = \n" + resultXML);
+				listVisits();
 			}
 			
     		private function showVaccCreateTitleWin():void{
@@ -55,9 +78,6 @@
     			vaccPopUp.patient = this.patient;
 				vaccPopUp.patientID = this.patientID;
     			PopUpManager.centerPopUp(vaccPopUp);
-    			
-    			// might want to raise event within vacc title window so PatientInfo
-    			// knows to refresh the datagrid after successful entry
     		}
 			
 			private function showAllergyCreateTitleWin():void{
@@ -65,10 +85,17 @@
     				AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));
     			
     			allergyPopUp.patient = this.patient;
+				allergyPopUp.patientID = this.patientID;
     			PopUpManager.centerPopUp(allergyPopUp);
+    		}
+			
+			private function showVisitCreateTitleWin():void{
+    			var visitPopUp:VisitCreateTitleWin = 
+    				VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
     			
-    			// might want to raise event within vacc title window so PatientInfo
-    			// knows to refresh the datagrid after successful entry
+    			visitPopUp.patient = this.patient;
+				visitPopUp.patientID = this.patientID;
+    			PopUpManager.centerPopUp(visitPopUp);
     		}
 			
 			private function showNoteCreateTitleWin():void{
@@ -93,8 +120,24 @@
 	
 	<mx:XMLListCollection id="vaccinationsXLC"
         source="{XMLList(svcVaccinationsList.lastResult.children())}"/>
-
 	
+	<mx:HTTPService
+        id="svcAllergiesList"
+        resultFormat="e4x"
+        result="handleAllergiesListResult(event)"/>
+	
+	<mx:XMLListCollection id="allergiesXLC"
+        source="{XMLList(svcAllergiesList.lastResult.children())}"/>
+
+	<mx:HTTPService
+        id="svcVisitsList"
+        resultFormat="e4x"
+        result="handleVisitsListResult(event)"/>
+	
+	<mx:XMLListCollection id="visitsXLC"
+        source="{XMLList(svcVisitsList.lastResult.children())}"/>
+		
+		
     <mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
     <mx:HBox>
     	<mx:VBox>
@@ -104,12 +147,12 @@
 			<mx:Label text="General Information"  fontWeight="bold" fontSize="12"/>
 			<mx:HBox>
     			<mx:Label text="Patient ID: {patient['id']}"  fontSize="12"/>
-				<mx:Label text="	Patient Active: {patient['patient_active']}"  fontSize="12"/>
+				<mx:Label text="Patient Active: {patient['patient_active']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
     			<mx:Label text="First Name: {patient['first_name']}"  fontSize="12"/>
-				<mx:Label text="	Middle Name: {patient['middle_name']}"  fontSize="12"/>
-				<mx:Label text="	Last Name: {patient['last_name']}"  fontSize="12"/>
+				<mx:Label text="Middle Name: {patient['middle_name']}"  fontSize="12"/>
+				<mx:Label text="Last Name: {patient['last_name']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
 				<mx:Label text="Date of Birth: {patient['date_of_birth']}"  fontSize="12"/>
@@ -168,12 +211,12 @@
 							dataField="dateSeen"/>
 						<mx:DataGridColumn headerText="Follow Up" width="100"
 							dataField="followUp"/>
-						<mx:DataGridColumn headerText="Note" width="130"
-							dataField="note"/>
+						<mx:DataGridColumn headerText="Notes" width="130"
+							dataField="notes"/>
 					</mx:columns>
 				</mx:DataGrid>
 			</mx:Panel>
-			<mx:LinkButton label="Add new visit" color="#0000FF" />
+			<mx:LinkButton label="Add new visit" color="#0000FF" click="showVisitCreateTitleWin()" />
 			<mx:Panel title="Allergies">
 				<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
 					dataProvider="{allergiesXLC}">

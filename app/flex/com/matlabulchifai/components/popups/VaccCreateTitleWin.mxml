@@ -16,12 +16,9 @@
 			[Bindable]
 			public var patient:XML;
 			[Bindable]
-			public var patientID:int;
+			public var patientID:Number;
 			
-			// add vaccination to database
-			//  on error: display error, don't close popup?
-			//  on success: remove popup, throw event to PatientInfo
-			//  to refresh datagrid
+			
 			private function processVaccinationCreate():void{
 				svcVaccinationCreate.send();
 				PopUpManager.removePopUp(this);

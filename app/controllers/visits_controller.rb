@@ -2,7 +2,11 @@ class VisitsController < ApplicationController
   # GET /visits
   # GET /visits.xml
   def index
-    @visits = Visit.find(:all)
+    if params[:patient_id]
+		@visits = Visit.find(:all, :conditions => {:patient_id => params[:patient_id]})
+	else
+		@visits = Visit.find(:all)
+	end
 
     respond_to do |format|
       format.html # index.html.erb
