@@ -12,7 +12,7 @@
 	paddingBottom="0"
 	width="100%"
 	height="100%"
-	creationComplete="handleCreationComplete()">
+	creationComplete="init(),handleCreationComplete()">
 	
 	<mx:Script>
 		<![CDATA[
@@ -29,6 +29,36 @@
 	    import com.matlabulchifai.events.alert.AlertEvent;
 	    import com.matlabulchifai.events.patient.PatientEvent;
 	    import com.matlabulchifai.events.patient.SearchEvent;
+	    
+	    import flash.net.navigateToURL;
+     	import mx.events.BrowserChangeEvent;
+     	import mx.utils.URLUtil;
+     	import mx.managers.IBrowserManager;
+     	import mx.managers.BrowserManager;
+     	
+     	private var browserManager:IBrowserManager;
+     
+     	private function init():void
+     	{
+       		browserManager = BrowserManager.getInstance();
+       		browserManager.addEventListener(
+         	BrowserChangeEvent.BROWSER_URL_CHANGE, 
+         	parseUrl
+       	)
+       		browserManager.init("");
+       		parseUrl();
+     	}
+     
+     	private function parseUrl(e:BrowserChangeEvent = null):void
+     	{
+       		var o:Object = URLUtil.stringToObject(browserManager.fragment);
+       		mainStack.selectedIndex = o.a;
+     	}
+     
+     	private function updateUrl():void
+     	{
+       		browserManager.setFragment("a=" + mainStack.selectedIndex);
+     	}
 		
 		[Bindable]
 		public static var title:String = "";
@@ -163,7 +193,7 @@
 		</mx:MenuBar>
 		<mx:Text id="titleText" fontFamily="Comic Sans MS" fontSize="24" fontWeight="bold" 
 			color="white" letterSpacing="2" fontThickness="10" text="{title}  "/>
-		<mx:ViewStack id="mainStack" width="100%" height="100%">
+		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" login="handleLogin(event)"/>
 				<mx:Button click="mainStack.selectedChild=patientBox;title='Patients';mainMenu.visible=true;" label="Bypass Login"/>
