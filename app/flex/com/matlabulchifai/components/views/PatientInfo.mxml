@@ -46,7 +46,6 @@
 			private function handleVaccinationsListResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("patient_vaccinations = \n" + resultXML);
-				listVaccinations();
 			}
 			
 			public function listAllergies():void {
@@ -57,7 +56,6 @@
 			private function handleAllergiesListResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("patient_allergies = \n" + resultXML);
-				listAllergies();
 			}
 			
 			public function listVisits():void {
@@ -68,7 +66,6 @@
 			private function handleVisitsListResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("visit_allergies = \n" + resultXML);
-				listVisits();
 			}
 			
     		private function showVaccCreateTitleWin():void{
