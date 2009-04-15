@@ -12,7 +12,7 @@
 	paddingBottom="0"
 	width="100%"
 	height="100%"
-	creationComplete="init(),handleCreationComplete()">
+	creationComplete="init()">
 	
 	<mx:Script>
 		<![CDATA[
@@ -37,8 +37,13 @@
      	import mx.managers.BrowserManager;
      	
      	private var browserManager:IBrowserManager;
+     	
+     	private function init():void{
+     		initHistoryManager();
+     		handleCreationComplete();
+     	}
      
-     	private function init():void
+     	private function initHistoryManager():void
      	{
        		browserManager = BrowserManager.getInstance();
        		browserManager.addEventListener(
