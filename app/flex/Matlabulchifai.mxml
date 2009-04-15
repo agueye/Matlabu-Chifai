@@ -40,7 +40,8 @@
      	
      	private function init():void{
      		initHistoryManager();
-     		handleCreationComplete();
+     		mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
+			listPatients();
      	}
      
      	private function initHistoryManager():void
@@ -114,11 +115,6 @@
 			mainStack.selectedChild = alertBox;
 			title = "Alerts"
 			mainMenu.visible = true;
-		}
-		
-		private function handleCreationComplete():void{
-			mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
-			listPatients();
 		}
 		
 		private function handleLogin(e:LoginEvent):void{
