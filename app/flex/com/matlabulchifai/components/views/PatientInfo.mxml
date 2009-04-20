@@ -105,8 +105,7 @@
     			// might want to raise event within vacc title window so PatientInfo
     			// knows to refresh the datagrid after successful entry
     		}
-    		[Bindable]
-			public var languageArray:Object;
+    		
     	]]>
     </mx:Script>
 	
@@ -135,23 +134,18 @@
 	<mx:XMLListCollection id="visitsXLC"
         source="{XMLList(svcVisitsList.lastResult.children())}"/>
     <mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
-	<mx:TabBar dataProvider="{pateientInfoMain}" fontWeight="Bold" x="51" y="3">
-	</mx:TabBar>
-	<mx:ViewStack horizontalCenter="0" y="30" id="pateientInfoMain" 
-       width="95%" height="87%" borderStyle="solid">
-       <mx:HBox label="Main">
-       	
-      <mx:VBox>
+    <mx:HBox label="Main">
+    	<mx:VBox>
     		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>	
     	</mx:VBox>
-    	<mx:VBox>
+		<mx:VBox>
 			<mx:Label text="General Information"  fontWeight="bold" fontSize="12"/>
 			<mx:HBox>
-    			<mx:Label text="Patient ID: {patient['id']}"  fontSize="12"/>
+				<mx:Label text="Patient ID: {patient['id']}"  fontSize="12"/>
 				<mx:Label text="Patient Active: {patient['patient_active']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
-    			<mx:Label text="First Name: {patient['first_name']}"  fontSize="12"/>
+				<mx:Label text="First Name: {patient['first_name']}"  fontSize="12"/>
 				<mx:Label text="Middle Name: {patient['middle_name']}"  fontSize="12"/>
 				<mx:Label text="Last Name: {patient['last_name']}"  fontSize="12"/>
 			</mx:HBox>
@@ -188,81 +182,66 @@
 				<mx:Label text="City: {patient['city']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:Label />
-			
-    	</mx:VBox>
-    	</mx:HBox>
-    	<mx:VBox label='Notes'>
-    	<mx:VBox>
-			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
-					dataProvider="{notesXLC}">
-					<mx:columns>
-						<mx:DataGridColumn headerText="Note" width="900"
-							dataField="note"/>
-					</mx:columns>
-				</mx:DataGrid>
 		</mx:VBox>
-		<mx:VBox>
-			<mx:LinkButton label="Add new note" color="#0000FF" click="showNoteCreateTitleWin()"/>
-    	</mx:VBox>
-    	</mx:VBox>
-    	<mx:VBox label='Visits'>
-    	<mx:VBox>
-				<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
-					dataProvider="{visitsXLC}">
-					<mx:columns>
-						<mx:DataGridColumn headerText="Reason" width="200"
-							dataField="reason"/>
-						<mx:DataGridColumn headerText="Date Seen" width="200"
-							dataField="dateSeen"/>
-						<mx:DataGridColumn headerText="Follow Up" width="200"
-							dataField="followUp"/>
-						<mx:DataGridColumn headerText="Notes" width="230"
-							dataField="notes"/>
-					</mx:columns>
-				</mx:DataGrid>
-		</mx:VBox>
-		<mx:VBox>
-			<mx:LinkButton label="Add new visit" color="#0000FF" click="showVisitCreateTitleWin()" />
-    	</mx:VBox>
-    	</mx:VBox>
-    	<mx:VBox label='Allergies'>
-    		<mx:VBox>
-				<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
-					dataProvider="{allergiesXLC}">
-					<mx:columns>
-						<mx:DataGridColumn headerText="Name" width="115"
-							dataField="name"/>
-						<mx:DataGridColumn headerText="Date Observed" width="100"
-							dataField="dateObserved"/>
-						<mx:DataGridColumn headerText="Severity" width="100"
-							dataField="severity"/>
-						<mx:DataGridColumn headerText="Notes" width="650"
-							dataField="notes"/>
-					</mx:columns>
-				</mx:DataGrid>
-			</mx:VBox>
-		<mx:VBox>
-			<mx:LinkButton label="Add new allergy" color="#0000FF" click="showAllergyCreateTitleWin()"/>
-		</mx:VBox>
-    	</mx:VBox>
-    	<mx:VBox label='Vaccinations'>
-    		<mx:VBox>
-				<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" 
-					dataProvider="{vaccinationsXLC}">
-					<mx:columns>
-						<mx:DataGridColumn headerText="Name" width="115"
-							dataField="name"/>
-						<mx:DataGridColumn headerText="Date Admined" width="100"
-							dataField="dateAdmined"/>
-						<mx:DataGridColumn headerText="Notes" width="650"
-							dataField="notes"/>
-					</mx:columns>
-				</mx:DataGrid>
-			</mx:VBox>
-			<mx:VBox>
-			<mx:LinkButton label="Add new vaccination" color="#0000FF" click="showVaccCreateTitleWin()"/>
-		</mx:VBox>	
-    	</mx:VBox>
-      </mx:ViewStack>
-		
+   		<mx:VBox width="600" height="500">
+   			<mx:TabBar dataProvider="{pateientInfoMain}" fontWeight="Bold" x="51" y="3" />
+			<mx:ViewStack horizontalCenter="0" y="30" id="pateientInfoMain" width="95%" height="87%" borderStyle="solid">
+	    		<mx:VBox label='Notes'>
+						<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
+								dataProvider="{notesXLC}">
+								<mx:columns>
+									<mx:DataGridColumn headerText="Note" dataField="note"/>
+								</mx:columns>
+							</mx:DataGrid>
+					<mx:LinkButton label="Add new note" color="#0000FF" click="showNoteCreateTitleWin()"/>
+		    	</mx:VBox>
+		    	<mx:VBox label='Visits'>
+						<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
+							dataProvider="{visitsXLC}">
+							<mx:columns>
+								<mx:DataGridColumn headerText="Reason"
+									dataField="reason"/>
+								<mx:DataGridColumn headerText="Date Seen"
+									dataField="dateSeen"/>
+								<mx:DataGridColumn headerText="Follow Up"
+									dataField="followUp"/>
+								<mx:DataGridColumn headerText="Notes"
+									dataField="notes"/>
+							</mx:columns>
+						</mx:DataGrid>
+					<mx:LinkButton label="Add new visit" color="#0000FF" click="showVisitCreateTitleWin()" />
+		    	</mx:VBox>
+		    	<mx:VBox label='Allergies'>
+						<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
+							dataProvider="{allergiesXLC}">
+							<mx:columns>
+								<mx:DataGridColumn headerText="Name"
+									dataField="name"/>
+								<mx:DataGridColumn headerText="Date Observed"
+									dataField="dateObserved"/>
+								<mx:DataGridColumn headerText="Severity"
+									dataField="severity"/>
+								<mx:DataGridColumn headerText="Notes"
+									dataField="notes"/>
+							</mx:columns>
+						</mx:DataGrid>
+					<mx:LinkButton label="Add new allergy" color="#0000FF" click="showAllergyCreateTitleWin()"/>
+				</mx:VBox>
+		    	<mx:VBox label='Vaccinations'>
+						<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" 
+							dataProvider="{vaccinationsXLC}">
+							<mx:columns>
+								<mx:DataGridColumn headerText="Name"
+									dataField="name"/>
+								<mx:DataGridColumn headerText="Date Admined"
+									dataField="dateAdmined"/>
+								<mx:DataGridColumn headerText="Notes"
+									dataField="notes"/>
+							</mx:columns>
+						</mx:DataGrid>
+					<mx:LinkButton label="Add new vaccination" color="#0000FF" click="showVaccCreateTitleWin()"/>
+		    	</mx:VBox>
+	      </mx:ViewStack>
+  		</mx:VBox>
+   	</mx:HBox>
 </mx:VBox>
