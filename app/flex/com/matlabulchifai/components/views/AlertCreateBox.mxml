@@ -68,9 +68,10 @@
 	                labelFunction="getPatientName"
 	                dataProvider="{patientsXLC}"/>
         	</mx:FormItem>
-        	<mx:FormItem required="true" label="Alert Date" >
-				<mx:TextInput id="dateTI"/>
+			<mx:FormItem required="true" label="Alert Date">
+				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980" />
 			</mx:FormItem>
+        	
 			<mx:FormItem required="true" label="Alert Note">
 				<mx:TextArea id="noteTA"/>
 			</mx:FormItem>			
