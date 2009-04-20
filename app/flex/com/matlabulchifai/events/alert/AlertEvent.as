@@ -2,10 +2,6 @@ package com.matlabulchifai.events.alert
 {
 	import flash.events.Event;
 	
-	/**
-	 * ...
-	 * @author ...
-	 */
 	public class AlertEvent extends Event 
 	{
 		
