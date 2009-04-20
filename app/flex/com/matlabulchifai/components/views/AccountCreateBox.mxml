@@ -49,7 +49,7 @@
 			</user>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:Panel title="{languageArray['Create a New Account']}">
+	<mx:Panel title="{languageArray['Create Account']}">
 		<mx:Form id="accountCreateForm">
 			<mx:FormItem required="true" label="{languageArray['Username']}">
 				<mx:TextInput id="loginTI"/>

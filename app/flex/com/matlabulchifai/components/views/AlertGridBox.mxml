@@ -94,13 +94,13 @@
 		<mx:DataGrid id="alertsGrid" width="100%" height="100%" wordWrap="true" textAlign="center"
 			variableRowHeight="true" dataProvider="{alertsXLC}">
 	        <mx:columns>
-				<mx:DataGridColumn headerText="Medical Record ID" width="115"
+				<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
 					labelFunction="getMedicalRecordNumber"/>
-				<mx:DataGridColumn headerText="Patient Name" width="150"
+				<mx:DataGridColumn headerText="{languageArray['Patient Name']}" width="150"
 					labelFunction="getPatientName" />
-				<mx:DataGridColumn headerText="Alert Date" width="90"
+				<mx:DataGridColumn headerText="{languageArray['Alert Date']}" width="90"
 					dataField="alert_date"/>
-				<mx:DataGridColumn headerText="Alert Note"
+				<mx:DataGridColumn headerText="{languageArray['Alert Note']}"
 					dataField="alert_note"/>
 				<mx:DataGridColumn headerText="" width="70" 
 	                    editable="false">

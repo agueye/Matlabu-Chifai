@@ -139,110 +139,42 @@
     	<mx:VBox>
     		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>	
     	</mx:VBox>
-		<mx:VBox>
-			<mx:Label text="General Information"  fontWeight="bold" fontSize="12"/>
+		<mx:VBox>			<mx:Label text="{languageArray['General Information']}"  fontWeight="bold" fontSize="12"/>			<mx:HBox>
+				<mx:Label text="{languageArray['Patient ID']}: {patient['id']}"  fontSize="12"/>				<mx:Label text="{languageArray['Patient Active']}: {patient['patient_active']}"  fontSize="12"/>			</mx:HBox>
 			<mx:HBox>
-				<mx:Label text="Patient ID: {patient['id']}"  fontSize="12"/>
-				<mx:Label text="Patient Active: {patient['patient_active']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['First Name']}: {patient['first_name']}"  fontSize="12"/>				<mx:Label text="{languageArray['Middle Name']}: {patient['middle_name']}"  fontSize="12"/>				<mx:Label text="{languageArray['Last Name']}: {patient['last_name']}"  fontSize="12"/>			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
-				<mx:Label text="First Name: {patient['first_name']}"  fontSize="12"/>
-				<mx:Label text="Middle Name: {patient['middle_name']}"  fontSize="12"/>
-				<mx:Label text="Last Name: {patient['last_name']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
-				<mx:Label text="Date of Birth: {patient['date_of_birth']}"  fontSize="12"/>
-				<mx:Label text="Gender: {patient['gender']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Father First Name']}: {patient['father_first_name']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Father Last Name']}: {patient['father_last_name']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
-				<mx:Label text="Address: {patient['address']}"  fontSize="12"/>
-				<mx:Label text="City: {patient['city']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="Father's First Name: {patient['father_first_name']}"  fontSize="12"/>
-				<mx:Label text="Father's Last Name: {patient['father_last_name']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="Mother's First Name: {patient['mother_first_name']}"  fontSize="12"/>
-				<mx:Label text="Mother's Last Name: {patient['mother_last_name']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Mother First Name']}: {patient['mother_first_name']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Mother Last Name']}: {patient['mother_last_name']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:Label />
 			
-			<mx:Label text="Emergency Contact"  fontWeight="bold" fontSize="12"/>
+			<mx:Label text="{languageArray['Emergency Contact']}"  fontWeight="bold" fontSize="12"/>
 			<mx:HBox>
-	    		<mx:Label text="First Name: {patient['emergency_first_name']}"  fontSize="12"/>
-				<mx:Label text="Middle Name: {patient['emergency_middle_name']}"  fontSize="12"/>
-				<mx:Label text="Last Name: {patient['emergency_last_name']}"  fontSize="12"/>
+	    		<mx:Label text="{languageArray['First Name']}: {patient['emergency_first_name']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Middle Name']}: {patient['emergency_middle_name']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Last Name']}: {patient['emergency_last_name']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
-				<mx:Label text="Date of Birth: {patient['date_of_birth']}"  fontSize="12"/>
-				<mx:Label text="Gender: {patient['gender']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:HBox>
-				<mx:Label text="Address: {patient['address']}"  fontSize="12"/>
-				<mx:Label text="City: {patient['city']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
+				<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
 			</mx:HBox>
 			<mx:Label />
 		</mx:VBox>
-   		<mx:VBox width="600" height="500">
-   			<mx:TabBar dataProvider="{pateientInfoMain}" fontWeight="Bold" x="51" y="3" />
-			<mx:ViewStack horizontalCenter="0" y="30" id="pateientInfoMain" width="95%" height="87%" borderStyle="solid">
-	    		<mx:VBox label='Notes'>
-						<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
-								dataProvider="{notesXLC}">
-								<mx:columns>
-									<mx:DataGridColumn headerText="Note" dataField="note"/>
-								</mx:columns>
-							</mx:DataGrid>
-					<mx:LinkButton label="Add new note" color="#0000FF" click="showNoteCreateTitleWin()"/>
-		    	</mx:VBox>
-		    	<mx:VBox label='Visits'>
-						<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
-							dataProvider="{visitsXLC}">
-							<mx:columns>
-								<mx:DataGridColumn headerText="Reason"
-									dataField="reason"/>
-								<mx:DataGridColumn headerText="Date Seen"
-									dataField="dateSeen"/>
-								<mx:DataGridColumn headerText="Follow Up"
-									dataField="followUp"/>
-								<mx:DataGridColumn headerText="Notes"
-									dataField="notes"/>
-							</mx:columns>
-						</mx:DataGrid>
-					<mx:LinkButton label="Add new visit" color="#0000FF" click="showVisitCreateTitleWin()" />
-		    	</mx:VBox>
-		    	<mx:VBox label='Allergies'>
-						<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
-							dataProvider="{allergiesXLC}">
-							<mx:columns>
-								<mx:DataGridColumn headerText="Name"
-									dataField="name"/>
-								<mx:DataGridColumn headerText="Date Observed"
-									dataField="dateObserved"/>
-								<mx:DataGridColumn headerText="Severity"
-									dataField="severity"/>
-								<mx:DataGridColumn headerText="Notes"
-									dataField="notes"/>
-							</mx:columns>
-						</mx:DataGrid>
-					<mx:LinkButton label="Add new allergy" color="#0000FF" click="showAllergyCreateTitleWin()"/>
-				</mx:VBox>
-		    	<mx:VBox label='Vaccinations'>
-						<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" 
-							dataProvider="{vaccinationsXLC}">
-							<mx:columns>
-								<mx:DataGridColumn headerText="Name"
-									dataField="name"/>
-								<mx:DataGridColumn headerText="Date Admined"
-									dataField="dateAdmined"/>
-								<mx:DataGridColumn headerText="Notes"
-									dataField="notes"/>
-							</mx:columns>
-						</mx:DataGrid>
-					<mx:LinkButton label="Add new vaccination" color="#0000FF" click="showVaccCreateTitleWin()"/>
-		    	</mx:VBox>
-	      </mx:ViewStack>
-  		</mx:VBox>
-   	</mx:HBox>
-</mx:VBox>
+   		<mx:VBox width="600" height="500">   			<mx:TabBar dataProvider="{pateientInfoMain}" fontWeight="Bold" x="51" y="3" />			<mx:ViewStack horizontalCenter="0" y="30" id="pateientInfoMain" width="95%" height="87%" borderStyle="solid">	    		<mx:VBox label='Notes'>						<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 								dataProvider="{notesXLC}">								<mx:columns>									<mx:DataGridColumn headerText="Note" dataField="note"/>								</mx:columns>							</mx:DataGrid>					<mx:LinkButton label="{languageArray['Add new note']}" color="#0000FF" click="showNoteCreateTitleWin()"/>		    	</mx:VBox>		    	<mx:VBox label="Visits">						<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 							dataProvider="{visitsXLC}">							<mx:columns>								<mx:DataGridColumn headerText="{languageArray['Reason']}"									dataField="reason"/>								<mx:DataGridColumn headerText="{languageArray['Date Seen']}"									dataField="dateSeen"/>								<mx:DataGridColumn headerText="{languageArray['Follow Up']}"									dataField="followUp"/>								<mx:DataGridColumn headerText="{languageArray['Notes']}"									dataField="notes"/>							</mx:columns>						</mx:DataGrid>					<mx:LinkButton label="{languageArray['Add new visit']}" color="#0000FF" click="showVisitCreateTitleWin()" />		    	</mx:VBox>		    	<mx:VBox label='Allergies'>						<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 							dataProvider="{allergiesXLC}">							<mx:columns>								<mx:DataGridColumn headerText="{languageArray['Name']}"									dataField="name"/>								<mx:DataGridColumn headerText="{languageArray['Date Observed']}"									dataField="dateObserved"/>								<mx:DataGridColumn headerText="{languageArray['Severity']}"									dataField="severity"/>								<mx:DataGridColumn headerText="{languageArray['Notes']}"									dataField="notes"/>							</mx:columns>						</mx:DataGrid>					<mx:LinkButton label="{languageArray['Add new allergy']}" color="#0000FF" click="showAllergyCreateTitleWin()"/>				</mx:VBox>		    	<mx:VBox label='Vaccinations'>						<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" 							dataProvider="{vaccinationsXLC}">							<mx:columns>								<mx:DataGridColumn headerText="{languageArray['Name']}"									dataField="name"/>								<mx:DataGridColumn headerText="{languageArray['Date Administered']}"									dataField="dateAdmined"/>								<mx:DataGridColumn headerText="{languageArray['Notes']}"									dataField="notes"/>							</mx:columns>						</mx:DataGrid>					<mx:LinkButton label="{languageArray['Add new vaccination']}" color="#0000FF" click="showVaccCreateTitleWin()"/>		    	</mx:VBox>	      </mx:ViewStack>  		</mx:VBox>   	</mx:HBox></mx:VBox>

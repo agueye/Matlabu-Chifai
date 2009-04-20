@@ -126,87 +126,87 @@
 		
 	<mx:Panel title="Add Patient" horizontalAlign="center">
 		<mx:Form id="patientForm" textAlign="left">
-				<mx:FormItem required="true" label="Medical Record ID">
+				<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
 					<mx:TextInput id="medicalrecordTI" focusOut="validateString(medicalrecordTI,numberInvalid)"/>
 				</mx:FormItem>
 				
-				<mx:FormItem required="true" label="First Name">
+				<mx:FormItem required="true" label="{languageArray['First Name']}">
 					<mx:TextInput id="firstnameTI" focusOut="validateString(firstnameTI,stringInvalid)"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Middle Name">
+				<mx:FormItem label="{languageArray['Middle Name']}">
 					<mx:TextInput id="middlenameTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem required="true" label="Last Name">
+				<mx:FormItem required="true" label="{languageArray['Last Name']}">
 					<mx:TextInput id="lastnameTI" focusOut="validateString(lastnameTI,stringInvalid)"/>
 				</mx:FormItem>
 				
-				<mx:FormItem required="true" label="Arrival Date">
+				<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
 					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" />
 				</mx:FormItem>
 				
-				<mx:FormItem required="true" label="Date of Birth">
+				<mx:FormItem required="true" label="{languageArray['Date of Birth']}">
 					<mx:DateField id="birthdateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" 
 						displayedMonth="0" displayedYear="1990" showToday="false" />
 				</mx:FormItem>
 				
-				<mx:FormItem label="Gender">
+				<mx:FormItem label="{languageArray['Gender']}">
 					<mx:ComboBox id="genderTI" dataProvider="{genders}"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Address">
+				<mx:FormItem label="{languageArray['Address']}">
 					<mx:TextInput id="addressTI"/>
 				</mx:FormItem>
 	
-				<mx:FormItem label="City">
+				<mx:FormItem label="{languageArray['City']}">
 					<mx:TextInput id="cityTI"/>
 				</mx:FormItem>
 				
 				
-				<mx:FormItem label="State">
+				<mx:FormItem label="{languageArray['State']}">
 					<mx:TextInput id="stateTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Zip">
+				<mx:FormItem label="{languageArray['Zip']}">
 					<mx:TextInput id="zipTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Telephone">
+				<mx:FormItem label="{languageArray['Telephone']}">
 					<mx:TextInput id="telephoneTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Father First Name">
+				<mx:FormItem label="{languageArray['Father First Name']}">
 					<mx:TextInput id="fatherfirstnameTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Father Last Name">
+				<mx:FormItem label="{languageArray['Father Last Name']}">
 					<mx:TextInput id="fatherlastnameTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Mother First Name">
+				<mx:FormItem label="{languageArray['Mother First Name']}">
 					<mx:TextInput id="motherfirstnameTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Mother Last Name">
+				<mx:FormItem label="{languageArray['Mother Last Name']}">
 					<mx:TextInput id="motherlastnameTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Emergency Contact Name">
+				<mx:FormItem label="{languageArray['Emergency Contact Name']}">
 					<mx:TextInput id="emergencycontactnameTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Emergency Contact Relationship">
+				<mx:FormItem label="{languageArray['Emergency Contact Relationship']}">
 					<mx:TextInput id="emergencycontactrelationshipTI"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Patient Remarks">
+				<mx:FormItem label="{languageArray['Patient Remarks']}">
 					<mx:TextInput id="patientremarksTI"/>
 				</mx:FormItem>
 				
 				
 				<mx:FormItem>
-					<mx:Button id="createBtn" label="Create"
+					<mx:Button id="createBtn" label="{languageArray['Create']}"
 						click="doPatientCreate()"/>
 				</mx:FormItem>
 				

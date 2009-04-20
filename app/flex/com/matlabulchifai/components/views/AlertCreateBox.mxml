@@ -61,22 +61,20 @@
 	</mx:request>
 </mx:HTTPService>
 	
-	<mx:Panel title="Add Alert" horizontalAlign="center">
+	<mx:Panel title="{languageArray['Add Alert']}" horizontalAlign="center">
 		<mx:Form id="createAlertForm">
-			<mx:FormItem label="Patient">
+			<mx:FormItem label="{languageArray['Patient']}">
 	            <mx:ComboBox id="patientsCB" width="175"
 	                labelFunction="getPatientName"
 	                dataProvider="{patientsXLC}"/>
         	</mx:FormItem>
-			<mx:FormItem required="true" label="Alert Date">
-				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980" />
-			</mx:FormItem>
+			<mx:FormItem required="true" label="{languageArray['Alert Date']}">				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980" />			</mx:FormItem>
         	
 			<mx:FormItem required="true" label="Alert Note">
 				<mx:TextArea id="noteTA"/>
 			</mx:FormItem>			
 			<mx:FormItem>
-				<mx:Button id="createAlertButton" label="Create" click="createAlert()"/>
+				<mx:Button id="createAlertButton" label="{languageArray['Create']}" click="createAlert()"/>
 			</mx:FormItem>	
 		</mx:Form>
 	</mx:Panel>

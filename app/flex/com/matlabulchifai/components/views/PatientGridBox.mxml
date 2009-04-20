@@ -81,13 +81,13 @@
         method="POST"
         result="handlePatientsUpdateResult(event)"/>
 	
-	<mx:Panel title="Patient List" width="100%" height="100%" 
+	<mx:Panel title="{languageArray['Patient List']}" width="100%" height="100%" 
 		paddingTop="10" paddingLeft="5" paddingRight="5">
 		<mx:HBox>
-			<mx:Label fontWeight="bold" text="Search by Name: "></mx:Label>
+			<mx:Label fontWeight="bold" text="{languageArray['Search by Name']}: "></mx:Label>
 			<mx:TextInput id="searchTI" change="search()"/>
-			<mx:Button id="searchButton" label="Search" click="search()"/>
-			<mx:Button id="showAllButton" label="Show All" click="showAll()"/>
+			<mx:Button id="searchButton" label="{languageArray['Search']}" click="search()"/>
+			<mx:Button id="showAllButton" label="{languageArray['Show All']}" click="showAll()"/>
 		</mx:HBox>
 		
 		<mx:Spacer height="5" />
@@ -95,17 +95,17 @@
 		<mx:DataGrid id="patientsGrid" width="100%" height="100%" textAlign="center" 
 			dataProvider="{patientsXLC}">
 	        <mx:columns>
-	        	<mx:DataGridColumn headerText="Medical Record ID" width="115"
+	        	<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
 	                dataField="medical_record_number"/>
-	        	<mx:DataGridColumn headerText="First Name" width="100"
+	        	<mx:DataGridColumn headerText="{languageArray['First Name']}" width="100"
 	                dataField="first_name"/>
-				<mx:DataGridColumn headerText="Middle Name" width="100"
+				<mx:DataGridColumn headerText="{languageArray['Middle Name']}" width="100"
 	                dataField="middle_name"/>
-	            <mx:DataGridColumn headerText="Last Name" width="100"
+	            <mx:DataGridColumn headerText="{languageArray['Last Name']}" width="100"
 	                dataField="last_name"/>
-	        	<mx:DataGridColumn headerText="Gender" width="100"
+	        	<mx:DataGridColumn headerText="{languageArray['Gender']}" width="100"
 	                dataField="gender"/>
-	    		<mx:DataGridColumn headerText="Date of Birth" width="100"
+	    		<mx:DataGridColumn headerText="{languageArray['Date of Birth']}" width="100"
 	                dataField="date_of_birth"/>	  
 	            <mx:DataGridColumn headerText=""
 	                    editable="false">
