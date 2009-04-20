@@ -87,7 +87,8 @@
 			box.setStyle("backgroundAlpha","1");
 			return;
 		}
-		
+		[Bindable]
+		public var languageArray:Object;
 		]]>
 	</mx:Script>
 		<mx:HTTPService

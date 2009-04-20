@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="vertical" 
 	width="400" 
@@ -36,7 +36,8 @@
 				Matlabulchifai.debug("visit created = \n" + resultXML);
 				dispatchEvent(new VisitEvent(VisitEvent.VISIT_CREATE, resultXML));
 			}
-			
+			[Bindable]
+			public var languageArray:Object;
 		]]>
 	</mx:Script>
 	

@@ -105,7 +105,8 @@
     			// might want to raise event within vacc title window so PatientInfo
     			// knows to refresh the datagrid after successful entry
     		}
-    		
+    		[Bindable]
+			public var languageArray:Object;
     	]]>
     </mx:Script>
 	

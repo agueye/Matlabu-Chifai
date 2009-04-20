@@ -34,7 +34,8 @@
 				svcAllergyCreate.send();
 				PopUpManager.removePopUp(this);
 			}
-			
+			[Bindable]
+			public var languageArray:Object;
 		]]>
 	</mx:Script>
 	

@@ -29,6 +29,11 @@
 				dispatchEvent(new LoginEvent(XML(result)));
 			}
 		}
+		
+		[Bindable]
+		public var languageArray:Object;
+		
+		
 		]]>
 	</mx:Script>
 	
@@ -37,18 +42,18 @@
 		resultFormat="e4x"
 		method="POST"
 		result="handleAccountLoginResult(event)"/>
-	<mx:Panel title="Login">
+	<mx:Panel title="{languageArray['Login']}">
 		<mx:Form id="loginForm">
-			<mx:FormItem required="true" label="Username">
+			<mx:FormItem required="true" label="{languageArray['Username']}">
 				<mx:TextInput id="loginTI"/>
 			</mx:FormItem>
 			
-			<mx:FormItem required="true" label="Password">
+			<mx:FormItem required="true" label="{languageArray['Password']}">
 				<mx:TextInput id="passwordTI" displayAsPassword="true"/>
 			</mx:FormItem>
 			
 			<mx:FormItem>
-				<mx:Button id="loginBtn" label="Login"
+				<mx:Button id="loginBtn" label="{languageArray['Login']}"
 					click="login()"/>
 			</mx:FormItem>	
 		</mx:Form>

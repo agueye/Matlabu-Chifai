@@ -38,7 +38,8 @@
 		dispatchEvent(new AlertEvent(AlertEvent.ALERT_CREATE, resultXML));
 		clearForm(); 
 	}
-		
+	[Bindable]
+	public var languageArray:Object;
     
 ]]>
 </mx:Script>

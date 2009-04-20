@@ -70,6 +70,8 @@
 		patientInfoBoxVar.init(alert.patient_id);
 		mainStackVar.selectedChild=patientInfoBoxVar;	
 	}
+	[Bindable]
+	public var languageArray:Object;
 ]]>
 </mx:Script>
 	

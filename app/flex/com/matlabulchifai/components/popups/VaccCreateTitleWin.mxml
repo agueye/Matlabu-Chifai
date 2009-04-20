@@ -30,7 +30,8 @@
 				Matlabulchifai.debug("vaccination created = \n" + resultXML);
 				dispatchEvent(new VaccinationEvent(VaccinationEvent.VACCINATION_CREATE, resultXML));	
 			}
-			
+			[Bindable]
+			public var languageArray:Object;
 		]]>
 	</mx:Script>
 	

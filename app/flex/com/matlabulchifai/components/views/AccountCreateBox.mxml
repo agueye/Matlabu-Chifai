@@ -28,6 +28,8 @@
 					dispatchEvent(new AccountCreateEvent(XML(result)));
 				}
 			}
+			[Bindable]
+			public var languageArray:Object;
 		]]>
 	</mx:Script>
 
@@ -47,30 +49,30 @@
 			</user>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:Panel title="Create a New Account">
+	<mx:Panel title="{languageArray['Create a New Account']}">
 		<mx:Form id="accountCreateForm">
-			<mx:FormItem required="true" label="Username">
+			<mx:FormItem required="true" label="{languageArray['Username']}">
 				<mx:TextInput id="loginTI"/>
 			</mx:FormItem>
 			
-			<mx:FormItem label="First Name">
+			<mx:FormItem label="{languageArray['First Name']}">
 				<mx:TextInput id="firstNameTI"/>
 			</mx:FormItem>
 			
-			<mx:FormItem label="Last Name">
+			<mx:FormItem label="{languageArray['Last Name']}">
 				<mx:TextInput id="lastNameTI"/>
 			</mx:FormItem>
 			
-			<mx:FormItem required="true" label="Password">
+			<mx:FormItem required="true" label="{languageArray['Password']}">
 				<mx:TextInput id="passwordTI" displayAsPassword="true"/>
 			</mx:FormItem>
 			
-			<mx:FormItem required="true" label="Confirm Password">
+			<mx:FormItem required="true" label="{languageArray['Confirm Password']}">
 				<mx:TextInput id="confirmPasswordTI" displayAsPassword="true"/>
 			</mx:FormItem>
 			
 			<mx:FormItem>
-				<mx:Button id="createAccountBtn" label="Create Account"
+				<mx:Button id="createAccountBtn" label="{languageArray['Create Account']}"
 					click="createAccount()"/>
 			</mx:FormItem>
 		</mx:Form>
