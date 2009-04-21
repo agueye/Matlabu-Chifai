@@ -59,12 +59,19 @@
      	private function parseUrl(e:BrowserChangeEvent = null):void
      	{
        		var o:Object = URLUtil.stringToObject(browserManager.fragment);
+       		if(o.a == 4)
+       			this.patientInfoBox.init(o.pid);
        		mainStack.selectedIndex = o.a;
      	}
      
      	private function updateUrl():void
      	{
-       		browserManager.setFragment("a=" + mainStack.selectedIndex);
+     		var currentIndex:int = mainStack.selectedIndex;
+     		var toStore:String = "a=" + currentIndex;
+     		if(currentIndex == 4){
+     			toStore+= ";pid="+ this.patientInfoBox.patientID;
+     		}
+       		browserManager.setFragment(toStore);
      	}
 		
 		[Bindable]
