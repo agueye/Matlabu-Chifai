@@ -1,8 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :notes
-
-  map.resources :prescriptions
-
+  map.search '/patients/search.:format', :controller => "patients", :action => "find"  
+  map.search_allergy '/allergies/search.:format', :controller => "allergies", :action => "find"
+  
+  map.search_vaccination '/vaccinations/search.:format', :controller => "vaccinations", :action => "find"
+  
+  map.search_visits '/visits/search.:format', :controller => "visits", :action => "find"
   
   map.resources :notes
 
@@ -12,11 +14,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :vaccinations
 
-  map.search '/patients/search.:format', :controller => "patients", :action => "find"
+  map.resources :prescriptions
+
 	
   map.resources :alerts
-
-  map.resources :searches
   
   map.resources :patients
 

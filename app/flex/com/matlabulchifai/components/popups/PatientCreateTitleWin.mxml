@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="550" 
+	height="500"
+	title="Add New Patient"
+	showCloseButton="true"
+    close="PopUpManager.removePopUp(this)">
+	
+	<mx:Metadata>
+		[Event(name="patientCreate", type="com.matlabulchifai.events.patient.PatientEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import com.matlabulchifai.events.patient.PatientEvent;
+			
+			[Bindable]
+			public var languageArray:Object;
+			
+			[Bindable]
+			private var currDate:Date = new Date();
+			
+			[Bindable]
+        	public var genders:ArrayCollection = new ArrayCollection(
+            	[ {label:"Male", data:"Male"}, 
+			  	{label:"Female", data:"Female"}]);
+			
+			
+			private function processPatientCreate():void{
+				svcPatientCreate.send();
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function clearForm():void{
+				medicalrecordTI.text = "";
+				firstnameTI.text = "";
+				middlenameTI.text = "";
+				lastnameTI.text = "";
+				arrivaldateTI.text = "";
+				birthdateTI.text = "";
+				genderTI.text = "";
+				addressTI.text = "";
+				cityTI.text = "";
+				stateTI.text = "";
+				zipTI.text = "";
+				telephoneTI.text = "";
+				fatherfirstnameTI.text = "";
+				fatherlastnameTI.text = "";
+				motherfirstnameTI.text = "";
+				motherlastnameTI.text = "";
+				emergencycontactnameTI.text = "";
+				emergencycontactrelationshipTI.text = "";
+				patientremarksTI.text = "";
+				//refocus back on the first field
+				focusManager.setFocus(medicalrecordTI);
+			}
+			
+			private function handleNewPatientResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("patient created = \n" + resultXML);
+				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, resultXML));
+				clearForm();		
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService
+		id="svcPatientCreate"
+		url="/patients.xml"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewPatientResult(event)">
+		<mx:request>
+			<patient>
+				<active>true</active>
+				<medical_record_number>{medicalrecordTI.text}</medical_record_number>
+				<first_name>{firstnameTI.text}</first_name>
+				<middle_name>{middlenameTI.text}</middle_name>
+				<last_name>{lastnameTI.text}</last_name>
+				<arrival_date>{arrivaldateTI.text}</arrival_date>
+				<date_of_birth>{birthdateTI.text}</date_of_birth>
+				<gender>{genderTI.text}</gender>
+				<address>{addressTI.text}</address>
+				<city>{cityTI.text}</city>
+				<state>{stateTI.text}</state>
+				<zip>{zipTI.text}</zip>
+				<telephone>{telephoneTI.text}</telephone>
+				<father_first_name>{fatherfirstnameTI.text}</father_first_name>
+				<father_last_name>{fatherlastnameTI.text}</father_last_name>
+				<mother_first_name>{motherfirstnameTI.text}</mother_first_name>
+				<mother_last_name>{motherlastnameTI.text}</mother_last_name>
+				<emergency_contact_name>{emergencycontactnameTI.text}</emergency_contact_name>
+				<emergency_contact_relationship>{emergencycontactrelationshipTI.text}</emergency_contact_relationship>
+				<patient_remarks>{patientremarksTI.text}</patient_remarks>
+			</patient>
+		</mx:request>
+	</mx:HTTPService>
+	
+	
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold">
+				<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
+					<mx:TextInput id="medicalrecordTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['First Name']}">
+					<mx:TextInput id="firstnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Middle Name']}">
+					<mx:TextInput id="middlenameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['Last Name']}">
+					<mx:TextInput id="lastnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
+					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" />
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['Date of Birth']}">
+					<mx:DateField id="birthdateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" 
+						displayedMonth="0" displayedYear="1990" showToday="false" />
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Gender']}">
+					<mx:ComboBox id="genderTI" dataProvider="{genders}"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Address']}">
+					<mx:TextInput id="addressTI"/>
+				</mx:FormItem>
+	
+				<mx:FormItem label="{languageArray['City']}">
+					<mx:TextInput id="cityTI"/>
+				</mx:FormItem>
+				
+				
+				<mx:FormItem label="{languageArray['State']}">
+					<mx:TextInput id="stateTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Zip']}">
+					<mx:TextInput id="zipTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Telephone']}">
+					<mx:TextInput id="telephoneTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Father First Name']}">
+					<mx:TextInput id="fatherfirstnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Father Last Name']}">
+					<mx:TextInput id="fatherlastnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Mother First Name']}">
+					<mx:TextInput id="motherfirstnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Mother Last Name']}">
+					<mx:TextInput id="motherlastnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Emergency Contact Name']}">
+					<mx:TextInput id="emergencycontactnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Emergency Contact Relationship']}">
+					<mx:TextInput id="emergencycontactrelationshipTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Patient Remarks']}">
+					<mx:TextArea id="patientremarksTI"/>
+				</mx:FormItem>
+				
+		</mx:Form>
+	</mx:VBox>
+	
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+		<mx:Button label="OK" id="OKBtn" click="processPatientCreate()" />
+		<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>

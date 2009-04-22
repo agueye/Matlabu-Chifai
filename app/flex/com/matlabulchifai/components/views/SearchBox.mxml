@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:mlc="com.matlabulchifai.components.views.*" 
+	width="100%" 
+	height="100%"
+    label="{languageArray['Search']}"
+    show="init()">
+<mx:Script>
+<![CDATA[
+	import mx.binding.utils.BindingUtils;
+	import mx.containers.ViewStack;
+    import mx.controls.Alert;
+    import mx.rpc.events.ResultEvent;
+    import mx.collections.XMLListCollection;
+    import mx.managers.PopUpManager;
+    import com.matlabulchifai.events.patient.PatientEvent;
+    import com.matlabulchifai.components.popups.PatientCreateTitleWin;
+    
+	[Bindable]
+	public var languageArray:Object;
+	
+	[Bindable]
+	public var mainStackVar:ViewStack;
+			
+	[Bindable]
+	public var patientInfoBoxVar:PatientInfo;
+	
+	[Bindable]        
+    public var patientIdMap:Object;
+	
+	private var rnd:Number;
+	
+	private var now:Date;
+	
+	private var last:Date = new Date();
+	
+	private var timeout:Number;
+	
+    private var execAsap:Boolean = false;
+    	
+    
+    private function init():void {
+    	searchPatient();
+    	searchMain.selectedIndex = 0;
+    	rnd = Math.round(Math.random()*1000);
+    }
+    
+	private function searchPatient():void {
+		debounce(500, "patient");
+		focusManager.setFocus(searchPatientTI);
+	}
+	
+	private function showAllPatients():void {
+    	searchPatientTI.text='';
+    	focusManager.setFocus(searchPatientTI);
+    	searchPatient();
+    }
+    
+	private function searchAllergy():void {
+		debounce(500, "allergy");
+		focusManager.setFocus(searchAllergyTI);
+	}
+	
+	private function showAllAllergies():void {
+    	searchAllergyTI.text='';
+    	focusManager.setFocus(searchAllergyTI);
+    	searchAllergy();
+    }
+    
+    private function searchVaccination():void {
+		debounce(500, "vaccination");
+		focusManager.setFocus(searchVaccinationTI);
+	}
+	
+	private function showAllVaccinations():void {
+    	searchVaccinationTI.text='';
+    	focusManager.setFocus(searchVaccinationTI);
+    	searchVaccination();
+    }
+    
+    private function searchCondition():void {
+		debounce(500, "condition");
+		focusManager.setFocus(searchConditionTI);
+	}
+	
+	private function showAllConditions():void {
+    	searchConditionTI.text='';
+    	focusManager.setFocus(searchConditionTI);
+    	searchCondition();
+    }
+	
+	private function callSearch(type:String):void {
+		switch (type) {
+			case "patient" :
+				if (searchPatientTI.text == "") {
+		    		svcPatientsList.url = "/patients.xml?rnd=" + rnd;
+	    			svcPatientsList.send();
+			    } else {
+		    		svcPatientsList.url = "/patients/search.xml?rnd=" + rnd;
+					svcPatientsList.send({search: searchPatientTI.text});
+			    }
+			    break;
+			case "allergy" :
+				if (searchAllergyTI.text == "") {
+		    		svcAllergiesList.url = "/allergies.xml?rnd=" + rnd;
+	    			svcAllergiesList.send();
+			    } else {
+		    		svcAllergiesList.url = "/allergies/search.xml?rnd=" + rnd;
+					svcAllergiesList.send({search: searchAllergyTI.text});
+			    }
+			    break;
+			case "vaccination" :
+				if (searchVaccinationTI.text == "") {
+		    		svcVaccinationsList.url = "/vaccinations.xml?rnd=" + rnd;
+	    			svcVaccinationsList.send();
+			    } else {
+		    		svcVaccinationsList.url = "/vaccinations/search.xml?rnd=" + rnd;
+					svcVaccinationsList.send({search: searchVaccinationTI.text});
+			    }
+			    break;
+			case "condition" :
+				if (searchConditionTI.text == "") {
+		    		svcConditionsList.url = "/visits.xml?rnd=" + rnd;
+	    			svcConditionsList.send();
+			    } else {
+		    		svcConditionsList.url = "/visits/search.xml?rnd=" + rnd;
+					svcConditionsList.send({search: searchConditionTI.text});
+			    }
+			    break;
+			default :
+				return;
+        }
+	}
+    
+    private function debounce(threshold:int, type:String):void{
+    	if (timeout)
+        	clearTimeout(timeout);        
+        else if (execAsap) {
+        	callSearch(type);
+        }       
+        timeout = setTimeout(delayed, threshold || 100, execAsap, type); 
+    }
+    
+    private function delayed(execAsap:Boolean, type:String):Object {       
+            if (!execAsap) {
+            	callSearch(type);
+            }              
+            return null; 
+    }
+    
+	public function selectPatient(patient:XML):void {
+		if(patient.hasOwnProperty("patient_id")) {
+			patientInfoBoxVar.init(patient.patient_id);
+		} else {
+			patientInfoBoxVar.init(patient.id);	
+		}		
+		mainStackVar.selectedChild=patientInfoBoxVar;	
+	}
+	
+	public function deletePatient(patient:XML):void {
+		var params:Object = new Object();
+		params['patient[active]'] = false;
+		params['_method'] = "PUT";
+		svcPatientsUpdate.url = "/patients/" + patient.id + ".xml";
+		svcPatientsUpdate.send(params);
+    }
+	
+	private function getMedicalRecordNumber(item:Object, column:DataGridColumn):String {     	
+    	var patient:XML = patientIdMap[item.patient_id];
+    	return patient.medical_record_number;
+    }
+    
+    private function getPatientName(item:Object, column:DataGridColumn):String {
+    	var patient:XML = patientIdMap[item.patient_id];
+    	return patient.first_name + " " + patient.middle_name + " " + patient.last_name;
+    }
+    
+    private function showPatientCreateTitleWin():void {
+		var patientPopUp:PatientCreateTitleWin = 
+			PatientCreateTitleWin(PopUpManager.createPopUp(this, PatientCreateTitleWin, true));		
+		patientPopUp.languageArray = languageArray;
+		PopUpManager.centerPopUp(patientPopUp);
+		
+		//add event listener to SearchBox.mxml for patient create
+		patientPopUp.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreate);
+	}
+	
+	private function handlePatientCreate(evt:Event):void {
+		searchPatient();
+	}
+	
+	private function handlePatientsUpdateResult(event:ResultEvent):void {
+		var resultXML: XML = XML(event.result);
+		Matlabulchifai.debug("patient_updates = \n" + resultXML);
+		showAllPatients();
+	}
+]]>
+</mx:Script>
+	<mx:HTTPService
+        id="svcPatientsUpdate"
+        resultFormat="e4x"
+        method="POST"
+        result="handlePatientsUpdateResult(event)"/>
+    <mx:HTTPService
+        id="svcPatientsList"
+        resultFormat="e4x"
+        result=""/>
+	<mx:XMLListCollection id="patientsXLC"
+        source="{XMLList(svcPatientsList.lastResult.children())}"/>    
+	<mx:HTTPService
+        id="svcAllergiesList"
+        resultFormat="e4x"
+        result=""/>
+	<mx:XMLListCollection id="allergiesXLC"
+        source="{XMLList(svcAllergiesList.lastResult.children())}"/>
+	<mx:HTTPService
+        id="svcVaccinationsList"
+        resultFormat="e4x"
+        result=""/>
+	<mx:XMLListCollection id="vaccinationsXLC"
+        source="{XMLList(svcVaccinationsList.lastResult.children())}"/>
+	<mx:HTTPService
+        id="svcConditionsList"
+        resultFormat="e4x"
+        result=""/>
+	<mx:XMLListCollection id="conditionsXLC"
+        source="{XMLList(svcConditionsList.lastResult.children())}"/>
+	
+	<mx:TabBar dataProvider="{searchMain}" fontWeight="Bold"/>			
+   	<mx:ViewStack
+   		id="searchMain" 
+   		width="100%" 
+   		height="100%">
+   		<mx:VBox label="{languageArray['Patients']}" show="searchPatient()">						
+	   		<mx:Panel title="{languageArray['Patient List']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox>
+					<mx:Label fontWeight="bold" text="{languageArray['Search by Patient Name']}: "></mx:Label>
+					<mx:TextInput id="searchPatientTI" change="searchPatient()"/>
+					<mx:Button id="searchPatientButton" label="{languageArray['Search']}" click="searchPatient()"/>
+					<mx:Button id="showAllPatientsButton" label="{languageArray['Show All']}" click="showAllPatients()"/>
+					<mx:Spacer width="20" />
+					<mx:LinkButton label="{languageArray['Add New Patient']}" color="#0000FF" click="showPatientCreateTitleWin()"/>
+				</mx:HBox>
+				
+				<mx:Spacer height="5" />
+				
+				<mx:DataGrid id="patientGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{patientsXLC}">
+			        <mx:columns>
+						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
+			                dataField="medical_record_number"/>
+			        	<mx:DataGridColumn headerText="{languageArray['First Name']}" width="100"
+			                dataField="first_name"/>
+						<mx:DataGridColumn headerText="{languageArray['Middle Name']}" width="100"
+			                dataField="middle_name"/>
+			            <mx:DataGridColumn headerText="{languageArray['Last Name']}" width="100"
+			                dataField="last_name"/>
+			        	<mx:DataGridColumn headerText="{languageArray['Gender']}" width="100"
+			                dataField="gender"/>
+			    		<mx:DataGridColumn headerText="{languageArray['Date of Birth']}" width="100"
+			                dataField="date_of_birth"/>
+			            <mx:DataGridColumn headerText="{languageArray['Arrival Date']}" width="100"
+			                dataField="arrival_date"/>	 	 		  
+			            <mx:DataGridColumn headerText="" width="110" editable="false">
+			                   	<mx:itemRenderer>
+			                 		<mx:Component>
+			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                    </mx:itemRenderer>
+						</mx:DataGridColumn>
+						<mx:DataGridColumn headerText="" width="110" editable="false">
+			                    <mx:itemRenderer>
+			                        <mx:Component>
+			                            <mx:Button label="Delete Patient" click="outerDocument.deletePatient(XML(data))"/>
+			                        </mx:Component>	                                           
+			                    </mx:itemRenderer>
+						</mx:DataGridColumn>	       	                
+			        </mx:columns>
+			    </mx:DataGrid>
+			</mx:Panel>
+		</mx:VBox>	    		
+	   	<mx:VBox label="{languageArray['Allergies']}" show="searchAllergy()">						
+	   		<mx:Panel title="{languageArray['Allergy List']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox>
+					<mx:Label fontWeight="bold" text="{languageArray['Search by Allergy Name']}: "></mx:Label>
+					<mx:TextInput id="searchAllergyTI" change="searchAllergy()"/>
+					<mx:Button id="searchAllergyButton" label="{languageArray['Search']}" click="searchAllergy()"/>
+					<mx:Button id="showAllAllergiesButton" label="{languageArray['Show All']}" click="showAllAllergies()"/>
+				</mx:HBox>
+				
+				<mx:Spacer height="5" />
+				
+				<mx:DataGrid id="allergyGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{allergiesXLC}">
+			        <mx:columns>
+						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
+							labelFunction="getMedicalRecordNumber"/>
+						<mx:DataGridColumn headerText="{languageArray['Patient Name']}" width="150"
+							labelFunction="getPatientName" />
+			        	<mx:DataGridColumn headerText="{languageArray['Allergy Name']}" width="250"
+			                dataField="name"/>
+			            <mx:DataGridColumn headerText="{languageArray['Severity']}" width="85"
+			                dataField="severity"/>
+			            <mx:DataGridColumn headerText="{languageArray['Date Observed']}" width="125"
+			                dataField="dateObserved"/>	
+			            <mx:DataGridColumn headerText="{languageArray['Notes']}"
+			                dataField="notes"/>			  
+			            <mx:DataGridColumn headerText="" width="110" editable="false">
+			                   	<mx:itemRenderer>
+			                 		<mx:Component>
+			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                    </mx:itemRenderer>
+						</mx:DataGridColumn>	       	                
+			        </mx:columns>
+			    </mx:DataGrid>
+			</mx:Panel>
+		</mx:VBox>
+		<mx:VBox label="{languageArray['Vaccinations']}" show="searchVaccination()">
+   			<mx:Panel title="{languageArray['Vaccination List']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox>
+					<mx:Label fontWeight="bold" text="{languageArray['Search by Vaccination Name']}: "></mx:Label>
+					<mx:TextInput id="searchVaccinationTI" change="searchVaccination()"/>
+					<mx:Button id="searchVaccinationButton" label="{languageArray['Search']}" click="searchVaccination()"/>
+					<mx:Button id="showAllVaccinationsButton" label="{languageArray['Show All']}" click="showAllVaccinations()"/>
+				</mx:HBox>
+				
+				<mx:Spacer height="5" />
+				
+				<mx:DataGrid id="vaccinationGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{vaccinationsXLC}">
+			        <mx:columns>
+						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
+							labelFunction="getMedicalRecordNumber"/>
+						<mx:DataGridColumn headerText="{languageArray['Patient Name']}" width="150"
+							labelFunction="getPatientName" />
+			        	<mx:DataGridColumn headerText="{languageArray['Vaccination Name']}" width="250"
+			                dataField="name"/>
+			            <mx:DataGridColumn headerText="{languageArray['Date Administered']}" width="125"
+			                dataField="dateAdmined"/>	
+			            <mx:DataGridColumn headerText="{languageArray['Notes']}"
+			                dataField="notes"/>			  
+			            <mx:DataGridColumn headerText="" width="110" editable="false">
+			                   	<mx:itemRenderer>
+			                 		<mx:Component>
+			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                    </mx:itemRenderer>
+						</mx:DataGridColumn>	       	                
+			        </mx:columns>
+			    </mx:DataGrid>
+			</mx:Panel>
+   		</mx:VBox>
+   		<mx:VBox label="{languageArray['Conditions']}" show="searchCondition()">						
+	   		<mx:Panel title="{languageArray['Condition List']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox>
+					<mx:Label fontWeight="bold" text="{languageArray['Search by Condition Name']}: "></mx:Label>
+					<mx:TextInput id="searchConditionTI" change="searchCondition()"/>
+					<mx:Button id="searchConditionButton" label="{languageArray['Search']}" click="searchCondition()"/>
+					<mx:Button id="showAllConditionsButton" label="{languageArray['Show All']}" click="showAllConditions()"/>
+				</mx:HBox>
+				
+				<mx:Spacer height="5" />
+				
+				<mx:DataGrid id="conditionGrid" width="100%" height="100%" textAlign="center" 
+					dataProvider="{conditionsXLC}">
+			        <mx:columns>
+						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
+							labelFunction="getMedicalRecordNumber"/>
+						<mx:DataGridColumn headerText="{languageArray['Patient Name']}" width="150"
+							labelFunction="getPatientName" />
+			        	<mx:DataGridColumn headerText="{languageArray['Condition Name']}" width="250"
+			                dataField="reason"/>
+			            <mx:DataGridColumn headerText="{languageArray['Visit Date']}" width="85"
+			                dataField="dateSeen"/>
+			            <mx:DataGridColumn headerText="{languageArray['Follow Up?']}" width="125"
+			                dataField="followUp"/>	
+			            <mx:DataGridColumn headerText="{languageArray['Notes']}"
+			                dataField="notes"/>			  
+			            <mx:DataGridColumn headerText="" width="110" editable="false">
+			                   	<mx:itemRenderer>
+			                 		<mx:Component>
+			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                    </mx:itemRenderer>
+						</mx:DataGridColumn>	       	                
+			        </mx:columns>
+			    </mx:DataGrid>
+			</mx:Panel>
+		</mx:VBox>
+	</mx:ViewStack>
+</mx:VBox>

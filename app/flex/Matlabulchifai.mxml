@@ -13,7 +13,7 @@
 	width="100%"
 	height="100%"
 	creationComplete="init();"
-	preinitialize="languageInit('FRENCH');">
+	preinitialize="languageInit('ENGLISH');">
 	<mx:Script source="com/matlabulchifai/util/language.as"/>
 	<mx:Script>
 		<![CDATA[
@@ -153,10 +153,8 @@
 				title = "Alerts";	
 			}
 			else if(e.currentTarget.selectedIndex == 1) {
-				title = "Patients";
-				mainStack.selectedChild = patientBox;
-				if (patientGridBox != null)
-					patientGridBox.setSearchFocus();
+				title = "Search";
+				mainStack.selectedChild = searchBox;
 			}
 			else if(e.currentTarget.selectedIndex == 2) {
 				mainStack.selectedChild = adminBox;
@@ -198,7 +196,7 @@
 		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false" >
 			<mx:XMLList>
 	            <menuitem label="{languageArray['Alerts']}"/>
-	            <menuitem label="{languageArray['Patients']}"/>
+	            <menuitem label="{languageArray['Search']}"/>
 	            <menuitem label="{languageArray['Administration']}"/>
 	            <menuitem label="{languageArray['Logout']}"/>
 	        </mx:XMLList>
@@ -208,28 +206,19 @@
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" languageArray="{languageArray}" login="handleLogin(event)"/>
-				<mx:Button click="login(XML('user'));title='Patients';mainMenu.visible=true;" label="Bypass Login"/>				
-				<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
+				<mx:Button click="login(XML('user'));title='Alerts';mainMenu.visible=true;" label="Bypass Login"/>								<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
-			<mx:VBox id="alertBox" horizontalAlign="center">
-				<mlc:AlertGridBox id="alertGridBox"
-					patientsXLC="{patientsXLC}" languageArray="{languageArray}"
-					patientIdMap="{patientIdMap}" 
-					mainStackVar="{mainStack}"
-					patientInfoBoxVar="{patientInfoBox}"
-					width="70%" height="90%" horizontalAlign="left"/>
-			</mx:VBox>
-			<mx:HBox id="patientBox">
-				<mlc:PatientGridBox id="patientGridBox"
-					patientSearch="handleSearchEvent(event)"
-					patientsXLC="{patientsXLC}" languageArray="{languageArray}"
-					mainStackVar="{mainStack}"
-					patientInfoBoxVar="{patientInfoBox}"
-					width="70%" height="90%" horizontalAlign="left"/>
-				<mlc:PatientCreateBox id="patientCreateBox"
-					patientCreate="handlePatientCreateEvent(event)" languageArray="{languageArray}"
-					width="30%" height="90%" horizontalAlign="center"/>	
-			</mx:HBox>
+			<mlc:AlertGridBox id="alertBox"
+				patientsXLC="{patientsXLC}" languageArray="{languageArray}"
+				patientIdMap="{patientIdMap}" 
+				mainStackVar="{mainStack}"
+				patientInfoBoxVar="{patientInfoBox}"
+				width="70%" height="90%" horizontalAlign="left"/>
+			<mlc:SearchBox id="searchBox"
+				languageArray="{languageArray}"
+				patientIdMap="{patientIdMap}"
+				mainStackVar="{mainStack}"
+				patientInfoBoxVar="{patientInfoBox}" />
 			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
 			<mlc:PatientInfo id="patientInfoBox"
 					patientIdMap="{patientIdMap}" languageArray="{languageArray}" />

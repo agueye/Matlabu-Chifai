@@ -14,6 +14,14 @@ class VisitsController < ApplicationController
     end
   end
 
+  def find
+    @visits = Visit.search(params[:search])
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @visits }
+    end
+  end
+
   # GET /visits/1
   # GET /visits/1.xml
   def show

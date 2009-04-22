@@ -3,10 +3,18 @@ class AllergiesController < ApplicationController
   # GET /allergies.xml
   def index
 	if params[:patient_id]
-		@allergies = Allergy.find(:all, :conditions => {:patient_id => params[:patient_id]})
+		@allergies = Allergy.find(:all, :conditions => {:patient_id => params[:patient_id]}, :order => "name")
 	else
-		@allergies = Allergy.find(:all)
+		@allergies = Allergy.find(:all, :order => "name")
 	end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @allergies }
+    end
+  end
+  
+  def find
+    @allergies = Allergy.search(params[:search])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @allergies }
