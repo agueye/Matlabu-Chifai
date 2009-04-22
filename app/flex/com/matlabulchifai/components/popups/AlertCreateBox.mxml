@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="100%" 
-	height="100%" 
-	label="Login"
-	horizontalAlign="center">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="425" 
+	height="350"
+	title="Add New Alert"
+	showCloseButton="true"
+    close="PopUpManager.removePopUp(this)">
 	
 	<mx:Metadata>
 		[Event(name="alertCreate", type="com.matlabulchifai.events.alert.AlertEvent")]
@@ -12,12 +13,15 @@
 
 <mx:Script>
 <![CDATA[
+	import mx.managers.PopUpManager;
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
     import com.matlabulchifai.events.alert.AlertEvent;
     
     [Bindable]
 	public var patientsXLC:XMLListCollection;
+	[Bindable]
+	public var languageArray:Object;
 
 	private function getPatientName(item:Object):String {
     	return item.last_name + ", " + item.first_name + " " + item.middle_name;
@@ -25,22 +29,15 @@
     
     private function createAlert():void {
     	svcAlertCreate.send();
-    }
-    
-    private function clearForm():void {
-			dateTI.text = "";
-			noteTA.text = "";
+		PopUpManager.removePopUp(this);
     }
     
     private function handleNewAlertResult(event:ResultEvent):void{
 		var resultXML:XML = XML(event.result);
 		Matlabulchifai.debug("alert created = \n" + resultXML);
-		dispatchEvent(new AlertEvent(AlertEvent.ALERT_CREATE, resultXML));
-		clearForm(); 
+		dispatchEvent(new AlertEvent(AlertEvent.ALERT_CREATE, resultXML)); 
 	}
-	[Bindable]
-	public var languageArray:Object;
-    
+	
 ]]>
 </mx:Script>
 
@@ -61,22 +58,25 @@
 	</mx:request>
 </mx:HTTPService>
 	
-	<mx:Panel title="{languageArray['Add Alert']}" horizontalAlign="center">
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form id="createAlertForm">
 			<mx:FormItem label="{languageArray['Patient']}">
 	            <mx:ComboBox id="patientsCB" width="175"
 	                labelFunction="getPatientName"
 	                dataProvider="{patientsXLC}"/>
         	</mx:FormItem>
-			<mx:FormItem required="true" label="{languageArray['Alert Date']}">				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980" />			</mx:FormItem>
-        	
+			<mx:FormItem required="true" label="Alert Date">
+				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980" />
+			</mx:FormItem>
 			<mx:FormItem required="true" label="Alert Note">
-				<mx:TextArea id="noteTA"/>
+				<mx:TextArea id="noteTA" width="200" height="150" />
 			</mx:FormItem>			
-			<mx:FormItem>
-				<mx:Button id="createAlertButton" label="{languageArray['Create']}" click="createAlert()"/>
-			</mx:FormItem>	
 		</mx:Form>
-	</mx:Panel>
+	</mx:VBox>
 	
-</mx:VBox>
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+		<mx:Button id="createAlertButton" label="{languageArray['Create']}" click="createAlert()"/>
+		<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>

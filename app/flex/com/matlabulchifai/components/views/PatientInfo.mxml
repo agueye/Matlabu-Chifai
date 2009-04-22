@@ -40,6 +40,7 @@
     			patientID=idnum;    			
     			//Patient info
     			patient = patientIdMap[idnum];
+				summary();
     		}
 			
 			public function summary():void {

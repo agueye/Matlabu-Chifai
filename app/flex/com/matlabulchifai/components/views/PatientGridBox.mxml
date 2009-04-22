@@ -111,7 +111,8 @@
 	                    editable="false">
 	                   	<mx:itemRenderer>
 	                 		<mx:Component>
-	                        	<mx:Button label="View" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+	                        	<mx:Button label="View" click="outerDocument.selectPatient(XML(data))" />
+							</mx:Component>                                       
 	                    </mx:itemRenderer>
 				</mx:DataGridColumn>	       	                
 				<mx:DataGridColumn headerText=""

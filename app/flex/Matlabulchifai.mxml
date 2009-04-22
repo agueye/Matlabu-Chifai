@@ -30,7 +30,6 @@
 	    import com.matlabulchifai.events.alert.AlertEvent;
 	    import com.matlabulchifai.events.patient.PatientEvent;
 	    import com.matlabulchifai.events.patient.SearchEvent;
-	    
 	    import flash.net.navigateToURL;
      	import mx.events.BrowserChangeEvent;
      	import mx.utils.URLUtil;
@@ -210,18 +209,14 @@
 				<mx:Button click="mainStack.selectedChild=patientBox;title='Patients';mainMenu.visible=true;" label="Bypass Login"/>				
 				<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
-			<mx:HBox id="alertBox">
+			<mx:VBox id="alertBox" horizontalAlign="center">
 				<mlc:AlertGridBox id="alertGridBox"
 					patientsXLC="{patientsXLC}" languageArray="{languageArray}"
 					patientIdMap="{patientIdMap}" 
 					mainStackVar="{mainStack}"
 					patientInfoBoxVar="{patientInfoBox}"
 					width="70%" height="90%" horizontalAlign="left"/>
-				<mlc:AlertCreateBox id="alertCreateBox"
-					alertCreate="alertGridBox.listAlerts()" languageArray="{languageArray}"
-					patientsXLC="{patientsXLC}" 
-					width="30%" height="90%" horizontalAlign="center"/>	
-			</mx:HBox>
+			</mx:VBox>
 			<mx:HBox id="patientBox">
 				<mlc:PatientGridBox id="patientGridBox"
 					patientSearch="handleSearchEvent(event)"
