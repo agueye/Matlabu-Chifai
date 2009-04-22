@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :notes
+
+  map.resources :prescriptions
+
   
   map.resources :notes
 

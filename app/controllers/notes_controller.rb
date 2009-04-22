@@ -2,11 +2,12 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.xml
   def index
-	@notesAll = Note.find_all_by_active(true)
-	
-	@notes = @notesAll.select {|note| note.patient.active }
-    @notes = Note.find(:all)
-
+	if params[:patient_id]
+		@notes = Note.find(:all, :conditions => {:patient_id => params[:patient_id]})
+	else
+		@notes = Note.find(:all)
+	end
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @notes }

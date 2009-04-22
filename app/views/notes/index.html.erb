@@ -3,12 +3,14 @@
 <table>
   <tr>
     <th>Patient</th>
+    <th>Datemade</th>
     <th>Body</th>
   </tr>
 
 <% for note in @notes %>
   <tr>
     <td><%=h note.patient_id %></td>
+    <td><%=h note.dateMade %></td>
     <td><%=h note.body %></td>
     <td><%= link_to 'Show', note %></td>
     <td><%= link_to 'Edit', edit_note_path(note) %></td>

@@ -16,9 +16,12 @@
 			import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
 			import com.matlabulchifai.components.popups.NoteCreateTitleWin;
 			import com.matlabulchifai.components.popups.VisitCreateTitleWin;
+			import com.matlabulchifai.components.popups.PrescriptionCreateTitleWin;
 			import com.matlabulchifai.events.patient.VaccinationEvent;
 			import com.matlabulchifai.events.patient.AllergyEvent;
 			import com.matlabulchifai.events.patient.VisitEvent;
+			import com.matlabulchifai.events.patient.NoteEvent;
+			import com.matlabulchifai.events.patient.PrescriptionEvent;
 			
     		[Bindable]
     		public var patientID:Number;
@@ -27,14 +30,13 @@
     		[Bindable]
     		public var patient:XML;
 			[Bindable]
-			public var notesXLC:XMLListCollection;
-			[Bindable]
 			public var languageArray:Object;
 			
 			private var vaccPopUp:VaccCreateTitleWin;
 			private var allergyPopUp:AllergyCreateTitleWin;
 			private var visitPopUp:VisitCreateTitleWin;
 			private var notePopUp:NoteCreateTitleWin;
+			private var prescriptionPopUp:PrescriptionCreateTitleWin;
 			
     		public function init(idnum:int):void{
     			patientID=idnum;    			
@@ -45,9 +47,32 @@
 			
 			public function summary():void {
 				listAllergies();
+				listNotes();
+				listPrescriptions();
 				listVisits();
-				listVaccinations();
+				listVaccinations();				
+			}	
+			
+			public function listPrescriptions():void {
+				svcPrescriptionsList.url="/prescriptions.xml?patient_id=" + patientID;
+				svcPrescriptionsList.send();
 			}
+    		
+			private function handlePrescriptionsListResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("prescriptions_notes = \n" + resultXML);
+			}
+			
+			public function listNotes():void {
+				svcNotesList.url="/notes.xml?patient_id=" + patientID;
+				svcNotesList.send();
+			}
+    		
+			private function handleNotesListResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("patient_notes = \n" + resultXML);
+			}
+			
 			
 			public function listVaccinations():void {
 				svcVaccinationsList.url="/vaccinations.xml?patient_id=" + patientID;
@@ -117,8 +142,8 @@
 				}
 			}
 			
-			private function showVisitCreateTitleWin():void{
-    			visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
+			private function showVisitCreateTitleWin():void {
+				visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
     			visitPopUp.addEventListener(VisitEvent.VISIT_CREATE, handleVisitEvent);
     			visitPopUp.patient = this.patient;
 				visitPopUp.patientID = this.patientID;
@@ -136,12 +161,45 @@
 				}
 			}
 			
-			private function showNoteCreateTitleWin():void{
+			private function showNoteCreateTitleWin():void {				
     			notePopUp = NoteCreateTitleWin(PopUpManager.createPopUp(this, NoteCreateTitleWin, true));
-    			
+    			notePopUp.addEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);
     			notePopUp.patient = this.patient;
+				notePopUp.patientID = this.patientID;
     			PopUpManager.centerPopUp(notePopUp);
     		}
+			
+			public function handleNoteEvent(event:Event):void {
+				listNotes();
+				removeNoteEventListener();
+			}
+			
+			public function removeNoteEventListener() {
+				if (notePopUp.hasEventListener(NoteEvent.NOTE_CREATE)) {
+					notePopUp.removeEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);
+				}
+			}
+			
+			private function showPrescriptionCreateTitleWin():void {				
+    			prescriptionPopUp = PrescriptionCreateTitleWin(PopUpManager.createPopUp(this, PrescriptionCreateTitleWin, true));
+    			prescriptionPopUp.addEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);
+    			prescriptionPopUp.patient = this.patient;
+				prescriptionPopUp.patientID = this.patientID;
+    			PopUpManager.centerPopUp(prescriptionPopUp);
+    		}
+			
+			public function handlePrescriptionEvent(event:Event):void {
+				listPrescriptions();
+				removePrescriptionEventListener();
+			}
+			
+			public function removePrescriptionEventListener() {
+				if (prescriptionPopUp.hasEventListener(PrescriptionEvent.PRESCRIPTION_CREATE)) {
+					prescriptionPopUp.removeEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);
+				}
+			}			
+			
+			
     	]]>
     </mx:Script>
 	
@@ -169,6 +227,22 @@
 	
 	<mx:XMLListCollection id="visitsXLC"
         source="{XMLList(svcVisitsList.lastResult.children())}"/>
+		
+	<mx:HTTPService
+        id="svcNotesList"
+        resultFormat="e4x"
+        result="handleNotesListResult(event)"/>
+	
+	<mx:XMLListCollection id="notesXLC"
+        source="{XMLList(svcNotesList.lastResult.children())}"/>
+		
+	<mx:HTTPService
+        id="svcPrescriptionsList"
+        resultFormat="e4x"
+        result="handlePrescriptionsListResult(event)"/>
+	
+	<mx:XMLListCollection id="prescriptionsXLC"
+        source="{XMLList(svcPrescriptionsList.lastResult.children())}"/>
 		
 		
     <mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
@@ -226,12 +300,24 @@
 			<mx:ViewStack horizontalCenter="0" y="30" id="pateientInfoMain" width="95%" height="87%" borderStyle="solid">
 				<mx:VBox label='Notes'>
 					<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" dataProvider="{notesXLC}">
-						<mx:columns>
-							<mx:DataGridColumn headerText="Note" dataField="note"/>
+						<mx:columns>							
+							<mx:DataGridColumn headerText="{languageArray['Note']}" dataField="body"/>
+							<mx:DataGridColumn headerText="{languageArray['Date Made']}" dataField="dateMade"/>
 						</mx:columns>
 					</mx:DataGrid>
 					<mx:LinkButton label="{languageArray['Add new note']}" color="#0000FF" click="showNoteCreateTitleWin()"/>
 				</mx:VBox>
+				<mx:VBox label='Prescriptions'>
+					<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" dataProvider="{prescriptionsXLC}">
+						<mx:columns>							
+							<mx:DataGridColumn headerText="{languageArray['Name']}" dataField="name"/>
+							<mx:DataGridColumn headerText="{languageArray['Dosage']}" dataField="dosage"/>
+							<mx:DataGridColumn headerText="{languageArray['Frequency']}" dataField="frequency"/>
+							<mx:DataGridColumn headerText="{languageArray['Date Given']}" dataField="dateGiven"/>
+						</mx:columns>
+					</mx:DataGrid>
+					<mx:LinkButton label="{languageArray['Add new visit']}" color="#0000FF" click="showPrescriptionCreateTitleWin()" />
+				</mx:VBox>				
 				<mx:VBox label="Visits">
 					<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" dataProvider="{visitsXLC}">
 						<mx:columns>
