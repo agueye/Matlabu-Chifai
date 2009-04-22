@@ -41,7 +41,7 @@
      	private function init():void{
      		initHistoryManager();
      		mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
-			listPatients();
+			
      	}
      
      	private function initHistoryManager():void
@@ -119,6 +119,7 @@
 		private function login(user:XML):void{
 			_user = user;
 			debug("user = " + user);
+			listPatients();
 			mainStack.selectedChild = alertBox;
 			title = "Alerts"
 			mainMenu.visible = true;
@@ -152,9 +153,10 @@
 				title = "Alerts";	
 			}
 			else if(e.currentTarget.selectedIndex == 1) {
-				mainStack.selectedChild = patientBox;
-				focusManager.setFocus(patientGridBox.searchTI);
 				title = "Patients";
+				mainStack.selectedChild = patientBox;
+				if (patientGridBox != null)
+					patientGridBox.setSearchFocus();
 			}
 			else if(e.currentTarget.selectedIndex == 2) {
 				mainStack.selectedChild = adminBox;
@@ -206,7 +208,7 @@
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" languageArray="{languageArray}" login="handleLogin(event)"/>
-				<mx:Button click="mainStack.selectedChild=patientBox;title='Patients';mainMenu.visible=true;" label="Bypass Login"/>				
+				<mx:Button click="login(XML('user'));title='Patients';mainMenu.visible=true;" label="Bypass Login"/>				
 				<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
 			<mx:VBox id="alertBox" horizontalAlign="center">
