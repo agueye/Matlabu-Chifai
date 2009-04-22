@@ -41,6 +41,10 @@
 		]]>
 	</mx:Script>
 	
+	<mx:Metadata>
+		[Event(name="visitCreate", type="com.matlabulchifai.events.patient.VisitEvent")]
+	</mx:Metadata>
+	
 	<mx:HTTPService
 		id="svcVisitCreate"
 		url="/visits.xml"

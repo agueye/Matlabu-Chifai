@@ -79,6 +79,7 @@
         id="svcAlertList"
         resultFormat="e4x"
         result="handleAlertListResult(event)"/>
+		
 	<mx:XMLListCollection id="alertsXLC"
         source="{XMLList(svcAlertList.lastResult.children())}"/>
 	
