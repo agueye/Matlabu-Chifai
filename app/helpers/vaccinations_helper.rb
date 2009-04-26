@@ -1,2 +1,0 @@
-module VaccinationsHelper
-end
