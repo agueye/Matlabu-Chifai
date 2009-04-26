@@ -1,0 +1,24 @@
+<h1>Listing patient_alerts</h1>
+
+<table>
+  <tr>
+    <th>Patient</th>
+    <th>Alert date</th>
+    <th>Notes</th>
+  </tr>
+
+<% for patient_alert in @patient_alerts %>
+  <tr>
+    <td><%=h patient_alert.patient_id %></td>
+    <td><%=h patient_alert.alert_date %></td>
+    <td><%=h patient_alert.notes %></td>
+    <td><%= link_to 'Show', patient_alert %></td>
+    <td><%= link_to 'Edit', edit_patient_alert_path(patient_alert) %></td>
+    <td><%= link_to 'Destroy', patient_alert, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New patient_alert', new_patient_alert_path %>

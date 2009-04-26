@@ -1,0 +1,22 @@
+<h1>Listing conditions</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Notes</th>
+  </tr>
+
+<% for condition in @conditions %>
+  <tr>
+    <td><%=h condition.name %></td>
+    <td><%=h condition.notes %></td>
+    <td><%= link_to 'Show', condition %></td>
+    <td><%= link_to 'Edit', edit_condition_path(condition) %></td>
+    <td><%= link_to 'Destroy', condition, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New condition', new_condition_path %>

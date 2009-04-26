@@ -1,0 +1,58 @@
+<p>
+  <b>Patient:</b>
+  <%=h @patient_visit.patient_id %>
+</p>
+
+<p>
+  <b>Doctor:</b>
+  <%=h @patient_visit.doctor_id %>
+</p>
+
+<p>
+  <b>Visit type:</b>
+  <%=h @patient_visit.visit_type_id %>
+</p>
+
+<p>
+  <b>Condition:</b>
+  <%=h @patient_visit.condition_id %>
+</p>
+
+<p>
+  <b>Visit date:</b>
+  <%=h @patient_visit.visit_date %>
+</p>
+
+<p>
+  <b>Height:</b>
+  <%=h @patient_visit.height %>
+</p>
+
+<p>
+  <b>Weight:</b>
+  <%=h @patient_visit.weight %>
+</p>
+
+<p>
+  <b>Blood pressure:</b>
+  <%=h @patient_visit.blood_pressure %>
+</p>
+
+<p>
+  <b>Pulse:</b>
+  <%=h @patient_visit.pulse %>
+</p>
+
+<p>
+  <b>Temperature:</b>
+  <%=h @patient_visit.temperature %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @patient_visit.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_patient_visit_path(@patient_visit) %> |
+<%= link_to 'Back', patient_visits_path %>

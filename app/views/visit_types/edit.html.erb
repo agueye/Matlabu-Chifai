@@ -1,0 +1,20 @@
+<h1>Editing visit_type</h1>
+
+<% form_for(@visit_type) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @visit_type %> |
+<%= link_to 'Back', visit_types_path %>

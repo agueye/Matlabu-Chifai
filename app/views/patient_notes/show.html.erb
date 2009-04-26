@@ -1,0 +1,18 @@
+<p>
+  <b>Patient:</b>
+  <%=h @patient_note.patient_id %>
+</p>
+
+<p>
+  <b>Note date:</b>
+  <%=h @patient_note.note_date %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%=h @patient_note.body %>
+</p>
+
+
+<%= link_to 'Edit', edit_patient_note_path(@patient_note) %> |
+<%= link_to 'Back', patient_notes_path %>

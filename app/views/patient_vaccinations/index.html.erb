@@ -1,0 +1,26 @@
+<h1>Listing patient_vaccinations</h1>
+
+<table>
+  <tr>
+    <th>Patient</th>
+    <th>Vaccination</th>
+    <th>Date admined</th>
+    <th>Notes</th>
+  </tr>
+
+<% for patient_vaccination in @patient_vaccinations %>
+  <tr>
+    <td><%=h patient_vaccination.patient_id %></td>
+    <td><%=h patient_vaccination.vaccination_id %></td>
+    <td><%=h patient_vaccination.date_admined %></td>
+    <td><%=h patient_vaccination.notes %></td>
+    <td><%= link_to 'Show', patient_vaccination %></td>
+    <td><%= link_to 'Edit', edit_patient_vaccination_path(patient_vaccination) %></td>
+    <td><%= link_to 'Destroy', patient_vaccination, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New patient_vaccination', new_patient_vaccination_path %>

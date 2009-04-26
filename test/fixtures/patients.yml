@@ -1,0 +1,45 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  medical_record_number: MyString
+  first_name: MyString
+  middle_name: MyString
+  last_name: MyString
+  arrival_date: 2009-04-25
+  date_of_birth: 2009-04-25
+  gender: MyString
+  address: MyString
+  city: MyString
+  state: MyString
+  zip: MyString
+  father_first_name: MyString
+  father_last_name: MyString
+  mother_first_name: MyString
+  mother_last_name: MyString
+  telephone: MyString
+  emergency_contact_name: MyString
+  emergency_contact_relationship: MyString
+  emergency_contact_number: MyString
+  notes: MyText
+
+two:
+  medical_record_number: MyString
+  first_name: MyString
+  middle_name: MyString
+  last_name: MyString
+  arrival_date: 2009-04-25
+  date_of_birth: 2009-04-25
+  gender: MyString
+  address: MyString
+  city: MyString
+  state: MyString
+  zip: MyString
+  father_first_name: MyString
+  father_last_name: MyString
+  mother_first_name: MyString
+  mother_last_name: MyString
+  telephone: MyString
+  emergency_contact_name: MyString
+  emergency_contact_relationship: MyString
+  emergency_contact_number: MyString
+  notes: MyText

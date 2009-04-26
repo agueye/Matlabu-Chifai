@@ -1,0 +1,36 @@
+<h1>Editing patient_allergy</h1>
+
+<% form_for(@patient_allergy) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :patient_id %><br />
+    <%= f.text_field :patient_id %>
+  </p>
+  <p>
+    <%= f.label :allergy_id %><br />
+    <%= f.text_field :allergy_id %>
+  </p>
+  <p>
+    <%= f.label :date_observed %><br />
+    <%= f.date_select :date_observed %>
+  </p>
+  <p>
+    <%= f.label :severity %><br />
+    <%= f.text_field :severity %>
+  </p>
+  <p>
+    <%= f.label :reaction %><br />
+    <%= f.text_field :reaction %>
+  </p>
+  <p>
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @patient_allergy %> |
+<%= link_to 'Back', patient_allergies_path %>

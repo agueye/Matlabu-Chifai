@@ -1,0 +1,27 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  patient_id: 1
+  doctor_id: 1
+  visit_type_id: 1
+  condition_id: 1
+  visit_date: 2009-04-25
+  height: MyString
+  weight: MyString
+  blood_pressure: MyString
+  pulse: MyString
+  temperature: MyString
+  notes: MyText
+
+two:
+  patient_id: 1
+  doctor_id: 1
+  visit_type_id: 1
+  condition_id: 1
+  visit_date: 2009-04-25
+  height: MyString
+  weight: MyString
+  blood_pressure: MyString
+  pulse: MyString
+  temperature: MyString
+  notes: MyText

@@ -1,0 +1,22 @@
+<h1>Listing allergies</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Notes</th>
+  </tr>
+
+<% for allergy in @allergies %>
+  <tr>
+    <td><%=h allergy.name %></td>
+    <td><%=h allergy.notes %></td>
+    <td><%= link_to 'Show', allergy %></td>
+    <td><%= link_to 'Edit', edit_allergy_path(allergy) %></td>
+    <td><%= link_to 'Destroy', allergy, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New allergy', new_allergy_path %>

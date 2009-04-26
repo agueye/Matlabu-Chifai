@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  patient_id: 1
+  doctor_id: 1
+  medication_id: 1
+  condition_id: 1
+  dosage: MyString
+  frequency: MyString
+  date_given: 2009-04-25
+  notes: MyText
+
+two:
+  patient_id: 1
+  doctor_id: 1
+  medication_id: 1
+  condition_id: 1
+  dosage: MyString
+  frequency: MyString
+  date_given: 2009-04-25
+  notes: MyText

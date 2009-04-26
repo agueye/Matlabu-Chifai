@@ -1,0 +1,22 @@
+<h1>Listing vaccinations</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Notes</th>
+  </tr>
+
+<% for vaccination in @vaccinations %>
+  <tr>
+    <td><%=h vaccination.name %></td>
+    <td><%=h vaccination.notes %></td>
+    <td><%= link_to 'Show', vaccination %></td>
+    <td><%= link_to 'Edit', edit_vaccination_path(vaccination) %></td>
+    <td><%= link_to 'Destroy', vaccination, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New vaccination', new_vaccination_path %>

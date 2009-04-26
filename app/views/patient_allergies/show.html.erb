@@ -1,0 +1,33 @@
+<p>
+  <b>Patient:</b>
+  <%=h @patient_allergy.patient_id %>
+</p>
+
+<p>
+  <b>Allergy:</b>
+  <%=h @patient_allergy.allergy_id %>
+</p>
+
+<p>
+  <b>Date observed:</b>
+  <%=h @patient_allergy.date_observed %>
+</p>
+
+<p>
+  <b>Severity:</b>
+  <%=h @patient_allergy.severity %>
+</p>
+
+<p>
+  <b>Reaction:</b>
+  <%=h @patient_allergy.reaction %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @patient_allergy.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_patient_allergy_path(@patient_allergy) %> |
+<%= link_to 'Back', patient_allergies_path %>

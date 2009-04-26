@@ -1,0 +1,30 @@
+<h1>Listing patient_allergies</h1>
+
+<table>
+  <tr>
+    <th>Patient</th>
+    <th>Allergy</th>
+    <th>Date observed</th>
+    <th>Severity</th>
+    <th>Reaction</th>
+    <th>Notes</th>
+  </tr>
+
+<% for patient_allergy in @patient_allergies %>
+  <tr>
+    <td><%=h patient_allergy.patient_id %></td>
+    <td><%=h patient_allergy.allergy_id %></td>
+    <td><%=h patient_allergy.date_observed %></td>
+    <td><%=h patient_allergy.severity %></td>
+    <td><%=h patient_allergy.reaction %></td>
+    <td><%=h patient_allergy.notes %></td>
+    <td><%= link_to 'Show', patient_allergy %></td>
+    <td><%= link_to 'Edit', edit_patient_allergy_path(patient_allergy) %></td>
+    <td><%= link_to 'Destroy', patient_allergy, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New patient_allergy', new_patient_allergy_path %>

@@ -1,0 +1,43 @@
+<p>
+  <b>Patient:</b>
+  <%=h @patient_medication.patient_id %>
+</p>
+
+<p>
+  <b>Doctor:</b>
+  <%=h @patient_medication.doctor_id %>
+</p>
+
+<p>
+  <b>Medication:</b>
+  <%=h @patient_medication.medication_id %>
+</p>
+
+<p>
+  <b>Condition:</b>
+  <%=h @patient_medication.condition_id %>
+</p>
+
+<p>
+  <b>Dosage:</b>
+  <%=h @patient_medication.dosage %>
+</p>
+
+<p>
+  <b>Frequency:</b>
+  <%=h @patient_medication.frequency %>
+</p>
+
+<p>
+  <b>Date given:</b>
+  <%=h @patient_medication.date_given %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @patient_medication.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_patient_medication_path(@patient_medication) %> |
+<%= link_to 'Back', patient_medications_path %>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="400" 
+	height="450"
+	title="Add New Allergy"
+	showCloseButton="true"
+    close="PopUpManager.removePopUp(this)">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.collections.ArrayCollection;
+			import com.matlabulchifai.events.patient.AllergyEvent;
+			
+			[Bindable]
+			public var patient:XML;
+			[Bindable]
+			public var patientID:Number;
+			[Bindable]
+			public var languageArray:Object;
+			[Bindable]
+			public var severities:ArrayCollection = new ArrayCollection(
+            [ { label:"10", data:"10" }, { label:"9", data:"9" }, { label:"8", data:"8" }, { label:"7", data:"7" },
+				{label:"6", data:"6" }, { label:"5", data:"5" }, { label:"4", data:"4" }, { label:"3", data:"3" },
+				{label:"2", data:"2" }, { label:"1", data:"1" } ]);
+				
+			private function handleNewAllergyResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("allergy created = \n" + resultXML);
+				dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, resultXML));
+			}
+			
+			private function processAllergyCreate():void{
+				svcAllergyCreate.send();
+				PopUpManager.removePopUp(this);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService
+		id="svcAllergyCreate"
+		url="/allergies.xml"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewAllergyResult(event)">
+		<mx:request>
+			<allergy>
+				<name>{allergyNameTI.text}</name>
+				<dateObserved>{allergyDateDF.text}</dateObserved>
+				<severity>{severityCB.text}</severity>
+				<notes>{allergyNotesTI.text}</notes>
+				<patient_id>{patientID}</patient_id>
+			</allergy>
+		</mx:request>
+	</mx:HTTPService>
+	
+	
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+		<mx:Form>
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Allergy">
+				<mx:TextInput id="allergyNameTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Date">
+				<mx:DateField id="allergyDateDF" yearNavigationEnabled="true" minYear="1980" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Severity">		
+				<mx:ComboBox id="severityCB" dataProvider="{severities}" /> 
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Notes">
+				<mx:TextArea id="allergyNotesTI" width="200" height="150" />
+			</mx:FormItem>
+		</mx:Form>
+	</mx:VBox>
+	
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+		<mx:Button label="OK" id="OKBtn" click="processAllergyCreate()" />
+		<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>
