@@ -147,8 +147,6 @@ public function languageInit(str:String):void{
 		  "Zip": "Code Postal"
 		  
 		  
-		  
-		  
 			}
 		return;
 	}
