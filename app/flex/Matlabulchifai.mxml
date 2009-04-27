@@ -155,6 +155,12 @@
 			updatePatientIdMap();
 			debug("patients = \n" + resultXML);	
 		}		
+		
+		private function bypassLogin():void{
+			loginFormBox.loginTI.text = "tester";
+			loginFormBox.passwordTI.text = "tester";
+			loginFormBox.login();
+		}
 		]]>
 	</mx:Script>
 	
@@ -187,7 +193,8 @@
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" languageArray="{languageArray}" login="handleLogin(event)"/>
-				<mx:Button click="login(XML('user'));title='Alerts';mainMenu.visible=true;" label="Bypass Login"/>								<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
+				<mx:Button click="bypassLogin()" label="Bypass Login"/>								
+				<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
 			<mlc:AlertGridBox id="alertBox"
 				patientsXLC="{patientsXLC}"
