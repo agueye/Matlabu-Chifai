@@ -8,6 +8,7 @@
 	
 <mx:Script>
 <![CDATA[
+	import mx.controls.Alert;
 	import flash.events.Event;
 	import mx.managers.PopUpManager;
     import mx.rpc.events.ResultEvent;
@@ -92,6 +93,9 @@
 		patientInfoBoxVar.init(alert.patient_id);
 		mainStackVar.selectedChild=patientInfoBoxVar;
 	}
+	private function alertClicked(event:MouseEvent):void{
+		selectPatient(XML(event.currentTarget.selectedItem));
+	}
 ]]>
 </mx:Script>
 	
@@ -109,11 +113,11 @@
         method="POST"
         result="handleAlertsDestroyResult(event)"/>
         
-	<mx:Panel title="Alert List" width="100%" height="100%" 
+	<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
 		paddingTop="5" paddingLeft="5" paddingRight="5">
-		<mx:LinkButton label="Add New Alert" color="#0000FF" click="showAlertCreateBox()"/>
+		<mx:LinkButton label="{languageArray['Add Alert']}" color="#0000FF" click="showAlertCreateBox()"/>
 		<mx:Spacer height="5" />
-		<mx:DataGrid id="alertsGrid" width="100%" height="100%" wordWrap="true" textAlign="center"
+		<mx:DataGrid id="alertsGrid" width="100%" height="100%" click="alertClicked(event)" wordWrap="true" textAlign="center"
 			variableRowHeight="true" dataProvider="{alertsXLC}">
 	        <mx:columns>
 				<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
@@ -124,14 +128,6 @@
 					dataField="alert_date"/>
 				<mx:DataGridColumn headerText="{languageArray['Alert Note']}"
 					dataField="notes"/>
-				<mx:DataGridColumn headerText="" width="70" 
-	                    editable="false">
-	                    <mx:itemRenderer>
-	                        <mx:Component>
-	                            <mx:Button label="View" click="outerDocument.selectPatient(XML(data))" />
-	                        </mx:Component>
-	                    </mx:itemRenderer>
-				</mx:DataGridColumn>
 				<mx:DataGridColumn headerText="" width="70" 
 	                    editable="false">
 	                    <mx:itemRenderer>
