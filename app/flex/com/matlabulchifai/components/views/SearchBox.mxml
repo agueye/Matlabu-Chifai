@@ -378,6 +378,9 @@
 	private function handleAllDoctorsListResult(event:ResultEvent):void {
 		updateDoctorIdMap();
 	}
+	private function patientClicked(event:MouseEvent):void{
+		selectPatient(XML(event.currentTarget.selectedItem));
+	}
 ]]>
 </mx:Script>
 	<mx:HTTPService
@@ -471,7 +474,7 @@
 				
 				<mx:Spacer height="5" />
 				
-				<mx:DataGrid id="patientGrid" width="100%" height="100%" textAlign="center" 
+				<mx:DataGrid id="patientGrid" width="100%" height="100%" doubleClickEnabled="true" doubleClick="patientClicked(event)" textAlign="center" 
 					dataProvider="{patientsXLC}">
 			        <mx:columns>
 						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
@@ -488,12 +491,6 @@
 			                dataField="date_of_birth"/>
 			            <mx:DataGridColumn headerText="{languageArray['Arrival Date']}" width="100"
 			                dataField="arrival_date"/>	 	 		  
-			            <mx:DataGridColumn headerText="" width="110" editable="false">
-			                   	<mx:itemRenderer>
-			                 		<mx:Component>
-			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
-			                    </mx:itemRenderer>
-						</mx:DataGridColumn>
 						<mx:DataGridColumn headerText="" width="110" editable="false">
 			                    <mx:itemRenderer>
 			                        <mx:Component>
