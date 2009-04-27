@@ -16,6 +16,7 @@
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.events.patient.VaccinationEvent;
+			import mx.core.Application;
 			
 			[Bindable]
 			public var patient:XML;
@@ -41,7 +42,7 @@
 	
 	<mx:HTTPService
 		id="svcVaccinationCreate"
-		url="/vaccinations.xml"
+		url="/vaccinations.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"

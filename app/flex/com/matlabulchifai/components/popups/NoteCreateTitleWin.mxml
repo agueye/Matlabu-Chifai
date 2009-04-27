@@ -16,6 +16,7 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.NoteEvent;
+			import mx.core.Application;
 			
 			[Bindable]
 			public var patient:XML;
@@ -40,7 +41,7 @@
 	
 	<mx:HTTPService
 		id="svcNoteCreate"
-		url="/notes.xml"
+		url="/notes.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"

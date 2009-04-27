@@ -46,12 +46,15 @@ end
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  include AuthenticatedSystem
   helper :all # include all helpers, all the time
+  before_filter :login_required
   after_filter :flex_error_handling
+  filter_parameter_logging :password, :user #these attributes won't be logged for security purposes
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
-  #protect_from_forgery # :secret => 'a45a7c0279b78366fa1830d5230096a2'
+  protect_from_forgery # :secret => 'a45a7c0279b78366fa1830d5230096a2'
   
   # See ActionController::Base for details 
   # Uncomment this to filter the contents of submitted sensitive data parameters

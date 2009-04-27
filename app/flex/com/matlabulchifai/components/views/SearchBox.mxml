@@ -22,6 +22,7 @@
     import mx.managers.PopUpManager;
     import com.matlabulchifai.events.patient.PatientEvent;
     import com.matlabulchifai.components.popups.PatientCreateTitleWin;
+    import mx.core.Application;
     
 	[Bindable]
 	public var languageArray:Object;
@@ -59,11 +60,15 @@
     
     private var doctorIdMap:Object;
     	
+    private var authToken:String;
     
     private function init():void {
     	searchPatient();
     	searchMain.selectedIndex = 0;
     	rnd = Math.round(Math.random()*1000);
+    	
+    	authToken = "?authenticity_token=" + Application.application.parameters.authenticityToken;
+
     	svcAllAllergiesList.url = "/allergies.xml?rnd=" + rnd;
     	svcAllAllergiesList.send();
     	svcAllVaccinationsList.url = "/vaccinations.xml?rnd=" + rnd;
@@ -211,7 +216,7 @@
 	}
 	
 	public function deletePatient(patient:XML):void {
-		svcPatientDestroy.url = "/patients/" + patient.id + ".xml";
+		svcPatientDestroy.url = "/patients/" + patient.id + ".xml" + authToken;
 		svcPatientDestroy.send({_method:"DELETE"});
     }
 	

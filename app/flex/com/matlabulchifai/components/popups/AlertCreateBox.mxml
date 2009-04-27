@@ -17,18 +17,21 @@
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
     import com.matlabulchifai.events.alert.AlertEvent;
+    import mx.core.Application;
     
     [Bindable]
 	public var patientsXLC:XMLListCollection;
 	[Bindable]
 	public var languageArray:Object;
+	
+	private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 
 	private function getPatientName(item:Object):String {
     	return item.last_name + ", " + item.first_name + " " + item.middle_name;
     }
     
     private function createAlert():void {
-    	svcAlertCreate.url = "/patients/" + patientsCB.selectedItem.id + "/patient_alerts.xml"
+    	svcAlertCreate.url = "/patients/" + patientsCB.selectedItem.id + "/patient_alerts.xml" + authToken;
     	svcAlertCreate.send();
 		PopUpManager.removePopUp(this);
     }

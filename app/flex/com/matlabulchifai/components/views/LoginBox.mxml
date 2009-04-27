@@ -29,7 +29,7 @@
 				dispatchEvent(new LoginEvent(XML(result)));
 			}
 		}
-		
+
 		[Bindable]
 		public var languageArray:Object;
 		
@@ -38,7 +38,7 @@
 	</mx:Script>
 	
 	<mx:HTTPService id="svcAccountLogin"
-		url="/session.xml/?authenticity_token={Application.application.parameters.authenticityToken}"
+		url="/session.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		method="POST"
 		result="handleAccountLoginResult(event)"/>

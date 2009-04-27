@@ -15,6 +15,7 @@
 	import mx.containers.ViewStack;
 	import com.matlabulchifai.events.alert.AlertEvent;
 	import com.matlabulchifai.components.popups.AlertCreateBox;
+	import mx.core.Application;
     
     [Bindable]
 	public var patientsXLC:XMLListCollection;
@@ -29,6 +30,8 @@
         
     private var rnd:Number;
 	private var alertPopUp:AlertCreateBox;
+	
+	private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 	
     public function listAlerts():void {
     	rnd = Math.round(Math.random()*1000);
@@ -47,7 +50,7 @@
     }
     
     public function deleteAlert(alert:XML):void {
-		svcAlertsDestroy.url = "/patient_alerts/" + alert.id + ".xml";
+		svcAlertsDestroy.url = "/patient_alerts/" + alert.id + ".xml" + authToken;
 		svcAlertsDestroy.send({_method:"DELETE"});
     }
     

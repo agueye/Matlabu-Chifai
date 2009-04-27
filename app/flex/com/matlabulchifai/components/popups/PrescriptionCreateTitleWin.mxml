@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="vertical" 
 	width="500" 
@@ -16,6 +16,7 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.PrescriptionEvent;
+			import mx.core.Application;
 			
 			[Bindable]
 			public var patient:XML;
@@ -40,7 +41,7 @@
 	
 	<mx:HTTPService
 		id="svcPrescriptionCreate"
-		url="/prescriptions.xml"
+		url="/prescriptions.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"

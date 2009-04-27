@@ -13,6 +13,7 @@
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.events.patient.VisitEvent;
+			import mx.core.Application;
 			
 			[Bindable]
 			public var patient:XML;
@@ -47,7 +48,7 @@
 	
 	<mx:HTTPService
 		id="svcVisitCreate"
-		url="/visits.xml"
+		url="/visits.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"

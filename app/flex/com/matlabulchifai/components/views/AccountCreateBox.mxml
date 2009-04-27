@@ -15,6 +15,7 @@
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.events.login.AccountCreateEvent;
+			import mx.core.Application;
 			
 			private function createAccount():void{
 				svcAccountCreate.send();
@@ -34,7 +35,7 @@
 	</mx:Script>
 
 	<mx:HTTPService id="svcAccountCreate"
-		url="/users.xml"
+		url="/users.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		contentType="application/xml"
 		resultFormat="e4x"
 		method="POST"

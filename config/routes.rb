@@ -1,4 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :users
+
+  map.resource :session
+  
+  
+  map.flex '/matlabulchifai', :controller => "flex", :action => "index"
+  
+  
   map.patient_search '/patients/search.:format', :controller => "patients", :action => "find"  
   map.allergy_search '/patient_allergies/search.:format', :controller => "patient_allergies", :action => "find"
   map.vaccination_search '/patient_vaccination/search.:format', :controller => "patient_vaccination", :action => "find"
