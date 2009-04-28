@@ -59,6 +59,8 @@ class PatientVaccinationsController < ApplicationController
     @patient_vaccination = PatientVaccination.new(params[:patient_vaccination])
     @patient_vaccination.patient = @patient
     
+    APP_LOGGER_LOG.info "VACCINATION CREATED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
+    
     respond_to do |format|
       if @patient_vaccination.save
         flash[:notice] = "The patient's vaccination was successfully created."
@@ -79,6 +81,9 @@ class PatientVaccinationsController < ApplicationController
     respond_to do |format|
       if @patient_vaccination.update_attributes(params[:patient_vaccination])
         flash[:notice] = "The patient's vaccination was successfully updated."
+        
+        APP_LOGGER_LOG.info "VACCINATION UPDATED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
+        
         format.html { redirect_to(patient_patient_vaccinations_path(@patient)) }
         format.xml  { head :ok }
       else
@@ -94,6 +99,8 @@ class PatientVaccinationsController < ApplicationController
     @patient_vaccination = PatientVaccination.find(params[:id])
     @patient_vaccination.destroy
 
+    APP_LOGGER_LOG.info "VACCINATION DELETED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
+    
     respond_to do |format|
       format.html { redirect_to(patient_patient_vaccinations_path(@patient)) }
       format.xml  { head :ok }

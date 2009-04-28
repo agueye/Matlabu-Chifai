@@ -60,6 +60,9 @@ class PatientAllergiesController < ApplicationController
     respond_to do |format|
       if @patient_allergy.save
         flash[:notice] = "The patient's allergy was successfully created."
+        
+        APP_LOGGER_LOG.info "ALLERGY CREATED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
+            
         format.html { redirect_to(patient_patient_allergies_path(@patient)) }
         format.xml  { render :xml => @patient_allergy, :status => :created, :location => @patient_allergy }
       else
@@ -77,6 +80,9 @@ class PatientAllergiesController < ApplicationController
     respond_to do |format|
       if @patient_allergy.update_attributes(params[:patient_allergy])
         flash[:notice] = "The patient's allergy was successfully updated."
+        
+        APP_LOGGER_LOG.info "ALLERGY UPDATED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
+            
         format.html { redirect_to(patient_patient_allergies_path(@patient)) }
         format.xml  { head :ok }
       else
@@ -91,7 +97,9 @@ class PatientAllergiesController < ApplicationController
   def destroy
     @patient_allergy = PatientAllergy.find(params[:id])
     @patient_allergy.destroy
-
+    
+    APP_LOGGER_LOG.info "ALLERGY DELETED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
+        
     respond_to do |format|
       format.html { redirect_to(patient_patient_allergies_path(@patient)) }
       format.xml  { head :ok }

@@ -45,6 +45,9 @@ class MedicationsController < ApplicationController
     respond_to do |format|
       if @medication.save
         flash[:notice] = 'Medication was successfully created.'
+        
+        APP_LOGGER_LOG.info "MEDICATION CREATED - " + @medication[:name] + " by USER " + self.current_user[:login]
+        
         format.html { redirect_to(@medication) }
         format.xml  { render :xml => @medication, :status => :created, :location => @medication }
       else
@@ -62,6 +65,9 @@ class MedicationsController < ApplicationController
     respond_to do |format|
       if @medication.update_attributes(params[:medication])
         flash[:notice] = 'Medication was successfully updated.'
+        
+        APP_LOGGER_LOG.info "MEDICATION UPDATED - " + @medication[:name] + " by USER " + self.current_user[:login]
+        
         format.html { redirect_to(@medication) }
         format.xml  { head :ok }
       else
@@ -76,6 +82,8 @@ class MedicationsController < ApplicationController
   def destroy
     @medication = Medication.find(params[:id])
     @medication.destroy
+    
+    APP_LOGGER_LOG.info "MEDICATION DELETED - " + @medication[:name] + " by USER " + self.current_user[:login]
 
     respond_to do |format|
       format.html { redirect_to(medications_url) }
