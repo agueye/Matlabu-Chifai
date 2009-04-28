@@ -309,10 +309,7 @@
         source="{XMLList(svcMedicationsList.lastResult.children())}"/>
 	
 	<mx:TabBar dataProvider="{searchMain}" fontWeight="Bold"/>			
-   	<mx:ViewStack
-   		id="searchMain" 
-   		width="100%" 
-   		height="100%">
+   	<mx:ViewStack id="searchMain" width="100%" height="100%" change="Application.application.updateUrl()">
    		<mx:VBox label="{languageArray['Patients']}" show="searchPatient()">						
 	   		<mx:Panel title="{languageArray['Patient List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">

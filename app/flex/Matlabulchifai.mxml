@@ -9,9 +9,10 @@
 	paddingLeft="0"
 	paddingRight="0"
 	paddingTop="0"
-	paddingBottom="0"
+	paddingBottom="0" 
 	width="100%"
 	height="100%"
+	historyManagementEnabled="false"
 	creationComplete="init();"
 	preinitialize="languageInit('ENGLISH');">
 <mx:Script source="com/matlabulchifai/util/language.as"/>
@@ -64,6 +65,7 @@
 	private var rnd:Number;
 
  	private var browserManager:IBrowserManager;
+ 	private var parsing:Boolean;
 
 
 	public static function debug(str:String):void {
@@ -209,30 +211,51 @@
             doctorsCursor.moveNext();
         }
     }
-    
-	private function initHistoryManager():void {
+     
+ 	private function initHistoryManager():void
+ 	{
+ 		debug("InitHistoryManager called");
    		browserManager = BrowserManager.getInstance();
-   		browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, parseUrl);
    		browserManager.init("");
-   		parseUrl();
+   		browserManager.addEventListener(
+     	BrowserChangeEvent.BROWSER_URL_CHANGE, 
+     	parseUrl
+   	)
+   		//parseUrl();
+   		browserManager.setFragment("");
  	}
  
  	private function parseUrl(e:BrowserChangeEvent = null):void
  	{
+ 		parsing = true;
+ 		debug("ParseURL called");
    		var o:Object = URLUtil.stringToObject(browserManager.fragment);
-   		if(o.a == 4) {
-   			var patient:XML = patientIdMap[o.pid];
+   		if(o.a == 2){
+   			this.searchBox.searchMain.selectedIndex = o.b;
+   		}
+   		if(o.a == 4){
+   			var patient:XML = patientIdMap[o.b];
    			this.patientInfoBox.patient = patient;
    		}
    		mainStack.selectedIndex = o.a;
+   		parsing = false;
  	}
+ 	
+ 	
  
- 	private function updateUrl():void
+ 	public function updateUrl():void
  	{
+ 		debug("UpdateURL() called");
+     	if(parsing)
+     		return;
  		var currentIndex:int = mainStack.selectedIndex;
  		var toStore:String = "a=" + currentIndex;
+ 		if(currentIndex == 2){
+ 			toStore+=";b=" + this.searchBox.searchMain.selectedIndex;
+ 			debug("Selected Index: " + searchBox.searchMain.selectedIndex);
+ 		}
  		if(currentIndex == 4){
- 			toStore+= ";pid="+ this.patientInfoBox.patientID;
+ 			toStore+= ";b="+ this.patientInfoBox.patientID;
  		}
    		browserManager.setFragment(toStore);
  	}

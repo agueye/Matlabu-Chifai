@@ -272,10 +272,7 @@
    	<mx:VBox height="100%" width="80%" verticalGap="0">
    		<mx:TabBar dataProvider="{patientInfoMain}" 
    			fontWeight="Bold" paddingTop="0" paddingBottom="0" />			
-   		<mx:ViewStack 
-   			id="patientInfoMain" 
-   			width="100%" 
-   			height="100%">
+   		<mx:ViewStack id="patientInfoMain" width="100%" height="100%">
 	   		<mx:VBox label="{languageArray['Alerts']}" show="listAlerts()">
 	   			<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
