@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox 
+<mx:HBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
 	height="100%"
@@ -235,121 +235,134 @@
 	<mx:XMLListCollection id="prescriptionsXLC"
         source="{XMLList(svcPrescriptionsList.lastResult.children())}"/>
 		
-		
-    <mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
-    <mx:HBox label="Main">
-    	<mx:VBox>
-    		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>	
-    	</mx:VBox>
-		<mx:VBox>						<mx:Label text="{languageArray['General Information']}"  fontWeight="bold" fontSize="12"/>						<mx:HBox>
-				<mx:Label text="{languageArray['Patient ID']}: {patient['id']}"  fontSize="12"/>				
-				<mx:Label text="{languageArray['Patient Active']}: {patient['patient_active']}"  fontSize="12"/>			
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['First Name']}: {patient['first_name']}"  fontSize="12"/>				
-				<mx:Label text="{languageArray['Middle Name']}: {patient['middle_name']}"  fontSize="12"/>				
-				<mx:Label text="{languageArray['Last Name']}: {patient['last_name']}"  fontSize="12"/>			
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['Father First Name']}: {patient['father_first_name']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['Father Last Name']}: {patient['father_last_name']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['Mother First Name']}: {patient['mother_first_name']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['Mother Last Name']}: {patient['mother_last_name']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:Label />
-			
-			<mx:Label text="{languageArray['Emergency Contact']}"  fontWeight="bold" fontSize="12"/>
-			<mx:HBox>
-	    		<mx:Label text="{languageArray['First Name']}: {patient['emergency_first_name']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['Middle Name']}: {patient['emergency_middle_name']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['Last Name']}: {patient['emergency_last_name']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
-				<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:HBox>
-				<mx:Label text="{languageArray['Notes']}: {patient['notes']}"  fontSize="12"/>
-			</mx:HBox>
-			<mx:Label />
-		</mx:VBox>
-   		<mx:VBox width="600" height="500">
-   		<mx:TabBar dataProvider="{pateientInfoMain}" fontWeight="Bold" x="51" y="3" />			
+	<mx:VBox label="Main" height="100%" width="20%">
+		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
+		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>			
+	</mx:VBox>
+   	<mx:VBox height="100%" width="80%">
+   		<mx:TabBar dataProvider="{patientInfoMain}" fontWeight="Bold"/>			
    		<mx:ViewStack 
-   			horizontalCenter="0" 
-   			y="30" 
-   			id="pateientInfoMain" 
+   			id="patientInfoMain" 
    			width="100%" 
-   			height="100%" 
-   			borderStyle="solid">				
-   		<mx:VBox label='Notes'>
-   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" click="showNoteCreateTitleWin()"/>					
-   			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
-   				dataProvider="{notesXLC}">						
-   				<mx:columns>														
-   					<mx:DataGridColumn headerText="{languageArray['Note']}" dataField="body"/>							
-   					<mx:DataGridColumn headerText="{languageArray['Note Date']}" dataField="note_date"/>						
-   				</mx:columns>					
-   			</mx:DataGrid>
-   		</mx:VBox>				
-   		<mx:VBox label='Prescriptions'>					
-   			<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" dataProvider="{prescriptionsXLC}">						
-   			<mx:columns>														
-   				<mx:DataGridColumn headerText="{languageArray['Name']}" dataField="name"/>							
-   				<mx:DataGridColumn headerText="{languageArray['Dosage']}" dataField="dosage"/>							
-   				<mx:DataGridColumn headerText="{languageArray['Frequency']}" dataField="frequency"/>							
-   				<mx:DataGridColumn headerText="{languageArray['Date Given']}" dataField="dateGiven"/>						
-   			</mx:columns>					
-   		</mx:DataGrid>					
-   		<mx:LinkButton label="{languageArray['Add new visit']}" color="#0000FF" click="showPrescriptionCreateTitleWin()" />				
-   		</mx:VBox>								
-   		<mx:VBox label="Visits">					
-   			<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" dataProvider="{visitsXLC}">						
-   				<mx:columns>							
-   					<mx:DataGridColumn headerText="{languageArray['Reason']}" dataField="reason"/>							
-   					<mx:DataGridColumn headerText="{languageArray['Date Seen']}" dataField="dateSeen"/>							
-   					<mx:DataGridColumn headerText="{languageArray['Follow Up']}" dataField="followUp"/>							
-   					<mx:DataGridColumn headerText="{languageArray['Notes']}" dataField="notes"/>						
-   				</mx:columns>					
-   			</mx:DataGrid>					
-   			<mx:LinkButton label="{languageArray['Add new visit']}" color="#0000FF" click="showVisitCreateTitleWin()" />				
-   		</mx:VBox>				
-   		<mx:VBox label='Allergies'>				
-   			<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" dataProvider="{allergiesXLC}">					
-   				<mx:columns>					
-   					<mx:DataGridColumn headerText="{languageArray['Name']}"	dataField="name"/>	
-   					<mx:DataGridColumn headerText="{languageArray['Date Observed']}" dataField="dateObserved"/>							
-   					<mx:DataGridColumn headerText="{languageArray['Severity']}"	dataField="severity"/>						
-   					<mx:DataGridColumn headerText="{languageArray['Notes']}" dataField="notes"/>						
-   				</mx:columns>					
-   			</mx:DataGrid>					
-   			<mx:LinkButton label="{languageArray['Add new allergy']}" color="#0000FF" click="showAllergyCreateTitleWin()"/>				
-   		</mx:VBox>				
-   		<mx:VBox label='Vaccinations'>					
-   			<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" dataProvider="{vaccinationsXLC}">						
-   				<mx:columns>							
-   					<mx:DataGridColumn headerText="{languageArray['Name']}"	dataField="name"/>							
-   					<mx:DataGridColumn headerText="{languageArray['Date Administered']}" dataField="dateAdmined"/>							
-   					<mx:DataGridColumn headerText="{languageArray['Notes']}" dataField="notes"/>						
-   				</mx:columns>					
-   			</mx:DataGrid>					
-   			<mx:LinkButton label="{languageArray['Add new vaccination']}" color="#0000FF" click="showVaccCreateTitleWin()"/>				
-   		</mx:VBox>			
+   			height="100%">
+	   		<mx:VBox label="{languageArray['Alerts']}" show="">
+	   			<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
+	   				paddingTop="10" paddingLeft="5" paddingRight="5">
+		   			<mx:LinkButton label="Add New Alert" color="#0000FF" click="showNoteCreateTitleWin()"/>
+		   			<mx:Spacer height="5" />					
+		   			<mx:DataGrid id="alertsGrid" width="100%" height="100%" textAlign="center" 
+		   				dataProvider="{notesXLC}">						
+		   				<mx:columns>														
+		   					<mx:DataGridColumn headerText="{languageArray['Alert Date']}" 
+		   						dataField="alert_date" width="90"/>							
+		   					<mx:DataGridColumn headerText="{languageArray['Alert Note']}" 
+		   						dataField="notes"/>						
+		   				</mx:columns>					
+		   			</mx:DataGrid>
+	   			</mx:Panel>
+	   		</mx:VBox>
+	   		<mx:VBox label="{languageArray['General Information']}" show="">
+	   			<mx:Panel title="{languageArray['General Information']}" width="100%" height="100%" 
+	   				paddingTop="10" paddingLeft="5" paddingRight="5">									
+					<mx:HBox>
+						<mx:Label text="{languageArray['Patient ID']}: {patient['id']}"  fontSize="12"/>				
+						<mx:Label text="{languageArray['Patient Active']}: {patient['patient_active']}"  fontSize="12"/>			
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['First Name']}: {patient['first_name']}"  fontSize="12"/>				
+						<mx:Label text="{languageArray['Middle Name']}: {patient['middle_name']}"  fontSize="12"/>				
+						<mx:Label text="{languageArray['Last Name']}: {patient['last_name']}"  fontSize="12"/>			
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Father First Name']}: {patient['father_first_name']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Father Last Name']}: {patient['father_last_name']}"  fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Mother First Name']}: {patient['mother_first_name']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Mother Last Name']}: {patient['mother_last_name']}"  fontSize="12"/>
+					</mx:HBox>
+					<mx:Label />
+					
+					<mx:Label text="{languageArray['Emergency Contact']}"  fontWeight="bold" fontSize="12"/>
+					<mx:HBox>
+			    		<mx:Label text="{languageArray['First Name']}: {patient['emergency_first_name']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Middle Name']}: {patient['emergency_middle_name']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Last Name']}: {patient['emergency_last_name']}"  fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Notes']}: {patient['notes']}"  fontSize="12"/>
+					</mx:HBox>
+	   			</mx:Panel>
+	   		</mx:VBox>							
+	   		<mx:VBox label='Notes'>
+	   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" click="showNoteCreateTitleWin()"/>					
+	   			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
+	   				dataProvider="{notesXLC}">						
+	   				<mx:columns>														
+	   					<mx:DataGridColumn headerText="{languageArray['Note']}" dataField="body"/>							
+	   					<mx:DataGridColumn headerText="{languageArray['Note Date']}" dataField="note_date"/>						
+	   				</mx:columns>					
+	   			</mx:DataGrid>
+	   		</mx:VBox>				
+	   		<mx:VBox label='Prescriptions'>					
+	   			<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" dataProvider="{prescriptionsXLC}">						
+	   			<mx:columns>														
+	   				<mx:DataGridColumn headerText="{languageArray['Name']}" dataField="name"/>							
+	   				<mx:DataGridColumn headerText="{languageArray['Dosage']}" dataField="dosage"/>							
+	   				<mx:DataGridColumn headerText="{languageArray['Frequency']}" dataField="frequency"/>							
+	   				<mx:DataGridColumn headerText="{languageArray['Date Given']}" dataField="dateGiven"/>						
+	   			</mx:columns>					
+	   		</mx:DataGrid>					
+	   		<mx:LinkButton label="{languageArray['Add New Prescription']}" color="#0000FF" click="showPrescriptionCreateTitleWin()" />				
+	   		</mx:VBox>								
+	   		<mx:VBox label="Visits">					
+	   			<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" dataProvider="{visitsXLC}">						
+	   				<mx:columns>							
+	   					<mx:DataGridColumn headerText="{languageArray['Reason']}" dataField="reason"/>							
+	   					<mx:DataGridColumn headerText="{languageArray['Date Seen']}" dataField="dateSeen"/>							
+	   					<mx:DataGridColumn headerText="{languageArray['Follow Up']}" dataField="followUp"/>							
+	   					<mx:DataGridColumn headerText="{languageArray['Notes']}" dataField="notes"/>						
+	   				</mx:columns>					
+	   			</mx:DataGrid>					
+	   			<mx:LinkButton label="{languageArray['Add new visit']}" color="#0000FF" click="showVisitCreateTitleWin()" />				
+	   		</mx:VBox>				
+	   		<mx:VBox label='Allergies'>				
+	   			<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" dataProvider="{allergiesXLC}">					
+	   				<mx:columns>					
+	   					<mx:DataGridColumn headerText="{languageArray['Name']}"	dataField="name"/>	
+	   					<mx:DataGridColumn headerText="{languageArray['Date Observed']}" dataField="dateObserved"/>							
+	   					<mx:DataGridColumn headerText="{languageArray['Severity']}"	dataField="severity"/>						
+	   					<mx:DataGridColumn headerText="{languageArray['Notes']}" dataField="notes"/>						
+	   				</mx:columns>					
+	   			</mx:DataGrid>					
+	   			<mx:LinkButton label="{languageArray['Add new allergy']}" color="#0000FF" click="showAllergyCreateTitleWin()"/>				
+	   		</mx:VBox>				
+	   		<mx:VBox label='Vaccinations'>					
+	   			<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" dataProvider="{vaccinationsXLC}">						
+	   				<mx:columns>							
+	   					<mx:DataGridColumn headerText="{languageArray['Name']}"	dataField="name"/>							
+	   					<mx:DataGridColumn headerText="{languageArray['Date Administered']}" dataField="dateAdmined"/>							
+	   					<mx:DataGridColumn headerText="{languageArray['Notes']}" dataField="notes"/>						
+	   				</mx:columns>					
+	   			</mx:DataGrid>					
+	   			<mx:LinkButton label="{languageArray['Add new vaccination']}" color="#0000FF" click="showVaccCreateTitleWin()"/>				
+	   		</mx:VBox>			
    		</mx:ViewStack>		
-   		</mx:VBox>	
-	</mx:HBox>
-</mx:VBox>
+   	</mx:VBox>		
+</mx:HBox>
