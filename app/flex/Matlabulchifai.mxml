@@ -208,13 +208,9 @@
         }
     }
     
-     	private function initHistoryManager():void
- 	{
+	private function initHistoryManager():void {
    		browserManager = BrowserManager.getInstance();
-   		browserManager.addEventListener(
-     	BrowserChangeEvent.BROWSER_URL_CHANGE, 
-     	parseUrl
-   	)
+   		browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, parseUrl);
    		browserManager.init("");
    		parseUrl();
  	}
@@ -224,7 +220,7 @@
    		var o:Object = URLUtil.stringToObject(browserManager.fragment);
    		if(o.a == 4) {
    			var patient:XML = patientIdMap[o.pid];
-   			this.patientInfoBox.patient = patient;	
+   			this.patientInfoBox.patient = patient;
    		}
    		mainStack.selectedIndex = o.a;
  	}
@@ -322,6 +318,7 @@
 	private function handlePatientSelectEvent(event:PatientEvent):void {
 		//select patientinfo view and pass in patient information
 		patientInfoBox.patient = event.patient;
+		patientInfoBox.patientID = event.patient.id;
 		mainStack.selectedChild = patientInfoBox;
 	}
 			

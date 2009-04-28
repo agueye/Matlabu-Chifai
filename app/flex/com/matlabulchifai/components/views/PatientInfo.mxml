@@ -26,7 +26,7 @@
 	[Bindable]
 	public var languageArray:Object;
 	[Bindable]
-	public var patientID:Number;
+	public var patientID:Number = 0;
 	
 	[Bindable]
 	public var patient:XML;
