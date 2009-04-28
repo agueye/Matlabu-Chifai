@@ -10,7 +10,7 @@
         public var patient:XML;
     
         public function PatientEvent(type:String, patient:XML) {
-            super(type);
+            super(type,true);
             this.patient = patient;
         }
 	}

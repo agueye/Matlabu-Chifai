@@ -7,10 +7,6 @@
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
 	
-	<mx:Metadata>
-		[Event(name="patientCreate", type="com.matlabulchifai.events.patient.PatientEvent")]
-	</mx:Metadata>
-	
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;

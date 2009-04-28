@@ -26,10 +26,8 @@
     import mx.controls.Alert;
     import mx.rpc.events.ResultEvent;
     import mx.collections.IViewCursor;
-    import mx.collections.XMLListCollection;
-    import com.matlabulchifai.events.alert.AlertEvent;
-    import com.matlabulchifai.events.patient.PatientEvent;
-    import com.matlabulchifai.events.patient.SearchEvent;
+    import mx.collections.XMLListCollection;    
+    import com.matlabulchifai.events.patient.PatientEvent;    
     import flash.net.navigateToURL;
  	import mx.events.BrowserChangeEvent;
  	import mx.utils.URLUtil;
@@ -68,8 +66,6 @@
 	private var rnd:Number;
 
  	private var browserManager:IBrowserManager;
- 	
- 	private var gotPatients:Boolean = false;
 
 
 	public static function debug(str:String):void {
@@ -80,7 +76,6 @@
  	private function init():void{
  		initHistoryManager();
  		mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
-		
  	}
  
  	private function initHistoryManager():void
@@ -110,7 +105,61 @@
  			toStore+= ";pid="+ this.patientInfoBox.patientID;
  		}
    		browserManager.setFragment(toStore);
- 	}
+ 	}	    
+	
+	private function listAll():void {
+		listPatients();
+		listAllergies();
+		listVaccinations();
+		listConditions();
+		listMedications();
+		listVisitTypes();
+		listDoctors();
+		
+		this.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreateEvent);
+	}
+	
+	private function listPatients():void {
+		rnd = Math.round(Math.random()*1000);
+		svcPatientList.url= "/patients.xml?rnd=" + rnd;
+		svcPatientList.send();
+	}
+	
+	private function listAllergies():void {
+		rnd = Math.round(Math.random()*1000);
+		svcAllergiesList.url = "/allergies.xml?rnd=" + rnd;
+    	svcAllergiesList.send();
+	}
+	
+	private function listVaccinations():void {
+		rnd = Math.round(Math.random()*1000);
+    	svcVaccinationsList.url = "/vaccinations.xml?rnd=" + rnd;
+    	svcVaccinationsList.send();
+	}
+	
+	private function listConditions():void {
+		rnd = Math.round(Math.random()*1000);
+		svcConditionsList.url = "/conditions.xml?rnd=" + rnd;
+    	svcConditionsList.send();
+	}
+	
+	private function listMedications():void {
+		rnd = Math.round(Math.random()*1000);
+		svcMedicationsList.url = "/medications.xml?rnd=" + rnd;
+    	svcMedicationsList.send();
+	}
+	
+	private function listVisitTypes():void {
+		rnd = Math.round(Math.random()*1000);
+		svcVisitTypesList.url = "/visit_types.xml?rnd=" + rnd;
+    	svcVisitTypesList.send();
+	}
+	
+	private function listDoctors():void {
+		rnd = Math.round(Math.random()*1000);
+		svcDoctorsList.url = "/doctors.xml?rnd=" + rnd;
+    	svcDoctorsList.send();
+	}
 	
 	private function updatePatientIdMap():void {
     	patientIdMap = {};
@@ -187,68 +236,12 @@
             doctorIdMap[doctor.id] = doctor;
             doctorsCursor.moveNext();
         }
-    }	    
-	
-	private function listAll():void {
-		listPatients();
-		listAllergies();
-		listVaccinations();
-		listConditions();
-		listMedications();
-		listVisitTypes();
-		listDoctors();
-		
-		//this.addEventListener(PatientEvent.PATIENT_CREATE, listPatients);
-	}
-	
-	private function listPatients():void {
-		rnd = Math.round(Math.random()*1000);
-		svcPatientList.url= "/patients.xml?rnd=" + rnd;
-		svcPatientList.send();
-	}
-	
-	private function listAllergies():void {
-		rnd = Math.round(Math.random()*1000);
-		svcAllergiesList.url = "/allergies.xml?rnd=" + rnd;
-    	svcAllergiesList.send();
-	}
-	
-	private function listVaccinations():void {
-		rnd = Math.round(Math.random()*1000);
-    	svcVaccinationsList.url = "/vaccinations.xml?rnd=" + rnd;
-    	svcVaccinationsList.send();
-	}
-	
-	private function listConditions():void {
-		rnd = Math.round(Math.random()*1000);
-		svcConditionsList.url = "/conditions.xml?rnd=" + rnd;
-    	svcConditionsList.send();
-	}
-	
-	private function listMedications():void {
-		rnd = Math.round(Math.random()*1000);
-		svcMedicationsList.url = "/medications.xml?rnd=" + rnd;
-    	svcMedicationsList.send();
-	}
-	
-	private function listVisitTypes():void {
-		rnd = Math.round(Math.random()*1000);
-		svcVisitTypesList.url = "/visit_types.xml?rnd=" + rnd;
-    	svcVisitTypesList.send();
-	}
-	
-	private function listDoctors():void {
-		rnd = Math.round(Math.random()*1000);
-		svcDoctorsList.url = "/doctors.xml?rnd=" + rnd;
-    	svcDoctorsList.send();
-	}
+    }
 	
 	private function login(user:XML):void{
 		_user = user;
 		//populate all ID maps
 		listAll();
-		//make sure listpatients service has completed before calling alertBox
-		//while(!gotPatients){};
 		mainStack.selectedChild = alertBox;
 		title = "Alerts"
 		mainMenu.visible = true;
@@ -295,7 +288,6 @@
 	}	
 	
 	private function handlePatientListResult(event:ResultEvent):void {
-		gotPatients = true;
 		updatePatientIdMap();
 	}
 	
@@ -321,6 +313,10 @@
 	
 	private function handleDoctorsListResult(event:ResultEvent):void {
 		updateDoctorIdMap();
+	}
+	
+	private function handlePatientCreateEvent(event:PatientEvent):void {
+		listPatients();
 	}
 			
 	]]>

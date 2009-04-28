@@ -260,7 +260,9 @@
 		patientPopUp.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreate);
 	}
 	
-	private function handlePatientCreate(evt:Event):void {
+	private function handlePatientCreate(evt:PatientEvent):void {
+		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
+		searchPatient();
 		removePatientEventListener();
 	}
 	
@@ -274,6 +276,7 @@
 		var resultXML: XML = XML(event.result);
 		Matlabulchifai.debug("patient_deleted = \n" + resultXML);
 		showAllPatients();
+		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
 	}
 	
 	private function patientClicked(event:MouseEvent):void{
