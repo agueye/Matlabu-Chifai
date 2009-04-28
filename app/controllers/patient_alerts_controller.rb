@@ -6,7 +6,7 @@ class PatientAlertsController < ApplicationController
   def index
     if params[:patient_id]
     	@patient_alerts = @patient.patient_alerts
-    	@patient_alerts.sort! {|y, x| x.alert_date <=> y.alert_date} 
+    	@patient_alerts.sort! {|x, y| x.alert_date <=> y.alert_date} 
     else
     	@patient_alerts = PatientAlert.find(:all, :order => "alert_date")
     end
