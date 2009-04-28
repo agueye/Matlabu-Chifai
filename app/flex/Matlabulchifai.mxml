@@ -77,35 +77,6 @@
  		this.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreateEvent);
 		this.addEventListener(PatientEvent.PATIENT_DESTROY, handlePatientDestroyEvent);
 		this.addEventListener(PatientEvent.PATIENT_SELECT, handlePatientSelectEvent);
- 	}
- 
- 	private function initHistoryManager():void
- 	{
-   		browserManager = BrowserManager.getInstance();
-   		browserManager.addEventListener(
-     	BrowserChangeEvent.BROWSER_URL_CHANGE, 
-     	parseUrl
-   	)
-   		browserManager.init("");
-   		parseUrl();
- 	}
- 
- 	private function parseUrl(e:BrowserChangeEvent = null):void
- 	{
-   		var o:Object = URLUtil.stringToObject(browserManager.fragment);
-   		if(o.a == 4)
-   			this.patientInfoBox.init(o.pid);
-   		mainStack.selectedIndex = o.a;
- 	}
- 
- 	private function updateUrl():void
- 	{
- 		var currentIndex:int = mainStack.selectedIndex;
- 		var toStore:String = "a=" + currentIndex;
- 		if(currentIndex == 4){
- 			toStore+= ";pid="+ this.patientInfoBox.patientID;
- 		}
-   		browserManager.setFragment(toStore);
  	}	    
 	
 	private function listAll():void {
@@ -236,6 +207,37 @@
             doctorsCursor.moveNext();
         }
     }
+    
+     	private function initHistoryManager():void
+ 	{
+   		browserManager = BrowserManager.getInstance();
+   		browserManager.addEventListener(
+     	BrowserChangeEvent.BROWSER_URL_CHANGE, 
+     	parseUrl
+   	)
+   		browserManager.init("");
+   		parseUrl();
+ 	}
+ 
+ 	private function parseUrl(e:BrowserChangeEvent = null):void
+ 	{
+   		var o:Object = URLUtil.stringToObject(browserManager.fragment);
+   		if(o.a == 4) {
+   			var patient:XML = patientIdMap[o.pid];
+   			this.patientInfoBox.patient = patient;	
+   		}
+   		mainStack.selectedIndex = o.a;
+ 	}
+ 
+ 	private function updateUrl():void
+ 	{
+ 		var currentIndex:int = mainStack.selectedIndex;
+ 		var toStore:String = "a=" + currentIndex;
+ 		if(currentIndex == 4){
+ 			toStore+= ";pid="+ this.patientInfoBox.patientID;
+ 		}
+   		browserManager.setFragment(toStore);
+ 	}
 	
 	private function login(user:XML):void{
 		_user = user;
@@ -407,9 +409,7 @@
 				visitTypeIdMap="{visitTypeIdMap}"
 				doctorIdMap="{doctorIdMap}"/>
 			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
-			<mlc:PatientInfo id="patientInfoBox"
-					patientIdMap="{patientIdMap}" 
-					languageArray="{languageArray}"/>
+			<mlc:PatientInfo id="patientInfoBox" languageArray="{languageArray}"/>
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>

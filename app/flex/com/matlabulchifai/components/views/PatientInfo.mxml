@@ -4,172 +4,195 @@
 	width="100%" 
 	height="100%"
     label="PatientInfo"
-	creationComplete="summary()">
-    <mx:Script>
-    	<![CDATA[
-			import flash.events.Event;
-    		import mx.core.IFlexDisplayObject;
-    		import mx.rpc.events.ResultEvent;
-			import mx.collections.XMLListCollection;
-			import mx.managers.PopUpManager;
-			import com.matlabulchifai.components.popups.VaccCreateTitleWin;
-			import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
-			import com.matlabulchifai.components.popups.NoteCreateTitleWin;
-			import com.matlabulchifai.components.popups.VisitCreateTitleWin;
-			import com.matlabulchifai.components.popups.PrescriptionCreateTitleWin;
-			import com.matlabulchifai.events.patient.VaccinationEvent;
-			import com.matlabulchifai.events.patient.AllergyEvent;
-			import com.matlabulchifai.events.patient.VisitEvent;
-			import com.matlabulchifai.events.patient.NoteEvent;
-			import com.matlabulchifai.events.patient.PrescriptionEvent;
-			
-			[Bindable]
-			public var languageArray:Object;
-    		[Bindable]
-    		public var patientID:Number;
-    		[Bindable]
-    		public var patientIdMap:Object;
-    		[Bindable]
-    		public var patient:XML;
-			
-			private var vaccPopUp:VaccCreateTitleWin;
-			private var allergyPopUp:AllergyCreateTitleWin;
-			private var visitPopUp:VisitCreateTitleWin;
-			private var notePopUp:NoteCreateTitleWin;
-			private var prescriptionPopUp:PrescriptionCreateTitleWin;
-			
-    		public function init(idnum:int):void{
-    			patientID=idnum;    			
-    			//Patient info
-    			patient = patientIdMap[idnum];
-				summary();
-    		}
-			
-			public function summary():void {
-				listAllergies();
-				listNotes();
-				listPrescriptions();
-				listVisits();
-				listVaccinations();				
-			}	
-			
-			public function listPrescriptions():void {
-				svcPrescriptionsList.url="/patients/" + patientID + "/patient_medications.xml?";
-				svcPrescriptionsList.send();
-			}
-    		
-			private function handlePrescriptionsListResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("prescriptions_notes = \n" + resultXML);
-			}
-			
-			public function listNotes():void {
-				svcNotesList.url="/patients/" + patientID + "/patient_notes.xml?";
-				svcNotesList.send();
-			}
-    		
-			private function handleNotesListResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("patient_notes = \n" + resultXML);
-			}
-			
-			
-			public function listVaccinations():void {
-				svcVaccinationsList.url="/patients/" + patientID + "/patient_vaccinations.xml?";
-				svcVaccinationsList.send();
-			}
-    		
-			private function handleVaccinationsListResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("patient_vaccinations = \n" + resultXML);
-			}
-			
-			public function listAllergies():void {
-				svcAllergiesList.url="/patients/" + patientID + "/patient_allergies.xml?";
-				svcAllergiesList.send();
-			}
-    		
-			private function handleAllergiesListResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("patient_allergies = \n" + resultXML);
-			}
-			
-			public function listVisits():void {
-				svcVisitsList.url="/patients/" + patientID + "/patient_visits.xml?";
-				svcVisitsList.send();
-			}
-    		
-			private function handleVisitsListResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("visit_allergies = \n" + resultXML);
-			}
-			
-    		private function showVaccCreateTitleWin():void {
-				vaccPopUp = VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
-				vaccPopUp.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
-    			vaccPopUp.patient = this.patient;
-				vaccPopUp.patientID = this.patientID;
-    			PopUpManager.centerPopUp(vaccPopUp);
-    		}
-			
-			public function handleVaccEvent(event:Event):void {
-				listVaccinations();
-				removeVaccEventListener();
-			}
-			
-			public function removeVaccEventListener() {
-				if (vaccPopUp.hasEventListener(VaccinationEvent.VACCINATION_CREATE)) {
-					vaccPopUp.removeEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
-				}
-			}
-			
-			private function showAllergyCreateTitleWin():void{
-    			allergyPopUp = AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));
-				allergyPopUp.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyEvent);
-    			allergyPopUp.patient = this.patient;
-				allergyPopUp.patientID = this.patientID;
-    			PopUpManager.centerPopUp(allergyPopUp);
-    		}
-			
-			public function handleAllergyEvent(event:Event):void {
-				listAllergies();
-				removeAllergyEventListener();
-			}
-			
-			public function removeAllergyEventListener() {
-				if (allergyPopUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {
-					allergyPopUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyEvent);
-				}
-			}
-			
-			private function showVisitCreateTitleWin():void {
-				visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
-    			visitPopUp.addEventListener(VisitEvent.VISIT_CREATE, handleVisitEvent);
-    			visitPopUp.patient = this.patient;
-				visitPopUp.patientID = this.patientID;
-    			PopUpManager.centerPopUp(visitPopUp);
-    		}
-			
-			public function handleVisitEvent(event:Event):void {
-				listVisits();
-				removeVisitEventListener();
-			}
-			
-			public function removeVisitEventListener() {
-				if (visitPopUp.hasEventListener(VisitEvent.VISIT_CREATE)) {
-					visitPopUp.removeEventListener(VisitEvent.VISIT_CREATE, handleVisitEvent);
-				}
-			}
-			
-			private function showNoteCreateTitleWin():void {				
-    			notePopUp = NoteCreateTitleWin(PopUpManager.createPopUp(this, NoteCreateTitleWin, true));
-    			notePopUp.addEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);
-    			notePopUp.patient = this.patient;
-				notePopUp.patientID = this.patientID;
-    			PopUpManager.centerPopUp(notePopUp);
-    		}
-						public function handleNoteEvent(event:Event):void {				listNotes();				removeNoteEventListener();			}						public function removeNoteEventListener() {				if (notePopUp.hasEventListener(NoteEvent.NOTE_CREATE)) {					notePopUp.removeEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);				}			}						private function showPrescriptionCreateTitleWin():void {				    			prescriptionPopUp = PrescriptionCreateTitleWin(PopUpManager.createPopUp(this, PrescriptionCreateTitleWin, true));    			prescriptionPopUp.addEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);    			prescriptionPopUp.patient = this.patient;				prescriptionPopUp.patientID = this.patientID;    			PopUpManager.centerPopUp(prescriptionPopUp);    		}						public function handlePrescriptionEvent(event:Event):void {				listPrescriptions();				removePrescriptionEventListener();			}						public function removePrescriptionEventListener() {				if (prescriptionPopUp.hasEventListener(PrescriptionEvent.PRESCRIPTION_CREATE)) {					prescriptionPopUp.removeEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);				}			}									    	]]>
-    </mx:Script>
+	creationComplete="init()">
+<mx:Script>
+<![CDATA[
+	import flash.events.Event;
+	import mx.core.IFlexDisplayObject;
+	import mx.rpc.events.ResultEvent;
+	import mx.collections.XMLListCollection;
+	import mx.managers.PopUpManager;
+	import com.matlabulchifai.components.popups.VaccCreateTitleWin;
+	import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
+	import com.matlabulchifai.components.popups.NoteCreateTitleWin;
+	import com.matlabulchifai.components.popups.VisitCreateTitleWin;
+	import com.matlabulchifai.components.popups.PrescriptionCreateTitleWin;
+	import com.matlabulchifai.events.patient.VaccinationEvent;
+	import com.matlabulchifai.events.patient.AllergyEvent;
+	import com.matlabulchifai.events.patient.VisitEvent;
+	import com.matlabulchifai.events.patient.NoteEvent;
+	import com.matlabulchifai.events.patient.PrescriptionEvent;
+	
+	[Bindable]
+	public var languageArray:Object;
+	[Bindable]
+	public var patientID:Number;
+	
+	[Bindable]
+	public var patient:XML;
+	
+	private var vaccPopUp:VaccCreateTitleWin;
+	private var allergyPopUp:AllergyCreateTitleWin;
+	private var visitPopUp:VisitCreateTitleWin;
+	private var notePopUp:NoteCreateTitleWin;
+	private var prescriptionPopUp:PrescriptionCreateTitleWin;
+	
+	public function init():void {
+		patientID = patient.id;
+		listAllergies();
+		listNotes();
+		listPrescriptions();
+		listVisits();
+		listVaccinations();				
+	}	
+	
+	public function listPrescriptions():void {
+		svcPrescriptionsList.url="/patients/" + patientID + "/patient_medications.xml?";
+		svcPrescriptionsList.send();
+	}
+	
+	private function handlePrescriptionsListResult(event:ResultEvent):void {
+		var resultXML:XML = XML(event.result);
+		Matlabulchifai.debug("prescriptions_notes = \n" + resultXML);
+	}
+	
+	public function listNotes():void {
+		svcNotesList.url="/patients/" + patientID + "/patient_notes.xml?";
+		svcNotesList.send();
+	}
+	
+	private function handleNotesListResult(event:ResultEvent):void {
+		var resultXML:XML = XML(event.result);
+		Matlabulchifai.debug("patient_notes = \n" + resultXML);
+	}
+	
+	
+	public function listVaccinations():void {
+		svcVaccinationsList.url="/patients/" + patientID + "/patient_vaccinations.xml?";
+		svcVaccinationsList.send();
+	}
+	
+	private function handleVaccinationsListResult(event:ResultEvent):void {
+		var resultXML:XML = XML(event.result);
+		Matlabulchifai.debug("patient_vaccinations = \n" + resultXML);
+	}
+	
+	public function listAllergies():void {
+		svcAllergiesList.url="/patients/" + patientID + "/patient_allergies.xml?";
+		svcAllergiesList.send();
+	}
+	
+	private function handleAllergiesListResult(event:ResultEvent):void {
+		var resultXML:XML = XML(event.result);
+		Matlabulchifai.debug("patient_allergies = \n" + resultXML);
+	}
+	
+	public function listVisits():void {
+		svcVisitsList.url="/patients/" + patientID + "/patient_visits.xml?";
+		svcVisitsList.send();
+	}
+	
+	private function handleVisitsListResult(event:ResultEvent):void {
+		var resultXML:XML = XML(event.result);
+		Matlabulchifai.debug("visit_allergies = \n" + resultXML);
+	}
+	
+	private function showVaccCreateTitleWin():void {
+		vaccPopUp = VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
+		vaccPopUp.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
+		vaccPopUp.patient = this.patient;
+		vaccPopUp.patientID = this.patientID;
+		PopUpManager.centerPopUp(vaccPopUp);
+	}
+	
+	public function handleVaccEvent(event:Event):void {
+		listVaccinations();
+		removeVaccEventListener();
+	}
+	
+	public function removeVaccEventListener() {
+		if (vaccPopUp.hasEventListener(VaccinationEvent.VACCINATION_CREATE)) {
+			vaccPopUp.removeEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
+		}
+	}
+	
+	private function showAllergyCreateTitleWin():void{
+		allergyPopUp = AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));
+		allergyPopUp.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyEvent);
+		allergyPopUp.patient = this.patient;
+		allergyPopUp.patientID = this.patientID;
+		PopUpManager.centerPopUp(allergyPopUp);
+	}
+	
+	public function handleAllergyEvent(event:Event):void {
+		listAllergies();
+		removeAllergyEventListener();
+	}
+	
+	public function removeAllergyEventListener() {
+		if (allergyPopUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {
+			allergyPopUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyEvent);
+		}
+	}
+	
+	private function showVisitCreateTitleWin():void {
+		visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
+		visitPopUp.addEventListener(VisitEvent.VISIT_CREATE, handleVisitEvent);
+		visitPopUp.patient = this.patient;
+		visitPopUp.patientID = this.patientID;
+		PopUpManager.centerPopUp(visitPopUp);
+	}
+	
+	public function handleVisitEvent(event:Event):void {
+		listVisits();
+		removeVisitEventListener();
+	}
+	
+	public function removeVisitEventListener() {
+		if (visitPopUp.hasEventListener(VisitEvent.VISIT_CREATE)) {
+			visitPopUp.removeEventListener(VisitEvent.VISIT_CREATE, handleVisitEvent);
+		}
+	}
+	
+	private function showNoteCreateTitleWin():void {				
+		notePopUp = NoteCreateTitleWin(PopUpManager.createPopUp(this, NoteCreateTitleWin, true));
+		notePopUp.addEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);
+		notePopUp.patient = this.patient;
+		notePopUp.patientID = this.patientID;
+		PopUpManager.centerPopUp(notePopUp);
+	}
+	
+	public function handleNoteEvent(event:Event):void {
+		listNotes();				
+		removeNoteEventListener();			
+	}						
+	
+	public function removeNoteEventListener() {				
+		if (notePopUp.hasEventListener(NoteEvent.NOTE_CREATE)) {					
+			notePopUp.removeEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);				
+		}			
+	}						
+	
+	private function showPrescriptionCreateTitleWin():void {				    			
+		prescriptionPopUp = PrescriptionCreateTitleWin(PopUpManager.createPopUp(this, PrescriptionCreateTitleWin, true));    			
+		prescriptionPopUp.addEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);    			
+		prescriptionPopUp.patient = this.patient;				
+		prescriptionPopUp.patientID = this.patientID;    			
+		PopUpManager.centerPopUp(prescriptionPopUp);    		
+	}						
+	
+	public function handlePrescriptionEvent(event:Event):void {				
+		listPrescriptions();				
+		removePrescriptionEventListener();			
+	}						
+	
+	public function removePrescriptionEventListener() {				
+		if (prescriptionPopUp.hasEventListener(PrescriptionEvent.PRESCRIPTION_CREATE)) {					
+			prescriptionPopUp.removeEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);				
+		}			
+	}									    	
+]]>
+</mx:Script>
 	
 	
 	<mx:HTTPService
