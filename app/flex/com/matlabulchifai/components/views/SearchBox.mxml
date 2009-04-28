@@ -271,10 +271,6 @@
 	private function patientClicked(event:MouseEvent):void{
 		selectPatient(XML(event.currentTarget.selectedItem));
 	}
-	public function getStr(str:String):String{
-		return languageArray[str];
-		
-	}
 ]]>
 </mx:Script>
 	<mx:HTTPService
@@ -350,7 +346,7 @@
 						<mx:DataGridColumn headerText="" width="110" editable="false">
 			                    <mx:itemRenderer>
 			                        <mx:Component>
-			                            <mx:Button label="{outerDocument.getStr('Delete Patient')}" click="outerDocument.deletePatient(XML(data))"/>
+			                            <mx:Button label="{outerDocument.languageArray['Delete Patient']}" click="outerDocument.deletePatient(XML(data))"/>
 			                        </mx:Component>	                                           
 			                    </mx:itemRenderer>
 						</mx:DataGridColumn>	       	                
