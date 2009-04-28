@@ -27,7 +27,8 @@
     import mx.rpc.events.ResultEvent;
     import mx.collections.IViewCursor;
     import mx.collections.XMLListCollection;    
-    import com.matlabulchifai.events.patient.PatientEvent;    
+    import com.matlabulchifai.events.patient.PatientEvent;
+    import com.matlabulchifai.events.patient.AlertEvent;
     import flash.net.navigateToURL;
  	import mx.events.BrowserChangeEvent;
  	import mx.utils.URLUtil;
@@ -77,6 +78,7 @@
  		this.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreateEvent);
 		this.addEventListener(PatientEvent.PATIENT_DESTROY, handlePatientDestroyEvent);
 		this.addEventListener(PatientEvent.PATIENT_SELECT, handlePatientSelectEvent);
+		this.addEventListener(AlertEvent.ALERT_CREATE, handleAlertCreateEvent);
  	}	    
 	
 	private function listAll():void {
@@ -320,6 +322,11 @@
 		patientInfoBox.patient = event.patient;
 		patientInfoBox.patientID = event.patient.id;
 		mainStack.selectedChild = patientInfoBox;
+	}
+	
+	private function handleAlertCreateEvent(event:AlertEvent):void {
+		//select patientinfo view and pass in patient information
+		alertBox.listAlerts();
 	}
 			
 	]]>

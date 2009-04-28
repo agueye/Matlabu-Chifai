@@ -4,9 +4,10 @@
 	width="100%" 
 	height="100%"
     label="PatientInfo"
-	creationComplete="init()">
+	show="init()">
 <mx:Script>
 <![CDATA[
+	import com.matlabulchifai.components.popups.AlertCreateTitleWin;
 	import flash.events.Event;
 	import mx.core.IFlexDisplayObject;
 	import mx.rpc.events.ResultEvent;
@@ -22,6 +23,7 @@
 	import com.matlabulchifai.events.patient.VisitEvent;
 	import com.matlabulchifai.events.patient.NoteEvent;
 	import com.matlabulchifai.events.patient.PrescriptionEvent;
+	import com.matlabulchifai.events.patient.AlertEvent;
 	
 	[Bindable]
 	public var languageArray:Object;
@@ -31,20 +33,25 @@
 	[Bindable]
 	public var patient:XML;
 	
+	private var rnd:Number;
 	private var vaccPopUp:VaccCreateTitleWin;
 	private var allergyPopUp:AllergyCreateTitleWin;
 	private var visitPopUp:VisitCreateTitleWin;
 	private var notePopUp:NoteCreateTitleWin;
 	private var prescriptionPopUp:PrescriptionCreateTitleWin;
+	private var alertPopUp:AlertCreateTitleWin;
 	
 	public function init():void {
 		patientID = patient.id;
-		listAllergies();
-		listNotes();
-		listPrescriptions();
-		listVisits();
-		listVaccinations();				
-	}	
+    	rnd = Math.round(Math.random()*1000);
+		listAlerts();
+		patientInfoMain.selectedIndex = 0;			
+	}
+	
+	public function listAlerts():void {
+		svcAlertsList.url="/patients/" + patientID + "/patient_alerts.xml?";
+		svcAlertsList.send();
+	}
 	
 	public function listPrescriptions():void {
 		svcPrescriptionsList.url="/patients/" + patientID + "/patient_medications.xml?";
@@ -110,7 +117,7 @@
 		removeVaccEventListener();
 	}
 	
-	public function removeVaccEventListener() {
+	public function removeVaccEventListener():void {
 		if (vaccPopUp.hasEventListener(VaccinationEvent.VACCINATION_CREATE)) {
 			vaccPopUp.removeEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
 		}
@@ -129,7 +136,7 @@
 		removeAllergyEventListener();
 	}
 	
-	public function removeAllergyEventListener() {
+	public function removeAllergyEventListener():void {
 		if (allergyPopUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {
 			allergyPopUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyEvent);
 		}
@@ -148,7 +155,7 @@
 		removeVisitEventListener();
 	}
 	
-	public function removeVisitEventListener() {
+	public function removeVisitEventListener():void {
 		if (visitPopUp.hasEventListener(VisitEvent.VISIT_CREATE)) {
 			visitPopUp.removeEventListener(VisitEvent.VISIT_CREATE, handleVisitEvent);
 		}
@@ -167,7 +174,7 @@
 		removeNoteEventListener();			
 	}						
 	
-	public function removeNoteEventListener() {				
+	public function removeNoteEventListener():void {				
 		if (notePopUp.hasEventListener(NoteEvent.NOTE_CREATE)) {					
 			notePopUp.removeEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);				
 		}			
@@ -186,11 +193,32 @@
 		removePrescriptionEventListener();			
 	}						
 	
-	public function removePrescriptionEventListener() {				
+	public function removePrescriptionEventListener():void {				
 		if (prescriptionPopUp.hasEventListener(PrescriptionEvent.PRESCRIPTION_CREATE)) {					
 			prescriptionPopUp.removeEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);				
 		}			
-	}									    	
+	}	
+	
+	private function showAlertCreateTitleWin():void {				
+		alertPopUp = AlertCreateTitleWin(PopUpManager.createPopUp(this, AlertCreateTitleWin, true));
+		alertPopUp.patient = this.patient;
+		alertPopUp.patientID = this.patientID;
+		alertPopUp.languageArray = languageArray;
+		PopUpManager.centerPopUp(alertPopUp);
+		alertPopUp.addEventListener(AlertEvent.ALERT_CREATE, handleAlertEvent);
+	}
+	
+	public function handleAlertEvent(event:Event):void {
+		dispatchEvent(new AlertEvent(AlertEvent.ALERT_CREATE, null));
+		listAlerts();				
+		removeAlertEventListener();			
+	}						
+	
+	public function removeAlertEventListener():void {				
+		if (alertPopUp.hasEventListener(AlertEvent.ALERT_CREATE)) {					
+			alertPopUp.removeEventListener(AlertEvent.ALERT_CREATE, handleNoteEvent);				
+		}			
+	}								    	
 ]]>
 </mx:Script>
 	
@@ -199,7 +227,6 @@
         id="svcVaccinationsList"
         resultFormat="e4x"
         result="handleVaccinationsListResult(event)"/>
-	
 	<mx:XMLListCollection id="vaccinationsXLC"
         source="{XMLList(svcVaccinationsList.lastResult.children())}"/>
 	
@@ -207,7 +234,6 @@
         id="svcAllergiesList"
         resultFormat="e4x"
         result="handleAllergiesListResult(event)"/>
-	
 	<mx:XMLListCollection id="allergiesXLC"
         source="{XMLList(svcAllergiesList.lastResult.children())}"/>
 
@@ -215,7 +241,6 @@
         id="svcVisitsList"
         resultFormat="e4x"
         result="handleVisitsListResult(event)"/>
-	
 	<mx:XMLListCollection id="visitsXLC"
         source="{XMLList(svcVisitsList.lastResult.children())}"/>
 		
@@ -223,7 +248,6 @@
         id="svcNotesList"
         resultFormat="e4x"
         result="handleNotesListResult(event)"/>
-	
 	<mx:XMLListCollection id="notesXLC"
         source="{XMLList(svcNotesList.lastResult.children())}"/>
 		
@@ -231,27 +255,33 @@
         id="svcPrescriptionsList"
         resultFormat="e4x"
         result="handlePrescriptionsListResult(event)"/>
-	
 	<mx:XMLListCollection id="prescriptionsXLC"
         source="{XMLList(svcPrescriptionsList.lastResult.children())}"/>
+    
+    <mx:HTTPService
+        id="svcAlertsList"
+        resultFormat="e4x"
+        result=""/>
+	<mx:XMLListCollection id="alertsXLC"
+        source="{XMLList(svcAlertsList.lastResult.children())}"/>
 		
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
 		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>			
 	</mx:VBox>
-   	<mx:VBox height="100%" width="80%">
-   		<mx:TabBar dataProvider="{patientInfoMain}" fontWeight="Bold"/>			
+   	<mx:VBox height="100%" width="80%" verticalGap="0">
+   		<mx:TabBar dataProvider="{patientInfoMain}" 
+   			fontWeight="Bold" paddingTop="0" paddingBottom="0" />			
    		<mx:ViewStack 
    			id="patientInfoMain" 
    			width="100%" 
    			height="100%">
-	   		<mx:VBox label="{languageArray['Alerts']}" show="">
+	   		<mx:VBox label="{languageArray['Alerts']}" show="listAlerts()">
 	   			<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
-	   				paddingTop="10" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="Add New Alert" color="#0000FF" click="showNoteCreateTitleWin()"/>
-		   			<mx:Spacer height="5" />					
+	   				paddingTop="5" paddingLeft="5" paddingRight="5">
+		   			<mx:LinkButton label="Add New Alert" color="#0000FF" click="showAlertCreateTitleWin()"/>
 		   			<mx:DataGrid id="alertsGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{notesXLC}">						
+		   				dataProvider="{alertsXLC}" wordWrap="true" variableRowHeight="true">						
 		   				<mx:columns>														
 		   					<mx:DataGridColumn headerText="{languageArray['Alert Date']}" 
 		   						dataField="alert_date" width="90"/>							
