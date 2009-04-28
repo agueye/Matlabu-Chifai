@@ -73,6 +73,10 @@
  	private function init():void{
  		initHistoryManager();
  		mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
+ 		
+ 		this.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreateEvent);
+		this.addEventListener(PatientEvent.PATIENT_DESTROY, handlePatientDestroyEvent);
+		this.addEventListener(PatientEvent.PATIENT_SELECT, handlePatientSelectEvent);
  	}
  
  	private function initHistoryManager():void
@@ -112,9 +116,6 @@
 		listMedications();
 		listVisitTypes();
 		listDoctors();
-		
-		this.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreateEvent);
-		this.addEventListener(PatientEvent.PATIENT_DESTROY, handlePatientDestroyEvent);
 	}
 	
 	private function listPatients():void {
@@ -315,6 +316,12 @@
 	private function handlePatientDestroyEvent(event:PatientEvent):void {
 		listPatients();
 	}
+	
+	private function handlePatientSelectEvent(event:PatientEvent):void {
+		//select patientinfo view and pass in patient information
+		patientInfoBox.patient = event.patient;
+		mainStack.selectedChild = patientInfoBox;
+	}
 			
 	]]>
 </mx:Script>
@@ -389,8 +396,6 @@
 				patientsXLC="{patientsXLC}"
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}" 
-				mainStackVar="{mainStack}"
-				patientInfoBoxVar="{patientInfoBox}"
 				width="70%" height="90%" horizontalAlign="left"/>
 			<mlc:SearchBox id="searchBox"
 				languageArray="{languageArray}"
@@ -400,9 +405,7 @@
 				conditionIdMap="{conditionIdMap}"
 				medicationIdMap="{medicationIdMap}"
 				visitTypeIdMap="{visitTypeIdMap}"
-				doctorIdMap="{doctorIdMap}"
-				mainStackVar="{mainStack}"
-				patientInfoBoxVar="{patientInfoBox}" />
+				doctorIdMap="{doctorIdMap}"/>
 			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
 			<mlc:PatientInfo id="patientInfoBox"
 					patientIdMap="{patientIdMap}" 
