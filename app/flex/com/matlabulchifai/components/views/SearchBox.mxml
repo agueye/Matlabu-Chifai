@@ -273,10 +273,8 @@
 	}
 	
 	private function handlePatientDestroyResult(event:ResultEvent):void {
-		var resultXML: XML = XML(event.result);
-		Matlabulchifai.debug("patient_deleted = \n" + resultXML);
+		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_DESTROY, null));
 		showAllPatients();
-		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
 	}
 	
 	private function patientClicked(event:MouseEvent):void{

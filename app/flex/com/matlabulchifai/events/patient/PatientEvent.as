@@ -6,6 +6,7 @@
 	{
 		
 		public static const PATIENT_CREATE:String = "patientCreate";
+		public static const PATIENT_DESTROY:String = "patientDestroy";
     
         public var patient:XML;
     

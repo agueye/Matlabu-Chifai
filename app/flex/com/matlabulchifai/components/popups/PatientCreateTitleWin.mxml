@@ -57,9 +57,7 @@
 			}
 			
 			private function handleNewPatientResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("patient created = \n" + resultXML);
-				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, resultXML));
+				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
 				clearForm();		
 			}
 		]]>
