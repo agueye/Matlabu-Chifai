@@ -10,6 +10,7 @@
     
 <mx:Script>
 <![CDATA[
+	import mx.messaging.channels.StreamingAMFChannel;
 	import mx.collections.IViewCursor;
 	import mx.binding.utils.BindingUtils;
 	import mx.containers.ViewStack;
@@ -270,6 +271,10 @@
 	private function patientClicked(event:MouseEvent):void{
 		selectPatient(XML(event.currentTarget.selectedItem));
 	}
+	public function getStr(str:String):String{
+		return languageArray[str];
+		
+	}
 ]]>
 </mx:Script>
 	<mx:HTTPService
@@ -309,7 +314,10 @@
         source="{XMLList(svcMedicationsList.lastResult.children())}"/>
 	
 	<mx:TabBar dataProvider="{searchMain}" fontWeight="Bold"/>			
-   	<mx:ViewStack id="searchMain" width="100%" height="100%" change="Application.application.updateUrl()">
+   	<mx:ViewStack
+   		id="searchMain" 
+   		width="100%" 
+   		height="100%">
    		<mx:VBox label="{languageArray['Patients']}" show="searchPatient()">						
 	   		<mx:Panel title="{languageArray['Patient List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
@@ -344,7 +352,7 @@
 						<mx:DataGridColumn headerText="" width="110" editable="false">
 			                    <mx:itemRenderer>
 			                        <mx:Component>
-			                            <mx:Button label="Delete Patient" click="outerDocument.deletePatient(XML(data))"/>
+			                            <mx:Button label="{outerDocument.getStr('Delete Patient')}" click="outerDocument.deletePatient(XML(data))"/>
 			                        </mx:Component>	                                           
 			                    </mx:itemRenderer>
 						</mx:DataGridColumn>	       	                

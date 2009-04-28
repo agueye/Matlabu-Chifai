@@ -35,6 +35,7 @@ public function languageInit(str:String):void{
 		  	"Date Observed":"Date Observed",		  
 		  	"Date Seen":"Date Seen",
 		  	"Delete":"Delete",
+		  	"Delete Patient":"Delete Patient",
 		  	"Doctor Name":"Doctor Name",
 		  	"Dosage":"Dosage",
 			"Emergency Contact Name": "Emergency Contact Name",
@@ -46,7 +47,7 @@ public function languageInit(str:String):void{
 			"Frequency":"Frequency",
 			"Gender": "Gender",
 		  	"General Information":"General Information",
-			"Hello": "Bonjour",
+			"Hello": "Hello",
 			"Last Name": "Last Name",
 			"Login": "Login",
 			"Logout": "Logout",
@@ -86,6 +87,7 @@ public function languageInit(str:String):void{
 			"Vaccination List":"Vaccination List",
 			"Vaccination Name":"Vaccination Name",
 			"Vaccinations":"Vaccinations",
+			"Visits":"Visits",
 			"Visit Date":"Visit Date",
 			"Visit Type":"Visit Type",
 		    "View":"View",
@@ -147,6 +149,7 @@ public function languageInit(str:String):void{
 		  "Patients": "Patients",
 		  "Reason":"Raison",
 		  "Search by Name": "Rechercher par Nom",
+		  "Search by Patient Name": "Rechercher par Nom du Patient",
 		  "Search": "Rechercher",
 		  "Severity":"Severite",
 		  "Show All": "Afficher tout",
@@ -154,10 +157,16 @@ public function languageInit(str:String):void{
 		  "Telephone": "Telephone",
 		  "Username":"Identifiant",
 		  "View":"Regarder",
-		  "Zip": "Code Postal"
+		  "Zip": "Code Postal",
 		  
 		  
+		  //to add
 		  
+		  "Prescriptions":"",
+		  "Allergies":"",
+		  "Vaccinations":"",
+		  "Delete Patient":"",
+		  "Visits":""
 		  
 			}
 		return;
