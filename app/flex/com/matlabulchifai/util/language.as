@@ -111,6 +111,9 @@ public function languageInit(str:String):void{
 		  "Add New Patient": "Ajouter Nouvelle Patient",
 		  "Address": "Adresse",
 		  "Administration": "Administration",
+		  "Allergies":"Allergies(French)",
+		  "Allergy List": "Allergy List(French)",
+		  "Allergy Name": "Allergy Name(French)",
 		  "Alert Date": "Date d'alerte",
 		  "Alert List": "Liste des Alertes",
 		  "Alert Note": "Note d'Alerte",
@@ -162,6 +165,7 @@ public function languageInit(str:String):void{
 		  "Patient Name": "Nom du Patient",
 		  "Patient Remarks": "Remarques",
 		  "Patients": "Patients",
+		  "Reaction":"Reaction(French)",
 		  "Reason":"Raison",
 		  "Search by Name": "Rechercher par Nom",
 		  "Search by Patient Name": "Rechercher par Nom du Patient",
@@ -180,6 +184,10 @@ public function languageInit(str:String):void{
 		  
 		  
 		  //to add
+		  "Allergies":"Allergies",
+		  "Reaction":"Reaction",
+		  "Allergy Name": "Allergy Name",
+		  "Allergy List": "Allergy List",
 		  "Visits List":"Visits List",
 		  "Prescriptions":"",
 		  "Allergies":"",
