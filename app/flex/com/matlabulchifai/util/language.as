@@ -183,6 +183,9 @@ public function languageInit(str:String):void{
 		  "State": "Etat",
 		  "Telephone": "Telephone",
 		  "Username":"Identifiant",
+		  "Vaccination List":"Vaccination List(French)",
+		  "Vaccination Name":"Vaccination Name(French)",
+		  "Vaccinations":"Vaccinations(French)",
 		  "View":"Regarder",
 		  "Visit Date":"Visit Date(French)",
 		  "Visit Type":"Visit Type(French)",
@@ -192,6 +195,9 @@ public function languageInit(str:String):void{
 		  
 		  
 		  //to add
+		  "Vaccination Name":"Vaccination Name",
+		  "Vaccination List":"Vaccination List",
+		  "Vaccinations":"Vaccinations",
 		  "Dosage":"Dosage",
 		  "Frequency":"Frequency",
 		  "Date Given":"Date Given",
