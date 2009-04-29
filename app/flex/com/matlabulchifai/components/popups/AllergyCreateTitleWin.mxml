@@ -5,6 +5,7 @@
 	height="530"
 	title="Add New Allergy"
 	showCloseButton="true"
+	creationComplete="init()"
     close="PopUpManager.removePopUp(this)">
 	
 	<mx:Script>
@@ -12,7 +13,7 @@
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
-			import com.matlabulchifai.events.patient.AllergyEvent;
+			import com.matlabulchifai.events.patient.PatientAllergyEvent;
 			import mx.core.Application;
 			
 			[Bindable]
@@ -22,7 +23,9 @@
 			[Bindable]
 			public var languageArray:Object;
 			[Bindable]
-			public var severities:ArrayCollection = new ArrayCollection(
+			public var allergyIdMap:Object;
+			[Bindable]
+			private var severities:ArrayCollection = new ArrayCollection(
             [ { label:"10", data:"10" }, { label:"9", data:"9" }, { label:"8", data:"8" }, { label:"7", data:"7" },
 				{label:"6", data:"6" }, { label:"5", data:"5" }, { label:"4", data:"4" }, { label:"3", data:"3" },
 				{label:"2", data:"2" }, { label:"1", data:"1" } ]);
@@ -30,16 +33,39 @@
 			private var allergyNames:ArrayCollection = new ArrayCollection(
 			[ { label:"Malaria", data:"malaria" }, { label:"Flu", data:"flu" }, 
 				{ label:"Food poisoning", data:"food poisoning" }, { label:"Other...", data:"" }]);	
+			
+			private function init():void {
+				initAllergyNames();
+			}
+			
+			private function initAllergyNames():void {
+				var i:int;
+				allergyNames = new ArrayCollection();
+				for (i = 1; allergyIdMap[i] != null; i++) {
+					var allergy:XML = allergyIdMap[i];
+					allergyNames.addItem( { label: allergy.name, data: allergy.name } );
+				}
+				allergyNames.addItem( { label:"Other...", data:"" } );
+			}
 				
 			private function handleNewAllergyResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("allergy created = \n" + resultXML);
-				dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, resultXML));
+				dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, resultXML));
 			}
 			
 			private function processAllergyCreate():void{
 				svcAllergyCreate.send();
 				PopUpManager.removePopUp(this);
+			}
+			
+			private function checkAllergyNameCB(event):void {
+				if (allergyNameCB.selectedLabel == "Other...") {
+					otherTI.enabled = true;
+				} else {
+					otherTI.text = "";
+					otherTI.enabled = false;
+				}
 			}
 			
 		]]>
@@ -54,7 +80,7 @@
 		result="handleNewAllergyResult(event)">
 		<mx:request>
 			<patient_allergy>
-				<name>{allergyNameTI.text}</name>
+				<name>{allergyNameCB.value + otherTI.text}</name>
 				<date_observed>{allergyDateDF.text}</date_observed>
 				<severity>{severityCB.text}</severity>
 				<reaction>{allergyReactionTI.text}</reaction>
@@ -70,7 +96,11 @@
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Allergy">
-				<mx:TextInput id="allergyNameTI" width="100%"/>
+				<mx:ComboBox id="allergyNameCB" dataProvider="{allergyNames}" change="checkAllergyNameCB(event)" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Other" paddingLeft="10">
+				<mx:TextInput id="otherTI" enabled="false"  />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
@@ -82,7 +112,7 @@
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Reaction">
-				<mx:TextArea id="allergyReactionTI" width="200" height="100" />
+				<mx:TextInput id="allergyReactionTI" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Notes">

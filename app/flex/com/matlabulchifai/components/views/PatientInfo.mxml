@@ -9,6 +9,7 @@
 	<mx:Metadata>
 		[Event(name="conditionCreate", type="com.matlabulchifai.events.patient.ConditionEvent")]
 		[Event(name="visitTypeCreate", type="com.matlabulchifai.events.patient.VisitTypeEvent")]
+		[Event(name="allergyCreate", type="com.matlabulchifai.events.patient.AllergyEvent")]
 	</mx:Metadata>
 		
 	<mx:Script>
@@ -32,25 +33,21 @@
 		import com.matlabulchifai.events.patient.AlertEvent;
 		import com.matlabulchifai.events.patient.ConditionEvent;
 		import com.matlabulchifai.events.patient.VisitTypeEvent;
+		import com.matlabulchifai.events.patient.PatientAllergyEvent;
+
 		
 		[Bindable]
 		public var languageArray:Object;
-		
 		[Bindable]        
 		public var allergyIdMap:Object;
-		
 		[Bindable]        
 		public var vaccinationIdMap:Object;
-		
 		[Bindable]        
 		public var conditionIdMap:Object;
-		
 		[Bindable]        
 		public var medicationIdMap:Object;	
-		
 		[Bindable]        
 		public var visitTypeIdMap:Object;
-		
 		[Bindable]        
 		public var doctorIdMap:Object;
 		
@@ -186,20 +183,26 @@
 		
 		private function showAllergyCreateTitleWin():void{
 			allergyPopUp = AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));
-			allergyPopUp.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyEvent);
+			allergyPopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, handlePatientAllergyEvent);
 			allergyPopUp.patient = this.patient;
 			allergyPopUp.patientID = this.patientID;
+			allergyPopUp.allergyIdMap = this.allergyIdMap;
 			PopUpManager.centerPopUp(allergyPopUp);
 		}
-		
-		public function handleAllergyEvent(event:Event):void {
+
+		//upon receiving a fresh patient allergy:
+		//update the allergies id map via dispatching a new AllergyEvent
+		//make sure that the event is dispatched before calling listAllergies()	
+		public function handlePatientAllergyEvent(event:Event):void {
+			var resultXML:XML;
+			dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, resultXML));
 			listAllergies();
-			removeAllergyEventListener();
+			removePatientAllergyEventListener();
 		}
 		
-		public function removeAllergyEventListener():void {
-			if (allergyPopUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {
-				allergyPopUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyEvent);
+		public function removePatientAllergyEventListener():void {
+			if (allergyPopUp.hasEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE)) {
+				allergyPopUp.removeEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, handlePatientAllergyEvent);
 			}
 		}
 		
@@ -217,6 +220,7 @@
 		//upon receiving a fresh patient visit:
 		//update the conditions id map via dispatching a new ConditionEvent
 		//update the visit type id map via dispatching a new VisitTypeEvent
+		//make sure events are dispatched before calling listVisits()
 		public function handleVisitEvent(event:Event):void {
 			var resultXML:XML;
 			dispatchEvent(new ConditionEvent(ConditionEvent.CONDITION_CREATE, resultXML));
