@@ -69,7 +69,7 @@
 			<mx:FormItem required="true" label="Alert Date">
 				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980" />
 			</mx:FormItem>
-			<mx:FormItem required="true" label="Alert Note">
+			<mx:FormItem required="true" label="{languageArray['Alert Note']}">
 				<mx:TextArea id="noteTA" width="200" height="150" />
 			</mx:FormItem>			
 		</mx:Form>
