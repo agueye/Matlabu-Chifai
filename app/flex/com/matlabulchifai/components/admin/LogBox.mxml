@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+	label="Log"
+    creationComplete="init()"
+    >
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+		
+			[Bindable]
+			public var languageArray:Object;
+			
+			private function init():void{
+				
+				try{
+					var rnd:int = Math.round(Math.random()*10000);
+					svcGetLog.url += "?rnd=" + rnd;
+					svcGetLog.send();
+				}
+				catch (error:Error){
+					Alert.show("Unable to download file.", "File Request Error");
+				}
+			}
+			
+			private function handleGetLogResult(event:ResultEvent):void{
+				var result:Object = event.result
+				logTA.text = String(result);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="svcGetLog"
+		url="/bin/application.log"
+		resultFormat="text"
+		method="GET"
+		result="handleGetLogResult(event)"/>
+	
+	<mx:VBox height="100%" width="100%">
+		<mx:Button id="logRefreshBTN" label="Refresh Log" click="init()"/>
+		<mx:TextArea id="logTA" editable="false" height="100%" width="100%"/>
+	</mx:VBox>
+	
+	
+</mx:VBox>
