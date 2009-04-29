@@ -17,6 +17,9 @@ class SessionsController < ApplicationController
         current_user.remember_me unless current_user.remember_token?
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
+      
+      APP_LOGGER_LOG.info "SESSION CREATED - USER " + self.current_user[:login]
+      
       respond_to do |format|
         format.html do
           redirect_back_or_default('/')

@@ -45,6 +45,9 @@ class AllergiesController < ApplicationController
     respond_to do |format|
       if @allergy.save
         flash[:notice] = 'Allergy was successfully created.'
+        
+        APP_LOGGER_LOG.info "ALLERGY CREATED - " + @allergy[:name] + " by USER " + self.current_user[:login]
+        
         format.html { redirect_to(@allergy) }
         format.xml  { render :xml => @allergy, :status => :created, :location => @allergy }
       else
@@ -62,6 +65,9 @@ class AllergiesController < ApplicationController
     respond_to do |format|
       if @allergy.update_attributes(params[:allergy])
         flash[:notice] = 'Allergy was successfully updated.'
+        
+        APP_LOGGER_LOG.info "ALLERGY UPDATED - " + @allergy[:name] + " by USER " + self.current_user[:login]
+        
         format.html { redirect_to(@allergy) }
         format.xml  { head :ok }
       else
@@ -76,6 +82,8 @@ class AllergiesController < ApplicationController
   def destroy
     @allergy = Allergy.find(params[:id])
     @allergy.destroy
+    
+    APP_LOGGER_LOG.info "ALLERGY DELETED - " + @allergy[:name] + " by USER " + self.current_user[:login]
 
     respond_to do |format|
       format.html { redirect_to(allergies_url) }

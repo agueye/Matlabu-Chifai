@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="vertical" 
-	width="400" 
-	height="450"
+	width="420" 
+	height="530"
 	title="Add New Allergy"
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
@@ -26,6 +26,10 @@
             [ { label:"10", data:"10" }, { label:"9", data:"9" }, { label:"8", data:"8" }, { label:"7", data:"7" },
 				{label:"6", data:"6" }, { label:"5", data:"5" }, { label:"4", data:"4" }, { label:"3", data:"3" },
 				{label:"2", data:"2" }, { label:"1", data:"1" } ]);
+			[Bindable]
+			private var allergyNames:ArrayCollection = new ArrayCollection(
+			[ { label:"Malaria", data:"malaria" }, { label:"Flu", data:"flu" }, 
+				{ label:"Food poisoning", data:"food poisoning" }, { label:"Other...", data:"" }]);	
 				
 			private function handleNewAllergyResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
@@ -43,19 +47,20 @@
 	
 	<mx:HTTPService
 		id="svcAllergyCreate"
-		url="/allergies.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		url="/patient_allergies.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
 		result="handleNewAllergyResult(event)">
 		<mx:request>
-			<allergy>
+			<patient_allergy>
 				<name>{allergyNameTI.text}</name>
-				<dateObserved>{allergyDateDF.text}</dateObserved>
+				<date_observed>{allergyDateDF.text}</date_observed>
 				<severity>{severityCB.text}</severity>
+				<reaction>{allergyReactionTI.text}</reaction>
 				<notes>{allergyNotesTI.text}</notes>
 				<patient_id>{patientID}</patient_id>
-			</allergy>
+			</patient_allergy>
 		</mx:request>
 	</mx:HTTPService>
 	
@@ -76,8 +81,12 @@
 				<mx:ComboBox id="severityCB" dataProvider="{severities}" /> 
 			</mx:FormItem>
 			<mx:Spacer height="5" />
+			<mx:FormItem label="Reaction">
+				<mx:TextArea id="allergyReactionTI" width="200" height="100" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
 			<mx:FormItem label="Notes">
-				<mx:TextArea id="allergyNotesTI" width="200" height="150" />
+				<mx:TextArea id="allergyNotesTI" width="200" height="100" />
 			</mx:FormItem>
 		</mx:Form>
 	</mx:VBox>

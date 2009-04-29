@@ -9,154 +9,351 @@
 	paddingLeft="0"
 	paddingRight="0"
 	paddingTop="0"
-	paddingBottom="0"
+	paddingBottom="0" 
 	width="100%"
 	height="100%"
+	historyManagementEnabled="false"
 	creationComplete="init();"
 	preinitialize="languageInit('ENGLISH');">
-	<mx:Script source="com/matlabulchifai/util/language.as"/>
-	<mx:Script>
-		<![CDATA[
-		import mx.controls.Button;
-		import com.matlabulchifai.events.login.*;
-		import com.matlabulchifai.components.views.DebugPanel;
-		import com.matlabulchifai.util.DebugMessage;
-		import mx.events.MenuEvent;
-		import mx.events.ListEvent;
-	    import mx.controls.Alert;
-	    import mx.rpc.events.ResultEvent;
-	    import mx.collections.IViewCursor;
-	    import mx.collections.XMLListCollection;
-	    import com.matlabulchifai.events.alert.AlertEvent;
-	    import com.matlabulchifai.events.patient.PatientEvent;
-	    import com.matlabulchifai.events.patient.SearchEvent;
-	    import flash.net.navigateToURL;
-     	import mx.events.BrowserChangeEvent;
-     	import mx.utils.URLUtil;
-     	import mx.managers.IBrowserManager;
-     	import mx.managers.BrowserManager;
-     	
-     	[Bindable]
-		public static var title:String = "";
-		
-		[Bindable]
-		private var _user:XML;
-		
-		[Bindable]
-		private var patientIdMap:Object;
-		
-		private var rnd:Number;
+<mx:Script source="com/matlabulchifai/util/language.as"/>
+<mx:Script>
+	<![CDATA[
+	import mx.controls.Button;
+	import com.matlabulchifai.events.login.*;
+	import com.matlabulchifai.components.views.DebugPanel;
+	import com.matlabulchifai.util.DebugMessage;
+	import mx.events.MenuEvent;
+	import mx.events.ListEvent;
+    import mx.controls.Alert;
+    import mx.rpc.events.ResultEvent;
+    import mx.collections.IViewCursor;
+    import mx.collections.XMLListCollection;    
+    import com.matlabulchifai.events.patient.PatientEvent;
+    import com.matlabulchifai.events.patient.AlertEvent;
+    import flash.net.navigateToURL;
+ 	import mx.events.BrowserChangeEvent;
+ 	import mx.utils.URLUtil;
+ 	import mx.managers.IBrowserManager;
+ 	import mx.managers.BrowserManager;
 
-     	private var browserManager:IBrowserManager;
+	[Bindable]
+	private var _user:XML;
+	
+	[Bindable]
+	private var patientIdMap:Object;
+	
+	[Bindable]
+    private var allergyIdMap:Object;
+    
+    [Bindable]
+    private var vaccinationIdMap:Object;
+    
+    [Bindable]
+    private var conditionIdMap:Object;
+    
+    [Bindable]
+    private var medicationIdMap:Object;	
+    
+    [Bindable]
+    private var visitTypeIdMap:Object;
+    
+    [Bindable]
+    private var doctorIdMap:Object;
+    	
+    private var authToken:String;	
+	
+	private var rnd:Number;
+
+ 	private var browserManager:IBrowserManager;
+ 	private var parsing:Boolean;
 
 
-		public static function debug(str:String):void {
-			application.debugPanel.addMessage(
-			new DebugMessage(str));
-		}		
-     	
-     	private function init():void{
-     		initHistoryManager();
-     		mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
+	public static function debug(str:String):void {
+		application.debugPanel.addMessage(
+		new DebugMessage(str));
+	}		
+ 	
+ 	private function init():void{
+ 		initHistoryManager();
+ 		mainMenu.addEventListener(MouseEvent.CLICK, handleMenuClick);
+ 		
+ 		this.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreateEvent);
+		this.addEventListener(PatientEvent.PATIENT_DESTROY, handlePatientDestroyEvent);
+		this.addEventListener(PatientEvent.PATIENT_SELECT, handlePatientSelectEvent);
+		this.addEventListener(AlertEvent.ALERT_CREATE, handleAlertCreateEvent);
+ 	}	    
+	
+	private function listAll():void {
+		listPatients();
+		listAllergies();
+		listVaccinations();
+		listConditions();
+		listMedications();
+		listVisitTypes();
+		listDoctors();
+	}
+	
+	private function listPatients():void {
+		rnd = Math.round(Math.random()*1000);
+		svcPatientList.url= "/patients.xml?rnd=" + rnd;
+		svcPatientList.send();
+	}
+	
+	private function listAllergies():void {
+		rnd = Math.round(Math.random()*1000);
+		svcAllergiesList.url = "/allergies.xml?rnd=" + rnd;
+    	svcAllergiesList.send();
+	}
+	
+	private function listVaccinations():void {
+		rnd = Math.round(Math.random()*1000);
+    	svcVaccinationsList.url = "/vaccinations.xml?rnd=" + rnd;
+    	svcVaccinationsList.send();
+	}
+	
+	private function listConditions():void {
+		rnd = Math.round(Math.random()*1000);
+		svcConditionsList.url = "/conditions.xml?rnd=" + rnd;
+    	svcConditionsList.send();
+	}
+	
+	private function listMedications():void {
+		rnd = Math.round(Math.random()*1000);
+		svcMedicationsList.url = "/medications.xml?rnd=" + rnd;
+    	svcMedicationsList.send();
+	}
+	
+	private function listVisitTypes():void {
+		rnd = Math.round(Math.random()*1000);
+		svcVisitTypesList.url = "/visit_types.xml?rnd=" + rnd;
+    	svcVisitTypesList.send();
+	}
+	
+	private function listDoctors():void {
+		rnd = Math.round(Math.random()*1000);
+		svcDoctorsList.url = "/doctors.xml?rnd=" + rnd;
+    	svcDoctorsList.send();
+	}
+	
+	private function updatePatientIdMap():void {
+    	patientIdMap = {};
+        var patientsCursor:IViewCursor =
+            patientsXLC.createCursor();
+        while (!patientsCursor.afterLast) {
+            var patient:XML = XML(patientsCursor.current);
+            patientIdMap[patient.id] = patient;
+            patientsCursor.moveNext();
+        }
+    }
+	    
+    private function updateAllergyIdMap():void {
+    	allergyIdMap = {};
+        var allergiesCursor:IViewCursor =
+            allergiesXLC.createCursor();
+        while (!allergiesCursor.afterLast) {
+            var allergy:XML = XML(allergiesCursor.current);
+            allergyIdMap[allergy.id] = allergy;
+            allergiesCursor.moveNext();
+        }
+    }
+    
+    private function updateVaccinationIdMap():void {
+    	vaccinationIdMap = {};
+        var vaccinationsCursor:IViewCursor =
+            vaccinationsXLC.createCursor();
+        while (!vaccinationsCursor.afterLast) {
+            var vaccination:XML = XML(vaccinationsCursor.current);
+            vaccinationIdMap[vaccination.id] = vaccination;
+            vaccinationsCursor.moveNext();
+        }
+    }
+    
+    private function updateConditionIdMap():void {
+    	conditionIdMap = {};
+        var conditionsCursor:IViewCursor =
+            conditionsXLC.createCursor();
+        while (!conditionsCursor.afterLast) {
+            var condition:XML = XML(conditionsCursor.current);
+            conditionIdMap[condition.id] = condition;
+            conditionsCursor.moveNext();
+        }
+    }
+    
+    private function updateMedicationIdMap():void {
+    	medicationIdMap = {};
+        var medicationsCursor:IViewCursor =
+            medicationsXLC.createCursor();
+        while (!medicationsCursor.afterLast) {
+            var medication:XML = XML(medicationsCursor.current);
+            medicationIdMap[medication.id] = medication;
+            medicationsCursor.moveNext();
+        }
+    }
+    
+    private function updateVisitTypeIdMap():void {
+    	visitTypeIdMap = {};
+        var visitTypesCursor:IViewCursor =
+            visitTypesXLC.createCursor();
+        while (!visitTypesCursor.afterLast) {
+            var visitType:XML = XML(visitTypesCursor.current);
+            visitTypeIdMap[visitType.id] = visitType;
+            visitTypesCursor.moveNext();
+        }
+    }
+    
+    private function updateDoctorIdMap():void {
+    	doctorIdMap = {};
+        var doctorsCursor:IViewCursor =
+            doctorsXLC.createCursor();
+        while (!doctorsCursor.afterLast) {
+            var doctor:XML = XML(doctorsCursor.current);
+            doctorIdMap[doctor.id] = doctor;
+            doctorsCursor.moveNext();
+        }
+    }
+     
+ 	private function initHistoryManager():void
+ 	{
+ 		debug("InitHistoryManager called");
+   		browserManager = BrowserManager.getInstance();
+   		browserManager.init("");
+   		browserManager.addEventListener(
+     	BrowserChangeEvent.BROWSER_URL_CHANGE, 
+     	parseUrl
+   	)
+   		//parseUrl();
+   		browserManager.setFragment("");
+ 	}
+ 
+ 	private function parseUrl(e:BrowserChangeEvent = null):void
+ 	{
+ 		parsing = true;
+ 		debug("ParseURL called");
+   		var o:Object = URLUtil.stringToObject(browserManager.fragment);
+   		if(o.a == 2){
+   			this.searchBox.searchMain.selectedIndex = o.b;
+   		}
+   		if(o.a == 4){
+   			var patient:XML = patientIdMap[o.b];
+   			this.patientInfoBox.patient = patient;
+   		}
+   		mainStack.selectedIndex = o.a;
+   		parsing = false;
+ 	}
+ 	
+ 	
+ 
+ 	public function updateUrl():void
+ 	{
+ 		debug("UpdateURL() called");
+     	if(parsing)
+     		return;
+ 		var currentIndex:int = mainStack.selectedIndex;
+ 		var toStore:String = "a=" + currentIndex;
+ 		if(currentIndex == 2){
+ 			toStore+=";b=" + this.searchBox.searchMain.selectedIndex;
+ 			debug("Selected Index: " + searchBox.searchMain.selectedIndex);
+ 		}
+ 		if(currentIndex == 4){
+ 			toStore+= ";b="+ this.patientInfoBox.patientID;
+ 		}
+   		browserManager.setFragment(toStore);
+ 	}
+	
+	private function login(user:XML):void{
+		_user = user;
+		//populate all ID maps
+		listAll();
+		mainStack.selectedChild = alertBox;
+		mainMenu.visible = true;
+	}
+	
+	private function bypassLogin():void {			
+		loginFormBox.loginTI.text = "tester";			
+		loginFormBox.passwordTI.text = "tester";
+		loginFormBox.login();
+	}	
+
+	private function handleLogin(e:LoginEvent):void{
+		login(e.user);
+	}
+	
+	private function handleAccountCreate(e:AccountCreateEvent):void{
+		login(e.user);
+	}
+	
+	private function handleLogout():void{
+		// invalidate session by invoking ruby logout, possibly attach event to login box and handle there
+		mainMenu.visible = false;
+		mainStack.selectedChild = loginBox;
+	}
+
+	private function handleMenuClick(e:MouseEvent):void {		
+		if(e.currentTarget.selectedIndex == 0) {
+			mainStack.selectedChild = alertBox;				
+		}			
+		else if(e.currentTarget.selectedIndex == 1) {				
+			mainStack.selectedChild = searchBox;			
+		}			
+		else if(e.currentTarget.selectedIndex == 2) {
+			mainStack.selectedChild = adminBox;				
+		}			
+		else if(e.currentTarget.selectedIndex == 3) {				
+			handleLogout();							
+		}			
+		mainMenu.selectedIndex = -1;		
+	}				
+	
+	private function handlePatientListResult(event:ResultEvent):void {
+		updatePatientIdMap();
+	}
+	
+	private function handleAllergiesListResult(event:ResultEvent):void {
+		updateAllergyIdMap();
+	}
+	
+	private function handleVaccinationsListResult(event:ResultEvent):void {
+		updateVaccinationIdMap();
+	}
+	
+	private function handleConditionsListResult(event:ResultEvent):void {
+		updateConditionIdMap();
+	}
+	
+	private function handleMedicationsListResult(event:ResultEvent):void {
+		updateMedicationIdMap();
+	}
+	
+	private function handleVisitTypesListResult(event:ResultEvent):void {
+		updateVisitTypeIdMap();
+	}
+	
+	private function handleDoctorsListResult(event:ResultEvent):void {
+		updateDoctorIdMap();
+	}
+	
+	private function handlePatientCreateEvent(event:PatientEvent):void {
+		listPatients();
+	}
+	
+	private function handlePatientDestroyEvent(event:PatientEvent):void {
+		listPatients();
+	}
+	
+	private function handlePatientSelectEvent(event:PatientEvent):void {
+		//select patientinfo view and pass in patient information
+		patientInfoBox.patient = event.patient;
+		patientInfoBox.patientID = event.patient.id;
+		mainStack.selectedChild = patientInfoBox;
+	}
+	
+	private function handleAlertCreateEvent(event:AlertEvent):void {
+		//select patientinfo view and pass in patient information
+		alertBox.listAlerts();
+	}
 			
-     	}
-     
-     	private function initHistoryManager():void
-     	{
-       		browserManager = BrowserManager.getInstance();
-       		browserManager.addEventListener(
-         	BrowserChangeEvent.BROWSER_URL_CHANGE, 
-         	parseUrl
-       	)
-       		browserManager.init("");
-       		parseUrl();
-     	}
-     
-     	private function parseUrl(e:BrowserChangeEvent = null):void
-     	{
-       		var o:Object = URLUtil.stringToObject(browserManager.fragment);
-       		if(o.a == 4)
-       			this.patientInfoBox.init(o.pid);
-       		mainStack.selectedIndex = o.a;
-     	}
-     
-     	private function updateUrl():void
-     	{
-     		var currentIndex:int = mainStack.selectedIndex;
-     		var toStore:String = "a=" + currentIndex;
-     		if(currentIndex == 4){
-     			toStore+= ";pid="+ this.patientInfoBox.patientID;
-     		}
-       		browserManager.setFragment(toStore);
-     	}
-		
-		private function updatePatientIdMap():void {
-	    	patientIdMap = {};
-	        var patientsCursor:IViewCursor =
-	            patientsXLC.createCursor();
-	        while (!patientsCursor.afterLast) {
-	            var patient:XML = XML(patientsCursor.current);
-	            patientIdMap[patient.id] = patient;
-	            patientsCursor.moveNext();
-	        }
-	    }
-		
-		private function listPatients():void {
-			rnd = Math.round(Math.random()*1000);
-			svcPatientList.url= "/patients.xml?rnd=" + rnd;
-			svcPatientList.send();
-		}
-		
-		private function login(user:XML):void{
-			_user = user;
-			debug("user = " + user);
-			listPatients();
-			mainStack.selectedChild = alertBox;
-			title = "Alerts"
-			mainMenu.visible = true;
-		}
-		
-		private function handleLogin(e:LoginEvent):void{
-			login(e.user);
-		}
-		
-		private function handleAccountCreate(e:AccountCreateEvent):void{
-			login(e.user);
-		}
-		
-		private function handleLogout():void{
-			// invalidate session by invoking ruby logout, possibly attach event to login box and handle there
-			mainMenu.visible = false;
-			mainStack.selectedChild = loginBox;
-		}
-		
-		private function handleMenuClick(e:MouseEvent):void {
-			if(e.currentTarget.selectedIndex == 0) {
-				mainStack.selectedChild = alertBox;
-				title = "Alerts";	
-			}
-			else if(e.currentTarget.selectedIndex == 1) {
-				title = "Search";
-				mainStack.selectedChild = searchBox;
-			}
-			else if(e.currentTarget.selectedIndex == 2) {
-				mainStack.selectedChild = adminBox;
-				title = "Administration";
-			}
-			else if(e.currentTarget.selectedIndex == 3) {
-				handleLogout();
-				title = "";
-			}
-			mainMenu.selectedIndex = -1;
-		}
-		
-		private function handlePatientListResult(event:ResultEvent):void {
-			var resultXML: XML = XML(event.result);
-			updatePatientIdMap();
-			debug("patients = \n" + resultXML);	
-		}		
-		]]>
-	</mx:Script>
+	]]>
+</mx:Script>
 	
 	<mx:HTTPService
         id="svcPatientList"
@@ -164,7 +361,43 @@
         result="handlePatientListResult(event)"/>
 	<mx:XMLListCollection id="patientsXLC"
         source="{XMLList(svcPatientList.lastResult.children())}"/>
-	
+    <mx:HTTPService
+        id="svcAllergiesList"        
+        resultFormat="e4x"
+        result="handleAllergiesListResult(event)"/>
+	<mx:XMLListCollection id="allergiesXLC"
+        source="{XMLList(svcAllergiesList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcVaccinationsList"
+        resultFormat="e4x"
+        result="handleVaccinationsListResult(event)"/>
+	<mx:XMLListCollection id="vaccinationsXLC"
+        source="{XMLList(svcVaccinationsList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcConditionsList"
+        resultFormat="e4x"
+        result="handleConditionsListResult(event)"/>
+	<mx:XMLListCollection id="conditionsXLC"
+        source="{XMLList(svcConditionsList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcMedicationsList"
+        resultFormat="e4x"
+        result="handleMedicationsListResult(event)"/>
+	<mx:XMLListCollection id="medicationsXLC"
+        source="{XMLList(svcMedicationsList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcVisitTypesList"
+        resultFormat="e4x"
+        result="handleVisitTypesListResult(event)"/>
+	<mx:XMLListCollection id="visitTypesXLC"
+        source="{XMLList(svcVisitTypesList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcDoctorsList"
+        resultFormat="e4x"
+        result="handleDoctorsListResult(event)"/>
+	<mx:XMLListCollection id="doctorsXLC"
+        source="{XMLList(svcDoctorsList.lastResult.children())}"/>	
+        
 <mx:VDividedBox width="100%" height="100%">
 	<mx:VBox height="100%" width="100%">
 		<mx:Canvas width="100%" height="75">
@@ -182,30 +415,35 @@
 	            <menuitem label="{languageArray['Logout']}"/>
 	        </mx:XMLList>
 		</mx:MenuBar>
-		<mx:Text id="titleText" fontFamily="Comic Sans MS" fontSize="24" fontWeight="bold" 
-			color="white" letterSpacing="2" fontThickness="10" text="{title}  "/>
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" languageArray="{languageArray}" login="handleLogin(event)"/>
-				<mx:Button click="login(XML('user'));title='Alerts';mainMenu.visible=true;" label="Bypass Login"/>								<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
+				<mx:Button click="bypassLogin()" label="Bypass Login"/>								
+				<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
 			<mlc:AlertGridBox id="alertBox"
 				patientsXLC="{patientsXLC}"
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}" 
-				mainStackVar="{mainStack}"
-				patientInfoBoxVar="{patientInfoBox}"
 				width="70%" height="90%" horizontalAlign="left"/>
 			<mlc:SearchBox id="searchBox"
-				patientCreate="listPatients()"
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}"
-				mainStackVar="{mainStack}"
-				patientInfoBoxVar="{patientInfoBox}" />
+				allergyIdMap="{allergyIdMap}"
+				vaccinationIdMap="{vaccinationIdMap}"
+				conditionIdMap="{conditionIdMap}"
+				medicationIdMap="{medicationIdMap}"
+				visitTypeIdMap="{visitTypeIdMap}"
+				doctorIdMap="{doctorIdMap}"/>
 			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
-			<mlc:PatientInfo id="patientInfoBox"
-					patientIdMap="{patientIdMap}" 
-					languageArray="{languageArray}"/>
+			<mlc:PatientInfo id="patientInfoBox" 
+				languageArray="{languageArray}"
+				allergyIdMap="{allergyIdMap}"
+				vaccinationIdMap="{vaccinationIdMap}"
+				conditionIdMap="{conditionIdMap}"
+				medicationIdMap="{medicationIdMap}"
+				visitTypeIdMap="{visitTypeIdMap}"
+				doctorIdMap="{doctorIdMap}"/>
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>

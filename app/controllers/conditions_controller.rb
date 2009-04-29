@@ -45,6 +45,9 @@ class ConditionsController < ApplicationController
     respond_to do |format|
       if @condition.save
         flash[:notice] = 'Condition was successfully created.'
+        
+        APP_LOGGER_LOG.info "CONDITION CREATED - " + @condition[:name] + " by USER " + self.current_user[:login]
+        
         format.html { redirect_to(@condition) }
         format.xml  { render :xml => @condition, :status => :created, :location => @condition }
       else
@@ -62,6 +65,9 @@ class ConditionsController < ApplicationController
     respond_to do |format|
       if @condition.update_attributes(params[:condition])
         flash[:notice] = 'Condition was successfully updated.'
+        
+        APP_LOGGER_LOG.info "CONDITION UPDATED - " + @condition[:name] + " by USER " + self.current_user[:login]
+        
         format.html { redirect_to(@condition) }
         format.xml  { head :ok }
       else
@@ -76,6 +82,8 @@ class ConditionsController < ApplicationController
   def destroy
     @condition = Condition.find(params[:id])
     @condition.destroy
+    
+    APP_LOGGER_LOG.info "CONDITION DELETED - " + @condition[:name] + " by USER " + self.current_user[:login]
 
     respond_to do |format|
       format.html { redirect_to(conditions_url) }

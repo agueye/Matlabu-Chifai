@@ -20,6 +20,8 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     @user.save!
     
+    APP_LOGGER_LOG.info "USER CREATED - " + @user[:login]
+
     self.current_user = @user
     respond_to do |format|
       format.html do

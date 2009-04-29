@@ -7,10 +7,6 @@
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
 	
-	<mx:Metadata>
-		[Event(name="patientCreate", type="com.matlabulchifai.events.patient.PatientEvent")]
-	</mx:Metadata>
-	
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -55,15 +51,14 @@
 				motherlastnameTI.text = "";
 				emergencycontactnameTI.text = "";
 				emergencycontactrelationshipTI.text = "";
+				emergencycontactnumberTI.text = "";
 				notesTI.text = "";
 				//refocus back on the first field
 				focusManager.setFocus(medicalrecordTI);
 			}
 			
 			private function handleNewPatientResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("patient created = \n" + resultXML);
-				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, resultXML));
+				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
 				clearForm();		
 			}
 		]]>
@@ -96,6 +91,7 @@
 				<mother_last_name>{motherlastnameTI.text}</mother_last_name>
 				<emergency_contact_name>{emergencycontactnameTI.text}</emergency_contact_name>
 				<emergency_contact_relationship>{emergencycontactrelationshipTI.text}</emergency_contact_relationship>
+				<emergency_contact_number>{emergencycontactnumberTI.text}</emergency_contact_number>
 				<notes>{notesTI.text}</notes>
 			</patient>
 		</mx:request>
@@ -176,6 +172,10 @@
 				
 				<mx:FormItem label="{languageArray['Emergency Contact Relationship']}">
 					<mx:TextInput id="emergencycontactrelationshipTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Emergency Contact Number']}">
+					<mx:TextInput id="emergencycontactnumberTI"/>
 				</mx:FormItem>
 				
 				<mx:FormItem label="{languageArray['Patient Remarks']}">

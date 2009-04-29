@@ -42,18 +42,18 @@
 	
 	<mx:HTTPService
 		id="svcVaccinationCreate"
-		url="/vaccinations.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		url="/patient_vaccinations.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
 		result="handleNewVaccinationResult(event)">
 		<mx:request>
-			<vaccination>
+			<patient_vaccination>
 				<name>{vaccNameTI.text}</name>
-				<dateAdmined>{vaccDateDF.text}</dateAdmined>
+				<date_admined>{vaccDateDF.text}</date_admined>
 				<notes>{vaccNotesTA.text}</notes>
 				<patient_id>{patientID}</patient_id>
-			</vaccination>
+			</patient_vaccination>
 		</mx:request>
 	</mx:HTTPService>
 	

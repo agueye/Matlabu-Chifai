@@ -41,7 +41,9 @@ class DoctorsController < ApplicationController
   # POST /doctors.xml
   def create
     @doctor = Doctor.new(params[:doctor])
-
+    
+    APP_LOGGER_LOG.info "DOCTOR CREATED - " + @doctor[:last_name] + "by USER " + self.current_user[:login]
+    
     respond_to do |format|
       if @doctor.save
         flash[:notice] = 'Doctor was successfully created.'
@@ -61,6 +63,9 @@ class DoctorsController < ApplicationController
 
     respond_to do |format|
       if @doctor.update_attributes(params[:doctor])
+        
+        APP_LOGGER_LOG.info "DOCTOR UPDATED - " + @doctor[:last_name] + "by USER " + self.current_user[:login]
+            
         flash[:notice] = 'Doctor was successfully updated.'
         format.html { redirect_to(@doctor) }
         format.xml  { head :ok }
@@ -76,7 +81,9 @@ class DoctorsController < ApplicationController
   def destroy
     @doctor = Doctor.find(params[:id])
     @doctor.destroy
-
+    
+    APP_LOGGER_LOG.info "DOCTOR DELETED - " + @doctor[:last_name] + "by USER " + self.current_user[:login]
+        
     respond_to do |format|
       format.html { redirect_to(doctors_url) }
       format.xml  { head :ok }
