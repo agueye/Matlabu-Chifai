@@ -304,48 +304,59 @@
 	   			<mx:Panel title="{languageArray['General Information']}" width="100%" height="100%" 
 	   				paddingTop="10" paddingLeft="5" paddingRight="5">									
 					<mx:HBox>
-						<mx:Label text="{languageArray['Patient ID']}: {patient['id']}"  fontSize="12"/>				
-						<mx:Label text="{languageArray['Patient Active']}: {patient['patient_active']}"  fontSize="12"/>			
+						<mx:Label text="{languageArray['Medical Record ID']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['medical_record_number']}" fontSize="12"/>				
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['First Name']}: {patient['first_name']}"  fontSize="12"/>				
-						<mx:Label text="{languageArray['Middle Name']}: {patient['middle_name']}"  fontSize="12"/>				
-						<mx:Label text="{languageArray['Last Name']}: {patient['last_name']}"  fontSize="12"/>			
+						<mx:Label text="{languageArray['Patient Name']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['first_name'] + ' ' + patient['middle_name'] + ' ' + patient['last_name']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Date of Birth']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['date_of_birth']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Arrival Date']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['arrival_date']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Father First Name']}: {patient['father_first_name']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['Father Last Name']}: {patient['father_last_name']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Gender']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['gender']}" fontSize="12"/>
+					</mx:HBox>
+					<mx:Spacer height="20" />
+					<mx:HBox>
+						<mx:Label text="{languageArray['Address']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['address'] + ' ' + patient['city'] + ' ' + patient['state'] + ' ' + patient['zip']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Mother First Name']}: {patient['mother_first_name']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['Mother Last Name']}: {patient['mother_last_name']}"  fontSize="12"/>
-					</mx:HBox>
-					<mx:Label />
-					
-					<mx:Label text="{languageArray['Emergency Contact']}"  fontWeight="bold" fontSize="12"/>
-					<mx:HBox>
-			    		<mx:Label text="{languageArray['First Name']}: {patient['emergency_first_name']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['Middle Name']}: {patient['emergency_middle_name']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['Last Name']}: {patient['emergency_last_name']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Telephone']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['telephone']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Date of Birth']}: {patient['date_of_birth']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['Gender']}: {patient['gender']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Father Name']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['father_first_name'] + ' ' + patient['father_last_name']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Address']}: {patient['address']}"  fontSize="12"/>
-						<mx:Label text="{languageArray['City']}: {patient['city']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Mother Name']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['mother_first_name'] + ' ' + patient['mother_last_name']}" fontSize="12"/>
+					</mx:HBox>
+					<mx:Spacer height="20" />
+					<mx:HBox>
+						<mx:Label text="{languageArray['Emergency Contact Name']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['emergency_contact_name']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Notes']}: {patient['notes']}"  fontSize="12"/>
+						<mx:Label text="{languageArray['Emergency Contact Relationship']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['emergency_contact_relationship']}" fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Emergency Contact Number']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['emergency_contact_number']}" fontSize="12"/>
+					</mx:HBox>
+					<mx:Spacer height="20" />
+					<mx:HBox>
+						<mx:Label text="{languageArray['Notes']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['notes']}" fontSize="12"/>
 					</mx:HBox>
 	   			</mx:Panel>
 	   		</mx:VBox>							
