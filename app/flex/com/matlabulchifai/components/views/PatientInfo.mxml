@@ -27,6 +27,25 @@
 	
 	[Bindable]
 	public var languageArray:Object;
+	
+	[Bindable]        
+    public var allergyIdMap:Object;
+    
+    [Bindable]        
+    public var vaccinationIdMap:Object;
+    
+    [Bindable]        
+    public var conditionIdMap:Object;
+    
+    [Bindable]        
+    public var medicationIdMap:Object;	
+    
+    [Bindable]        
+    public var visitTypeIdMap:Object;
+    
+    [Bindable]        
+    public var doctorIdMap:Object;
+	
 	[Bindable]
 	public var patientID:Number = 0;
 	
@@ -103,6 +122,36 @@
 		var resultXML:XML = XML(event.result);
 		Matlabulchifai.debug("visit_allergies = \n" + resultXML);
 	}
+	
+	private function getDoctorName(item:Object, column:DataGridColumn):String {
+    	var doctor:XML = doctorIdMap[item.doctor_id];
+    	return doctor.first_name + " " + doctor.middle_name + " " + doctor.last_name;
+    }
+    
+    private function getAllergyName(item:Object, column:DataGridColumn):String {
+    	var allergy:XML = allergyIdMap[item.allergy_id];
+    	return allergy.name;
+    }
+    
+    private function getVaccinationName(item:Object, column:DataGridColumn):String {
+    	var vaccination:XML = vaccinationIdMap[item.vaccination_id];
+    	return vaccination.name;
+    }
+    
+    private function getConditionName(item:Object, column:DataGridColumn):String {
+    	var condition:XML = conditionIdMap[item.condition_id];
+    	return condition.name;
+    }
+    
+    private function getMedicationName(item:Object, column:DataGridColumn):String {
+    	var medication:XML = medicationIdMap[item.medication_id];
+    	return medication.name;
+    }
+    
+    private function getVisitType(item:Object, column:DataGridColumn):String {
+    	var visitType:XML = visitTypeIdMap[item.visit_type_id];
+    	return visitType.name;
+    }
 	
 	private function showVaccCreateTitleWin():void {
 		vaccPopUp = VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
@@ -365,7 +414,28 @@
 		   				</mx:columns>					
 		   			</mx:DataGrid>
 	   			</mx:Panel>
-	   		</mx:VBox>										
+	   		</mx:VBox>
+	   		<mx:VBox label="{languageArray['Visits-Conditions']}" show="listVisits()">
+	   			<mx:Panel title="{languageArray['Visits List']}" width="100%" height="100%" 
+	   				paddingTop="5" paddingLeft="5" paddingRight="5">
+		   			<mx:LinkButton label="{languageArray['Add New Visit']}" color="#0000FF" click="showVisitCreateTitleWin()"/>
+		   			<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
+		   				dataProvider="{visitsXLC}" wordWrap="true" variableRowHeight="true">						
+		   				<mx:columns>
+		   					<mx:DataGridColumn headerText="{languageArray['Visit Date']}" width="85"
+				                dataField="visit_date"/>														
+		   					<mx:DataGridColumn headerText="{languageArray['Condition Name']}" width="250"
+				                labelFunction="getConditionName"/>
+				            <mx:DataGridColumn headerText="{languageArray['Visit Type']}" width="125"
+				                labelFunction="getVisitType"/>	
+							<mx:DataGridColumn headerText="{languageArray['Doctor Name']}" width="125"
+				                labelFunction="getDoctorName"/>	
+				            <mx:DataGridColumn headerText="{languageArray['Notes']}"
+				                dataField="notes"/>					
+		   				</mx:columns>					
+		   			</mx:DataGrid>
+	   			</mx:Panel>
+	   		</mx:VBox>									
 	   		<mx:VBox label="{languageArray['Prescriptions']}" show="listPrescriptions()">					
 	   			<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" dataProvider="{prescriptionsXLC}">						
 		   			<mx:columns>														
@@ -376,17 +446,6 @@
 		   			</mx:columns>					
 	   			</mx:DataGrid>					
 	   			<mx:LinkButton label="{languageArray['Add New Prescription']}" color="#0000FF" click="showPrescriptionCreateTitleWin()" />				
-	   		</mx:VBox>								
-	   		<mx:VBox label="{languageArray['Visits']}" show="listVisits()">					
-	   			<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" dataProvider="{visitsXLC}">						
-	   				<mx:columns>							
-	   					<mx:DataGridColumn headerText="{languageArray['Reason']}" dataField="reason"/>							
-	   					<mx:DataGridColumn headerText="{languageArray['Date Seen']}" dataField="dateSeen"/>							
-	   					<mx:DataGridColumn headerText="{languageArray['Follow Up']}" dataField="followUp"/>							
-	   					<mx:DataGridColumn headerText="{languageArray['Notes']}" dataField="notes"/>						
-	   				</mx:columns>					
-	   			</mx:DataGrid>					
-	   			<mx:LinkButton label="{languageArray['Add new visit']}" color="#0000FF" click="showVisitCreateTitleWin()" />				
 	   		</mx:VBox>				
 	   		<mx:VBox label="{languageArray['Allergies']}" show="listAllergies()">				
 	   			<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" dataProvider="{allergiesXLC}">					
