@@ -25,6 +25,7 @@ public function languageInit(str:String):void{
 			"Allergy List": "Allergy List",
 			"Allergy Name": "Allergy Name",
 			"Arrival Date": "Arrival Date",
+			"Cancel": "Cancel",
 			"City": "City",
 			"Conditions":"Conditions",
 			"Condition List":"Condition List",
@@ -131,6 +132,7 @@ public function languageInit(str:String):void{
 		  "Confirm Password": "Confirmer Mot de Passe",
 		  "Create Account": "Creer Compte",
 		  "Create": "Creer",
+		  "Date": "Date",
 		  "Date Administered":"Date de Registration",
 		  "Date of Birth": "Date de Naissance",
 		  "Date Observed":"Date d'Obeservation",
@@ -218,11 +220,7 @@ public function languageInit(str:String):void{
 		  "Refresh Log": "Refresh Log(French)",
 		  "Search by Allergy Name": "Search by Allergy Name(French)",
 		  "Search by Condition Name": "Search by Condition Name(French)",
-		  
 		  "Unable to download file.": "Unable to download file.(French)",
-		  
-		  
-		  
 		  "Search by Allergy Name": "Search by Allergy Name(French)",
 		  "Search by Vaccination Name": "Search by Vaccination Name(French)",
 		  "Search by Medicine Name": "Search by Medicine Name(French)",
@@ -230,7 +228,12 @@ public function languageInit(str:String):void{
 		  "Condition List":"Condition List(French)",
 		  "Vaccination List":"Vaccination List(French)",
 		  "Prescription List":"Prescription List(French)",
-		  "View Patient": "View Patient(French)"
+		  "View Patient": "View Patient(French)",
+		  
+		  
+		  
+		  
+			"Cancel": "Cancel(French)"
 			}
 		return;
 	}
