@@ -328,7 +328,8 @@
 	   		<mx:VBox label="{languageArray['Alerts']}" show="listAlerts()">
 	   			<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="{languageArray['Add New Alert']}" color="#0000FF" click="showAlertCreateTitleWin()"/>
+		   			<mx:LinkButton label="{languageArray['Add New Alert']}" color="#0000FF" 
+		   				click="showAlertCreateTitleWin()"/>
 		   			<mx:DataGrid id="alertsGrid" width="100%" height="100%" textAlign="center" 
 		   				dataProvider="{alertsXLC}" wordWrap="true" variableRowHeight="true">						
 		   				<mx:columns>														
@@ -403,7 +404,8 @@
 	   		<mx:VBox label="{languageArray['Notes']}" show="listNotes()">
 	   			<mx:Panel title="{languageArray['Note List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" click="showNoteCreateTitleWin()"/>
+		   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" 
+		   				click="showNoteCreateTitleWin()"/>
 		   			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
 		   				dataProvider="{notesXLC}" wordWrap="true" variableRowHeight="true">						
 		   				<mx:columns>														
@@ -418,7 +420,8 @@
 	   		<mx:VBox label="{languageArray['Allergies']}" show="listAllergies()">
 	   			<mx:Panel title="{languageArray['Allergy List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="{languageArray['Add New Allergy']}" color="#0000FF" click="showAllergyCreateTitleWin()"/>
+		   			<mx:LinkButton label="{languageArray['Add New Allergy']}" color="#0000FF" 
+		   				click="showAllergyCreateTitleWin()"/>
 		   			<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
 		   				dataProvider="{allergiesXLC}" wordWrap="true" variableRowHeight="true">						
 		   				<mx:columns>														
@@ -456,18 +459,33 @@
 		   				</mx:columns>					
 		   			</mx:DataGrid>
 	   			</mx:Panel>
-	   		</mx:VBox>									
-	   		<mx:VBox label="{languageArray['Prescriptions']}" show="listPrescriptions()">					
-	   			<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" dataProvider="{prescriptionsXLC}">						
-		   			<mx:columns>														
-		   				<mx:DataGridColumn headerText="{languageArray['Name']}" dataField="name"/>							
-		   				<mx:DataGridColumn headerText="{languageArray['Dosage']}" dataField="dosage"/>							
-		   				<mx:DataGridColumn headerText="{languageArray['Frequency']}" dataField="frequency"/>							
-		   				<mx:DataGridColumn headerText="{languageArray['Date Given']}" dataField="dateGiven"/>						
-		   			</mx:columns>					
-	   			</mx:DataGrid>					
-	   			<mx:LinkButton label="{languageArray['Add New Prescription']}" color="#0000FF" click="showPrescriptionCreateTitleWin()" />				
 	   		</mx:VBox>
+	   		<mx:VBox label="{languageArray['Prescriptions']}" show="listPrescriptions()">
+	   			<mx:Panel title="{languageArray['Prescription List']}" width="100%" height="100%" 
+	   				paddingTop="5" paddingLeft="5" paddingRight="5">
+		   			<mx:LinkButton label="{languageArray['Add New Prescription']}" color="#0000FF" 
+		   				click="showPrescriptionCreateTitleWin()"/>
+		   			<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" 
+		   				dataProvider="{prescriptionsXLC}" wordWrap="true" variableRowHeight="true">						
+		   				<mx:columns>														
+		   					<mx:DataGridColumn headerText="{languageArray['Medicine Name']}" width="150"
+			                	labelFunction="getMedicationName"/>
+				            <mx:DataGridColumn headerText="{languageArray['Date Given']}" width="85"
+				                dataField="date_given"/>
+				            <mx:DataGridColumn headerText="{languageArray['Condition Name']}" width="150"
+				                labelFunction="getConditionName"/>
+				            <mx:DataGridColumn headerText="{languageArray['Doctor Name']}" width="125"
+				                labelFunction="getDoctorName"/>
+				            <mx:DataGridColumn headerText="{languageArray['Dosage']}" width="125"
+				                dataField="dosage"/>
+				            <mx:DataGridColumn headerText="{languageArray['Frequency']}" width="125"
+				                dataField="frequency"/>		
+				            <mx:DataGridColumn headerText="{languageArray['Notes']}"
+				                dataField="notes"/>								
+		   				</mx:columns>					
+		   			</mx:DataGrid>
+	   			</mx:Panel>
+	   		</mx:VBox>								
 	   		<mx:VBox label="{languageArray['Vaccinations']}" show="listVaccinations()">					
 	   			<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" dataProvider="{vaccinationsXLC}">						
 	   				<mx:columns>							
