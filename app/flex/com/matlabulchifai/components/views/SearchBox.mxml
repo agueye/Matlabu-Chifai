@@ -10,6 +10,7 @@
     
 <mx:Script>
 <![CDATA[
+	import mx.events.ListEvent;
 	import mx.messaging.channels.StreamingAMFChannel;
 	import mx.collections.IViewCursor;
 	import mx.binding.utils.BindingUtils;
@@ -268,8 +269,12 @@
 		showAllPatients();
 	}
 	
-	private function patientClicked(event:MouseEvent):void{
-		selectPatient(XML(event.currentTarget.selectedItem));
+	private function patientClicked(event:ListEvent):void{
+		//Alert.show(event.currentTarget.columns.length);
+		
+		if (event.columnIndex != event.currentTarget.columns.length-1){
+			selectPatient(XML(event.currentTarget.selectedItem));
+		}
 	}
 ]]>
 </mx:Script>
@@ -326,7 +331,7 @@
 				
 				<mx:Spacer height="5" />
 				
-				<mx:DataGrid id="patientGrid" width="100%" height="100%" doubleClickEnabled="true" doubleClick="patientClicked(event)" textAlign="center" 
+				<mx:DataGrid id="patientGrid" width="100%" height="100%" itemClick="patientClicked(event)" textAlign="center" 
 					dataProvider="{patientsXLC}">
 			        <mx:columns>
 						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
@@ -366,7 +371,7 @@
 				
 				<mx:Spacer height="5" />
 				
-				<mx:DataGrid id="allergyGrid" width="100%" height="100%" textAlign="center" 
+				<mx:DataGrid id="allergyGrid" width="100%" height="100%" textAlign="center"  itemClick="patientClicked(event)"
 					dataProvider="{allergiesXLC}">
 			        <mx:columns>
 						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
@@ -405,7 +410,7 @@
 				
 				<mx:Spacer height="5" />
 				
-				<mx:DataGrid id="vaccinationGrid" width="100%" height="100%" textAlign="center" 
+				<mx:DataGrid id="vaccinationGrid" width="100%" height="100%" textAlign="center"  itemClick="patientClicked(event)"
 					dataProvider="{vaccinationsXLC}">
 			        <mx:columns>
 						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
@@ -441,7 +446,7 @@
 				
 				<mx:Spacer height="5" />
 				
-				<mx:DataGrid id="conditionGrid" width="100%" height="100%" textAlign="center" 
+				<mx:DataGrid id="conditionGrid" width="100%" height="100%" textAlign="center"  itemClick="patientClicked(event)"
 					dataProvider="{conditionsXLC}">
 			        <mx:columns>
 						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
@@ -480,7 +485,7 @@
 				
 				<mx:Spacer height="5" />
 				
-				<mx:DataGrid id="medicationGrid" width="100%" height="100%" textAlign="center" 
+				<mx:DataGrid id="medicationGrid" width="100%" height="100%" textAlign="center"  itemClick="patientClicked(event)"
 					dataProvider="{medicationsXLC}">
 			        <mx:columns>
 						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
