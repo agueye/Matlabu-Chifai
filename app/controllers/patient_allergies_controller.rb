@@ -1,5 +1,5 @@
 class PatientAllergiesController < ApplicationController
-  before_filter :get_patient, :except => [:find, :create]
+  before_filter :get_patient, :except => :find
 
   # GET /patient_allergies
   # GET /patient_allergies.xml
@@ -54,21 +54,12 @@ class PatientAllergiesController < ApplicationController
   # POST /patient_allergies
   # POST /patient_allergies.xml
   def create
-	name = params["patient_allergy"].delete("name")
-	patient = params["patient_allergy"].delete("patient_id")
     @patient_allergy = PatientAllergy.new(params[:patient_allergy])
-	allergy = Allergy.find_by_name(name)
-	if !allergy
-		allergy = Allergy.new(:name => name)
-	end
-    @patient_allergy.allergy = allergy
-	@patient_allergy.patient = Patient.find(patient)
+    @patient_allergy.patient = @patient
+		
     respond_to do |format|
       if @patient_allergy.save
         flash[:notice] = "The patient's allergy was successfully created."
-        
-        APP_LOGGER_LOG.info "ALLERGY CREATED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
-            
         format.html { redirect_to(patient_patient_allergies_path(@patient)) }
         format.xml  { render :xml => @patient_allergy, :status => :created, :location => @patient_allergy }
       else
@@ -86,9 +77,6 @@ class PatientAllergiesController < ApplicationController
     respond_to do |format|
       if @patient_allergy.update_attributes(params[:patient_allergy])
         flash[:notice] = "The patient's allergy was successfully updated."
-        
-        APP_LOGGER_LOG.info "ALLERGY UPDATED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
-            
         format.html { redirect_to(patient_patient_allergies_path(@patient)) }
         format.xml  { head :ok }
       else
@@ -103,9 +91,7 @@ class PatientAllergiesController < ApplicationController
   def destroy
     @patient_allergy = PatientAllergy.find(params[:id])
     @patient_allergy.destroy
-    
-    APP_LOGGER_LOG.info "ALLERGY DELETED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
-        
+
     respond_to do |format|
       format.html { redirect_to(patient_patient_allergies_path(@patient)) }
       format.xml  { head :ok }

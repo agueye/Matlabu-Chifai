@@ -10,12 +10,6 @@ RAILS_GEM_VERSION = '2.2.2' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
-class AppLogger < Logger
-  def format_message(severity, timestamp, progname, msg)
-    "#{timestamp.to_formatted_s(:db)} #{severity} #{msg}\n"
-  end
-end
-
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -55,11 +49,6 @@ Rails::Initializer.run do |config|
   # All files from config/locales/*.rb,yml are added automatically.
   # config.i18n.load_path << Dir[File.join(RAILS_ROOT, 'my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
-  
-  # Initialize logger
-  app_logger_logfile = File.open("#{RAILS_ROOT}/public/bin/application.log", 'a')
-  app_logger_logfile.sync = true
-  APP_LOGGER_LOG = AppLogger.new(app_logger_logfile)
 
   # Your secret key for verifying cookie session data integrity.
   # If you change this key, all old sessions will become invalid!

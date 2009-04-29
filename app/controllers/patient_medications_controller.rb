@@ -62,9 +62,6 @@ class PatientMedicationsController < ApplicationController
     respond_to do |format|
       if @patient_medication.save
         flash[:notice] = "The patient's medication was successfully created."
-        
-        APP_LOGGER_LOG.info "MEDICATION CREATED - for PATIENT ID " + @patient_medication[:patient_id].to_s + " by USER " + self.current_user[:login]
-            
         format.html { }
         format.xml  { render :xml => @patient_medication, :status => :created, :location => @patient_medication }
       else
@@ -82,9 +79,6 @@ class PatientMedicationsController < ApplicationController
     respond_to do |format|
       if @patient_medication.update_attributes(params[:patient_medication])
         flash[:notice] = "The patient's medication was successfully updated."
-        
-        APP_LOGGER_LOG.info "MEDICATION UPDATED - for PATIENT ID " + @patient_medication[:patient_id].to_s + " by USER " + self.current_user[:login]
-            
         format.html { }
         format.xml  { head :ok }
       else
@@ -100,8 +94,6 @@ class PatientMedicationsController < ApplicationController
     @patient_medication = PatientMedication.find(params[:id])
     @patient_medication.destroy
 
-    APP_LOGGER_LOG.info "MEDICATION DELETED - for PATIENT ID " + @patient_medication[:patient_id].to_s + " by USER " + self.current_user[:login]
-    
     respond_to do |format|
       format.html { }
       format.xml  { head :ok }

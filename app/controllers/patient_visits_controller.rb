@@ -61,9 +61,6 @@ class PatientVisitsController < ApplicationController
     respond_to do |format|
       if @patient_visit.save
         flash[:notice] = "The patient's visit was successfully created."
-        
-        APP_LOGGER_LOG.info "VISIT CREATED - for PATIENT ID " + @patient_visit[:patient_id].to_s + " by USER " + self.current_user[:login]
-        
         format.html { redirect_to(patient_patient_visit_path(@patient, @patient_visit)) }
         format.xml  { render :xml => @patient_visit, :status => :created, :location => @patient_visit }
       else
@@ -81,9 +78,6 @@ class PatientVisitsController < ApplicationController
     respond_to do |format|
       if @patient_visit.update_attributes(params[:patient_visit])
         flash[:notice] = "The patient's visit was successfully updated."
-        
-        APP_LOGGER_LOG.info "VISIT UPDATED - for PATIENT ID " + @patient_visit[:patient_id].to_s + " by USER " + self.current_user[:login]
-        
         format.html { redirect_to(patient_patient_visit_path(@patient, @patient_visit)) }
         format.xml  { head :ok }
       else
@@ -98,9 +92,7 @@ class PatientVisitsController < ApplicationController
   def destroy
     @patient_visit = PatientVisit.find(params[:id])
     @patient_visit.destroy
-    
-    APP_LOGGER_LOG.info "VISIT DELETED - for PATIENT ID " + @patient_visit[:patient_id].to_s + " by USER " + self.current_user[:login]
-    
+
     respond_to do |format|
       format.html { redirect_to(patient_patient_visits_path(@patient)) }
       format.xml  { head :ok }

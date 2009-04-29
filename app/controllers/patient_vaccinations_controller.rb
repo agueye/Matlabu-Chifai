@@ -1,6 +1,6 @@
 class PatientVaccinationsController < ApplicationController
 
-  before_filter :get_patient, :except => [:find, :create]
+  before_filter :get_patient, :except => :find
   # GET /patient_vaccinations
   # GET /patient_vaccinations.xml
   def index
@@ -56,17 +56,8 @@ class PatientVaccinationsController < ApplicationController
   # POST /patient_vaccinations
   # POST /patient_vaccinations.xml
   def create
-	name = params["patient_vaccination"].delete("name")
-	patient = params["patient_vaccination"].delete("patient_id")
     @patient_vaccination = PatientVaccination.new(params[:patient_vaccination])
-	vacc = Vaccination.find_by_name(name)
-	if !vacc
-		vacc = Vaccination.new(:name => name)
-	end
-	@patient_vaccination.vaccination = vacc
-    @patient_vaccination.patient = Patient.find(patient)
-    
-    APP_LOGGER_LOG.info "VACCINATION CREATED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
+    @patient_vaccination.patient = @patient
     
     respond_to do |format|
       if @patient_vaccination.save
@@ -88,9 +79,6 @@ class PatientVaccinationsController < ApplicationController
     respond_to do |format|
       if @patient_vaccination.update_attributes(params[:patient_vaccination])
         flash[:notice] = "The patient's vaccination was successfully updated."
-        
-        APP_LOGGER_LOG.info "VACCINATION UPDATED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
-        
         format.html { redirect_to(patient_patient_vaccinations_path(@patient)) }
         format.xml  { head :ok }
       else
@@ -106,8 +94,6 @@ class PatientVaccinationsController < ApplicationController
     @patient_vaccination = PatientVaccination.find(params[:id])
     @patient_vaccination.destroy
 
-    APP_LOGGER_LOG.info "VACCINATION DELETED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
-    
     respond_to do |format|
       format.html { redirect_to(patient_patient_vaccinations_path(@patient)) }
       format.xml  { head :ok }

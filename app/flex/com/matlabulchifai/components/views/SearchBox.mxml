@@ -4,13 +4,15 @@
 	xmlns:mlc="com.matlabulchifai.components.views.*" 
 	width="100%" 
 	height="100%"
-    verticalGap="0"
     label="{languageArray['Search']}"
     show="init()">
     
+	<mx:Metadata>
+		[Event(name="patientCreate", type="com.matlabulchifai.events.patient.PatientEvent")]
+	</mx:Metadata>
+    
 <mx:Script>
 <![CDATA[
-	import mx.messaging.channels.StreamingAMFChannel;
 	import mx.collections.IViewCursor;
 	import mx.binding.utils.BindingUtils;
 	import mx.containers.ViewStack;
@@ -25,28 +27,14 @@
 	[Bindable]
 	public var languageArray:Object;
 	
+	[Bindable]
+	public var mainStackVar:ViewStack;
+			
+	[Bindable]
+	public var patientInfoBoxVar:PatientInfo;
+	
 	[Bindable]        
     public var patientIdMap:Object;
-
-    [Bindable]        
-    public var allergyIdMap:Object;
-    
-    [Bindable]        
-    public var vaccinationIdMap:Object;
-    
-    [Bindable]        
-    public var conditionIdMap:Object;
-    
-    [Bindable]        
-    public var medicationIdMap:Object;	
-    
-    [Bindable]        
-    public var visitTypeIdMap:Object;
-    
-    [Bindable]        
-    public var doctorIdMap:Object;
-    	
-    private var authToken:String;    
 	
 	private var rnd:Number;
 	
@@ -59,7 +47,20 @@
     private var execAsap:Boolean = false;
     
     private var patientPopUp:PatientCreateTitleWin;
-   
+    
+    private var allergyIdMap:Object;
+    
+    private var vaccinationIdMap:Object;
+    
+    private var conditionIdMap:Object;
+    
+    private var medicationIdMap:Object;	
+    
+    private var visitTypeIdMap:Object;
+    
+    private var doctorIdMap:Object;
+    	
+    private var authToken:String;
     
     private function init():void {
     	searchPatient();
@@ -67,6 +68,19 @@
     	rnd = Math.round(Math.random()*1000);
     	
     	authToken = "?authenticity_token=" + Application.application.parameters.authenticityToken;
+
+    	svcAllAllergiesList.url = "/allergies.xml?rnd=" + rnd;
+    	svcAllAllergiesList.send();
+    	svcAllVaccinationsList.url = "/vaccinations.xml?rnd=" + rnd;
+    	svcAllVaccinationsList.send();
+    	svcAllConditionsList.url = "/conditions.xml?rnd=" + rnd;
+    	svcAllConditionsList.send();
+    	svcAllMedicationsList.url = "/medications.xml?rnd=" + rnd;
+    	svcAllMedicationsList.send();
+    	svcAllVisitTypesList.url = "/visit_types.xml?rnd=" + rnd;
+    	svcAllVisitTypesList.send();
+    	svcAllDoctorsList.url = "/doctors.xml?rnd=" + rnd;
+    	svcAllDoctorsList.send();
     }
     
 	private function searchPatient():void {
@@ -192,8 +206,13 @@
             return null; 
     }
     
-	public function selectPatient(patient:XML):void {		
-		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_SELECT, patient));
+	public function selectPatient(patient:XML):void {
+		if(patient.hasOwnProperty("patient_id")) {
+			patientInfoBoxVar.init(patient.patient_id);
+		} else {
+			patientInfoBoxVar.init(patient.id);	
+		}		
+		mainStackVar.selectedChild=patientInfoBoxVar;	
 	}
 	
 	public function deletePatient(patient:XML):void {
@@ -241,6 +260,72 @@
     	return visitType.name;
     }
     
+    private function updateAllergyIdMap():void {
+    	allergyIdMap = {};
+        var allergiesCursor:IViewCursor =
+            allAllergiesXLC.createCursor();
+        while (!allergiesCursor.afterLast) {
+            var allergy:XML = XML(allergiesCursor.current);
+            allergyIdMap[allergy.id] = allergy;
+            allergiesCursor.moveNext();
+        }
+    }
+    
+    private function updateVaccinationIdMap():void {
+    	vaccinationIdMap = {};
+        var vaccinationsCursor:IViewCursor =
+            allVaccinationsXLC.createCursor();
+        while (!vaccinationsCursor.afterLast) {
+            var vaccination:XML = XML(vaccinationsCursor.current);
+            vaccinationIdMap[vaccination.id] = vaccination;
+            vaccinationsCursor.moveNext();
+        }
+    }
+    
+    private function updateConditionIdMap():void {
+    	conditionIdMap = {};
+        var conditionsCursor:IViewCursor =
+            allConditionsXLC.createCursor();
+        while (!conditionsCursor.afterLast) {
+            var condition:XML = XML(conditionsCursor.current);
+            conditionIdMap[condition.id] = condition;
+            conditionsCursor.moveNext();
+        }
+    }
+    
+    private function updateMedicationIdMap():void {
+    	medicationIdMap = {};
+        var medicationsCursor:IViewCursor =
+            allMedicationsXLC.createCursor();
+        while (!medicationsCursor.afterLast) {
+            var medication:XML = XML(medicationsCursor.current);
+            medicationIdMap[medication.id] = medication;
+            medicationsCursor.moveNext();
+        }
+    }
+    
+    private function updateVisitTypeIdMap():void {
+    	visitTypeIdMap = {};
+        var visitTypesCursor:IViewCursor =
+            allVisitTypesXLC.createCursor();
+        while (!visitTypesCursor.afterLast) {
+            var visitType:XML = XML(visitTypesCursor.current);
+            visitTypeIdMap[visitType.id] = visitType;
+            visitTypesCursor.moveNext();
+        }
+    }
+    
+    private function updateDoctorIdMap():void {
+    	doctorIdMap = {};
+        var doctorsCursor:IViewCursor =
+            allDoctorsXLC.createCursor();
+        while (!doctorsCursor.afterLast) {
+            var doctor:XML = XML(doctorsCursor.current);
+            doctorIdMap[doctor.id] = doctor;
+            doctorsCursor.moveNext();
+        }
+    }
+    
     private function showPatientCreateTitleWin():void {
 		patientPopUp = 
 			PatientCreateTitleWin(PopUpManager.createPopUp(this, PatientCreateTitleWin, true));		
@@ -251,9 +336,9 @@
 		patientPopUp.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreate);
 	}
 	
-	private function handlePatientCreate(evt:PatientEvent):void {
-		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
+	private function handlePatientCreate(evt:Event):void {
 		searchPatient();
+		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
 		removePatientEventListener();
 	}
 	
@@ -264,12 +349,34 @@
 	}
 	
 	private function handlePatientDestroyResult(event:ResultEvent):void {
-		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_DESTROY, null));
+		var resultXML: XML = XML(event.result);
+		Matlabulchifai.debug("patient_deleted = \n" + resultXML);
 		showAllPatients();
 	}
 	
-	private function patientClicked(event:MouseEvent):void{
-		selectPatient(XML(event.currentTarget.selectedItem));
+	private function handleAllAllergiesListResult(event:ResultEvent):void {
+		updateAllergyIdMap();
+	}
+	
+	private function handleAllVaccinationsListResult(event:ResultEvent):void {
+		updateVaccinationIdMap();
+
+	}
+	
+	private function handleAllConditionsListResult(event:ResultEvent):void {
+		updateConditionIdMap();
+	}
+	
+	private function handleAllMedicationsListResult(event:ResultEvent):void {
+		updateMedicationIdMap();
+	}
+	
+	private function handleAllVisitTypesListResult(event:ResultEvent):void {
+		updateVisitTypeIdMap();
+	}
+	
+	private function handleAllDoctorsListResult(event:ResultEvent):void {
+		updateDoctorIdMap();
 	}
 ]]>
 </mx:Script>
@@ -308,10 +415,48 @@
         result=""/>
 	<mx:XMLListCollection id="medicationsXLC"
         source="{XMLList(svcMedicationsList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcAllAllergiesList"        
+        resultFormat="e4x"
+        result="handleAllAllergiesListResult(event)"/>
+	<mx:XMLListCollection id="allAllergiesXLC"
+        source="{XMLList(svcAllAllergiesList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcAllVaccinationsList"
+        resultFormat="e4x"
+        result="handleAllVaccinationsListResult(event)"/>
+	<mx:XMLListCollection id="allVaccinationsXLC"
+        source="{XMLList(svcAllVaccinationsList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcAllConditionsList"
+        resultFormat="e4x"
+        result="handleAllConditionsListResult(event)"/>
+	<mx:XMLListCollection id="allConditionsXLC"
+        source="{XMLList(svcAllConditionsList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcAllMedicationsList"
+        resultFormat="e4x"
+        result="handleAllMedicationsListResult(event)"/>
+	<mx:XMLListCollection id="allMedicationsXLC"
+        source="{XMLList(svcAllMedicationsList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcAllVisitTypesList"
+        resultFormat="e4x"
+        result="handleAllVisitTypesListResult(event)"/>
+	<mx:XMLListCollection id="allVisitTypesXLC"
+        source="{XMLList(svcAllVisitTypesList.lastResult.children())}"/>
+    <mx:HTTPService
+        id="svcAllDoctorsList"
+        resultFormat="e4x"
+        result="handleAllDoctorsListResult(event)"/>
+	<mx:XMLListCollection id="allDoctorsXLC"
+        source="{XMLList(svcAllDoctorsList.lastResult.children())}"/>
 	
 	<mx:TabBar dataProvider="{searchMain}" fontWeight="Bold"/>			
-   	<mx:ViewStack id="searchMain" width="100%" height="100%" 
-   		change="Application.application.updateUrl()">
+   	<mx:ViewStack
+   		id="searchMain" 
+   		width="100%" 
+   		height="100%">
    		<mx:VBox label="{languageArray['Patients']}" show="searchPatient()">						
 	   		<mx:Panel title="{languageArray['Patient List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
@@ -326,7 +471,7 @@
 				
 				<mx:Spacer height="5" />
 				
-				<mx:DataGrid id="patientGrid" width="100%" height="100%" doubleClickEnabled="true" doubleClick="patientClicked(event)" textAlign="center" 
+				<mx:DataGrid id="patientGrid" width="100%" height="100%" textAlign="center" 
 					dataProvider="{patientsXLC}">
 			        <mx:columns>
 						<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
@@ -343,10 +488,16 @@
 			                dataField="date_of_birth"/>
 			            <mx:DataGridColumn headerText="{languageArray['Arrival Date']}" width="100"
 			                dataField="arrival_date"/>	 	 		  
+			            <mx:DataGridColumn headerText="" width="110" editable="false">
+			                   	<mx:itemRenderer>
+			                 		<mx:Component>
+			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                    </mx:itemRenderer>
+						</mx:DataGridColumn>
 						<mx:DataGridColumn headerText="" width="110" editable="false">
 			                    <mx:itemRenderer>
 			                        <mx:Component>
-			                            <mx:Button label="{outerDocument.languageArray['Delete Patient']}" click="outerDocument.deletePatient(XML(data))"/>
+			                            <mx:Button label="Delete Patient" click="outerDocument.deletePatient(XML(data))"/>
 			                        </mx:Component>	                                           
 			                    </mx:itemRenderer>
 						</mx:DataGridColumn>	       	                

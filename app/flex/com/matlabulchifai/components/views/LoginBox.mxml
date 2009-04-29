@@ -17,7 +17,7 @@
 		import mx.controls.Alert;
 		import mx.core.Application;
 		
-		public function login():void{
+		private function login():void{
 			svcAccountLogin.send({login: loginTI.text, password: passwordTI.text});
 		}
 		

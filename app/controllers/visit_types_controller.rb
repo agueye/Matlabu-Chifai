@@ -45,9 +45,6 @@ class VisitTypesController < ApplicationController
     respond_to do |format|
       if @visit_type.save
         flash[:notice] = 'VisitType was successfully created.'
-        
-        APP_LOGGER_LOG.info "VISIT_TYPE CREATED - " + @visit_type[:name] + " by USER " + self.current_user[:login]
-        
         format.html { redirect_to(@visit_type) }
         format.xml  { render :xml => @visit_type, :status => :created, :location => @visit_type }
       else
@@ -65,9 +62,6 @@ class VisitTypesController < ApplicationController
     respond_to do |format|
       if @visit_type.update_attributes(params[:visit_type])
         flash[:notice] = 'VisitType was successfully updated.'
-        
-        APP_LOGGER_LOG.info "VISIT_TYPE UPDATED - " + @visit_type[:name] + " by USER " + self.current_user[:login]
-        
         format.html { redirect_to(@visit_type) }
         format.xml  { head :ok }
       else
@@ -82,8 +76,6 @@ class VisitTypesController < ApplicationController
   def destroy
     @visit_type = VisitType.find(params[:id])
     @visit_type.destroy
-    
-    APP_LOGGER_LOG.info "VISIT_TYPE DELETED - " + @visit_type[:name] + " by USER " + self.current_user[:login]
 
     respond_to do |format|
       format.html { redirect_to(visit_types_url) }

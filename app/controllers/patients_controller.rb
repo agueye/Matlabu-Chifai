@@ -53,9 +53,6 @@ class PatientsController < ApplicationController
     respond_to do |format|
       if @patient.save
         flash[:notice] = 'Patient was successfully created.'
-        
-        APP_LOGGER_LOG.info "PATIENT CREATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
-        
         format.html { redirect_to(@patient) }
         format.xml  { render :xml => @patient, :status => :created, :location => @patient }
       else
@@ -73,9 +70,6 @@ class PatientsController < ApplicationController
     respond_to do |format|
       if @patient.update_attributes(params[:patient])
         flash[:notice] = 'Patient was successfully updated.'
-        
-        APP_LOGGER_LOG.info "PATIENT UPDATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
-        
         format.html { redirect_to(@patient) }
         format.xml  { head :ok }
       else
@@ -90,9 +84,7 @@ class PatientsController < ApplicationController
   def destroy
     @patient = Patient.find(params[:id])
     @patient.destroy
-    
-    APP_LOGGER_LOG.info "PATIENT DELETED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
-    
+
     respond_to do |format|
       format.html { redirect_to(patients_url) }
       format.xml  { head :ok }

@@ -49,9 +49,6 @@ class PatientNotesController < ApplicationController
     respond_to do |format|
       if @patient_note.save
         flash[:notice] = 'PatientNote was successfully created.'
-        
-        APP_LOGGER_LOG.info "NOTE CREATED - for PATIENT ID " + @patient_note[:patient_id].to_s + " by USER " + self.current_user[:login]
-            
         format.html { redirect_to(@patient_note) }
         format.xml  { render :xml => @patient_note, :status => :created, :location => @patient_note }
       else
@@ -69,9 +66,6 @@ class PatientNotesController < ApplicationController
     respond_to do |format|
       if @patient_note.update_attributes(params[:patient_note])
         flash[:notice] = 'PatientNote was successfully updated.'
-        
-        APP_LOGGER_LOG.info "NOTE UPDATED - for PATIENT ID " + @patient_note[:patient_id].to_s + " by USER " + self.current_user[:login]
-    
         format.html { redirect_to(@patient_note) }
         format.xml  { head :ok }
       else
@@ -87,8 +81,6 @@ class PatientNotesController < ApplicationController
     @patient_note = PatientNote.find(params[:id])
     @patient_note.destroy
 
-    APP_LOGGER_LOG.info "NOTE DELETED - for PATIENT ID " + @patient_note[:patient_id].to_s + " by USER " + self.current_user[:login]
-    
     respond_to do |format|
       format.html { redirect_to(patient_notes_url) }
       format.xml  { head :ok }
