@@ -3,7 +3,7 @@
 	layout="vertical" 
 	width="550" 
 	height="500"
-	title="Add New Patient"
+	title="{languageArray['Add New Patient']}"
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
 	
@@ -188,7 +188,7 @@
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
 		<mx:Button label="OK" id="OKBtn" click="processPatientCreate()" />
-		<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	
 </mx:TitleWindow>

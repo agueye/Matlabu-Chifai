@@ -3,7 +3,7 @@
 	layout="vertical" 
 	width="420" 
 	height="530"
-	title="Add New Allergy"
+	title="{languageArray['Add New Allergy']}"
 	showCloseButton="true"
 	creationComplete="init()"
     close="PopUpManager.removePopUp(this)">
@@ -124,7 +124,7 @@
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
 		<mx:Button label="OK" id="OKBtn" click="processAllergyCreate()" />
-		<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	
 </mx:TitleWindow>

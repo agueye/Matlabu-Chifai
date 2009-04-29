@@ -166,6 +166,7 @@
 			vaccPopUp = VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
 			vaccPopUp.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
 			vaccPopUp.patient = this.patient;
+			vaccPopUp.languageArray = this.languageArray;
 			vaccPopUp.patientID = this.patientID;
 			PopUpManager.centerPopUp(vaccPopUp);
 		}
@@ -186,6 +187,7 @@
 			allergyPopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, handlePatientAllergyEvent);
 			allergyPopUp.patient = this.patient;
 			allergyPopUp.patientID = this.patientID;
+			allergyPopUp.languageArray = this.languageArray;
 			allergyPopUp.allergyIdMap = this.allergyIdMap;
 			PopUpManager.centerPopUp(allergyPopUp);
 		}
@@ -213,6 +215,7 @@
 			visitPopUp.patientID = this.patientID;
 			visitPopUp.visitTypeIdMap = this.visitTypeIdMap;
 			visitPopUp.conditionIdMap = this.conditionIdMap;
+			visitPopUp.languageArray = this.languageArray;
 			visitPopUp.doctorIdMap = this.doctorIdMap;
 			PopUpManager.centerPopUp(visitPopUp);
 		}
@@ -240,6 +243,7 @@
 			notePopUp.addEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);
 			notePopUp.patient = this.patient;
 			notePopUp.patientID = this.patientID;
+			notePopUp.languageArray = this.languageArray;
 			PopUpManager.centerPopUp(notePopUp);
 		}
 		
@@ -257,8 +261,9 @@
 		private function showPrescriptionCreateTitleWin():void {				    			
 			prescriptionPopUp = PrescriptionCreateTitleWin(PopUpManager.createPopUp(this, PrescriptionCreateTitleWin, true));    			
 			prescriptionPopUp.addEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);    			
-			prescriptionPopUp.patient = this.patient;				
-			prescriptionPopUp.patientID = this.patientID;    			
+			prescriptionPopUp.patient = this.patient;	
+			prescriptionPopUp.languageArray = this.languageArray;				
+			prescriptionPopUp.patientID = this.patientID;    		
 			PopUpManager.centerPopUp(prescriptionPopUp);    		
 		}						
 		

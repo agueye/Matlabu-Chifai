@@ -3,7 +3,7 @@
 	layout="vertical" 
 	width="500" 
 	height="300"
-	title="Add New Note"
+	title="{languageArray['Add New Note']}"
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
 	<mx:Metadata>
@@ -23,6 +23,8 @@
 			[Bindable]
 			public var patientID:Number;
 			
+			[Bindable]
+			public var languageArray:Object;
 			
 			
 			private function handleNewNoteResult(event:ResultEvent):void {
@@ -69,7 +71,7 @@
 			
 		<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
 			<mx:Button label="OK" id="OKBtn" click="processNoteCreate()" />
-			<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+			<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 		</mx:HBox>
 			
 		</mx:Form>

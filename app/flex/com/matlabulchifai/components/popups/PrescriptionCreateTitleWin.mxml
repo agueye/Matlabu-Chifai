@@ -3,7 +3,7 @@
 	layout="vertical" 
 	width="500" 
 	height="350"
-	title="Add New Prescription"
+	title="{languageArray['Add New Prescription']}"
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
 	<mx:Metadata>
@@ -23,6 +23,8 @@
 			[Bindable]
 			public var patientID:Number;
 			
+			[Bindable]
+			public var languageArray:Object;
 			
 			
 			private function handleNewPrescriptionResult(event:ResultEvent):void {
@@ -95,7 +97,7 @@
 			
 		<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
 			<mx:Button label="OK" id="OKBtn" click="processPrescriptionCreate()" />
-			<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+			<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 		</mx:HBox>
 			
 		</mx:Form>
