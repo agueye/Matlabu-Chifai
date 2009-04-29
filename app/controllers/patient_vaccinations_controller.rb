@@ -1,6 +1,6 @@
 class PatientVaccinationsController < ApplicationController
 
-  before_filter :get_patient, :except => :find
+  before_filter :get_patient, :except => [:find, :create]
   # GET /patient_vaccinations
   # GET /patient_vaccinations.xml
   def index
@@ -56,8 +56,15 @@ class PatientVaccinationsController < ApplicationController
   # POST /patient_vaccinations
   # POST /patient_vaccinations.xml
   def create
+	name = params["patient_vaccination"].delete("name")
+	patient = params["patient_vaccination"].delete("patient_id")
     @patient_vaccination = PatientVaccination.new(params[:patient_vaccination])
-    @patient_vaccination.patient = @patient
+	vacc = Vaccination.find_by_name(name)
+	if !vacc
+		vacc = Vaccination.new(:name => name)
+	end
+	@patient_vaccination.vaccination = vacc
+    @patient_vaccination.patient = Patient.find(patient)
     
     APP_LOGGER_LOG.info "VACCINATION CREATED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
     

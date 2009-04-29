@@ -1,5 +1,5 @@
 class PatientAllergiesController < ApplicationController
-  before_filter :get_patient, :except => :find
+  before_filter :get_patient, :except => [:find, :create]
 
   # GET /patient_allergies
   # GET /patient_allergies.xml
@@ -54,9 +54,15 @@ class PatientAllergiesController < ApplicationController
   # POST /patient_allergies
   # POST /patient_allergies.xml
   def create
+	name = params["patient_allergy"].delete("name")
+	patient = params["patient_allergy"].delete("patient_id")
     @patient_allergy = PatientAllergy.new(params[:patient_allergy])
-    @patient_allergy.patient = @patient
-		
+	allergy = Allergy.find_by_name(name)
+	if !allergy
+		allergy = Allergy.new(:name => name)
+	end
+    @patient_allergy.allergy = allergy
+	@patient_allergy.patient = Patient.find(patient)
     respond_to do |format|
       if @patient_allergy.save
         flash[:notice] = "The patient's allergy was successfully created."
