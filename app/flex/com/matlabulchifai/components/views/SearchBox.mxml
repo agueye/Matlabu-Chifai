@@ -386,7 +386,7 @@
 			            <mx:DataGridColumn headerText="" width="110" editable="false">
 			                   	<mx:itemRenderer>
 			                 		<mx:Component>
-			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                        	<mx:Button label="{outerDocument.languageArray['View Patient']}" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
 			                    </mx:itemRenderer>
 						</mx:DataGridColumn>	       	                
 			        </mx:columns>
@@ -421,7 +421,8 @@
 			            <mx:DataGridColumn headerText="" width="110" editable="false">
 			                   	<mx:itemRenderer>
 			                 		<mx:Component>
-			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                        	<mx:Button label="{outerDocument.languageArray['View Patient']}" click="outerDocument.selectPatient(XML(data))" />
+			                       	</mx:Component>                                       
 			                    </mx:itemRenderer>
 						</mx:DataGridColumn>	       	                
 			        </mx:columns>
@@ -460,7 +461,7 @@
 			            <mx:DataGridColumn headerText="" width="110" editable="false">
 			                   	<mx:itemRenderer>
 			                 		<mx:Component>
-			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                        	<mx:Button label="{outerDocument.languageArray['View Patient']}" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
 			                    </mx:itemRenderer>
 						</mx:DataGridColumn>	       	                
 			        </mx:columns>
@@ -503,7 +504,7 @@
 			            <mx:DataGridColumn headerText="" width="110" editable="false">
 			                   	<mx:itemRenderer>
 			                 		<mx:Component>
-			                        	<mx:Button label="View Patient" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
+			                        	<mx:Button label="{outerDocument.languageArray['View Patient']}" click="outerDocument.selectPatient(XML(data))" />	                        </mx:Component>                                       
 			                    </mx:itemRenderer>
 						</mx:DataGridColumn>	       	                
 			        </mx:columns>
