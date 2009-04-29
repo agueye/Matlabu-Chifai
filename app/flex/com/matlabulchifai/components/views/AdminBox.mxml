@@ -9,6 +9,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import com.matlabulchifai.events.login.AccountCreateEvent;
+			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.components.admin.LogBox;
 					
 			[Bindable]
@@ -17,9 +19,16 @@
 			private function init():void{
 				
 			}
+			
+			private function handleAccountCreate(event:AccountCreateEvent):void{
+				// not sure if this is needed
+			}
+			
 		]]>
 	</mx:Script>
 	
-	<mlc:LogBox id="logBox"/>
+	<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
+	<mlc:AccountViewBox id="accountViewBox" languageArray="{languageArray}"/>
+	<mlc:LogBox id="logBox" languageArray="{languageArray}"/>
 
 </mx:VBox>

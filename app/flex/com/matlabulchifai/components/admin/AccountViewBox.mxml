@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+    label="{languageArray['Account Management']}"
+    creationComplete="init()">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+			import mx.collections.XMLListCollection;
+			import mx.core.Application;
+			
+			[Bindable]
+			public var languageArray:Object;
+			
+			[Bindable]
+			private var usersXLC:XMLListCollection;
+			
+			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
+			
+			private function init():void{
+				
+			}
+			
+			private function listUsers():void{
+				var rnd:int = Math.round(Math.random()*10000);
+				svcUsersList.url += "?rnd=" + rnd;
+				
+				try{
+					svcUsersList.send();
+				}
+				catch (error:Error){
+					Alert.show(languageArray["Could not retrieve user list."], languageArray["Server Error"]);
+				}
+			}
+			
+			private function handleUsersListResult(event:ResultEvent):void{
+				
+			}
+			
+			private function deleteUsers(user:XML):void {
+				svcUsersDestroy.url = "/" + user.id + ".xml" + authToken;
+				
+				try{
+					svcUsersDestroy.send({_method:"DELETE"});
+				}
+				catch (error:Error){
+					Alert.show("Could not delete user.", "Server Error");
+				}
+				
+    		}
+    		
+    		private function handleUsersDestroyResult(event:ResultEvent):void{
+    			
+    		}
+    		
+    		private function showUserCreateBox():void{
+    			// doesn't exist yet
+    		}
+    		
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService
+        id="svcUsersList"
+        url="/users.xml"
+        resultFormat="e4x"
+        result="handleUsersListResult(event)"/>
+        
+    <mx:HTTPService
+        id="svcUsersDestroy"
+        url="/users"
+        resultFormat="e4x"
+        method="POST"
+        result="handleUsersDestroyResult(event)"/>
+	
+	<mx:Panel title="{languageArray['User List']}" width="100%" height="100%" 
+		paddingTop="5" paddingLeft="5" paddingRight="5">
+		<mx:LinkButton label="{languageArray['Add User']}" color="#0000FF" click="showUserCreateBox()"/>
+		
+		<mx:DataGrid id="usersGrid" width="100%" height="100%" wordWrap="true" textAlign="center"
+			variableRowHeight="true" dataProvider="{usersXLC}">
+	        <mx:columns>
+				<mx:DataGridColumn headerText="{languageArray['Login']}" width="115"
+					dataField="login"/>
+				<mx:DataGridColumn headerText="{languageArray['First Name']}" width="150"
+					dataField="first_name" />
+				<mx:DataGridColumn headerText="{languageArray['Last Name']}" width="90"
+					dataField="last_name"/>
+				<mx:DataGridColumn headerText="{languageArray['Created On']}" width="90"
+					dataField="created_at"/>
+				<mx:DataGridColumn headerText="" width="70" 
+	                    editable="false">
+	                    <mx:itemRenderer>
+	                        <mx:Component>
+	                            <mx:Button label="Delete" click="" />
+	                        </mx:Component>
+	                    </mx:itemRenderer>
+				</mx:DataGridColumn>
+			</mx:columns>
+		</mx:DataGrid>
+	</mx:Panel>	
+	
+</mx:VBox>

@@ -24,8 +24,11 @@
 			private function handleAccountCreateResult(event:ResultEvent):void{
 				var result:Object = event.result;
 				if(result == "error"){
-					Alert.show("Your account was not created.", "Error");
+					Alert.show("The account was not created.", "Error");
 				}else{
+					Alert.show("The account was created successfully.", "Success");
+					firstNameTI.text = lastNameTI.text = passwordTI.text = 
+						confirmPasswordTI.text = loginTI.text = "";
 					dispatchEvent(new AccountCreateEvent(XML(result)));
 				}
 			}

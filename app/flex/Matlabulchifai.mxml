@@ -280,10 +280,6 @@
 		login(e.user);
 	}
 	
-	private function handleAccountCreate(e:AccountCreateEvent):void{
-		login(e.user);
-	}
-	
 	private function handleLogout():void{
 		// invalidate session by invoking ruby logout, possibly attach event to login box and handle there
 		mainMenu.visible = false;
@@ -431,7 +427,6 @@
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" languageArray="{languageArray}" login="handleLogin(event)"/>
 				<mx:Button click="bypassLogin()" label="Bypass Login"/>								
-				<mlc:AccountCreateBox id="accountCreateBox" languageArray="{languageArray}" accountCreate="handleAccountCreate(event)"/>
 			</mx:VBox>
 			<mlc:AlertGridBox id="alertBox"
 				patientsXLC="{patientsXLC}"

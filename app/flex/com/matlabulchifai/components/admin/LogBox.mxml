@@ -22,7 +22,7 @@
 					svcGetLog.send();
 				}
 				catch (error:Error){
-					Alert.show("Unable to download file.", "File Request Error");
+					Alert.show(languageArray["Unable to download file."], languageArray["Server Error"]);
 				}
 			}
 			
@@ -40,7 +40,7 @@
 		result="handleGetLogResult(event)"/>
 	
 	<mx:VBox height="100%" width="100%">
-		<mx:Button id="logRefreshBTN" label="Refresh Log" click="init()"/>
+		<mx:Button id="logRefreshBTN" label="{languageArray['Refresh Log']}" click="init()"/>
 		<mx:TextArea id="logTA" editable="false" height="100%" width="100%"/>
 	</mx:VBox>
 	

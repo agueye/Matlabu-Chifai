@@ -5,6 +5,7 @@ public function languageInit(str:String):void{
 	
 	if (str == "ENGLISH"){
 		languageArray = {
+			"Account Management": "Account Management",
 			"Add Alert": "Add Alert",
 		  	"Add New Note":"Add New Note",
 		  	"Add New Visit":"Add New Visit",
@@ -13,6 +14,7 @@ public function languageInit(str:String):void{
 		  	"Add New Patient":"Add New Patient",
 		  	"Add New Prescription":"Add New Prescription",
 			"Add Patient": "Add Patient",
+			"Add User": "Add User",
 			"Address": "Address",
 			"Administration": "Administration",
 			"Alert Date": "Alert Date",
@@ -28,8 +30,10 @@ public function languageInit(str:String):void{
 			"Condition List":"Condition List",
 			"Condition Name":"Condition Name",
 			"Confirm Password": "Confirm Password",
+			"Could not retrieve user list.": "Could not retrieve user list.",
 			"Create Account": "Create a New Account",
 			"Create": "Create",
+			"Created On": "Created On",
 			"Date of Birth": "Date of Birth",
 		  	"Date Administered":"Date Administered",
 		  	"Date Given":"Date Given",
@@ -78,17 +82,21 @@ public function languageInit(str:String):void{
 			"Prescription List":"Prescription List",
 			"Reaction":"Reaction",
 		  	"Reason":"Reason",
+		  	"Refresh Log": "Refresh Log",
 		  	"Search by Allergy Name": "Search by Allergy Name",
 		  	"Search by Condition Name": "Search by Condition Name",
 		  	"Search by Medicine Name":"Search by Medicine Name",
 			"Search by Patient Name": "Search by Patient Name",
 			"Search by Vaccination Name": "Search by Vaccination Name",
 			"Search": "Search",
+			"Server Error": "Server Error",
 			"Severity":"Severity",
 			"Show All": "Show All",
 			"State": "State",
 			"Telephone": "Telephone",
+			"User List": "User List",
 			"Username":"Username",
+			"Unable to download file.": "Unable to download file.",
 			"Vaccination List":"Vaccination List",
 			"Vaccination Name":"Vaccination Name",
 			"Vaccinations":"Vaccinations",
@@ -219,8 +227,15 @@ public function languageInit(str:String):void{
 		  "Condition Name":"Condition Name",
 		  "Visit Date":"Visit Date",
 		  "Visit Type":"Visit Type",
-		  "Doctor Name":"Doctor Name"
-		  
+		  "Doctor Name":"Doctor Name",
+		  "Account Management": "Account Management",
+		  "Could not retrieve user list.": "Could not retrieve user list.",
+		  "Server Error": "Server Error",
+		  "Created On": "Created On",
+		  "Add User": "Add User",
+		  "User List": "User List",
+		  "Refresh Log": "Refresh Log",
+		  "Unable to download file.": "Unable to download file."
 			}
 		return;
 	}
