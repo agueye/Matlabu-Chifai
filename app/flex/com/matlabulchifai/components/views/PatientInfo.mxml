@@ -44,17 +44,8 @@
 	public function init():void {
 		patientID = patient.id;
     	rnd = Math.round(Math.random()*1000);
-		listAll();
-		patientInfoMain.selectedIndex = 0;			
-	}
-	
-	public function listAll():void {
 		listAlerts();
-		listAllergies();
-		listNotes();
-		listPrescriptions();
-		listVaccinations();
-		listVisits();
+		patientInfoMain.selectedIndex = 0;			
 	}
 	
 	public function listAlerts():void {
@@ -359,17 +350,22 @@
 						<mx:Label text="{patient['notes']}" fontSize="12"/>
 					</mx:HBox>
 	   			</mx:Panel>
-	   		</mx:VBox>							
+	   		</mx:VBox>
 	   		<mx:VBox label="{languageArray['Notes']}" show="listNotes()">
-	   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" click="showNoteCreateTitleWin()"/>					
-	   			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
-	   				dataProvider="{notesXLC}">						
-	   				<mx:columns>														
-	   					<mx:DataGridColumn headerText="{languageArray['Note']}" dataField="body"/>							
-	   					<mx:DataGridColumn headerText="{languageArray['Note Date']}" dataField="note_date"/>						
-	   				</mx:columns>					
-	   			</mx:DataGrid>
-	   		</mx:VBox>				
+	   			<mx:Panel title="{languageArray['Note List']}" width="100%" height="100%" 
+	   				paddingTop="5" paddingLeft="5" paddingRight="5">
+		   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" click="showNoteCreateTitleWin()"/>
+		   			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
+		   				dataProvider="{notesXLC}" wordWrap="true" variableRowHeight="true">						
+		   				<mx:columns>														
+		   					<mx:DataGridColumn headerText="{languageArray['Note Date']}" 
+		   						dataField="note_date" width="90"/>							
+		   					<mx:DataGridColumn headerText="{languageArray['Note']}" 
+		   						dataField="body"/>						
+		   				</mx:columns>					
+		   			</mx:DataGrid>
+	   			</mx:Panel>
+	   		</mx:VBox>										
 	   		<mx:VBox label="{languageArray['Prescriptions']}" show="listPrescriptions()">					
 	   			<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" dataProvider="{prescriptionsXLC}">						
 		   			<mx:columns>														
