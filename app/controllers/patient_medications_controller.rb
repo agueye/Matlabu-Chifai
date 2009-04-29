@@ -1,5 +1,5 @@
 class PatientMedicationsController < ApplicationController
-  before_filter :get_patient, :except => :find
+  before_filter :get_patient, :except => [:find, :create]
   
   # GET /patient_medications
   # GET /patient_medications.xml
@@ -56,8 +56,24 @@ class PatientMedicationsController < ApplicationController
   # POST /patient_medications
   # POST /patient_medications.xml
   def create
-    @patient_medication = PatientMedication.new(params[:patient_medication])
-    @patient_medication.patient = @patient
+	name = params["patient_prescription"].delete("name")
+	patient = params["patient_prescription"].delete("patient_id")
+	condition_n = params["patient_prescription"].delete("condition")
+	doctor = params["patient_prescription"].delete("doctor")
+    @patient_medication = PatientMedication.new(params[:patient_prescription])
+	medication = Medication.find_by_name(name)
+	if !medication
+		medication = Medication.new(:name => name)
+	end
+	condition = Condition.find_by_name(condition_n)
+	if !condition
+		condition = Condition.new(:name => name)
+	end
+	@patient_medication.medication = medication
+	@patient_medication.condition = condition
+	@patient_medication.doctor = Doctor.find(doctor)
+	@patient_medication.patient = Patient.find(patient)
+
     
     respond_to do |format|
       if @patient_medication.save

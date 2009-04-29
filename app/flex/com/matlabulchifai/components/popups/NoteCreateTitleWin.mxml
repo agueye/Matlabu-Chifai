@@ -2,7 +2,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="vertical" 
 	width="500" 
-	height="250"
+	height="300"
 	title="Add New Note"
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
@@ -41,17 +41,17 @@
 	
 	<mx:HTTPService
 		id="svcNoteCreate"
-		url="/notes.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		url="/patient_notes.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
 		result="handleNewNoteResult(event)">
 		<mx:request>
-			<note>								
+			<patient_note>								
 				<patient_id>{patientID}</patient_id>
 				<body>{NotesTI.text}</body>
-				<dateMade>{noteDateDF.text}</dateMade>
-			</note>
+				<note_date>{noteDateDF.text}</note_date>
+			</patient_note>
 		</mx:request>
 	</mx:HTTPService>
 	
@@ -62,7 +62,7 @@
 			<mx:FormItem label="Notes">
 				<mx:TextArea id="NotesTI" width="300" height="100" />
 			</mx:FormItem>
-			
+			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
 				<mx:DateField id="noteDateDF" yearNavigationEnabled="true" minYear="1980" />
 			</mx:FormItem>

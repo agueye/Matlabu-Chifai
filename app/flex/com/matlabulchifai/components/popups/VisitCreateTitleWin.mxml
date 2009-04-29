@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="vertical" 
-	width="400" 
-	height="450"
+	width="425" 
+	height="550"
 	title="Add New Visit"
 	showCloseButton="true"
+	creationComplete="init()"
     close="PopUpManager.removePopUp(this)">
 	
 	<mx:Script>
 		<![CDATA[
+			import flash.events.Event;
 			import mx.collections.ArrayCollection;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.events.patient.VisitEvent;
+			import com.matlabulchifai.events.patient.ConditionEvent;
+			import com.matlabulchifai.events.patient.VisitTypeEvent;
+			
 			import mx.core.Application;
 			
 			[Bindable]
@@ -20,13 +25,55 @@
 			[Bindable]
 			public var patientID:Number;
 			[Bindable]
-			private var reasons:ArrayCollection = new ArrayCollection(
-			[ { label:"Malaria", data:"malaria" }, { label:"Flu", data:"flu" }, 
-				{ label:"Food poisoning", data:"food poisoning" }, { label:"Other...", data:"" }]);
+			public var conditionIdMap:Object;
 			[Bindable]
-			private var yesNo:ArrayCollection = new ArrayCollection(
-			[ { label:"Yes", data:"yes" }, { label:"No", data:"no" } ]);
+			public var visitTypeIdMap:Object;
+			[Bindable]
+			public var doctorIdMap:Object;
+			[Bindable]
+			private var conditions:ArrayCollection;
+			[Bindable]
+			private var visitTypes:ArrayCollection;
+			[Bindable]
+			private var doctors:ArrayCollection;
 			
+			
+			private function init():void {
+				initVisitType();
+				initConditions();
+				initDoctors();
+			}
+			
+			private function initVisitType():void {
+				var i:int;
+				visitTypes = new ArrayCollection();
+				for (i = 1; visitTypeIdMap[i] != null; i++) {
+					var vt:XML = visitTypeIdMap[i];
+					visitTypes.addItem( { label: vt.name, data: vt.name } );
+				}
+				visitTypes.addItem( { label:"New...", data:"" } );
+			}
+			
+			private function initConditions():void {
+				var i:int;
+				conditions = new ArrayCollection();
+				for (i = 1; conditionIdMap[i] != null; i++) {
+					var cond:XML = conditionIdMap[i];
+					conditions.addItem( { label: cond.name, data: cond.name } );
+				}
+				conditions.addItem( { label:"Other...", data:"" } );
+			}
+			
+			private function initDoctors():void {
+				var i:int;
+				doctors = new ArrayCollection();
+				for (i = 1; doctorIdMap[i] != null; i++) {
+					var doctor:XML = doctorIdMap[i];
+					doctors.addItem( { label: doctor.first_name + " " + 
+						doctor.middle_name + " " + doctor.last_name, data: doctor.id } );
+				}
+			}
+				
 			private function processVisitCreate():void{
 				svcVisitCreate.send();
 				PopUpManager.removePopUp(this);
@@ -37,6 +84,25 @@
 				Matlabulchifai.debug("visit created = \n" + resultXML);
 				dispatchEvent(new VisitEvent(VisitEvent.VISIT_CREATE, resultXML));
 			}
+			
+			private function checkConditionCB(event:Event):void {
+				if (conditionCB.selectedLabel == "Other...") {
+					otherTI.enabled = true;
+				} else {
+					otherTI.text = "";
+					otherTI.enabled = false;
+				}
+			}
+			
+			private function checkTypeCB(event:Event):void {
+				if (typeCB.selectedLabel == "New...") {
+					newTI.enabled = true;
+				} else {
+					newTI.text = "";
+					newTI.enabled = false;
+				}
+			}
+			
 			[Bindable]
 			public var languageArray:Object;
 		]]>
@@ -48,44 +114,79 @@
 	
 	<mx:HTTPService
 		id="svcVisitCreate"
-		url="/visits.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		url="/patient_visits.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
 		result="handleNewVisitResult(event)">
 		<mx:request>
-			<visit>
-				<reason>{reasonCB.text + otherTI.text}</reason>
-				<followUp>{followupCB.text}</followUp>
-				<dateSeen>{visitDateDF.text}</dateSeen>
+			<patient_visit>
+				<condition>{conditionCB.value + otherTI.text}</condition>
+				<type>{typeCB.value + newTI.text}</type>
+				<visit_date>{visitDateDF.text}</visit_date>
 				<notes>{visitNotesTA.text}</notes>
+				<height>{HeightTI.text}</height>
+				<weight>{WeightTI.text}</weight>
+				<blood_pressure>{BloodPressureTI.text}</blood_pressure>
+				<pulse>{PulseTI.text}</pulse>
+				<temperature>{TemperatureTI.text}</temperature>
+				<doctor>{String(doctorCB.value)}</doctor>
 				<patient_id>{patientID}</patient_id>
-			</visit>
+			</patient_visit>
 		</mx:request>
 	</mx:HTTPService>
 	
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form>
-			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />					
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" fontSize="10" />					
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Reason">
-			<mx:ComboBox id="reasonCB" dataProvider="{reasons}" />
+			<mx:FormItem label="Visit Type">
+				<mx:ComboBox id="typeCB" dataProvider="{visitTypes}" change="checkTypeCB(event)" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Other">
+			<mx:FormItem label="New" paddingLeft="10">
+				<mx:TextInput id="newTI" enabled="false" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Condition">
+			<mx:ComboBox id="conditionCB" dataProvider="{conditions}" change="checkConditionCB(event)" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Other" paddingLeft="10">
 				<mx:TextInput id="otherTI" enabled="false" width="100%"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Follow up?">
-				<mx:ComboBox id="followupCB" dataProvider="{yesNo}" />
-			</mx:FormItem>
-			<mx:Spacer height="5" />
-			
 			<mx:FormItem label="Date">
 				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
+			<mx:FormItem label="Doctor">
+				<mx:ComboBox id="doctorCB" dataProvider="{doctors}" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:Text text="Physicals" fontWeight="bold" />
+			<mx:FormItem label="Height">
+				<mx:TextInput id="HeightTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Weight">
+				<mx:TextInput id="WeightTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Blood Pressure">
+				<mx:TextInput id="BloodPressureTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Pulse">
+				<mx:TextInput id="PulseTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Temperature">
+				<mx:TextInput id="TemperatureTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			
 			<mx:FormItem label="Notes">
 				<mx:TextArea id="visitNotesTA" width="200" height="150" />
 			</mx:FormItem>

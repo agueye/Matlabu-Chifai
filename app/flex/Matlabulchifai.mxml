@@ -30,6 +30,8 @@
     import mx.collections.XMLListCollection;    
     import com.matlabulchifai.events.patient.PatientEvent;
     import com.matlabulchifai.events.patient.AlertEvent;
+	import com.matlabulchifai.events.patient.ConditionEvent;
+	import com.matlabulchifai.events.patient.VisitTypeEvent;
     import flash.net.navigateToURL;
  	import mx.events.BrowserChangeEvent;
  	import mx.utils.URLUtil;
@@ -351,6 +353,16 @@
 		//select patientinfo view and pass in patient information
 		alertBox.listAlerts();
 	}
+	
+	//update conditions id map upon condition creation by requesting new svcConditionsList
+	private function handleConditionCreateEvent(event:ConditionEvent):void {
+		listConditions();
+	}
+	
+	//update visit types id map upon visit type creation by requesting new svcVisitTypesList
+	private function handleVisitTypeCreateEvent(event:VisitTypeEvent):void {
+		listVisitTypes();
+	}
 			
 	]]>
 </mx:Script>
@@ -443,7 +455,9 @@
 				conditionIdMap="{conditionIdMap}"
 				medicationIdMap="{medicationIdMap}"
 				visitTypeIdMap="{visitTypeIdMap}"
-				doctorIdMap="{doctorIdMap}"/>
+				doctorIdMap="{doctorIdMap}"
+				conditionCreate="handleConditionCreateEvent(event)"
+				visitTypeCreate="handleVisitTypeCreateEvent(event)" />
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>

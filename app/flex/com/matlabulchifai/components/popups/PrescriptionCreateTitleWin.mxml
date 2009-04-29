@@ -41,19 +41,23 @@
 	
 	<mx:HTTPService
 		id="svcPrescriptionCreate"
-		url="/prescriptions.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		url="/patient_medications.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
 		result="handleNewPrescriptionResult(event)">
 		<mx:request>
-			<prescription>								
+			<patient_prescription>				
 				<patient_id>{patientID}</patient_id>
 				<name>{NameTI.text}</name>
 				<dosage>{DosageTI.text}</dosage>
 				<frequency>{FrequencyTI.text}</frequency>
-				<dateGiven>{prescriptionDateDF.text}</dateGiven>
-			</prescription>
+				<date_given>{PrescriptionDateDF.text}</date_given>
+				<condition>{ConditionTI.text}</condition>
+				<doctor>{DoctorTI.text}</doctor>
+				<notes>{NotesTA.text}</notes>
+				
+			</patient_prescription>
 		</mx:request>
 	</mx:HTTPService>
 	
@@ -74,7 +78,19 @@
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
-				<mx:DateField id="prescriptionDateDF" yearNavigationEnabled="true" minYear="1980" />
+				<mx:DateField id="PrescriptionDateDF" yearNavigationEnabled="true" minYear="1980" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Condition">
+				<mx:TextInput id="ConditionTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Doctor">
+				<mx:TextInput id="DoctorTI" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Notes">
+				<mx:TextArea id="NotesTA" width="100%"/>
 			</mx:FormItem>
 			
 		<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">

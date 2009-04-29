@@ -1,5 +1,5 @@
 class PatientNotesController < ApplicationController
-  before_filter :get_patient
+  before_filter :get_patient, :except => :create
   
   # GET /patient_notes
   # GET /patient_notes.xml
@@ -43,8 +43,9 @@ class PatientNotesController < ApplicationController
   # POST /patient_notes
   # POST /patient_notes.xml
   def create
+  	patient = params["patient_note"].delete("patient_id")
     @patient_note = PatientNote.new(params[:patient_note])
-    @patient_note.patient = @patient
+    @patient_note.patient = Patient.find(patient)
 
     respond_to do |format|
       if @patient_note.save
