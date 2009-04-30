@@ -9,8 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.patient_search '/patients/search.:format', :controller => "patients", :action => "find"  
   map.allergy_search '/patient_allergies/search.:format', :controller => "patient_allergies", :action => "find"
-  map.vaccination_search '/patient_vaccination/search.:format', :controller => "patient_vaccination", :action => "find"
-  map.medication_search '/patient_medication/search.:format', :controller => "patient_medication", :action => "find"
+  map.vaccination_search '/patient_vaccinations/search.:format', :controller => "patient_vaccinations", :action => "find"
+  map.medication_search '/patient_medications/search.:format', :controller => "patient_medications", :action => "find"
   map.condtion_search '/patient_visits/search.:format', :controller => "patient_visits", :action => "find"
   
   map.connect '/patients/:patient_id/patient_physicals/:action', 
