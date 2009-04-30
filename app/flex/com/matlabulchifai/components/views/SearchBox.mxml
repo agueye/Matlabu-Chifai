@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:mlc="com.matlabulchifai.components.views.*" 
+	xmlns:mlc="com.matlabulchifai.components.views.*"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
 	width="100%" 
 	height="100%"
     verticalGap="0"
@@ -10,6 +12,7 @@
     
 <mx:Script>
 <![CDATA[
+	import mx.collections.ArrayCollection;
 	import mx.events.ListEvent;
 	import mx.messaging.channels.StreamingAMFChannel;
 	import mx.collections.IViewCursor;
@@ -60,9 +63,23 @@
     private var execAsap:Boolean = false;
     
     private var patientPopUp:PatientCreateTitleWin;
-   
+
+	[Bindable]
+	public var colors:ArrayCollection;
+
+	private function colorInit():void
+	{
+		colors = new ArrayCollection(
+		[
+			{ "name":"Almond", "hex":"#EED9C4" },
+			{ "name":"Antique Brass", "hex":"#C88A65" },
+			{ "name":"Apricot", "hex":"#FDD5B1" },
+			{ "name":"Yellow Orange", "hex":"#FFAE42" }
+		] );				
+	}			
     
     private function init():void {
+    	colorInit();
     	searchPatient();
     	searchMain.selectedIndex = 0;
     	rnd = Math.round(Math.random()*1000);
@@ -371,6 +388,7 @@
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Allergy Name']}: "></mx:Label>
 					<mx:TextInput id="searchAllergyTI" change="searchAllergy()"/>
+					<hc:AutoComplete id="autoComplete" dataProvider="{ colors }"  />
 					<mx:Button id="searchAllergyButton" label="{languageArray['Search']}" click="searchAllergy()"/>
 					<mx:Button id="showAllAllergiesButton" label="{languageArray['Show All']}" click="showAllAllergies()"/>
 				</mx:HBox>
