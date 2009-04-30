@@ -419,12 +419,13 @@
 					<mx:Text height="100%" width="100%" fontFamily="Comic Sans MS" fontSize="55" color="white" text="Matlabul Chifai"/>
 					<mx:Button click="languageInit('FRENCH');" label="Use French" />
 					<mx:Button click="languageInit('ENGLISH');" label="Use English" />
+					<mx:Button click="languageInit('HINDI');" label="Use Hindi" />
 				</mx:HBox>
 		</mx:Canvas>
-		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false" >
+		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false">
 			<mx:XMLList>
 	            <menuitem label="{languageArray['Alerts']}"/>
-	            <menuitem label="{languageArray['Search']}"/>
+	            <menuitem label="{languageArray['Search']}" />
 	            <menuitem label="{languageArray['Administration']}"/>
 	            <menuitem label="{languageArray['Logout']}"/>
 	        </mx:XMLList>
