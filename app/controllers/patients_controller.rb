@@ -3,6 +3,7 @@ class PatientsController < ApplicationController
   # GET /patients.xml
   def index
     @patients = Patient.find(:all)
+    @patients.sort! {|x,y| x.last_name <=> y.last_name}
 
     respond_to do |format|
       format.html # index.html.erb

@@ -193,8 +193,14 @@
             return null; 
     }
     
-	public function selectPatient(patient:XML):void {		
-		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_SELECT, patient));
+	public function selectPatient(record:XML):void {
+		var patient:XML;
+		if(record.hasOwnProperty("patient_id")) {
+			patient = patientIdMap[record.patient_id];
+			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_SELECT, patient));
+		} else {
+			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_SELECT, record));
+		}		
 	}
 	
 	public function deletePatient(patient:XML):void {

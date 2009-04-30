@@ -31,7 +31,7 @@
 			[Bindable]
 			private var vaccinationNames:ArrayCollection;
 			
-			private function init() {
+			private function init():void{
 				initVaccinationNames();
 			}
 			
@@ -56,7 +56,7 @@
 				dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, resultXML));	
 			}
 			
-			private function checkVaccNameCB(event:Event){
+			private function checkVaccNameCB(event:Event):void{
 				if (vaccNameCB.selectedLabel == "Other...") {
 					otherTI.enabled = true;
 				} else {
