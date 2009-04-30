@@ -94,16 +94,13 @@
 			<mx:FormItem label="Notes">
 				<mx:TextArea id="NotesTA" width="100%"/>
 			</mx:FormItem>
-			
-		<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
-			<mx:Button label="OK" id="OKBtn" click="processPrescriptionCreate()" />
-			<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
-		</mx:HBox>
-			
 		</mx:Form>
 	</mx:VBox>
 	
 	
-	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
+		<mx:Button label="OK" id="OKBtn" click="processPrescriptionCreate()" />
+		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
 	
 </mx:TitleWindow>

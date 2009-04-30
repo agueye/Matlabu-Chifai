@@ -186,7 +186,6 @@
 				<mx:TextInput id="TemperatureTI" width="100%"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			
 			<mx:FormItem label="Notes">
 				<mx:TextArea id="visitNotesTA" width="200" height="150" />
 			</mx:FormItem>
