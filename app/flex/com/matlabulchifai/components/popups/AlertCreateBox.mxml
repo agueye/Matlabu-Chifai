@@ -67,7 +67,8 @@
 	                dataProvider="{patientsXLC}"/>
         	</mx:FormItem>
 			<mx:FormItem required="true" label="Alert Date">
-				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980" />
+				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980"
+					 creationComplete="dateTI.selectedDate = new Date();"/>
 			</mx:FormItem>
 			<mx:FormItem required="true" label="{languageArray['Alert Note']}">
 				<mx:TextArea id="noteTA" width="200" height="150" />

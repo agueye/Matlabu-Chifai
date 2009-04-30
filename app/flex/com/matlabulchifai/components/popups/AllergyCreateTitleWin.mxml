@@ -101,7 +101,8 @@
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
-				<mx:DateField id="allergyDateDF" yearNavigationEnabled="true" minYear="1980" />
+				<mx:DateField id="allergyDateDF" yearNavigationEnabled="true" minYear="1980"
+					creationComplete="allergyDateDF.selectedDate = new Date();" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Severity">		

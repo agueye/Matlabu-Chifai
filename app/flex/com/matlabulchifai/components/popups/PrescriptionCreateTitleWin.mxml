@@ -79,8 +79,9 @@
 				<mx:TextInput id="FrequencyTI" width="100%"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date">
-				<mx:DateField id="PrescriptionDateDF" yearNavigationEnabled="true" minYear="1980" />
+			<mx:FormItem label="Date Given">
+				<mx:DateField id="PrescriptionDateDF" yearNavigationEnabled="true" minYear="1980"
+					creationComplete="PrescriptionDateDF.selectedDate = new Date();" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Condition">

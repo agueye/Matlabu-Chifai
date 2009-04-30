@@ -115,7 +115,7 @@
         
 	<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
 		paddingTop="5" paddingLeft="5" paddingRight="5">
-		<mx:LinkButton label="{languageArray['Add Alert']}" color="#0000FF" click="showAlertCreateBox()"/>
+		<mx:LinkButton label="{languageArray['Add New Alert']}" color="#0000FF" click="showAlertCreateBox()"/>
 		<mx:DataGrid id="alertsGrid" width="100%" height="100%" itemClick="alertClicked(event)" wordWrap="true" textAlign="center"
 			variableRowHeight="true" dataProvider="{alertsXLC}">
 	        <mx:columns>
@@ -127,11 +127,11 @@
 					dataField="alert_date"/>
 				<mx:DataGridColumn headerText="{languageArray['Alert Note']}"
 					dataField="notes"/>
-				<mx:DataGridColumn headerText="" width="70" 
+				<mx:DataGridColumn headerText="" width="150" 
 	                    editable="false">
 	                    <mx:itemRenderer>
 	                        <mx:Component>
-	                            <mx:Button label="Delete" click="outerDocument.deleteAlert(XML(data))" />
+	                            <mx:Button label="{outerDocument.languageArray['Delete Alert']}" click="outerDocument.deleteAlert(XML(data))" />
 	                        </mx:Component>
 	                    </mx:itemRenderer>
 				</mx:DataGridColumn>

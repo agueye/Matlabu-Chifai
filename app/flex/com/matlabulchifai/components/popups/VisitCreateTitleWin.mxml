@@ -158,7 +158,8 @@
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
-				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980" />
+				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"
+					creationComplete="visitDateDF.selectedDate = new Date();" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Doctor">

@@ -117,7 +117,9 @@
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
-					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" />
+					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" 
+						minYear="1930" maxYear="{currDate.getFullYear()}"
+						creationComplete="arrivaldateTI.selectedDate = new Date();"/>
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['Date of Birth']}">

@@ -6,7 +6,7 @@ public function languageInit(str:String):void{
 	if (str == "ENGLISH"){
 		languageArray = {
 			"Account Management": "Account Management",
-			"Add Alert": "Add Alert",
+			"Add New Alert": "Add New Alert",
 		  	"Add New Note":"Add New Note",
 		  	"Add New Visit":"Add New Visit",
 		  	"Add New Allergy":"Add New Allergy",
@@ -40,7 +40,7 @@ public function languageInit(str:String):void{
 		  	"Date Given":"Date Given",
 		  	"Date Observed":"Date Observed",		  
 		  	"Date Seen":"Date Seen",
-		  	"Delete":"Delete",
+		  	"Delete Alert":"Delete Alert",
 		  	"Delete Patient":"Delete Patient",
 		  	"Doctor Name":"Doctor Name",
 		  	"Dosage":"Dosage",
@@ -114,7 +114,7 @@ public function languageInit(str:String):void{
 	}
 	if(str == "FRENCH"){
 		languageArray = {
-		  "Add Alert": "Ajouter Alerte",
+		  "Add New Alert": "Ajouter Nouvelle Alerte",
 		  "Add New Note":"Ajouter Nouvelle Remarques",
 		  "Add New Visit":"Ajouter Nouvelle Visite",
 		  "Add New Allergy":"Ajouter Nouvelle Allergie",
@@ -138,6 +138,7 @@ public function languageInit(str:String):void{
 		  "Date Observed":"Date d'Obeservation",
 		  "Date Seen":"Date de visite",
 		  "Delete":"D'effacement",
+		  "Delete Alert":"Alerte D'effacement",
 		  "Delete Patient":"Patient D'effacement",
 		  "Emergency Contact Name": "Contact en cas d'Urgence",
 		  "Emergency Contact Relationship": "Relation avec le contact",
