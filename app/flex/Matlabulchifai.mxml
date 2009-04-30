@@ -33,6 +33,7 @@
 	import com.matlabulchifai.events.patient.ConditionEvent;
 	import com.matlabulchifai.events.patient.VisitTypeEvent;
 	import com.matlabulchifai.events.patient.AllergyEvent;
+	import com.matlabulchifai.events.patient.VaccinationEvent;
     import flash.net.navigateToURL;
  	import mx.events.BrowserChangeEvent;
  	import mx.utils.URLUtil;
@@ -365,6 +366,12 @@
 	private function handleAllergyCreateEvent(event:AllergyEvent):void {
 		listAllergies();
 	}
+	
+	//update vaccinations id map upon vaccination creation by requesting new svcVaccinationsList
+	private function handleVaccinationCreateEvent(event:VaccinationEvent):void {
+		listVaccinations();
+	}
+		
 			
 	]]>
 </mx:Script>
@@ -460,7 +467,8 @@
 				doctorIdMap="{doctorIdMap}"
 				conditionCreate="handleConditionCreateEvent(event)"
 				visitTypeCreate="handleVisitTypeCreateEvent(event)"
-				allergyCreate="handleAllergyCreateEvent(event)" />
+				allergyCreate="handleAllergyCreateEvent(event)"
+				vaccinationCreate="handleVaccinationCreateEvent(event)" />
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>

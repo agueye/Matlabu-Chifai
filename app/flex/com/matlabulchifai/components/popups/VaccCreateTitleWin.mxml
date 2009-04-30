@@ -5,38 +5,66 @@
 	height="450"
 	title="{languageArray['Add New Vaccination']}"
 	showCloseButton="true"
+	creationComplete="init()"
     close="PopUpManager.removePopUp(this)">
 	
 	<mx:Metadata>
-		[Event(name="vaccCreate", type="com.matlabulchifai.events.patient.VaccinationEvent")]
+		[Event(name="patientVaccCreate", type="com.matlabulchifai.events.patient.PatientVaccinationEvent")]
 	</mx:Metadata>
 		
 	<mx:Script>
 		<![CDATA[
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
-			import com.matlabulchifai.events.patient.VaccinationEvent;
 			import mx.core.Application;
+			import mx.collections.ArrayCollection;
+			import com.matlabulchifai.events.patient.PatientVaccinationEvent;
 			
 			[Bindable]
 			public var patient:XML;
 			[Bindable]
 			public var patientID:Number;
+			[Bindable]
+			public var languageArray:Object;
+			[Bindable]
+			public var vaccinationIdMap:Object;
+			[Bindable]
+			private var vaccinationNames:ArrayCollection;
 			
+			private function init() {
+				initVaccinationNames();
+			}
+			
+			private function initVaccinationNames():void {
+				var i:int;
+				vaccinationNames = new ArrayCollection();
+				for (i = 1; vaccinationIdMap[i] != null; i++) {
+					var vacc:XML = vaccinationIdMap[i];
+					vaccinationNames.addItem( { label: vacc.name, data: vacc.name } );
+				}
+				vaccinationNames.addItem( { label:"Other...", data:"" } );
+			}
 			
 			private function processVaccinationCreate():void{
 				svcVaccinationCreate.send();
 				PopUpManager.removePopUp(this);
 			}
 			
-			
 			private function handleNewVaccinationResult(event:ResultEvent):void{
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("vaccination created = \n" + resultXML);
-				dispatchEvent(new VaccinationEvent(VaccinationEvent.VACCINATION_CREATE, resultXML));	
+				dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, resultXML));	
 			}
-			[Bindable]
-			public var languageArray:Object;
+			
+			private function checkVaccNameCB(event:Event){
+				if (vaccNameCB.selectedLabel == "Other...") {
+					otherTI.enabled = true;
+				} else {
+					otherTI.text = "";
+					otherTI.enabled = false;
+				}
+			}
+
 		]]>
 	</mx:Script>
 	
@@ -49,7 +77,7 @@
 		result="handleNewVaccinationResult(event)">
 		<mx:request>
 			<patient_vaccination>
-				<name>{vaccNameTI.text}</name>
+				<name>{vaccNameCB.value + otherTI.text}</name>
 				<date_admined>{vaccDateDF.text}</date_admined>
 				<notes>{vaccNotesTA.text}</notes>
 				<patient_id>{patientID}</patient_id>
@@ -63,7 +91,11 @@
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Vaccine">
-				<mx:TextInput id="vaccNameTI" width="100%"/>
+				<mx:ComboBox id="vaccNameCB" dataProvider="{vaccinationNames}" change="checkVaccNameCB(event)" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Other" paddingLeft="10">
+				<mx:TextInput id="otherTI" enabled="false" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date Administered">

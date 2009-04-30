@@ -10,6 +10,7 @@
 		[Event(name="conditionCreate", type="com.matlabulchifai.events.patient.ConditionEvent")]
 		[Event(name="visitTypeCreate", type="com.matlabulchifai.events.patient.VisitTypeEvent")]
 		[Event(name="allergyCreate", type="com.matlabulchifai.events.patient.AllergyEvent")]
+		[Event(name="vaccinationCreate", type="com.matlabulchifai.events.patient.VaccinationEvent")]
 	</mx:Metadata>
 		
 	<mx:Script>
@@ -34,6 +35,7 @@
 		import com.matlabulchifai.events.patient.ConditionEvent;
 		import com.matlabulchifai.events.patient.VisitTypeEvent;
 		import com.matlabulchifai.events.patient.PatientAllergyEvent;
+		import com.matlabulchifai.events.patient.PatientVaccinationEvent;
 
 		
 		[Bindable]
@@ -164,21 +166,27 @@
 		
 		private function showVaccCreateTitleWin():void {
 			vaccPopUp = VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
-			vaccPopUp.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
+			vaccPopUp.addEventListener(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, handlePatientVaccEvent);
 			vaccPopUp.patient = this.patient;
 			vaccPopUp.languageArray = this.languageArray;
 			vaccPopUp.patientID = this.patientID;
+			vaccPopUp.vaccinationIdMap = this.vaccinationIdMap;
 			PopUpManager.centerPopUp(vaccPopUp);
 		}
 		
-		public function handleVaccEvent(event:Event):void {
+		//upon receiving a fresh patient vaccination:
+		//update the vaccinations id map via dispatching a new VaccinationEvent
+		//make sure that the event is dispatched before calling listVaccinations()	
+		public function handlePatientVaccEvent(event:Event):void {
+			var resultXML:XML;
+			dispatchEvent(new VaccinationEvent(VaccinationEvent.VACCINATION_CREATE, resultXML));
 			listVaccinations();
-			removeVaccEventListener();
+			removePatientVaccEventListener();
 		}
 		
-		public function removeVaccEventListener():void {
-			if (vaccPopUp.hasEventListener(VaccinationEvent.VACCINATION_CREATE)) {
-				vaccPopUp.removeEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccEvent);
+		public function removePatientVaccEventListener():void {
+			if (vaccPopUp.hasEventListener(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE)) {
+				vaccPopUp.removeEventListener(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, handlePatientVaccEvent);
 			}
 		}
 		
