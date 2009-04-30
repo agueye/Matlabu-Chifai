@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="vertical" 
-	width="500" 
-	height="350"
+	width="475" 
+	height="520"
 	title="{languageArray['Add New Prescription']}"
 	showCloseButton="true"
+	creationComplete="init()"
     close="PopUpManager.removePopUp(this)">
 	<mx:Metadata>
-		[Event(name="prescriptionCreate", type="com.matlabulchifai.events.patient.PrescriptionEvent")]
+		[Event(name="patientPrescriptionCreate", type="com.matlabulchifai.events.patient.PatientPrescriptionEvent")]
 	</mx:Metadata>
 		
 	<mx:Script>
@@ -15,27 +16,91 @@
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
-			import com.matlabulchifai.events.patient.PrescriptionEvent;
+			import com.matlabulchifai.events.patient.PatientPrescriptionEvent;
 			import mx.core.Application;
 			
 			[Bindable]
 			public var patient:XML;
 			[Bindable]
 			public var patientID:Number;
-			
+			[Bindable]
+			public var conditionIdMap:Object;
+			[Bindable]
+			public var medicationIdMap:Object;
+			[Bindable]
+			public var doctorIdMap:Object;
+			[Bindable]
+			private var conditions:ArrayCollection;
+			[Bindable]
+			private var medicationNames:ArrayCollection;
+			[Bindable]
+			private var doctors:ArrayCollection;
 			[Bindable]
 			public var languageArray:Object;
 			
+			private function init():void {
+				initConditions();
+				initMedications();
+				initDoctors();
+			}
+			
+			private function initMedications():void {
+				var i:int;
+				medicationNames = new ArrayCollection();
+				for (i = 1; medicationIdMap[i] != null; i++) {
+					var med:XML = medicationIdMap[i];
+					medicationNames.addItem( { label: med.name, data: med.name } );
+				}
+				medicationNames.addItem( { label:"New...", data:"" } );
+			}
+			
+			private function initConditions():void {
+				var i:int;
+				conditions = new ArrayCollection();
+				for (i = 1; conditionIdMap[i] != null; i++) {
+					var cond:XML = conditionIdMap[i];
+					conditions.addItem( { label: cond.name, data: cond.name } );
+				}
+				conditions.addItem( { label:"Other...", data:"" } );
+			}
+			
+			private function initDoctors():void {
+				var i:int;
+				doctors = new ArrayCollection();
+				for (i = 1; doctorIdMap[i] != null; i++) {
+					var doctor:XML = doctorIdMap[i];
+					doctors.addItem( { label: doctor.first_name + " " + 
+						doctor.middle_name + " " + doctor.last_name, data: doctor.id } );
+				}
+			}
 			
 			private function handleNewPrescriptionResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("note created = \n" + resultXML);
-				dispatchEvent(new PrescriptionEvent(PrescriptionEvent.PRESCRIPTION_CREATE, resultXML));
+				dispatchEvent(new PatientPrescriptionEvent(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE, resultXML));
 			}
 			
 			private function processPrescriptionCreate():void{
 				svcPrescriptionCreate.send();
 				PopUpManager.removePopUp(this);
+			}
+			
+			private function checkConditionCB(event:Event):void {
+				if (conditionCB.selectedLabel == "Other...") {
+					otherTI.enabled = true;
+				} else {
+					otherTI.text = "";
+					otherTI.enabled = false;
+				}
+			}
+			
+			private function checkMedNameCB(event:Event):void {
+				if (medNameCB.selectedLabel == "New...") {
+					newTI.enabled = true;
+				} else {
+					newTI.text = "";
+					newTI.enabled = false;
+				}
 			}
 			
 		]]>
@@ -51,12 +116,12 @@
 		<mx:request>
 			<patient_prescription>				
 				<patient_id>{patientID}</patient_id>
-				<name>{NameTI.text}</name>
+				<name>{medNameCB.value + newTI.text}</name>
 				<dosage>{DosageTI.text}</dosage>
 				<frequency>{FrequencyTI.text}</frequency>
 				<date_given>{PrescriptionDateDF.text}</date_given>
-				<condition>{ConditionTI.text}</condition>
-				<doctor>{DoctorTI.text}</doctor>
+				<condition>{conditionCB.value + otherTI.text}</condition>
+				<doctor>{String(doctorCB.value)}</doctor>
 				<notes>{NotesTA.text}</notes>
 				
 			</patient_prescription>
@@ -67,8 +132,12 @@
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />		
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Name">
-				<mx:TextInput id="NameTI" width="100%"/>
+			<mx:FormItem label="Medication Name">
+				<mx:ComboBox id="medNameCB" dataProvider="{medicationNames}" change="checkMedNameCB(event)" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="New" paddingLeft="10">
+				<mx:TextInput id="newTI" enabled="false" width="100%"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Dosage">
@@ -85,11 +154,15 @@
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Condition">
-				<mx:TextInput id="ConditionTI" width="100%"/>
+			<mx:ComboBox id="conditionCB" dataProvider="{conditions}" change="checkConditionCB(event)" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Other" paddingLeft="10">
+				<mx:TextInput id="otherTI" enabled="false" width="100%"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Doctor">
-				<mx:TextInput id="DoctorTI" width="100%"/>
+				<mx:ComboBox id="doctorCB" dataProvider="{doctors}" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Notes">

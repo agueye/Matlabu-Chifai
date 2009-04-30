@@ -11,6 +11,7 @@
 		[Event(name="visitTypeCreate", type="com.matlabulchifai.events.patient.VisitTypeEvent")]
 		[Event(name="allergyCreate", type="com.matlabulchifai.events.patient.AllergyEvent")]
 		[Event(name="vaccinationCreate", type="com.matlabulchifai.events.patient.VaccinationEvent")]
+		[Event(name="prescriptionCreate", type="com.matlabulchifai.events.patient.PrescriptionEvent")]
 	</mx:Metadata>
 		
 	<mx:Script>
@@ -36,6 +37,7 @@
 		import com.matlabulchifai.events.patient.VisitTypeEvent;
 		import com.matlabulchifai.events.patient.PatientAllergyEvent;
 		import com.matlabulchifai.events.patient.PatientVaccinationEvent;
+		import com.matlabulchifai.events.patient.PatientPrescriptionEvent;
 
 		
 		[Bindable]
@@ -223,8 +225,8 @@
 			visitPopUp.patientID = this.patientID;
 			visitPopUp.visitTypeIdMap = this.visitTypeIdMap;
 			visitPopUp.conditionIdMap = this.conditionIdMap;
-			visitPopUp.languageArray = this.languageArray;
 			visitPopUp.doctorIdMap = this.doctorIdMap;
+			visitPopUp.languageArray = this.languageArray;
 			PopUpManager.centerPopUp(visitPopUp);
 		}
 		
@@ -268,21 +270,31 @@
 		
 		private function showPrescriptionCreateTitleWin():void {				    			
 			prescriptionPopUp = PrescriptionCreateTitleWin(PopUpManager.createPopUp(this, PrescriptionCreateTitleWin, true));    			
-			prescriptionPopUp.addEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);    			
-			prescriptionPopUp.patient = this.patient;	
-			prescriptionPopUp.languageArray = this.languageArray;				
-			prescriptionPopUp.patientID = this.patientID;    		
+			prescriptionPopUp.addEventListener(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE, handlePatientPrescriptionEvent);
+			prescriptionPopUp.patient = this.patient;				
+			prescriptionPopUp.patientID = this.patientID;  
+			prescriptionPopUp.medicationIdMap = this.medicationIdMap;
+			prescriptionPopUp.doctorIdMap = this.doctorIdMap;
+			prescriptionPopUp.conditionIdMap = this.conditionIdMap;
+			prescriptionPopUp.languageArray = this.languageArray;
 			PopUpManager.centerPopUp(prescriptionPopUp);    		
 		}						
 		
-		public function handlePrescriptionEvent(event:Event):void {				
+		//upon receiving a fresh patient prescription:
+		//update the conditions id map via dispatching a new ConditionEvent
+		//update the medication id map via dispatching a new PrescriptionEvent
+		//make sure events are dispatched before calling listPrescriptions()
+		public function handlePatientPrescriptionEvent(event:Event):void {
+			var resultXML:XML;
+			dispatchEvent(new ConditionEvent(ConditionEvent.CONDITION_CREATE, resultXML));
+			dispatchEvent(new PrescriptionEvent(PrescriptionEvent.PRESCRIPTION_CREATE, resultXML));
 			listPrescriptions();				
-			removePrescriptionEventListener();			
+			removePatientPrescriptionEventListener();			
 		}						
 		
-		public function removePrescriptionEventListener():void {				
-			if (prescriptionPopUp.hasEventListener(PrescriptionEvent.PRESCRIPTION_CREATE)) {					
-				prescriptionPopUp.removeEventListener(PrescriptionEvent.PRESCRIPTION_CREATE, handlePrescriptionEvent);				
+		public function removePatientPrescriptionEventListener():void {				
+			if (prescriptionPopUp.hasEventListener(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE)) {					
+				prescriptionPopUp.removeEventListener(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE, handlePatientPrescriptionEvent);				
 			}			
 		}	
 		

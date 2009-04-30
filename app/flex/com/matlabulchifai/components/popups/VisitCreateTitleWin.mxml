@@ -36,6 +36,8 @@
 			private var visitTypes:ArrayCollection;
 			[Bindable]
 			private var doctors:ArrayCollection;
+			[Bindable]
+			public var languageArray:Object;
 			
 			
 			private function init():void {
@@ -103,8 +105,6 @@
 				}
 			}
 			
-			[Bindable]
-			public var languageArray:Object;
 		]]>
 	</mx:Script>
 	

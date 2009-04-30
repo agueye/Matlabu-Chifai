@@ -34,6 +34,7 @@
 	import com.matlabulchifai.events.patient.VisitTypeEvent;
 	import com.matlabulchifai.events.patient.AllergyEvent;
 	import com.matlabulchifai.events.patient.VaccinationEvent;
+	import com.matlabulchifai.events.patient.PrescriptionEvent;
     import flash.net.navigateToURL;
  	import mx.events.BrowserChangeEvent;
  	import mx.utils.URLUtil;
@@ -371,6 +372,10 @@
 	private function handleVaccinationCreateEvent(event:VaccinationEvent):void {
 		listVaccinations();
 	}
+	
+	private function handlePrescriptionCreateEvent(event:PrescriptionEvent):void {
+		listMedications();
+	}
 		
 			
 	]]>
@@ -468,7 +473,8 @@
 				conditionCreate="handleConditionCreateEvent(event)"
 				visitTypeCreate="handleVisitTypeCreateEvent(event)"
 				allergyCreate="handleAllergyCreateEvent(event)"
-				vaccinationCreate="handleVaccinationCreateEvent(event)" />
+				vaccinationCreate="handleVaccinationCreateEvent(event)"
+				prescriptionCreate="handlePrescriptionCreateEvent(event)" />
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>
