@@ -63,50 +63,34 @@
     private var execAsap:Boolean = false;
     
     private var patientPopUp:PatientCreateTitleWin;
-
+	
+	
 	[Bindable]
-	public var colors:ArrayCollection;
-
-	private function colorInit():void
-	{
-		colors = new ArrayCollection(
-		[
-			{ "name":"Almond", "hex":"#EED9C4" },
-			{ "name":"Antique Brass", "hex":"#C88A65" },
-			{ "name":"Apricot", "hex":"#FDD5B1" },
-			{ "name":"Yellow Orange", "hex":"#FFAE42" }
-		] );				
-	}			
+	public var patients:ArrayCollection;
+	[Bindable]
+	public var allergies:ArrayCollection;
+	
     
     private function init():void {
-    	colorInit();
-    	searchPatient();
+    	showAllPatients();
     	searchMain.selectedIndex = 0;
     	rnd = Math.round(Math.random()*1000);
     	
     	authToken = "?authenticity_token=" + Application.application.parameters.authenticityToken;
     }
-    
-	private function searchPatient():void {
-		debounce(500, "patient");
-		focusManager.setFocus(searchPatientTI);
-	}
 	
 	private function showAllPatients():void {
-    	searchPatientTI.text='';
+    	searchPatientTI.selectedItem = null;
     	focusManager.setFocus(searchPatientTI);
-    	searchPatient();
+    	svcPatientsList.url = "/patients.xml?rnd=" + rnd;
+	    svcPatientsList.send();
     }
-    
-	private function searchAllergy():void {
-		debounce(500, "allergy");
-		focusManager.setFocus(searchAllergyTI);
-	}
 	
 	private function showAllAllergies():void {
-    	searchAllergyTI.text='';
+    	searchAllergyTI.selectedItem = null;
     	focusManager.setFocus(searchAllergyTI);
-    	searchAllergy();
+    	svcAllergiesList.url = "/patient_allergies.xml?rnd=" + rnd;
+	    svcAllergiesList.send();
     }
     
     private function searchVaccination():void {
@@ -144,24 +128,6 @@
 	
 	private function callSearch(type:String):void {
 		switch (type) {
-			case "patient" :
-				if (searchPatientTI.text == "") {
-		    		svcPatientsList.url = "/patients.xml?rnd=" + rnd;
-	    			svcPatientsList.send();
-			    } else {
-		    		svcPatientsList.url = "/patients/search.xml?rnd=" + rnd;
-					svcPatientsList.send({search: searchPatientTI.text});
-			    }
-			    break;
-			case "allergy" :
-				if (searchAllergyTI.text == "") {
-		    		svcAllergiesList.url = "/patient_allergies.xml?rnd=" + rnd;
-	    			svcAllergiesList.send();
-			    } else {
-		    		svcAllergiesList.url = "/patient_allergies/search.xml?rnd=" + rnd;
-					svcAllergiesList.send({search: searchAllergyTI.text});
-			    }
-			    break;
 			case "vaccination" :
 				if (searchVaccinationTI.text == "") {
 		    		svcVaccinationsList.url = "/patient_vaccinations.xml?rnd=" + rnd;
@@ -277,7 +243,7 @@
 	
 	private function handlePatientCreate(evt:PatientEvent):void {
 		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
-		searchPatient();
+		showAllPatients();
 		removePatientEventListener();
 	}
 	
@@ -290,6 +256,28 @@
 	private function handlePatientDestroyResult(event:ResultEvent):void {
 		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_DESTROY, null));
 		showAllPatients();
+	}
+	
+	private function handleAllergyAutoCompleteChange():void {
+		var allergy:Object = searchAllergyTI.selectedItem;
+		if (allergy != null) {
+			svcAllergiesList.url = "/patient_allergies/search.xml?rnd=" + rnd;
+			svcAllergiesList.send({search: allergy.id});	
+		}else {
+			svcAllergiesList.url = "/patient_allergies.xml?rnd=" + rnd;
+			svcAllergiesList.send();
+		}
+	}
+	
+	private function handlePatientAutoCompleteChange():void {
+		var patient:Object = searchPatientTI.selectedItem;
+		if (patient != null) {
+			svcPatientsList.url = "/patients/search.xml?rnd=" + rnd;
+			svcPatientsList.send({search: patient.id});	
+		}else {
+			svcPatientsList.url = "/patients.xml?rnd=" + rnd;
+			svcPatientsList.send();
+		}
 	}
 	
 	private function patientClicked(event:ListEvent):void{
@@ -340,13 +328,16 @@
 	<mx:TabBar dataProvider="{searchMain}" fontWeight="Bold"/>			
    	<mx:ViewStack id="searchMain" width="100%" height="100%" 
    		change="Application.application.updateUrl()">
-   		<mx:VBox label="{languageArray['Patients']}" show="searchPatient()">						
+   		<mx:VBox label="{languageArray['Patients']}" show="showAllPatients()">						
 	   		<mx:Panel title="{languageArray['Patient List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Patient Name']}: "></mx:Label>
-					<mx:TextInput id="searchPatientTI" change="searchPatient()"/>
-					<mx:Button id="searchPatientButton" label="{languageArray['Search']}" click="searchPatient()"/>
+					<hc:AutoComplete id="searchPatientTI" dataProvider="{patients}" labelField="name"
+						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+						prompt="Search patient by name" enableRemoveIcon="true"
+						change="handlePatientAutoCompleteChange()"/>
+					<mx:Spacer width="100" />
 					<mx:Button id="showAllPatientsButton" label="{languageArray['Show All']}" click="showAllPatients()"/>
 					<mx:Spacer width="20" />
 					<mx:LinkButton label="{languageArray['Add New Patient']}" color="#0000FF" click="showPatientCreateTitleWin()"/>
@@ -382,14 +373,16 @@
 			    </mx:DataGrid>
 			</mx:Panel>
 		</mx:VBox>	    		
-	   	<mx:VBox label="{languageArray['Allergies']}" show="searchAllergy()">						
+	   	<mx:VBox label="{languageArray['Allergies']}" show="showAllAllergies()">						
 	   		<mx:Panel title="{languageArray['Allergy List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
-					<mx:Label fontWeight="bold" text="{languageArray['Search by Allergy Name']}: "></mx:Label>
-					<mx:TextInput id="searchAllergyTI" change="searchAllergy()"/>
-					<hc:AutoComplete id="autoComplete" dataProvider="{ colors }"  />
-					<mx:Button id="searchAllergyButton" label="{languageArray['Search']}" click="searchAllergy()"/>
+					<mx:Label fontWeight="bold" text="{languageArray['Search by Allergy Name']}: "></mx:Label>					
+					<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
+						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+						prompt="Search patient by allergy name" enableRemoveIcon="true" 
+						change="handleAllergyAutoCompleteChange()"/>
+					<mx:Spacer width="100" />
 					<mx:Button id="showAllAllergiesButton" label="{languageArray['Show All']}" click="showAllAllergies()"/>
 				</mx:HBox>
 				

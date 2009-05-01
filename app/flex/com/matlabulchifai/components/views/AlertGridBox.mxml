@@ -54,7 +54,8 @@
     }
     
     private function handleCreationComplete():void {
-    	listAlerts();
+    	//this call is already made from Matlabulchifai.mxml
+    	//listAlerts();
     }
     
     private function handleAlertListResult(event:ResultEvent):void {

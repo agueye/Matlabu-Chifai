@@ -19,6 +19,7 @@
 <mx:Script>
 	<![CDATA[
 	import mx.controls.Button;
+	import mx.collections.ArrayCollection;
 	import com.matlabulchifai.events.login.*;
 	import com.matlabulchifai.components.views.DebugPanel;
 	import com.matlabulchifai.util.DebugMessage;
@@ -34,7 +35,6 @@
 	import com.matlabulchifai.events.patient.VisitTypeEvent;
 	import com.matlabulchifai.events.patient.AllergyEvent;
 	import com.matlabulchifai.events.patient.VaccinationEvent;
-	import com.matlabulchifai.events.patient.PrescriptionEvent;
     import flash.net.navigateToURL;
  	import mx.events.BrowserChangeEvent;
  	import mx.utils.URLUtil;
@@ -43,33 +43,33 @@
 
 	[Bindable]
 	private var _user:XML;
-	
 	[Bindable]
 	private var patientIdMap:Object;
-	
 	[Bindable]
     private var allergyIdMap:Object;
-    
     [Bindable]
     private var vaccinationIdMap:Object;
-    
     [Bindable]
     private var conditionIdMap:Object;
-    
     [Bindable]
     private var medicationIdMap:Object;	
-    
     [Bindable]
     private var visitTypeIdMap:Object;
-    
     [Bindable]
     private var doctorIdMap:Object;
+    [Bindable]
+	public var patients:ArrayCollection;
+	[Bindable]
+	public var allergies:ArrayCollection;
     	
     private var authToken:String;	
 	
 	private var rnd:Number;
 
+	private var firstPatientLoad:Boolean = true;
+
  	private var browserManager:IBrowserManager;
+ 	
  	private var parsing:Boolean;
 
 
@@ -89,7 +89,6 @@
  	}	    
 	
 	private function listAll():void {
-		listPatients();
 		listAllergies();
 		listVaccinations();
 		listConditions();
@@ -149,8 +148,28 @@
             patientIdMap[patient.id] = patient;
             patientsCursor.moveNext();
         }
+        buildPatientArray();
     }
-	    
+    
+	private function buildPatientArray():void {
+    	patients = new ArrayCollection();
+    	
+    	for (var i:String in patientIdMap) {
+    		var patient:Object = new Object();
+    		var fname:String = patientIdMap[i].first_name;
+    		var mname:String = patientIdMap[i].middle_name;
+    		var lname:String = patientIdMap[i].last_name;
+    		
+    		if (mname != "") 
+    			patient.name = fname + " " + mname + " " + lname;
+    		else
+    			patient.name = fname + " " + lname;
+    			
+    		patient.id = i;
+    		patients.addItem(patient);
+    	}
+    }
+    
     private function updateAllergyIdMap():void {
     	allergyIdMap = {};
         var allergiesCursor:IViewCursor =
@@ -160,6 +179,18 @@
             allergyIdMap[allergy.id] = allergy;
             allergiesCursor.moveNext();
         }
+        buildAllergyArray();
+    }
+    
+    private function buildAllergyArray():void {
+    	allergies = new ArrayCollection();
+    	
+    	for (var i:String in allergyIdMap) {
+    		var allergy:Object = new Object();
+    		allergy.name = allergyIdMap[i].name;
+    		allergy.id = i;
+    		allergies.addItem(allergy);
+    	}
     }
     
     private function updateVaccinationIdMap():void {
@@ -267,10 +298,7 @@
 	
 	private function login(user:XML):void{
 		_user = user;
-		//populate all ID maps
-		listAll();
-		mainStack.selectedChild = alertBox;
-		mainMenu.visible = true;
+		listPatients();
 	}
 	
 	private function bypassLogin():void {			
@@ -307,6 +335,15 @@
 	
 	private function handlePatientListResult(event:ResultEvent):void {
 		updatePatientIdMap();
+		
+		if (firstPatientLoad) {
+			firstPatientLoad = false;
+			mainStack.selectedChild = alertBox;
+			alertBox.listAlerts();
+			mainMenu.visible = true;
+			//populate all ID maps
+			listAll();	
+		}
 	}
 	
 	private function handleAllergiesListResult(event:ResultEvent):void {
@@ -371,10 +408,6 @@
 	//update vaccinations id map upon vaccination creation by requesting new svcVaccinationsList
 	private function handleVaccinationCreateEvent(event:VaccinationEvent):void {
 		listVaccinations();
-	}
-	
-	private function handlePrescriptionCreateEvent(event:PrescriptionEvent):void {
-		listMedications();
 	}
 		
 			
@@ -460,7 +493,9 @@
 				conditionIdMap="{conditionIdMap}"
 				medicationIdMap="{medicationIdMap}"
 				visitTypeIdMap="{visitTypeIdMap}"
-				doctorIdMap="{doctorIdMap}"/>
+				doctorIdMap="{doctorIdMap}"
+				patients="{patients}"
+				allergies="{allergies}"/>
 			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
 			<mlc:PatientInfo id="patientInfoBox" 
 				languageArray="{languageArray}"
@@ -473,8 +508,7 @@
 				conditionCreate="handleConditionCreateEvent(event)"
 				visitTypeCreate="handleVisitTypeCreateEvent(event)"
 				allergyCreate="handleAllergyCreateEvent(event)"
-				vaccinationCreate="handleVaccinationCreateEvent(event)"
-				prescriptionCreate="handlePrescriptionCreateEvent(event)" />
+				vaccinationCreate="handleVaccinationCreateEvent(event)" />
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>
