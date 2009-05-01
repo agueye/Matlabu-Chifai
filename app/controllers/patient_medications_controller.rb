@@ -103,7 +103,7 @@ class PatientMedicationsController < ApplicationController
         APP_LOGGER_LOG.info "MEDICATION UPDATED - for PATIENT ID " + @patient_medication[:patient_id].to_s + " by USER " + self.current_user[:login]
             
         format.html { }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @patient_medication }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @patient_medication.errors, :status => :unprocessable_entity }

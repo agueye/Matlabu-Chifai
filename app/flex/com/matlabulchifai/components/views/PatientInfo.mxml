@@ -29,6 +29,7 @@
 		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 		import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
 		import com.matlabulchifai.components.popups.NoteCreateTitleWin;
+		import com.matlabulchifai.components.popups.NoteUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
 		import com.matlabulchifai.components.popups.PrescriptionCreateTitleWin;
 		import com.matlabulchifai.events.patient.PatientEvent;
@@ -78,6 +79,7 @@
 		private var prescriptionPopUp:PrescriptionCreateTitleWin;
 		private var alertPopUp:AlertCreateTitleWin;
 		private var alertUpdatePopUp:AlertUpdateTitleWin;
+		private var noteUpdatePopUp:NoteUpdateTitleWin;
 		
 		public function init():void {
 			patientID = patient.id;
@@ -388,7 +390,45 @@
 			if (alertUpdatePopUp.hasEventListener(AlertEvent.ALERT_UPDATE)) {					
 				alertUpdatePopUp.removeEventListener(AlertEvent.ALERT_UPDATE, handleAlertUpdateEvent);				
 			}			
+		}
+		
+		public function deleteNote(note:XML):void {
+			svcNotesDestroy.url = "/patient_notes/" + note.id + ".xml" + authToken;
+			svcNotesDestroy.send({_method:"DELETE"});
+	    }
+	    
+	    private function handleNotesDestroyResult(event:ResultEvent):void {
+	    	listNotes();	    	
+	    }
+		
+		private function handleNoteClick(event:ListEvent):void {
+			if (event.columnIndex != event.currentTarget.columns.length-1){
+				var note:XML = XML(event.currentTarget.selectedItem)
+				showNoteUpdateTitleWin(note);
+			}
+		}
+		
+		private function showNoteUpdateTitleWin(note:XML):void {				
+			noteUpdatePopUp = NoteUpdateTitleWin(PopUpManager.createPopUp(this, NoteUpdateTitleWin, true));
+			noteUpdatePopUp.patient = patient;
+			noteUpdatePopUp.note = note;			
+			noteUpdatePopUp.languageArray = languageArray;
+			PopUpManager.centerPopUp(noteUpdatePopUp);
+			noteUpdatePopUp.addEventListener(NoteEvent.NOTE_UPDATE, handleNoteUpdateEvent);
+		}
+		
+		public function handleNoteUpdateEvent(event:NoteEvent):void {			
+			listNotes();				
+			removeNoteUpdateEventListener();			
+		}
+		
+		public function removeNoteUpdateEventListener():void {				
+			if (noteUpdatePopUp.hasEventListener(NoteEvent.NOTE_UPDATE)) {					
+				noteUpdatePopUp.removeEventListener(NoteEvent.NOTE_UPDATE, handleNoteUpdateEvent);				
+			}			
 		}				    	
+		
+		
 	]]>
 	</mx:Script>
 	
@@ -439,6 +479,12 @@
         resultFormat="e4x"
         method="POST"
         result="handleAlertsDestroyResult(event)"/>
+        
+    <mx:HTTPService
+        id="svcNotesDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleNotesDestroyResult(event)"/>
 		
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
@@ -544,12 +590,21 @@
 		   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" 
 		   				click="showNoteCreateTitleWin()"/>
 		   			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{notesXLC}" wordWrap="true" variableRowHeight="true">						
+		   				dataProvider="{notesXLC}" wordWrap="true" variableRowHeight="true"
+		   				itemClick="handleNoteClick(event)">						
 		   				<mx:columns>
 		   					<mx:DataGridColumn headerText="{languageArray['Note Date']}" 
 		   						dataField="note_date" width="90"/>							
 		   					<mx:DataGridColumn headerText="{languageArray['Note']}" 
-		   						dataField="body"/>						
+		   						dataField="body"/>
+		   					<mx:DataGridColumn headerText="" width="150" 
+				                    editable="false">
+				                    <mx:itemRenderer>
+				                        <mx:Component>
+				                            <mx:Button label="{outerDocument.languageArray['Delete Note']}" click="outerDocument.deleteNote(XML(data))" />
+				                        </mx:Component>
+				                    </mx:itemRenderer>
+							</mx:DataGridColumn>					
 		   				</mx:columns>					
 		   			</mx:DataGrid>
 	   			</mx:Panel>

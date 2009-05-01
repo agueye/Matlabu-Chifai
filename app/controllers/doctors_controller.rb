@@ -68,7 +68,7 @@ class DoctorsController < ApplicationController
             
         flash[:notice] = 'Doctor was successfully updated.'
         format.html { redirect_to(@doctor) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @doctor }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @doctor.errors, :status => :unprocessable_entity }

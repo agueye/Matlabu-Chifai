@@ -74,7 +74,7 @@ class PatientNotesController < ApplicationController
         APP_LOGGER_LOG.info "NOTE UPDATED - for PATIENT ID " + @patient_note[:patient_id].to_s + " by USER " + self.current_user[:login]
     
         format.html { redirect_to(@patient_note) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @patient_note }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @patient_note.errors, :status => :unprocessable_entity }

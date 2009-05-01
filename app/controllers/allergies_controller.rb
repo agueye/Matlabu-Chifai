@@ -69,7 +69,7 @@ class AllergiesController < ApplicationController
         APP_LOGGER_LOG.info "ALLERGY UPDATED - " + @allergy[:name] + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@allergy) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @allergy }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @allergy.errors, :status => :unprocessable_entity }

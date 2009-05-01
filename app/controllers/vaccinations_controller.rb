@@ -69,7 +69,7 @@ class VaccinationsController < ApplicationController
         APP_LOGGER_LOG.info "VACCINATION UPDATED - " + @vaccination[:name] + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@vaccination) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @vaccination }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @vaccination.errors, :status => :unprocessable_entity }

@@ -41,9 +41,11 @@ public function languageInit(str:String):void{
 		  	"Date Observed":"Date Observed",		  
 		  	"Date Seen":"Date Seen",
 		  	"Delete Alert":"Delete Alert",
+		  	"Delete Note":"Delete Note",
 		  	"Delete Patient":"Delete Patient",
 		  	"Doctor Name":"Doctor Name",
 		  	"Dosage":"Dosage",
+		  	"Edit Note":"Edit Note",
 		  	"Edit Patient Information":"Edit Patient Information",
 			"Emergency Contact Name": "Emergency Contact Name",
 			"Emergency Contact Relationship": "Emergency Contact Relationship",
@@ -139,8 +141,10 @@ public function languageInit(str:String):void{
 		  "Date Observed":"Date d'Obeservation",
 		  "Date Seen":"Date de visite",
 		  "Delete":"D'effacement",
+		  "Delete Note":"Delete Note(French)",
 		  "Delete Alert":"Alerte D'effacement",
 		  "Delete Patient":"Patient D'effacement",
+		  "Edit Note":"Edit Note(French)",
 		  "Edit Patient Information":"Edit Patient Information(French)",
 		  "Emergency Contact Name": "Contact en cas d'Urgence",
 		  "Emergency Contact Relationship": "Relation avec le contact",
@@ -190,6 +194,8 @@ public function languageInit(str:String):void{
 		  
 		  
 		  //to add
+		  "Edit Note":"Edit Note",
+		  "Delete Note":"Delete Note",
 		  "Edit Patient Information":"Edit Patient Information",
 		  "Vaccination Name":"Vaccination Name(French)",
 		  "Vaccinations":"Vaccinations(French)",

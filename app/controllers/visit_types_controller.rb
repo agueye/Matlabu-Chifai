@@ -69,7 +69,7 @@ class VisitTypesController < ApplicationController
         APP_LOGGER_LOG.info "VISIT_TYPE UPDATED - " + @visit_type[:name] + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@visit_type) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @visit_type }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @visit_type.errors, :status => :unprocessable_entity }

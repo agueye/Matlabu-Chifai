@@ -91,7 +91,7 @@ class PatientAllergiesController < ApplicationController
         APP_LOGGER_LOG.info "ALLERGY UPDATED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
             
         format.html { redirect_to(patient_patient_allergies_path(@patient)) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @patient_allergy }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @patient_allergy.errors, :status => :unprocessable_entity }

@@ -69,7 +69,7 @@ class ConditionsController < ApplicationController
         APP_LOGGER_LOG.info "CONDITION UPDATED - " + @condition[:name] + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@condition) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @condition}
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @condition.errors, :status => :unprocessable_entity }

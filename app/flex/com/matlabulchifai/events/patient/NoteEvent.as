@@ -6,6 +6,7 @@
 	{
 		
 		public static const NOTE_CREATE:String = "noteCreate";
+		public static const NOTE_UPDATE:String = "noteUpdate";
     
         public var note:XML;
     

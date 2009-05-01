@@ -69,7 +69,7 @@ class MedicationsController < ApplicationController
         APP_LOGGER_LOG.info "MEDICATION UPDATED - " + @medication[:name] + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@medication) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @medication }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @medication.errors, :status => :unprocessable_entity }
