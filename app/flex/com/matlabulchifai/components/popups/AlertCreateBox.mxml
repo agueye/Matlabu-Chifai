@@ -16,7 +16,7 @@
 	import mx.managers.PopUpManager;
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
-    import com.matlabulchifai.events.alert.AlertEvent;
+    import com.matlabulchifai.events.patient.AlertEvent;
     import mx.core.Application;
     
     [Bindable]

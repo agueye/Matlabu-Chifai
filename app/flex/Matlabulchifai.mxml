@@ -92,6 +92,7 @@
 		this.addEventListener(PatientEvent.PATIENT_DESTROY, handlePatientDestroyEvent);
 		this.addEventListener(PatientEvent.PATIENT_SELECT, handlePatientSelectEvent);
 		this.addEventListener(AlertEvent.ALERT_CREATE, handleAlertCreateEvent);
+		this.addEventListener(AlertEvent.ALERT_DESTROY, handleAlertDestroyEvent);
  	}	    
 	
 	private function listAll():void {
@@ -428,6 +429,11 @@
 	}
 	
 	private function handleAlertCreateEvent(event:AlertEvent):void {
+		//select patientinfo view and pass in patient information
+		alertBox.listAlerts();
+	}
+	
+	private function handleAlertDestroyEvent(event:AlertEvent):void {
 		//select patientinfo view and pass in patient information
 		alertBox.listAlerts();
 	}

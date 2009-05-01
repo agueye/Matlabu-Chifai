@@ -15,7 +15,7 @@
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
 	import mx.containers.ViewStack;
-	import com.matlabulchifai.events.alert.AlertEvent;
+	import com.matlabulchifai.events.patient.AlertEvent;
 	import com.matlabulchifai.events.patient.PatientEvent;
 	import com.matlabulchifai.components.popups.AlertCreateBox;
 	import mx.core.Application;

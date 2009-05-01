@@ -16,8 +16,10 @@
 		
 	<mx:Script>
 	<![CDATA[
+		import mx.core.Application;
 		import com.matlabulchifai.components.popups.AlertCreateTitleWin;
 		import flash.events.Event;
+		import mx.events.ListEvent;
 		import mx.core.IFlexDisplayObject;
 		import mx.rpc.events.ResultEvent;
 		import mx.collections.XMLListCollection;
@@ -65,6 +67,7 @@
 		[Bindable]
 		public var patient:XML;
 		
+		private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 		private var rnd:Number;
 		private var patientUpdatePopUp:PatientUpdateTitleWin;
 		private var vaccPopUp:VaccCreateTitleWin;
@@ -342,6 +345,23 @@
 			if (alertPopUp.hasEventListener(AlertEvent.ALERT_CREATE)) {					
 				alertPopUp.removeEventListener(AlertEvent.ALERT_CREATE, handleNoteEvent);				
 			}			
+		}
+		
+		public function deleteAlert(alert:XML):void {
+			svcAlertsDestroy.url = "/patient_alerts/" + alert.id + ".xml" + authToken;
+			svcAlertsDestroy.send({_method:"DELETE"});
+	    }
+	    
+	    private function handleAlertsDestroyResult(event:ResultEvent):void {
+	    	var alert = XML(event.result);
+	    	listAlerts();
+	    	dispatchEvent(new AlertEvent(AlertEvent.ALERT_DESTROY, alert));
+	    }
+		
+		private function handleAlertClick(event:ListEvent):void {
+			if (event.columnIndex != event.currentTarget.columns.length-1){
+				//showAlertUpdateTitleWin();
+			}
 		}								    	
 	]]>
 	</mx:Script>
@@ -387,6 +407,12 @@
         result=""/>
 	<mx:XMLListCollection id="alertsXLC"
         source="{XMLList(svcAlertsList.lastResult.children())}"/>
+        
+    <mx:HTTPService
+        id="svcAlertsDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleAlertsDestroyResult(event)"/>
 		
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
@@ -405,12 +431,21 @@
 		   			<mx:LinkButton label="{languageArray['Add New Alert']}" color="#0000FF" 
 		   				click="showAlertCreateTitleWin()"/>
 		   			<mx:DataGrid id="alertsGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{alertsXLC}" wordWrap="true" variableRowHeight="true">						
+		   				dataProvider="{alertsXLC}" wordWrap="true" variableRowHeight="true"
+		   				 itemClick="handleAlertClick(event)">						
 		   				<mx:columns>														
 		   					<mx:DataGridColumn headerText="{languageArray['Alert Date']}" 
 		   						dataField="alert_date" width="90"/>							
 		   					<mx:DataGridColumn headerText="{languageArray['Alert Note']}" 
-		   						dataField="notes"/>						
+		   						dataField="notes"/>
+		   					<mx:DataGridColumn headerText="" width="150" 
+				                    editable="false">
+				                    <mx:itemRenderer>
+				                        <mx:Component>
+				                            <mx:Button label="{outerDocument.languageArray['Delete Alert']}" click="outerDocument.deleteAlert(XML(data))" />
+				                        </mx:Component>
+				                    </mx:itemRenderer>
+							</mx:DataGridColumn>				
 		   				</mx:columns>					
 		   			</mx:DataGrid>
 	   			</mx:Panel>

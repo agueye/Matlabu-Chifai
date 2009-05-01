@@ -6,6 +6,7 @@ package com.matlabulchifai.events.patient
 	{
 		
 		public static const ALERT_CREATE:String = "alertCreate";
+		public static const ALERT_DESTROY:String = "alertDestroy";
     
         public var alert:XML;
     
