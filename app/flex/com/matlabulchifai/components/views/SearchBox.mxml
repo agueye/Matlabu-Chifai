@@ -292,8 +292,7 @@
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Patient Name']}: "></mx:Label>
 					<hc:AutoComplete id="searchPatientTI" dataProvider="{patients}" labelField="name"
 						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						prompt="Search patient by name" enableRemoveIcon="true"
-						change="handlePatientAutoCompleteChange()"/>
+						change="handlePatientAutoCompleteChange()" enableRemoveIcon="true"/>
 					<mx:Spacer width="100" />
 					<mx:Button id="showAllPatientsButton" label="{languageArray['Show All']}" click="showAllPatients()"/>
 					<mx:Spacer width="20" />
@@ -337,8 +336,7 @@
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Allergy Name']}: "></mx:Label>					
 					<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
 						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						prompt="Search patient by allergy name" enableRemoveIcon="true" 
-						change="handleAllergyAutoCompleteChange()"/>
+						change="handleAllergyAutoCompleteChange()" enableRemoveIcon="true"/>
 					<mx:Spacer width="100" />
 					<mx:Button id="showAllAllergiesButton" label="{languageArray['Show All']}" click="showAllAllergies()"/>
 				</mx:HBox>
@@ -379,8 +377,7 @@
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Vaccination Name']}: "></mx:Label>
 					<hc:AutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" labelField="name"
 						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						prompt="Search patient by vaccination name" enableRemoveIcon="true"
-						change="handleVaccinationAutoCompleteChange()"/>
+						change="handleVaccinationAutoCompleteChange()" enableRemoveIcon="true"/>
 					<mx:Spacer width="100" />
 					<mx:Button id="showAllVaccinationsButton" label="{languageArray['Show All']}" click="showAllVaccinations()"/>
 				</mx:HBox>
@@ -418,8 +415,7 @@
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Condition Name']}: "></mx:Label>
 					<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
 						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						prompt="Search patient by condition name" enableRemoveIcon="true"
-						change="handleConditionAutoCompleteChange()"/>
+						change="handleConditionAutoCompleteChange()" enableRemoveIcon="true"/>
 					<mx:Spacer width="100" />
 					<mx:Button id="showAllConditionsButton" label="{languageArray['Show All']}" click="showAllConditions()"/>
 				</mx:HBox>
@@ -460,8 +456,7 @@
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Medicine Name']}: "></mx:Label>
 					<hc:AutoComplete id="searchMedicationTI" dataProvider="{medications}" labelField="name"
 						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						prompt="Search patient by medication name" enableRemoveIcon="true"
-						change="handleMedicationAutoCompleteChange()"/>
+						change="handleMedicationAutoCompleteChange()" enableRemoveIcon="true"/>
 					<mx:Spacer width="100" />
 					<mx:Button id="showAllMedicationsButton" label="{languageArray['Show All']}" click="showAllMedications()"/>
 				</mx:HBox>

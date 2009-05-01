@@ -17,8 +17,9 @@ class PatientAllergiesController < ApplicationController
   end
 
   def find
-    @patient_allergies = PatientAllergy.find(:all, :conditions => ["allergy_id = ?", params[:search]], 
-    						:order => "date_observed DESC")
+    @patient_allergies = PatientAllergy.find(:all, :conditions => ["allergy_id = ?", params[:search]])
+    @patient_allergies.sort! {|y, x| x.date_observed <=> y.date_observed}
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @patient_allergies }

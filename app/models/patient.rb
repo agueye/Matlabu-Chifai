@@ -41,14 +41,5 @@ class Patient < ActiveRecord::Base
   validates_length_of   :emergency_contact_number, 
                         :maximum => 100, :allow_blank => true  
   validates_length_of   :notes, :maximum => 10000, :allow_blank => true
-  
-  def self.search(query)
-    if !query.to_s.strip.empty?
-      tokens = query.split.collect {|c| "%#{c.downcase}%"}
-        find_by_sql(["SELECT * from patients WHERE #{ (["(LOWER(first_name) LIKE ? OR LOWER(middle_name) LIKE ? OR LOWER(last_name) LIKE ?)"] * tokens.size).join(" AND ") } ORDER by last_name ", *tokens.collect { |token| [token] * 3 }.flatten])
-	else
-	  []
-	end
-  end
     
 end

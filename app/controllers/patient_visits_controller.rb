@@ -18,8 +18,9 @@ class PatientVisitsController < ApplicationController
   end
 
   def find
-    @patient_visits = PatientVisit.find(:all, :conditions => ["condition_id = ?", params[:search]], 
-    						:order => "visit_date DESC")
+    @patient_visits = PatientVisit.find(:all, :conditions => ["condition_id = ?", params[:search]])
+    @patient_visits.sort! {|y, x| x.visit_date <=> y.visit_date}
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @patient_visits }

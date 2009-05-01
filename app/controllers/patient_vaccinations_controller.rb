@@ -18,8 +18,9 @@ class PatientVaccinationsController < ApplicationController
   end
   
   def find
-    @patient_vaccinations = PatientVaccination.find(:all, :conditions => ["vaccination_id = ?", params[:search]], 
-    						:order => "date_admined DESC")
+    @patient_vaccinations = PatientVaccination.find(:all, :conditions => ["vaccination_id = ?", params[:search]])
+    @patient_vaccinations.sort! {|y, x| x.date_admined <=> y.date_admined}
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @patient_vaccinations }
