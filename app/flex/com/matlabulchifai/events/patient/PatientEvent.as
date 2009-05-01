@@ -8,6 +8,7 @@
 		public static const PATIENT_CREATE:String = "patientCreate";
 		public static const PATIENT_DESTROY:String = "patientDestroy";
 		public static const PATIENT_SELECT:String = "patientSelect";
+		public static const PATIENT_UPDATE:String = "patientUpdate";
     
         public var patient:XML;
     

@@ -544,6 +544,7 @@
 			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
 			<mlc:PatientInfo id="patientInfoBox" 
 				languageArray="{languageArray}"
+				patientIdMap="{patientIdMap}"
 				allergyIdMap="{allergyIdMap}"
 				vaccinationIdMap="{vaccinationIdMap}"
 				conditionIdMap="{conditionIdMap}"

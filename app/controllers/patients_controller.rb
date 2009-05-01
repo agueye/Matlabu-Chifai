@@ -79,7 +79,7 @@ class PatientsController < ApplicationController
         APP_LOGGER_LOG.info "PATIENT UPDATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@patient) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @patient }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @patient.errors, :status => :unprocessable_entity }

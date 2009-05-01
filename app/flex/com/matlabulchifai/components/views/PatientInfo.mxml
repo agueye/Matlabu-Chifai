@@ -22,11 +22,13 @@
 		import mx.rpc.events.ResultEvent;
 		import mx.collections.XMLListCollection;
 		import mx.managers.PopUpManager;
+		import com.matlabulchifai.components.popups.PatientUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 		import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
 		import com.matlabulchifai.components.popups.NoteCreateTitleWin;
 		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
 		import com.matlabulchifai.components.popups.PrescriptionCreateTitleWin;
+		import com.matlabulchifai.events.patient.PatientEvent;
 		import com.matlabulchifai.events.patient.VaccinationEvent;
 		import com.matlabulchifai.events.patient.AllergyEvent;
 		import com.matlabulchifai.events.patient.VisitEvent;
@@ -42,6 +44,8 @@
 		
 		[Bindable]
 		public var languageArray:Object;
+		[Bindable]        
+		public var patientIdMap:Object;
 		[Bindable]        
 		public var allergyIdMap:Object;
 		[Bindable]        
@@ -62,6 +66,7 @@
 		public var patient:XML;
 		
 		private var rnd:Number;
+		private var patientUpdatePopUp:PatientUpdateTitleWin;
 		private var vaccPopUp:VaccCreateTitleWin;
 		private var allergyPopUp:AllergyCreateTitleWin;
 		private var visitPopUp:VisitCreateTitleWin;
@@ -164,6 +169,26 @@
 			while (visitTypeIdMap[item.visit_type_id] == null) {}
 			visitType = visitTypeIdMap[item.visit_type_id];
 			return visitType.name;
+		}
+		
+		private function showPatientUpdateTitleWin():void {
+			patientUpdatePopUp = PatientUpdateTitleWin(PopUpManager.createPopUp(this, PatientUpdateTitleWin, true));
+			patientUpdatePopUp.addEventListener(PatientEvent.PATIENT_UPDATE, handlePatientUpdateEvent);
+			patientUpdatePopUp.patient = this.patient;
+			patientUpdatePopUp.languageArray = this.languageArray;
+			PopUpManager.centerPopUp(patientUpdatePopUp);
+		}
+		
+		public function handlePatientUpdateEvent(event:PatientEvent):void {
+			patient = event.patient;			
+			patientIdMap[patient.id] = patient;
+			removePatientUpdateEventListener();
+		}
+		
+		public function removePatientUpdateEventListener():void {
+			if (patientUpdatePopUp.hasEventListener(PatientEvent.PATIENT_UPDATE)) {
+				patientUpdatePopUp.removeEventListener(PatientEvent.PATIENT_UPDATE, handlePatientUpdateEvent);
+			}
 		}
 		
 		private function showVaccCreateTitleWin():void {
@@ -392,7 +417,9 @@
 	   		</mx:VBox>
 	   		<mx:VBox label="{languageArray['General Information']}" show="">
 	   			<mx:Panel title="{languageArray['General Information']}" width="100%" height="100%" 
-	   				paddingTop="10" paddingLeft="5" paddingRight="5">									
+	   				paddingTop="10" paddingLeft="5" paddingRight="5">	
+	   				<mx:LinkButton label="{languageArray['Edit Patient Information']}" color="#0000FF" 
+		   				click="showPatientUpdateTitleWin()"/>								
 					<mx:HBox>
 						<mx:Label text="{languageArray['Medical Record ID']}:" fontSize="12" fontWeight="bold"/>
 						<mx:Label text="{patient['medical_record_number']}" fontSize="12"/>				
@@ -402,12 +429,12 @@
 						<mx:Label text="{patient['first_name'] + ' ' + patient['middle_name'] + ' ' + patient['last_name']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
-						<mx:Label text="{languageArray['Date of Birth']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['date_of_birth']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
 						<mx:Label text="{languageArray['Arrival Date']}:" fontSize="12" fontWeight="bold"/>
 						<mx:Label text="{patient['arrival_date']}" fontSize="12"/>
+					</mx:HBox>
+					<mx:HBox>
+						<mx:Label text="{languageArray['Date of Birth']}:" fontSize="12" fontWeight="bold"/>
+						<mx:Label text="{patient['date_of_birth']}" fontSize="12"/>
 					</mx:HBox>
 					<mx:HBox>
 						<mx:Label text="{languageArray['Gender']}:" fontSize="12" fontWeight="bold"/>

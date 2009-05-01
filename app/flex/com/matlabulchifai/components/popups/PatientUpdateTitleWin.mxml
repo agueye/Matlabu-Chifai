@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="550" 
+	height="500"
+	title="{languageArray['Edit Patient Information']}"
+	showCloseButton="true"
+    close="PopUpManager.removePopUp(this)"
+    creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.utils.DateUtil;
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import com.matlabulchifai.events.patient.PatientEvent;
+			import mx.core.Application;
+			
+			[Bindable]
+			public var patient:Object;
+			[Bindable]
+			public var languageArray:Object;
+			
+			[Bindable]
+			private var currDate:Date = new Date();
+			
+			[Bindable]
+        	public var genders:ArrayCollection = new ArrayCollection(
+            	[ {label:"Male", data:"Male"}, 
+			  	{label:"Female", data:"Female"}]);
+			
+			
+			private function init():void {
+				medicalrecordTI.text = patient.medical_record_number;
+				firstnameTI.text = patient.first_name;
+				middlenameTI.text = patient.middle_name;
+				lastnameTI.text = patient.last_name;
+				arrivaldateTI.selectedDate = DateUtil.parseW3CDTF(patient.arrival_date);
+				birthdateTI.selectedDate = DateUtil.parseW3CDTF(patient.date_of_birth);				
+				genderTI.text = patient.gender;
+				addressTI.text = patient.address;
+				cityTI.text = patient.city;
+				stateTI.text = patient.state;
+				zipTI.text = patient.zip;
+				telephoneTI.text = patient.telephone;
+				fatherfirstnameTI.text = patient.father_first_name;
+				fatherlastnameTI.text = patient.father_last_name;
+				motherfirstnameTI.text = patient.mother_first_name;
+				motherlastnameTI.text = patient.mother_last_name;
+				emergencycontactnameTI.text = patient.emergency_contact_name;
+				emergencycontactrelationshipTI.text = patient.emergency_contact_relationship;
+				emergencycontactnumberTI.text = patient.emergency_contact_number;
+				notesTI.text = patient.notes;
+			}
+			
+			private function processPatientUpdate():void{
+				var	params:Object = new	Object();
+				params['patient[medical_record_number]'] = medicalrecordTI.text;
+				params['patient[first_name]'] = firstnameTI.text;
+				params['patient[middle_name]'] = middlenameTI.text;
+				params['patient[last_name]'] = lastnameTI.text;
+				params['patient[arrival_date]'] = arrivaldateTI.text;
+				params['patient[date_of_birth]'] = birthdateTI.text;
+				params['patient[gender]'] = genderTI.text;
+				params['patient[address]'] = addressTI.text;
+				params['patient[city]'] = cityTI.text;
+				params['patient[state]'] = stateTI.text;
+				params['patient[zip]'] = zipTI.text;
+				params['patient[telephone]'] = telephoneTI.text;
+				params['patient[father_first_name]'] = fatherfirstnameTI.text;
+				params['patient[father_last_name]'] = fatherlastnameTI.text;
+				params['patient[mother_first_name]'] = motherfirstnameTI.text;
+				params['patient[mother_last_name]'] = motherlastnameTI.text;
+				params['patient[emergency_contact_name]'] = emergencycontactnameTI.text;
+				params['patient[emergency_contact_relationship]'] = emergencycontactrelationshipTI.text;
+				params['patient[emergency_contact_number]'] = emergencycontactnumberTI.text;
+				params['patient[notes]'] = notesTI.text;
+				params['_method'] = "PUT";
+				svcPatientUpdate.url = "/patients/" + patient.id + ".xml?authenticity_token=" +
+					Application.application.parameters.authenticityToken;
+				svcPatientUpdate.send(params);
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function clearForm():void{
+				medicalrecordTI.text = "";
+				firstnameTI.text = "";
+				middlenameTI.text = "";
+				lastnameTI.text = "";
+				arrivaldateTI.text = "";
+				birthdateTI.text = "";
+				genderTI.text = "";
+				addressTI.text = "";
+				cityTI.text = "";
+				stateTI.text = "";
+				zipTI.text = "";
+				telephoneTI.text = "";
+				fatherfirstnameTI.text = "";
+				fatherlastnameTI.text = "";
+				motherfirstnameTI.text = "";
+				motherlastnameTI.text = "";
+				emergencycontactnameTI.text = "";
+				emergencycontactrelationshipTI.text = "";
+				emergencycontactnumberTI.text = "";
+				notesTI.text = "";
+				//refocus back on the first field
+				focusManager.setFocus(medicalrecordTI);
+			}
+			
+			private function handleUpdatePatientResult(event:ResultEvent):void {
+				var patient:XML = XML(event.result);
+				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_UPDATE, patient));
+				clearForm();		
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService
+		id="svcPatientUpdate"
+		resultFormat="e4x"
+		method="POST"
+		result="handleUpdatePatientResult(event)">
+	</mx:HTTPService>
+	
+	
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold">
+				<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
+					<mx:TextInput id="medicalrecordTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['First Name']}">
+					<mx:TextInput id="firstnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Middle Name']}">
+					<mx:TextInput id="middlenameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['Last Name']}">
+					<mx:TextInput id="lastnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
+					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" 
+						minYear="1930" maxYear="{currDate.getFullYear()}"/>
+				</mx:FormItem>
+				
+				<mx:FormItem required="true" label="{languageArray['Date of Birth']}">
+					<mx:DateField id="birthdateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" 
+						displayedMonth="0" displayedYear="1990" showToday="false" />
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Gender']}">
+					<mx:ComboBox id="genderTI" dataProvider="{genders}"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Address']}">
+					<mx:TextInput id="addressTI"/>
+				</mx:FormItem>
+	
+				<mx:FormItem label="{languageArray['City']}">
+					<mx:TextInput id="cityTI"/>
+				</mx:FormItem>
+				
+				
+				<mx:FormItem label="{languageArray['State']}">
+					<mx:TextInput id="stateTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Zip']}">
+					<mx:TextInput id="zipTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Telephone']}">
+					<mx:TextInput id="telephoneTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Father First Name']}">
+					<mx:TextInput id="fatherfirstnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Father Last Name']}">
+					<mx:TextInput id="fatherlastnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Mother First Name']}">
+					<mx:TextInput id="motherfirstnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Mother Last Name']}">
+					<mx:TextInput id="motherlastnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Emergency Contact Name']}">
+					<mx:TextInput id="emergencycontactnameTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Emergency Contact Relationship']}">
+					<mx:TextInput id="emergencycontactrelationshipTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Emergency Contact Number']}">
+					<mx:TextInput id="emergencycontactnumberTI"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="{languageArray['Patient Remarks']}">
+					<mx:TextArea id="notesTI"/>
+				</mx:FormItem>
+				
+		</mx:Form>
+	</mx:VBox>
+	
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+		<mx:Button label="OK" id="OKBtn" click="processPatientUpdate()" />
+		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>
