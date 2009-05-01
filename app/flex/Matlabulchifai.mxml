@@ -61,6 +61,12 @@
 	public var patients:ArrayCollection;
 	[Bindable]
 	public var allergies:ArrayCollection;
+	[Bindable]
+	public var vaccinations:ArrayCollection;
+	[Bindable]
+	public var conditions:ArrayCollection;
+	[Bindable]
+	public var medications:ArrayCollection;
     	
     private var authToken:String;	
 	
@@ -202,6 +208,18 @@
             vaccinationIdMap[vaccination.id] = vaccination;
             vaccinationsCursor.moveNext();
         }
+        buildVaccinationArray();
+    }
+    
+    private function buildVaccinationArray():void {
+    	vaccinations = new ArrayCollection();
+    	
+    	for (var i:String in vaccinationIdMap) {
+    		var vaccination:Object = new Object();
+    		vaccination.name = vaccinationIdMap[i].name;
+    		vaccination.id = i;
+    		vaccinations.addItem(vaccination);
+    	}
     }
     
     private function updateConditionIdMap():void {
@@ -213,6 +231,18 @@
             conditionIdMap[condition.id] = condition;
             conditionsCursor.moveNext();
         }
+        buildConditionArray();
+    }
+    
+    private function buildConditionArray():void {
+    	conditions = new ArrayCollection();
+    	
+    	for (var i:String in conditionIdMap) {
+    		var condition:Object = new Object();
+    		condition.name = conditionIdMap[i].name;
+    		condition.id = i;
+    		conditions.addItem(condition);
+    	}
     }
     
     private function updateMedicationIdMap():void {
@@ -224,6 +254,18 @@
             medicationIdMap[medication.id] = medication;
             medicationsCursor.moveNext();
         }
+        buildMedicationArray();
+    }
+    
+    private function buildMedicationArray():void {
+    	medications = new ArrayCollection();
+    	
+    	for (var i:String in medicationIdMap) {
+    		var medication:Object = new Object();
+    		medication.name = medicationIdMap[i].name;
+    		medication.id = i;
+    		medications.addItem(medication);
+    	}
     }
     
     private function updateVisitTypeIdMap():void {
@@ -495,7 +537,10 @@
 				visitTypeIdMap="{visitTypeIdMap}"
 				doctorIdMap="{doctorIdMap}"
 				patients="{patients}"
-				allergies="{allergies}"/>
+				allergies="{allergies}"
+				vaccinations="{vaccinations}"
+				conditions="{conditions}"
+				medications="{medications}"/>
 			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
 			<mlc:PatientInfo id="patientInfoBox" 
 				languageArray="{languageArray}"

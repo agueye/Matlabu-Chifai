@@ -28,54 +28,40 @@
     
 	[Bindable]
 	public var languageArray:Object;
-	
 	[Bindable]        
     public var patientIdMap:Object;
-
     [Bindable]        
     public var allergyIdMap:Object;
-    
     [Bindable]        
     public var vaccinationIdMap:Object;
-    
     [Bindable]        
     public var conditionIdMap:Object;
-    
     [Bindable]        
     public var medicationIdMap:Object;	
-    
     [Bindable]        
     public var visitTypeIdMap:Object;
-    
     [Bindable]        
     public var doctorIdMap:Object;
-    	
-    private var authToken:String;    
-	
-	private var rnd:Number;
-	
-	private var now:Date;
-	
-	private var last:Date = new Date();
-	
-	private var timeout:Number;
-	
-    private var execAsap:Boolean = false;
-    
-    private var patientPopUp:PatientCreateTitleWin;
-	
-	
-	[Bindable]
+    [Bindable]
 	public var patients:ArrayCollection;
 	[Bindable]
 	public var allergies:ArrayCollection;
+	[Bindable]
+	public var vaccinations:ArrayCollection;
+	[Bindable]
+	public var conditions:ArrayCollection;
+	[Bindable]
+	public var medications:ArrayCollection;
+    
+    private var authToken:String;    
+	private var rnd:Number;
+    private var patientPopUp:PatientCreateTitleWin;
 	
     
     private function init():void {
     	showAllPatients();
     	searchMain.selectedIndex = 0;
     	rnd = Math.round(Math.random()*1000);
-    	
     	authToken = "?authenticity_token=" + Application.application.parameters.authenticityToken;
     }
 	
@@ -92,88 +78,26 @@
     	svcAllergiesList.url = "/patient_allergies.xml?rnd=" + rnd;
 	    svcAllergiesList.send();
     }
-    
-    private function searchVaccination():void {
-		debounce(500, "vaccination");
-		focusManager.setFocus(searchVaccinationTI);
-	}
 	
 	private function showAllVaccinations():void {
-    	searchVaccinationTI.text='';
+    	searchVaccinationTI.selectedItem = null;
     	focusManager.setFocus(searchVaccinationTI);
-    	searchVaccination();
+    	svcVaccinationsList.url = "/patient_vaccinations.xml?rnd=" + rnd;
+	    svcVaccinationsList.send();
     }
-    
-    private function searchCondition():void {
-		debounce(500, "condition");
-		focusManager.setFocus(searchConditionTI);
-	}
 	
 	private function showAllConditions():void {
-    	searchConditionTI.text='';
+    	searchConditionTI.selectedItem = null;
     	focusManager.setFocus(searchConditionTI);
-    	searchCondition();
+    	svcConditionsList.url = "/patient_visits.xml?rnd=" + rnd;
+	    svcConditionsList.send();
     }
-    
-    private function searchMedication():void {
-		debounce(500, "medication");
-		focusManager.setFocus(searchMedicationTI);
-	}
-	
+
 	private function showAllMedications():void {
-    	searchMedicationTI.text='';
+    	searchMedicationTI.selectedItem = null;
     	focusManager.setFocus(searchMedicationTI);
-    	searchMedication();
-    }
-	
-	private function callSearch(type:String):void {
-		switch (type) {
-			case "vaccination" :
-				if (searchVaccinationTI.text == "") {
-		    		svcVaccinationsList.url = "/patient_vaccinations.xml?rnd=" + rnd;
-	    			svcVaccinationsList.send();
-			    } else {
-		    		svcVaccinationsList.url = "/patient_vaccinations/search.xml?rnd=" + rnd;
-					svcVaccinationsList.send({search: searchVaccinationTI.text});
-			    }
-			    break;
-			case "condition" :
-				if (searchConditionTI.text == "") {
-		    		svcConditionsList.url = "/patient_visits.xml?rnd=" + rnd;
-	    			svcConditionsList.send();
-			    } else {
-		    		svcConditionsList.url = "/patient_visits/search.xml?rnd=" + rnd;
-					svcConditionsList.send({search: searchConditionTI.text});
-			    }
-			    break;
-			case "medication" :
-				if (searchMedicationTI.text == "") {
-		    		svcMedicationsList.url = "/patient_medications.xml?rnd=" + rnd;
-	    			svcMedicationsList.send();
-			    } else {
-		    		svcMedicationsList.url = "/patient_medications/search.xml?rnd=" + rnd;
-					svcMedicationsList.send({search: searchMedicationTI.text});
-			    }
-			    break;
-			default :
-				return;
-        }
-	}
-    
-    private function debounce(threshold:int, type:String):void{
-    	if (timeout)
-        	clearTimeout(timeout);        
-        else if (execAsap) {
-        	callSearch(type);
-        }       
-        timeout = setTimeout(delayed, threshold || 100, execAsap, type); 
-    }
-    
-    private function delayed(execAsap:Boolean, type:String):Object {       
-            if (!execAsap) {
-            	callSearch(type);
-            }              
-            return null; 
+    	svcMedicationsList.url = "/patient_medications.xml?rnd=" + rnd;
+	    svcMedicationsList.send();
     }
     
 	public function selectPatient(record:XML):void {
@@ -257,6 +181,17 @@
 		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_DESTROY, null));
 		showAllPatients();
 	}
+
+	private function handlePatientAutoCompleteChange():void {
+		var patient:Object = searchPatientTI.selectedItem;
+		if (patient != null) {
+			svcPatientsList.url = "/patients/search.xml?rnd=" + rnd;
+			svcPatientsList.send({search: patient.id});	
+		}else {
+			svcPatientsList.url = "/patients.xml?rnd=" + rnd;
+			svcPatientsList.send();
+		}
+	}
 	
 	private function handleAllergyAutoCompleteChange():void {
 		var allergy:Object = searchAllergyTI.selectedItem;
@@ -269,17 +204,39 @@
 		}
 	}
 	
-	private function handlePatientAutoCompleteChange():void {
-		var patient:Object = searchPatientTI.selectedItem;
-		if (patient != null) {
-			svcPatientsList.url = "/patients/search.xml?rnd=" + rnd;
-			svcPatientsList.send({search: patient.id});	
+	private function handleVaccinationAutoCompleteChange():void {
+		var vaccination:Object = searchVaccinationTI.selectedItem;
+		if (vaccination != null) {
+			svcVaccinationsList.url = "/patient_vaccinations/search.xml?rnd=" + rnd;
+			svcVaccinationsList.send({search: vaccination.id});	
 		}else {
-			svcPatientsList.url = "/patients.xml?rnd=" + rnd;
-			svcPatientsList.send();
+			svcVaccinationsList.url = "/patient_vaccinations.xml?rnd=" + rnd;
+			svcVaccinationsList.send();
+		}
+	}	
+	
+	private function handleConditionAutoCompleteChange():void {
+		var condition:Object = searchConditionTI.selectedItem;
+		if (condition != null) {
+			svcConditionsList.url = "/patient_visits/search.xml?rnd=" + rnd;
+			svcConditionsList.send({search: condition.id});	
+		}else {
+			svcConditionsList.url = "/patient_visits.xml?rnd=" + rnd;
+			svcConditionsList.send();
 		}
 	}
 	
+	private function handleMedicationAutoCompleteChange():void {
+		var medication:Object = searchMedicationTI.selectedItem;
+		if (medication != null) {
+			svcMedicationsList.url = "/patient_medications/search.xml?rnd=" + rnd;
+			svcMedicationsList.send({search: medication.id});	
+		}else {
+			svcMedicationsList.url = "/patient_medications.xml?rnd=" + rnd;
+			svcMedicationsList.send();
+		}
+	}	
+
 	private function patientClicked(event:ListEvent):void{
 		//Alert.show(event.currentTarget.columns.length);
 		
@@ -415,13 +372,16 @@
 			    </mx:DataGrid>
 			</mx:Panel>
 		</mx:VBox>
-		<mx:VBox label="{languageArray['Vaccinations']}" show="searchVaccination()">
+		<mx:VBox label="{languageArray['Vaccinations']}" show="showAllVaccinations()">
    			<mx:Panel title="{languageArray['Vaccination List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Vaccination Name']}: "></mx:Label>
-					<mx:TextInput id="searchVaccinationTI" change="searchVaccination()"/>
-					<mx:Button id="searchVaccinationButton" label="{languageArray['Search']}" click="searchVaccination()"/>
+					<hc:AutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" labelField="name"
+						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+						prompt="Search patient by vaccination name" enableRemoveIcon="true"
+						change="handleVaccinationAutoCompleteChange()"/>
+					<mx:Spacer width="100" />
 					<mx:Button id="showAllVaccinationsButton" label="{languageArray['Show All']}" click="showAllVaccinations()"/>
 				</mx:HBox>
 				
@@ -451,13 +411,16 @@
 			    </mx:DataGrid>
 			</mx:Panel>
    		</mx:VBox>
-   		<mx:VBox label="{languageArray['Conditions']}" show="searchCondition()">						
+   		<mx:VBox label="{languageArray['Conditions']}" show="showAllConditions()">						
 	   		<mx:Panel title="{languageArray['Condition List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Condition Name']}: "></mx:Label>
-					<mx:TextInput id="searchConditionTI" change="searchCondition()"/>
-					<mx:Button id="searchConditionButton" label="{languageArray['Search']}" click="searchCondition()"/>
+					<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
+						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+						prompt="Search patient by condition name" enableRemoveIcon="true"
+						change="handleConditionAutoCompleteChange()"/>
+					<mx:Spacer width="100" />
 					<mx:Button id="showAllConditionsButton" label="{languageArray['Show All']}" click="showAllConditions()"/>
 				</mx:HBox>
 				
@@ -490,13 +453,16 @@
 			    </mx:DataGrid>
 			</mx:Panel>
 		</mx:VBox>
-		<mx:VBox label="{languageArray['Prescriptions']}" show="searchMedication()">						
+		<mx:VBox label="{languageArray['Prescriptions']}" show="showAllMedications()">						
 	   		<mx:Panel title="{languageArray['Prescription List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Medicine Name']}: "></mx:Label>
-					<mx:TextInput id="searchMedicationTI" change="searchMedication()"/>
-					<mx:Button id="searchMedicationButton" label="{languageArray['Search']}" click="searchMedication()"/>
+					<hc:AutoComplete id="searchMedicationTI" dataProvider="{medications}" labelField="name"
+						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+						prompt="Search patient by medication name" enableRemoveIcon="true"
+						change="handleMedicationAutoCompleteChange()"/>
+					<mx:Spacer width="100" />
 					<mx:Button id="showAllMedicationsButton" label="{languageArray['Show All']}" click="showAllMedications()"/>
 				</mx:HBox>
 				
