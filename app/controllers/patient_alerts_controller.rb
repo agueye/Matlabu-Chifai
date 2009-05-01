@@ -68,7 +68,7 @@ class PatientAlertsController < ApplicationController
   # PUT /patient_alerts/1.xml
   def update
     @patient_alert = PatientAlert.find(params[:id])
-
+	
     respond_to do |format|
       if @patient_alert.update_attributes(params[:patient_alert])
         
@@ -76,7 +76,7 @@ class PatientAlertsController < ApplicationController
         
         flash[:notice] = 'PatientAlert was successfully updated.'
         format.html { redirect_to(@patient_alert) }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @patient_alert }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @patient_alert.errors, :status => :unprocessable_entity }

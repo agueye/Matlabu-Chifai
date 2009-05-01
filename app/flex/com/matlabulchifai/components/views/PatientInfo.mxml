@@ -17,13 +17,14 @@
 	<mx:Script>
 	<![CDATA[
 		import mx.core.Application;
-		import com.matlabulchifai.components.popups.AlertCreateTitleWin;
 		import flash.events.Event;
 		import mx.events.ListEvent;
 		import mx.core.IFlexDisplayObject;
 		import mx.rpc.events.ResultEvent;
 		import mx.collections.XMLListCollection;
 		import mx.managers.PopUpManager;
+		import com.matlabulchifai.components.popups.AlertCreateTitleWin;
+		import com.matlabulchifai.components.popups.AlertUpdateTitleWin;
 		import com.matlabulchifai.components.popups.PatientUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 		import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
@@ -76,6 +77,7 @@
 		private var notePopUp:NoteCreateTitleWin;
 		private var prescriptionPopUp:PrescriptionCreateTitleWin;
 		private var alertPopUp:AlertCreateTitleWin;
+		private var alertUpdatePopUp:AlertUpdateTitleWin;
 		
 		public function init():void {
 			patientID = patient.id;
@@ -185,6 +187,7 @@
 		public function handlePatientUpdateEvent(event:PatientEvent):void {
 			patient = event.patient;			
 			patientIdMap[patient.id] = patient;
+			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_UPDATE, patient));
 			removePatientUpdateEventListener();
 		}
 		
@@ -343,7 +346,7 @@
 		
 		public function removeAlertEventListener():void {				
 			if (alertPopUp.hasEventListener(AlertEvent.ALERT_CREATE)) {					
-				alertPopUp.removeEventListener(AlertEvent.ALERT_CREATE, handleNoteEvent);				
+				alertPopUp.removeEventListener(AlertEvent.ALERT_CREATE, handleAlertEvent);				
 			}			
 		}
 		
@@ -360,9 +363,32 @@
 		
 		private function handleAlertClick(event:ListEvent):void {
 			if (event.columnIndex != event.currentTarget.columns.length-1){
-				//showAlertUpdateTitleWin();
+				var alert:XML = XML(event.currentTarget.selectedItem)
+				showAlertUpdateTitleWin(alert);
 			}
-		}								    	
+		}
+		
+		private function showAlertUpdateTitleWin(alert:XML):void {				
+			alertUpdatePopUp = AlertUpdateTitleWin(PopUpManager.createPopUp(this, AlertUpdateTitleWin, true));
+			alertUpdatePopUp.patient = patient;
+			alertUpdatePopUp.alert = alert;			
+			alertUpdatePopUp.languageArray = languageArray;
+			PopUpManager.centerPopUp(alertUpdatePopUp);
+			alertUpdatePopUp.addEventListener(AlertEvent.ALERT_UPDATE, handleAlertUpdateEvent);
+		}
+		
+		public function handleAlertUpdateEvent(event:AlertEvent):void {
+			var alert:XML = XML(event.alert);
+			dispatchEvent(new AlertEvent(AlertEvent.ALERT_UPDATE, alert));
+			listAlerts();				
+			removeAlertUpdateEventListener();			
+		}
+		
+		public function removeAlertUpdateEventListener():void {				
+			if (alertUpdatePopUp.hasEventListener(AlertEvent.ALERT_UPDATE)) {					
+				alertUpdatePopUp.removeEventListener(AlertEvent.ALERT_UPDATE, handleAlertUpdateEvent);				
+			}			
+		}				    	
 	]]>
 	</mx:Script>
 	

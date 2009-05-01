@@ -7,6 +7,7 @@ package com.matlabulchifai.events.patient
 		
 		public static const ALERT_CREATE:String = "alertCreate";
 		public static const ALERT_DESTROY:String = "alertDestroy";
+		public static const ALERT_UPDATE:String = "alertUpdate";
     
         public var alert:XML;
     

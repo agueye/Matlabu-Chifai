@@ -238,8 +238,6 @@
 	}	
 
 	private function patientClicked(event:ListEvent):void{
-		//Alert.show(event.currentTarget.columns.length);
-		
 		if (event.columnIndex != event.currentTarget.columns.length-1){
 			selectPatient(XML(event.currentTarget.selectedItem));
 		}
