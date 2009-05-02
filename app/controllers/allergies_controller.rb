@@ -3,6 +3,7 @@ class AllergiesController < ApplicationController
   # GET /allergies.xml
   def index
     @allergies = Allergy.find(:all)
+    @allergies.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
       format.html # index.html.erb

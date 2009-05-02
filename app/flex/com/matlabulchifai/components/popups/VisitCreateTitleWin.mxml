@@ -14,9 +14,9 @@
 			import mx.collections.ArrayCollection;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
-			import com.matlabulchifai.events.patient.VisitEvent;
-			import com.matlabulchifai.events.patient.ConditionEvent;
-			import com.matlabulchifai.events.patient.VisitTypeEvent;
+			import com.matlabulchifai.events.patient.PatientVisitEvent;
+			import com.matlabulchifai.events.patient.PatientConditionEvent;
+			import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 			
 			import mx.core.Application;
 			
@@ -84,7 +84,7 @@
 			private function handleNewVisitResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("visit created = \n" + resultXML);
-				dispatchEvent(new VisitEvent(VisitEvent.VISIT_CREATE, resultXML));
+				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.VISIT_CREATE, resultXML));
 			}
 			
 			private function checkConditionCB(event:Event):void {
@@ -109,7 +109,7 @@
 	</mx:Script>
 	
 	<mx:Metadata>
-		[Event(name="visitCreate", type="com.matlabulchifai.events.patient.VisitEvent")]
+		[Event(name="visitCreate", type="com.matlabulchifai.events.patient.PatientVisitEvent")]
 	</mx:Metadata>
 	
 	<mx:HTTPService

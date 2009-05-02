@@ -19,7 +19,8 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
 			import mx.collections.ArrayCollection;
-			import com.matlabulchifai.events.patient.AllergyEvent;
+			import com.matlabulchifai.events.allergy.AllergyEvent;
+			import com.matlabulchifai.events.patient.PatientAllergyEvent;
 			import mx.core.Application;
 			
 			[Bindable]
@@ -33,6 +34,7 @@
 			[Bindable]
 			public var allergies:ArrayCollection;
 			
+			private var allergyId:String;
 			
 			[Bindable]
 			private var severities:ArrayCollection = new ArrayCollection(
@@ -50,7 +52,7 @@
 				
 			private function handleUpdateAllergyResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
-				dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_UPDATE, resultXML));
+				dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, resultXML));
 			}
 			
 			private function processAllergyUpdate():void {
@@ -59,17 +61,8 @@
 				if (allergySelected != null) {
 					//check to see if selected allergy already exists
 					if (allergySelected.hasOwnProperty("id")) {
-						var	params:Object = new	Object();
-						params['patient_allergy[allergy_id]'] = allergySelected.id;
-						params['patient_allergy[date_observed]'] = allergyDateDF.text;
-						params['patient_allergy[reaction]'] = allergyReactionTI.text;
-						params['patient_allergy[severity]'] = severityCB.text;
-						params['patient_allergy[notes]'] = allergyNotesTI.text;
-						params['_method'] = "PUT";
-						svcAllergyUpdate.url = "/patient_allergies/" + allergy.id + ".xml?authenticity_token=" +
-									Application.application.parameters.authenticityToken;
-						svcAllergyUpdate.send(params);
-						PopUpManager.removePopUp(this);
+						allergyId = allergySelected.id;
+						callAllergyUpdate();
 					} else {
 						//if allergy does not exits then create new allergy 
 						//and then create patient_allergy						
@@ -83,21 +76,25 @@
 				
 				if (newAllergy != null) {
 					//add new allergy to allergyIdMap and allergies collection
-					allergyIdMap[newAllergy.id] = newAllergy;
-					allergies.addItem(newAllergy);
+					dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, newAllergy));
 					
-					var	params:Object = new	Object();
-					params['patient_allergy[allergy_id]'] = newAllergy.id;
-					params['patient_allergy[date_observed]'] = allergyDateDF.text;
-					params['patient_allergy[reaction]'] = allergyReactionTI.text;
-					params['patient_allergy[severity]'] = severityCB.text;
-					params['patient_allergy[notes]'] = allergyNotesTI.text;
-					params['_method'] = "PUT";
-					svcAllergyUpdate.url = "/patient_allergies/" + allergy.id + ".xml?authenticity_token=" +
-								Application.application.parameters.authenticityToken;
-					svcAllergyUpdate.send(params);
-					PopUpManager.removePopUp(this);
+					allergyId = newAllergy.id;
+					callAllergyUpdate();
 				}
+			}
+			
+			private function callAllergyUpdate():void {
+				var	params:Object = new	Object();
+				params['patient_allergy[allergy_id]'] = allergyId;
+				params['patient_allergy[date_observed]'] = allergyDateDF.text;
+				params['patient_allergy[reaction]'] = allergyReactionTI.text;
+				params['patient_allergy[severity]'] = severityCB.text;
+				params['patient_allergy[notes]'] = allergyNotesTI.text;
+				params['_method'] = "PUT";
+				svcAllergyUpdate.url = "/patient_allergies/" + allergy.id + ".xml?authenticity_token=" +
+							Application.application.parameters.authenticityToken;
+				svcAllergyUpdate.send(params);
+				PopUpManager.removePopUp(this);
 			}
 
 		]]>
@@ -129,7 +126,7 @@
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Allergy">
+			<mx:FormItem label="Allergy Name">
 				<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
 					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
 					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>

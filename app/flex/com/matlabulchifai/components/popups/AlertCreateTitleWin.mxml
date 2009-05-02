@@ -12,7 +12,7 @@
 	import mx.managers.PopUpManager;
 	import mx.rpc.events.ResultEvent;
 	import mx.collections.ArrayCollection;
-	import com.matlabulchifai.events.patient.AlertEvent;
+	import com.matlabulchifai.events.patient.PatientAlertEvent;
 	import mx.core.Application;
 	
 	[Bindable]
@@ -26,7 +26,7 @@
 	
 	
 	private function handleNewAlertResult(event:ResultEvent):void {
-		dispatchEvent(new AlertEvent(AlertEvent.ALERT_CREATE, null));
+		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_CREATE, null));
 	}
 	
 	private function processAlertCreate():void{

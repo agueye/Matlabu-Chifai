@@ -3,6 +3,7 @@ class ConditionsController < ApplicationController
   # GET /conditions.xml
   def index
     @conditions = Condition.find(:all)
+    @conditions.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
       format.html # index.html.erb

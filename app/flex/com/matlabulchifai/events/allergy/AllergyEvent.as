@@ -1,4 +1,4 @@
-﻿package com.matlabulchifai.events.patient
+﻿package com.matlabulchifai.events.allergy
 {
 	import flash.events.Event;
 
@@ -11,7 +11,7 @@
         public var allergy:XML;
     
         public function AllergyEvent(type:String, allergy:XML) {
-            super(type);
+            super(type, true);
             this.allergy = allergy;
         }
 	}

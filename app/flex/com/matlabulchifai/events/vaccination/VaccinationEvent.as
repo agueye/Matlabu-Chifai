@@ -1,4 +1,4 @@
-﻿package com.matlabulchifai.events.patient
+﻿package com.matlabulchifai.events.vaccination
 {
 	import flash.events.Event;
 
@@ -6,11 +6,12 @@
 	{
 		
 		public static const VACCINATION_CREATE:String = "vaccinationCreate";
+		public static const VACCINATION_UPDATE:String = "vaccinationUpdate";
     
         public var vaccination:XML;
     
         public function VaccinationEvent(type:String, vaccination:XML) {
-            super(type);
+            super(type, true);
             this.vaccination = vaccination;
         }
 	}

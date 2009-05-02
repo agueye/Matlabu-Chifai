@@ -3,6 +3,7 @@ class VisitTypesController < ApplicationController
   # GET /visit_types.xml
   def index
     @visit_types = VisitType.find(:all)
+    @visit_types.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
       format.html # index.html.erb

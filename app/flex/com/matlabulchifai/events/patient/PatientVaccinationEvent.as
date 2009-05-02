@@ -6,6 +6,7 @@
 	{
 		
 		public static const PATIENT_VACCINATION_CREATE:String = "patientVaccinationCreate";
+		public static const PATIENT_VACCINATION_UPDATE:String = "patientVaccinationUpdate";
     
         public var patientVaccination:XML;
     

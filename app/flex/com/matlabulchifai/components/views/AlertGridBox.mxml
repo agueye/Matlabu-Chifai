@@ -15,7 +15,7 @@
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
 	import mx.containers.ViewStack;
-	import com.matlabulchifai.events.patient.AlertEvent;
+	import com.matlabulchifai.events.patient.PatientAlertEvent;
 	import com.matlabulchifai.events.patient.PatientEvent;
 	import com.matlabulchifai.components.popups.AlertCreateBox;
 	import mx.core.Application;
@@ -71,7 +71,7 @@
 	
 	private function showAlertCreateBox():void {
 		alertPopUp = AlertCreateBox(PopUpManager.createPopUp(this, AlertCreateBox, true));
-		alertPopUp.addEventListener(AlertEvent.ALERT_CREATE, handleAlertEvent);
+		alertPopUp.addEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE, handleAlertEvent);
 		alertPopUp.patientsXLC = this.patientsXLC;
 		alertPopUp.languageArray = this.languageArray;
 		PopUpManager.centerPopUp(alertPopUp);
@@ -83,8 +83,8 @@
 	}
 	
 	public function removeAllergyEventListener():void {
-		if (alertPopUp.hasEventListener(AlertEvent.ALERT_CREATE)) {
-			alertPopUp.removeEventListener(AlertEvent.ALERT_CREATE, handleAlertEvent);
+		if (alertPopUp.hasEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE)) {
+			alertPopUp.removeEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE, handleAlertEvent);
 		}
 	}
 	

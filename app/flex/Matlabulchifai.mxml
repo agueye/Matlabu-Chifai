@@ -30,11 +30,18 @@
     import mx.collections.IViewCursor;
     import mx.collections.XMLListCollection;    
     import com.matlabulchifai.events.patient.PatientEvent;
-    import com.matlabulchifai.events.patient.AlertEvent;
-	import com.matlabulchifai.events.patient.ConditionEvent;
-	import com.matlabulchifai.events.patient.VisitTypeEvent;
-	import com.matlabulchifai.events.patient.AllergyEvent;
-	import com.matlabulchifai.events.patient.VaccinationEvent;
+    import com.matlabulchifai.events.patient.PatientAlertEvent;
+	import com.matlabulchifai.events.patient.PatientConditionEvent;
+	import com.matlabulchifai.events.visit_type.VisitTypeEvent;
+	import com.matlabulchifai.events.patient.PatientAllergyEvent;
+	import com.matlabulchifai.events.patient.PatientVaccinationEvent;
+	import com.matlabulchifai.events.allergy.AllergyEvent;
+	import com.matlabulchifai.events.vaccination.VaccinationEvent;
+	import com.matlabulchifai.events.visit_type.VisitTypeEvent;
+	import com.matlabulchifai.events.medication.MedicationEvent;
+	import com.matlabulchifai.events.condition.ConditionEvent;
+	import com.matlabulchifai.events.vaccination.VaccinationEvent;
+	import com.matlabulchifai.events.doctor.DoctorEvent;
     import flash.net.navigateToURL;
  	import mx.events.BrowserChangeEvent;
  	import mx.utils.URLUtil;
@@ -67,6 +74,10 @@
 	public var conditions:ArrayCollection;
 	[Bindable]
 	public var medications:ArrayCollection;
+	[Bindable]
+	public var visitTypes:ArrayCollection;
+	[Bindable]
+	public var doctors:ArrayCollection;
     	
     private var authToken:String;	
 	
@@ -92,9 +103,18 @@
 		this.addEventListener(PatientEvent.PATIENT_DESTROY, handlePatientDestroyEvent);
 		this.addEventListener(PatientEvent.PATIENT_SELECT, handlePatientSelectEvent);
 		this.addEventListener(PatientEvent.PATIENT_UPDATE, handlePatientUpdateEvent);
-		this.addEventListener(AlertEvent.ALERT_CREATE, handleAlertCreateEvent);
-		this.addEventListener(AlertEvent.ALERT_DESTROY, handleAlertDestroyEvent);
-		this.addEventListener(AlertEvent.ALERT_UPDATE, handleAlertUpdateEvent);
+		this.addEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE, handleAlertCreateEvent);
+		this.addEventListener(PatientAlertEvent.PATIENT_ALERT_DESTROY, handleAlertDestroyEvent);
+		this.addEventListener(PatientAlertEvent.PATIENT_ALERT_UPDATE, handleAlertUpdateEvent);
+		this.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);
+		this.addEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);
+		this.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
+		this.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);
+		this.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);
+		this.addEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);
+		this.addEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);
+		this.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
+		this.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);
  	}	    
 	
 	private function listAll():void {
@@ -150,146 +170,150 @@
 	
 	private function updatePatientIdMap():void {
     	patientIdMap = {};
+    	patients = new ArrayCollection();
+    	
         var patientsCursor:IViewCursor =
             patientsXLC.createCursor();
         while (!patientsCursor.afterLast) {
             var patient:XML = XML(patientsCursor.current);
             patientIdMap[patient.id] = patient;
-            patientsCursor.moveNext();
-        }
-        buildPatientArray();
-    }
-    
-	private function buildPatientArray():void {
-    	patients = new ArrayCollection();
-    	
-    	for (var i:String in patientIdMap) {
-    		var patient:Object = new Object();
-    		var fname:String = patientIdMap[i].first_name;
-    		var mname:String = patientIdMap[i].middle_name;
-    		var lname:String = patientIdMap[i].last_name;
+            
+            var newPatient:Object = new Object();
+            var fname:String = patient.first_name;
+    		var mname:String = patient.middle_name;
+    		var lname:String = patient.last_name;
     		
     		if (mname != "") 
-    			patient.name = fname + " " + mname + " " + lname;
+    			newPatient.name = fname + " " + mname + " " + lname;
     		else
-    			patient.name = fname + " " + lname;
-    			
-    		patient.id = i;
-    		patients.addItem(patient);
-    	}
+    			newPatient.name = fname + " " + lname;
+    		newPatient.id = patient.id;
+    		patients.addItem(newPatient);
+            
+            patientsCursor.moveNext();
+        }        
     }
     
     private function updateAllergyIdMap():void {
     	allergyIdMap = {};
+    	allergies = new ArrayCollection();
+    	
         var allergiesCursor:IViewCursor =
             allergiesXLC.createCursor();
         while (!allergiesCursor.afterLast) {
-            var allergy:XML = XML(allergiesCursor.current);
+            var allergy:XML = XML(allergiesCursor.current);        
             allergyIdMap[allergy.id] = allergy;
+            
+            var newAllergy:Object = new Object();
+    		newAllergy.name = allergy.name;
+    		newAllergy.id = allergy.id;
+    		allergies.addItem(newAllergy);
+            
             allergiesCursor.moveNext();
-        }
-        buildAllergyArray();
+        }        
     }
-    
-    private function buildAllergyArray():void {
-    	allergies = new ArrayCollection();
-    	
-    	for (var i:String in allergyIdMap) {
-    		var allergy:Object = new Object();
-    		allergy.name = allergyIdMap[i].name;
-    		allergy.id = i;
-    		allergies.addItem(allergy);
-    	}
-    }
+
     
     private function updateVaccinationIdMap():void {
     	vaccinationIdMap = {};
+    	vaccinations = new ArrayCollection();
+    	
         var vaccinationsCursor:IViewCursor =
             vaccinationsXLC.createCursor();
         while (!vaccinationsCursor.afterLast) {
             var vaccination:XML = XML(vaccinationsCursor.current);
             vaccinationIdMap[vaccination.id] = vaccination;
+            
+            var newVaccination:Object = new Object();
+        	newVaccination.name = vaccination.name;
+    		newVaccination.id = vaccination.id;
+    		vaccinations.addItem(newVaccination);
+            
             vaccinationsCursor.moveNext();
-        }
-        buildVaccinationArray();
-    }
-    
-    private function buildVaccinationArray():void {
-    	vaccinations = new ArrayCollection();
-    	
-    	for (var i:String in vaccinationIdMap) {
-    		var vaccination:Object = new Object();
-    		vaccination.name = vaccinationIdMap[i].name;
-    		vaccination.id = i;
-    		vaccinations.addItem(vaccination);
-    	}
+        }        
     }
     
     private function updateConditionIdMap():void {
     	conditionIdMap = {};
+    	conditions = new ArrayCollection();
+    	
         var conditionsCursor:IViewCursor =
             conditionsXLC.createCursor();
         while (!conditionsCursor.afterLast) {
             var condition:XML = XML(conditionsCursor.current);
             conditionIdMap[condition.id] = condition;
-            conditionsCursor.moveNext();
-        }
-        buildConditionArray();
-    }
-    
-    private function buildConditionArray():void {
-    	conditions = new ArrayCollection();
-    	
-    	for (var i:String in conditionIdMap) {
-    		var condition:Object = new Object();
-    		condition.name = conditionIdMap[i].name;
-    		condition.id = i;
-    		conditions.addItem(condition);
-    	}
+            
+            var newCondition:Object = new Object();
+    		newCondition.name = condition.name;
+    		newCondition.id = condition.id;
+    		conditions.addItem(newCondition);
+    		
+			conditionsCursor.moveNext();
+        }        
     }
     
     private function updateMedicationIdMap():void {
     	medicationIdMap = {};
+    	medications = new ArrayCollection();
+    	
         var medicationsCursor:IViewCursor =
             medicationsXLC.createCursor();
         while (!medicationsCursor.afterLast) {
             var medication:XML = XML(medicationsCursor.current);
             medicationIdMap[medication.id] = medication;
-            medicationsCursor.moveNext();
+            
+            var newMedication:Object = new Object();
+    		newMedication.name = medication.name;
+    		newMedication.id = medication.id;
+    		medications.addItem(newMedication);
+    		
+    		medicationsCursor.moveNext();
         }
-        buildMedicationArray();
-    }
-    
-    private function buildMedicationArray():void {
-    	medications = new ArrayCollection();
-    	
-    	for (var i:String in medicationIdMap) {
-    		var medication:Object = new Object();
-    		medication.name = medicationIdMap[i].name;
-    		medication.id = i;
-    		medications.addItem(medication);
-    	}
     }
     
     private function updateVisitTypeIdMap():void {
     	visitTypeIdMap = {};
+    	visitTypes = new ArrayCollection();
+    	
         var visitTypesCursor:IViewCursor =
             visitTypesXLC.createCursor();
         while (!visitTypesCursor.afterLast) {
             var visitType:XML = XML(visitTypesCursor.current);
             visitTypeIdMap[visitType.id] = visitType;
-            visitTypesCursor.moveNext();
-        }
+            
+            var newVisitType:Object = new Object();
+    		newVisitType.name = visitType.name;
+    		newVisitType.id = visitType.id;
+    		visitTypes.addItem(newVisitType);
+    		
+    		visitTypesCursor.moveNext();
+        }    	
     }
     
     private function updateDoctorIdMap():void {
     	doctorIdMap = {};
+    	doctors = new ArrayCollection();
+    	
         var doctorsCursor:IViewCursor =
             doctorsXLC.createCursor();
         while (!doctorsCursor.afterLast) {
             var doctor:XML = XML(doctorsCursor.current);
             doctorIdMap[doctor.id] = doctor;
-            doctorsCursor.moveNext();
+            
+            var newDoctor:Object = new Object();
+    		var fname:String = doctor.first_name;
+    		var mname:String = doctor.middle_name;
+    		var lname:String = doctor.last_name;
+    		
+    		if (mname != "") 
+    			newDoctor.name = fname + " " + mname + " " + lname;
+    		else
+    			newDoctor.name = fname + " " + lname;
+    			
+    		newDoctor.id = doctor.id;
+    		doctors.addItem(newDoctor);
+    		
+    		doctorsCursor.moveNext();
         }
     }
      
@@ -433,39 +457,47 @@
 		mainStack.selectedChild = patientInfoBox;
 	}
 	
-	private function handleAlertCreateEvent(event:AlertEvent):void {
+	private function handleAlertCreateEvent(event:PatientAlertEvent):void {
 		//select patientinfo view and pass in patient information
 		alertBox.listAlerts();
 	}
 	
-	private function handleAlertDestroyEvent(event:AlertEvent):void {
+	private function handleAlertDestroyEvent(event:PatientAlertEvent):void {
 		//select patientinfo view and pass in patient information
 		alertBox.listAlerts();
 	}
 	
-	private function handleAlertUpdateEvent(event:AlertEvent):void {
+	private function handleAlertUpdateEvent(event:PatientAlertEvent):void {
 		//select patientinfo view and pass in patient information
 		alertBox.listAlerts();
 	}
 	
 	//update conditions id map upon condition creation by requesting new svcConditionsList
-	private function handleConditionCreateEvent(event:ConditionEvent):void {
+	private function handleConditionCreateEvent(event:Event):void {
 		listConditions();
 	}
 	
 	//update visit types id map upon visit type creation by requesting new svcVisitTypesList
-	private function handleVisitTypeCreateEvent(event:VisitTypeEvent):void {
+	private function handleVisitTypeCreateEvent(event:Event):void {
 		listVisitTypes();
 	}
 	
 	//update allergies id map upon allergy  creation by requesting new svcAllergiesList
-	private function handleAllergyCreateEvent(event:AllergyEvent):void {
+	private function handleAllergyCreateEvent(event:Event):void {
 		listAllergies();
 	}
 	
 	//update vaccinations id map upon vaccination creation by requesting new svcVaccinationsList
-	private function handleVaccinationCreateEvent(event:VaccinationEvent):void {
+	private function handleVaccinationCreateEvent(event:Event):void {
 		listVaccinations();
+	}
+	
+	private function handleMedicationCreateEvent(event:Event):void {
+		listMedications();
+	}
+
+	private function handleDoctorCreateEvent(event:Event):void {
+		listDoctors();
 	}
 		
 			
@@ -568,10 +600,15 @@
 				visitTypeIdMap="{visitTypeIdMap}"
 				doctorIdMap="{doctorIdMap}"
 				allergies="{allergies}"
-				conditionCreate="handleConditionCreateEvent(event)"
+				vaccinations="{vaccinations}"
+				medications="{medications}"
+				conditions="{conditions}"
+				visitTypes="{visitTypes}"
+				doctors="{doctors}"
+				patientConditionCreate="handleConditionCreateEvent(event)"
 				visitTypeCreate="handleVisitTypeCreateEvent(event)"
-				allergyCreate="handleAllergyCreateEvent(event)"
-				vaccinationCreate="handleVaccinationCreateEvent(event)" />
+				patientAllergyCreate="handleAllergyCreateEvent(event)"
+				patientVaccinationCreate="handleVaccinationCreateEvent(event)" />
 		</mx:ViewStack>
 	</mx:VBox>
 	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>

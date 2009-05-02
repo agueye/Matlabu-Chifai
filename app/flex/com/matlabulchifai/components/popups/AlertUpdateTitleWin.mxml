@@ -14,7 +14,7 @@
 	import mx.managers.PopUpManager;
 	import mx.rpc.events.ResultEvent;
 	import mx.collections.ArrayCollection;
-	import com.matlabulchifai.events.patient.AlertEvent;
+	import com.matlabulchifai.events.patient.PatientAlertEvent;
 	import mx.core.Application;
 	
 	[Bindable]
@@ -47,7 +47,7 @@
 	
 	private function handleAlertUpdateResult(event:ResultEvent):void {
 		var alert:XML = XML(event.result);
-		dispatchEvent(new AlertEvent(AlertEvent.ALERT_UPDATE, alert));
+		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_UPDATE, alert));
 	}
 ]]>
 </mx:Script>

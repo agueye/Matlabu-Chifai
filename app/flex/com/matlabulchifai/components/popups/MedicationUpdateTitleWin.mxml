@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
+	layout="vertical" 
+	width="400" 
+	height="525"
+	title="{languageArray['Edit Medication']}"
+	showCloseButton="true"
+	creationComplete="init()"
+    close="PopUpManager.removePopUp(this)">
+		
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.utils.DateUtil;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.core.Application;
+			import mx.collections.ArrayCollection;
+			import com.matlabulchifai.events.patient.PatientMedicationEvent;
+			import com.matlabulchifai.events.medication.MedicationEvent;
+			import com.matlabulchifai.events.condition.ConditionEvent;
+			import com.matlabulchifai.events.doctor.DoctorEvent;
+			
+			[Bindable]
+			public var patient:XML;
+			[Bindable]
+			public var medication:XML;
+			[Bindable]
+			public var languageArray:Object;
+			[Bindable]
+			public var medicationIdMap:Object;
+			[Bindable]
+			public var conditionIdMap:Object;
+			[Bindable]
+			public var doctorIdMap:Object;
+			[Bindable]
+			public var medications:ArrayCollection;
+			[Bindable]
+			public var conditions:ArrayCollection;
+			[Bindable]
+			public var doctors:ArrayCollection;
+			[Bindable]
+			private var gotMedication:Boolean = false;
+			[Bindable]
+			private var gotCondition:Boolean = false;
+			
+			private var medicationId:String;
+			private var conditionId:String;
+			
+			private function init():void {
+				searchMedicationTI.selectedItemId = medication.medication_id;
+				searchConditionTI.selectedItemId = medication.condition_id;
+				medicationDateDF.selectedDate = DateUtil.parseW3CDTF(medication.date_given);
+				FrequencyTI.text = medication.frequency;				
+				DosageTI.text = medication.dosage;
+				medicationNotesTI.text = medication.notes;
+				
+				var doctorsArray:Array = doctors.toArray();
+				for (var i:int=0; doctorsArray.length-1; i++) {
+					if (parseInt(doctorsArray[i].id) == parseInt(medication.doctor_id)) {
+						doctorCB.selectedIndex = i;
+						break;		
+					}
+				}
+			}
+			
+			private function handleUpdateMedicationResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new PatientMedicationEvent(PatientMedicationEvent.PATIENT_MEDICATION_UPDATE, resultXML));
+			}
+			
+			private function processMedicationUpdate():void {
+				var medicationSelected:Object = searchMedicationTI.selectedItem;
+				var conditionSelected:Object = searchConditionTI.selectedItem;
+				
+				//Stop processing if medication or condition is blank
+				//If item alredy exists, then set flag, otherwise create item
+				if (medicationSelected != null && conditionSelected != null) {
+					if (medicationSelected.hasOwnProperty("id")) {
+						medicationId = medicationSelected.id;
+						gotMedication = true;
+					} else {
+						svcMedicationCreate.send();
+					}
+					
+					if (conditionSelected.hasOwnProperty("id")) {
+						conditionId = conditionSelected.id;
+						gotCondition = true;
+					} else {
+						svcConditionCreate.send();
+					}
+					
+					//if both condition and medication already exist, then call update
+					if (gotMedication && gotCondition) {
+						callMedicationUpdate();
+					}					
+				}
+			}
+			
+			private function handleNewMedicationResult(event:ResultEvent):void {
+				var newMedication:XML = XML(event.result);
+				
+				if (newMedication != null) {
+					//add new medication to medicationIdMap and medications collection
+					dispatchEvent(new MedicationEvent(MedicationEvent.MEDICATION_CREATE, newMedication));
+					
+					//set flag and id field
+					medicationId = newMedication.id;
+					gotMedication = true;
+					
+					//if all other flag are ready, call update
+					if (gotMedication && gotCondition) {
+						callMedicationUpdate();
+					}	
+				}
+			}
+			
+			private function callMedicationUpdate():void {
+				var	params:Object = new	Object();
+				params['patient_medication[medication_id]'] = medicationId;
+				params['patient_medication[condition_id]'] = conditionId;
+				params['patient_medication[doctor_id]'] = doctorCB.selectedItem.id;
+				params['patient_medication[dosage]'] = DosageTI.text;
+				params['patient_medication[frequency]'] = FrequencyTI.text;
+				params['patient_medication[date_given]'] = medicationDateDF.text;
+				params['patient_medication[notes]'] = medicationNotesTI.text;
+				params['_method'] = "PUT";
+				svcMedicationUpdate.url = "/patient_medications/" + medication.id + ".xml?authenticity_token=" +
+							Application.application.parameters.authenticityToken;
+				svcMedicationUpdate.send(params);
+				PopUpManager.removePopUp(this);	
+			}
+			
+			private function handleNewConditionResult(event:ResultEvent):void {
+				var newCondition:XML = XML(event.result);
+				
+				if (newCondition != null) {
+					//add new medication to medicationIdMap and medications collection
+					dispatchEvent(new ConditionEvent(ConditionEvent.CONDITION_CREATE, newCondition));
+					
+					//set flag and id field
+					conditionId = newCondition.id;
+					gotCondition = true;
+					
+					//if all other flag are ready, call update
+					if (gotMedication && gotCondition) {
+						callMedicationUpdate();
+					}	
+				}
+			}
+
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService
+		id="svcMedicationUpdate"
+		resultFormat="e4x"
+		method="POST"
+		result="handleUpdateMedicationResult(event)">
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcMedicationCreate"
+		url="/medications.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewMedicationResult(event)">
+		<mx:request>
+			<medication>
+				<name>{searchMedicationTI.selectedItem.toString()}</name>
+				<notes></notes>
+			</medication>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcConditionCreate"
+		url="/conditions.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewConditionResult(event)">
+		<mx:request>
+			<condition>
+				<name>{searchConditionTI.selectedItem.toString()}</name>
+				<notes></notes>
+			</condition>
+		</mx:request>
+	</mx:HTTPService>
+	
+	
+	<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
+		<mx:Form>
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Medication Name">
+				<hc:AutoComplete id="searchMedicationTI" dataProvider="{medications}" labelField="name"
+					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Condition Name">
+				<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
+					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Dosage">
+				<mx:TextInput id="DosageTI"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Frequency">
+				<mx:TextInput id="FrequencyTI"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Date Administered">
+				<mx:DateField id="medicationDateDF" yearNavigationEnabled="true" minYear="1980"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Doctor">
+				<mx:ComboBox id="doctorCB" dataProvider="{doctors}" labelField="name" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Notes">
+				<mx:TextArea id="medicationNotesTI" width="200" height="100" />
+			</mx:FormItem>
+		</mx:Form>
+	</mx:HBox>
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="10%">
+		<mx:Button label="OK" id="OKBtn" click="processMedicationUpdate()" />
+		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>

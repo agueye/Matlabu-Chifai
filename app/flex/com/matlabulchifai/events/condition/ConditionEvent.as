@@ -1,4 +1,4 @@
-﻿package com.matlabulchifai.events.patient
+﻿package com.matlabulchifai.events.condition
 {
 	import flash.events.Event;
 
@@ -6,6 +6,7 @@
 	{
 		
 		public static const CONDITION_CREATE:String = "conditionCreate";
+		public static const CONDITION_UPDATE:String = "conditionUpdate";
     
         public var condition:XML;
     
