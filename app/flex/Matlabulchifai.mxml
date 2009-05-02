@@ -567,6 +567,7 @@
 				medicationIdMap="{medicationIdMap}"
 				visitTypeIdMap="{visitTypeIdMap}"
 				doctorIdMap="{doctorIdMap}"
+				allergies="{allergies}"
 				conditionCreate="handleConditionCreateEvent(event)"
 				visitTypeCreate="handleVisitTypeCreateEvent(event)"
 				allergyCreate="handleAllergyCreateEvent(event)"

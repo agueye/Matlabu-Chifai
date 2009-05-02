@@ -17,6 +17,7 @@
 	<mx:Script>
 	<![CDATA[
 		import mx.core.Application;
+		import mx.collections.ArrayCollection;
 		import flash.events.Event;
 		import mx.events.ListEvent;
 		import mx.core.IFlexDisplayObject;
@@ -28,6 +29,7 @@
 		import com.matlabulchifai.components.popups.PatientUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 		import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
+		import com.matlabulchifai.components.popups.AllergyUpdateTitleWin;
 		import com.matlabulchifai.components.popups.NoteCreateTitleWin;
 		import com.matlabulchifai.components.popups.NoteUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
@@ -62,6 +64,8 @@
 		public var visitTypeIdMap:Object;
 		[Bindable]        
 		public var doctorIdMap:Object;
+		[Bindable]
+		public var allergies:ArrayCollection;
 		
 		[Bindable]
 		public var patientID:Number = 0;
@@ -80,6 +84,7 @@
 		private var alertPopUp:AlertCreateTitleWin;
 		private var alertUpdatePopUp:AlertUpdateTitleWin;
 		private var noteUpdatePopUp:NoteUpdateTitleWin;
+		private var allergyUpdatePopUp:AllergyUpdateTitleWin;
 		
 		public function init():void {
 			patientID = patient.id;
@@ -358,7 +363,7 @@
 	    }
 	    
 	    private function handleAlertsDestroyResult(event:ResultEvent):void {
-	    	var alert = XML(event.result);
+	    	var alert:XML = XML(event.result);
 	    	listAlerts();
 	    	dispatchEvent(new AlertEvent(AlertEvent.ALERT_DESTROY, alert));
 	    }
@@ -426,6 +431,44 @@
 			if (noteUpdatePopUp.hasEventListener(NoteEvent.NOTE_UPDATE)) {					
 				noteUpdatePopUp.removeEventListener(NoteEvent.NOTE_UPDATE, handleNoteUpdateEvent);				
 			}			
+		}
+		
+		public function deleteAllergy(allergy:XML):void {
+			svcAllergiesDestroy.url = "/patient_allergies/" + allergy.id + ".xml" + authToken;
+			svcAllergiesDestroy.send({_method:"DELETE"});
+	    }
+	    
+	    private function handleAllergiesDestroyResult(event:ResultEvent):void {
+	    	listAllergies();	    	
+	    }
+		
+		private function handleAllergyClick(event:ListEvent):void {
+			if (event.columnIndex != event.currentTarget.columns.length-1){
+				var allergy:XML = XML(event.currentTarget.selectedItem)
+				showAllergyUpdateTitleWin(allergy);
+			}
+		}
+		
+		private function showAllergyUpdateTitleWin(allergy:XML):void {				
+			allergyUpdatePopUp = AllergyUpdateTitleWin(PopUpManager.createPopUp(this, AllergyUpdateTitleWin, true));
+			allergyUpdatePopUp.patient = patient;
+			allergyUpdatePopUp.allergy = allergy;
+			allergyUpdatePopUp.allergies = allergies;
+			allergyUpdatePopUp.allergyIdMap = allergyIdMap					
+			allergyUpdatePopUp.languageArray = languageArray;
+			PopUpManager.centerPopUp(allergyUpdatePopUp);
+			allergyUpdatePopUp.addEventListener(AllergyEvent.ALLERGY_UPDATE, handleAllergyUpdateEvent);
+		}
+		
+		public function handleAllergyUpdateEvent(event:AllergyEvent):void {			
+			listAllergies();				
+			removeAllergyUpdateEventListener();			
+		}
+		
+		public function removeAllergyUpdateEventListener():void {				
+			if (allergyUpdatePopUp.hasEventListener(AllergyEvent.ALLERGY_UPDATE)) {					
+				allergyUpdatePopUp.removeEventListener(AllergyEvent.ALLERGY_UPDATE, handleAllergyUpdateEvent);				
+			}			
 		}				    	
 		
 		
@@ -485,6 +528,12 @@
         resultFormat="e4x"
         method="POST"
         result="handleNotesDestroyResult(event)"/>
+    
+    <mx:HTTPService
+        id="svcAllergiesDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleAllergiesDestroyResult(event)"/>
 		
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
@@ -615,7 +664,8 @@
 		   			<mx:LinkButton label="{languageArray['Add New Allergy']}" color="#0000FF" 
 		   				click="showAllergyCreateTitleWin()"/>
 		   			<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{allergiesXLC}" wordWrap="true" variableRowHeight="true">						
+		   				dataProvider="{allergiesXLC}" wordWrap="true" variableRowHeight="true"
+		   				itemClick="handleAllergyClick(event)">						
 		   				<mx:columns>														
 		   					<mx:DataGridColumn headerText="{languageArray['Allergy Name']}" width="250"
 				                labelFunction="getAllergyName"/>
@@ -626,7 +676,15 @@
 				            <mx:DataGridColumn headerText="{languageArray['Reaction']}" width="85"
 				                dataField="reaction"/>
 				            <mx:DataGridColumn headerText="{languageArray['Notes']}"
-				                dataField="notes"/>						
+				                dataField="notes"/>	
+				            <mx:DataGridColumn headerText="" width="150" 
+				                    editable="false">
+				                    <mx:itemRenderer>
+				                        <mx:Component>
+				                            <mx:Button label="{outerDocument.languageArray['Delete Allergy']}" click="outerDocument.deleteAllergy(XML(data))" />
+				                        </mx:Component>
+				                    </mx:itemRenderer>
+							</mx:DataGridColumn>						
 		   				</mx:columns>					
 		   			</mx:DataGrid>
 	   			</mx:Panel>

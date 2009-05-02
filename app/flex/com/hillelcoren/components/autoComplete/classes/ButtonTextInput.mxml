@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:components="com.hillelcoren.components.*"
+	implements="com.hillelcoren.components.autoComplete.interfaces.iComboItem"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	verticalAlign="middle" horizontalAlign="left"
+	horizontalGap="0" verticalGap="0">
+	
+	<mx:Metadata>
+		[Event(name="change")]
+		[Event(name="buttonClick")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Button;
+			import mx.managers.PopUpManager;
+			import mx.containers.VBox;
+			import com.hillelcoren.components.autoComplete.classes.*;
+			
+			private var _button:Button;
+			private var _buttonChanged:Boolean;
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				
+				if (_buttonChanged)
+				{
+					_buttonChanged = false;
+					
+					if (_button)
+					{
+						setStyle( "paddingRight", 2 );
+						
+						_button.tabEnabled = false;
+						_button.visible = false;
+						_button.includeInLayout = false;
+						_button.addEventListener( MouseEvent.CLICK, handleButtonClick );
+						
+						addChild( _button );						
+					}
+					else
+					{
+						setStyle( "paddingRight", 0 );
+					}
+				}
+			}
+			
+			override public function get minWidth():Number
+			{
+				var width:int = measureText( textInput.text ).width + 30 
+				
+				if (_button)
+				{
+					width += _button.width;
+				}
+				
+				return width;
+			}
+			
+			public function set buttonVisible( value:Boolean ):void
+			{
+				if (!_button)
+				{
+					return;
+				}
+				
+				_button.visible = value;
+				_button.includeInLayout = value;
+			}
+			
+			public function setTextFocus():void
+			{
+				textInput.setFocus();
+			}
+			
+			public function isCursorAtBeginning():Boolean
+			{
+				return textInput.isCursorAtBeginning();
+			}
+			
+			public function isCursorAtEnd():Boolean
+			{
+				return textInput.isCursorAtEnd();	
+			}
+			
+			public function isEditable():Boolean
+			{
+				return true;	
+			}		
+			
+			public function get text():String
+			{
+				return textInput.text;
+			}
+			
+			public function get item():Object
+			{
+				return null;	
+			}						
+			
+			private function handleTextChange( event:Event ):void
+			{
+				dispatchEvent( event );
+			}
+			
+			private function handleButtonClick( event:Event ):void
+			{
+				var event:Event = new Event( "buttonClick" );
+				dispatchEvent( event );
+			}
+			
+			public function set button( value:Button ):void
+			{	
+				if (_button && !value)
+				{
+					removeChild( _button );
+				}
+				
+				if (_button != value)
+				{
+					_button = value;
+					_buttonChanged = true;
+				
+					invalidateProperties();
+				}
+			}
+			
+			public function get button():Button
+			{
+				return _button;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<components:PromptTextInput id="textInput" enableClearIcon="false" width="100%"
+		change="handleTextChange(event)" drawFocusBorder="false" borderStyle="none"/>
+	
+</mx:HBox>

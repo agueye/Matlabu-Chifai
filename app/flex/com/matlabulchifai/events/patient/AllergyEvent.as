@@ -6,6 +6,7 @@
 	{
 		
 		public static const ALLERGY_CREATE:String = "allergyCreate";
+		public static const ALLERGY_UPDATE:String = "allergyUpdate";
     
         public var allergy:XML;
     

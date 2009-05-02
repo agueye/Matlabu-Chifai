@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*" 
+	layout="vertical" 
+	width="420" 
+	height="530"
+	title="{languageArray['Edit Allergy']}"
+	showCloseButton="true"
+	creationComplete="init()"
+    close="PopUpManager.removePopUp(this)">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.utils.DateUtil;
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+			import com.matlabulchifai.events.patient.AllergyEvent;
+			import mx.core.Application;
+			
+			[Bindable]
+			public var patient:XML;
+			[Bindable]
+			public var allergy:XML;
+			[Bindable]
+			public var languageArray:Object;
+			[Bindable]
+			public var allergyIdMap:Object;
+			[Bindable]
+			public var allergies:ArrayCollection;
+			
+			
+			[Bindable]
+			private var severities:ArrayCollection = new ArrayCollection(
+            [ { label:"10", data:"10" }, { label:"9", data:"9" }, { label:"8", data:"8" }, { label:"7", data:"7" },
+				{label:"6", data:"6" }, { label:"5", data:"5" }, { label:"4", data:"4" }, { label:"3", data:"3" },
+				{label:"2", data:"2" }, { label:"1", data:"1" } ]);
+			
+			private function init():void {
+				searchAllergyTI.selectedItemId = allergy.allergy_id;
+				allergyDateDF.selectedDate = DateUtil.parseW3CDTF(allergy.date_observed);
+				allergyReactionTI.text = allergy.reaction;
+				allergyNotesTI.text = allergy.notes;
+				severityCB.selectedIndex = 10 - parseInt(allergy.severity);
+			}
+				
+			private function handleUpdateAllergyResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_UPDATE, resultXML));
+			}
+			
+			private function processAllergyUpdate():void {
+				var allergySelected:Object = searchAllergyTI.selectedItem;
+				
+				if (allergySelected != null) {
+					//check to see if selected allergy already exists
+					if (allergySelected.hasOwnProperty("id")) {
+						var	params:Object = new	Object();
+						params['patient_allergy[allergy_id]'] = allergySelected.id;
+						params['patient_allergy[date_observed]'] = allergyDateDF.text;
+						params['patient_allergy[reaction]'] = allergyReactionTI.text;
+						params['patient_allergy[severity]'] = severityCB.text;
+						params['patient_allergy[notes]'] = allergyNotesTI.text;
+						params['_method'] = "PUT";
+						svcAllergyUpdate.url = "/patient_allergies/" + allergy.id + ".xml?authenticity_token=" +
+									Application.application.parameters.authenticityToken;
+						svcAllergyUpdate.send(params);
+						PopUpManager.removePopUp(this);
+					} else {
+						//if allergy does not exits then create new allergy 
+						//and then create patient_allergy						
+						svcAllergyCreate.send();
+					}
+				}
+			}
+			
+			private function handleNewAllergyResult(event:ResultEvent):void {
+				var newAllergy:XML = XML(event.result);
+				
+				if (newAllergy != null) {
+					//add new allergy to allergyIdMap and allergies collection
+					allergyIdMap[newAllergy.id] = newAllergy;
+					allergies.addItem(newAllergy);
+					
+					var	params:Object = new	Object();
+					params['patient_allergy[allergy_id]'] = newAllergy.id;
+					params['patient_allergy[date_observed]'] = allergyDateDF.text;
+					params['patient_allergy[reaction]'] = allergyReactionTI.text;
+					params['patient_allergy[severity]'] = severityCB.text;
+					params['patient_allergy[notes]'] = allergyNotesTI.text;
+					params['_method'] = "PUT";
+					svcAllergyUpdate.url = "/patient_allergies/" + allergy.id + ".xml?authenticity_token=" +
+								Application.application.parameters.authenticityToken;
+					svcAllergyUpdate.send(params);
+					PopUpManager.removePopUp(this);
+				}
+			}
+
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService
+		id="svcAllergyUpdate"
+		resultFormat="e4x"
+		method="POST"
+		result="handleUpdateAllergyResult(event)">
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcAllergyCreate"
+		url="/allergies.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewAllergyResult(event)">
+		<mx:request>
+			<allergy>
+				<name>{searchAllergyTI.selectedItem.toString()}</name>
+				<notes></notes>
+			</allergy>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+		<mx:Form>
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Allergy">
+				<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
+					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Date Observed">
+				<mx:DateField id="allergyDateDF" yearNavigationEnabled="true" minYear="1980"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Severity">		
+				<mx:ComboBox id="severityCB" dataProvider="{severities}" /> 
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Reaction">
+				<mx:TextInput id="allergyReactionTI" />
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Notes">
+				<mx:TextArea id="allergyNotesTI" width="200" height="100" />
+			</mx:FormItem>
+		</mx:Form>
+	</mx:VBox>
+	
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+		<mx:Button label="OK" id="OKBtn" click="processAllergyUpdate()" />
+		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>
