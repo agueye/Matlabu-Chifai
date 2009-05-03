@@ -86,7 +86,7 @@
 				_list.dataProvider = _dataProvider;
 				_list.doubleClickEnabled = true;
 				_list.itemRenderer = _itemRenderer ? _itemRenderer : browserItemRenderer;
-				_list.addEventListener( ListEvent.ITEM_DOUBLE_CLICK, handleDoubleClick );
+				_list.addEventListener( ListEvent.ITEM_CLICK, handleDoubleClick );
 				_list.addEventListener( KeyboardEvent.KEY_DOWN, handleKeyDown );
 				vBox.addChildAt( _list, 0 );
 			}

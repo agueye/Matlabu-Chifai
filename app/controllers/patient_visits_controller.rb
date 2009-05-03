@@ -101,7 +101,7 @@ class PatientVisitsController < ApplicationController
         APP_LOGGER_LOG.info "VISIT UPDATED - for PATIENT ID " + @patient_visit[:patient_id].to_s + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(patient_patient_visit_path(@patient, @patient_visit)) }
-        format.xml  { render :xml => @patient_vaccination }
+        format.xml  { render :xml => @patient_visit }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @patient_visit.errors, :status => :unprocessable_entity }

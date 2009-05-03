@@ -69,8 +69,7 @@
 				doctors = new ArrayCollection();
 				for (i = 1; doctorIdMap[i] != null; i++) {
 					var doctor:XML = doctorIdMap[i];
-					doctors.addItem( { label: doctor.first_name + " " + 
-						doctor.middle_name + " " + doctor.last_name, data: doctor.id } );
+					doctors.addItem( { label: doctor.name, data: doctor.id } );
 				}
 			}
 			

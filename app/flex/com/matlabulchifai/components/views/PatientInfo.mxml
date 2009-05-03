@@ -34,6 +34,7 @@
 		import com.matlabulchifai.components.popups.NoteCreateTitleWin;
 		import com.matlabulchifai.components.popups.NoteUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
+		import com.matlabulchifai.components.popups.VisitUpdateTitleWin;
 		import com.matlabulchifai.components.popups.PrescriptionCreateTitleWin;
 		import com.matlabulchifai.components.popups.MedicationUpdateTitleWin;
 		import com.matlabulchifai.events.patient.PatientEvent;
@@ -103,6 +104,7 @@
 		private var allergyUpdatePopUp:AllergyUpdateTitleWin;
 		private var vaccinationUpdatePopUp:VaccinationUpdateTitleWin;
 		private var medicationUpdatePopUp:MedicationUpdateTitleWin;
+		private var visitUpdatePopUp:VisitUpdateTitleWin;
 		
 		public function init():void {
 			patientID = patient.id;
@@ -276,7 +278,7 @@
 		
 		private function showVisitCreateTitleWin():void {
 			visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
-			visitPopUp.addEventListener(PatientVisitEvent.VISIT_CREATE, handleVisitEvent);
+			visitPopUp.addEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE, handleVisitEvent);
 			visitPopUp.patient = this.patient;
 			visitPopUp.patientID = this.patientID;
 			visitPopUp.visitTypeIdMap = this.visitTypeIdMap;
@@ -299,8 +301,8 @@
 		}
 		
 		public function removeVisitEventListener():void {
-			if (visitPopUp.hasEventListener(PatientVisitEvent.VISIT_CREATE)) {
-				visitPopUp.removeEventListener(PatientVisitEvent.VISIT_CREATE, handleVisitEvent);
+			if (visitPopUp.hasEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE)) {
+				visitPopUp.removeEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE, handleVisitEvent);
 			}
 		}
 		
@@ -618,17 +620,89 @@
 			}			
 		}
 		
-		public function removeConditionCreateEventListener():void {				
-			if (medicationUpdatePopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
-				medicationUpdatePopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
-			}			
+		public function removeConditionCreateEventListener():void {	
+			if (medicationUpdatePopUp != null) {
+				if (medicationUpdatePopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
+					medicationUpdatePopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
+				}	
+			}	
+			
+			if (visitUpdatePopUp != null) {
+				if (visitUpdatePopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
+					visitUpdatePopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
+				}
+			}
 		}
 		
 		public function removeDoctorCreateEventListener():void {				
-			if (medicationUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
-				medicationUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
+			if (medicationUpdatePopUp != null) {
+				if (medicationUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
+					medicationUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleConditionCreateEvent);				
+				}	
+			}	
+			
+			if (visitUpdatePopUp != null) {
+				if (visitUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
+					visitUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleConditionCreateEvent);				
+				}
+			}	
+		}
+		
+		public function deleteVisit(visit:XML):void {
+			svcVisitsDestroy.url = "/patient_visits/" + visit.id + ".xml" + authToken;
+			svcVisitsDestroy.send({_method:"DELETE"});
+	    }
+	    
+	    private function handleVisitsDestroyResult(event:ResultEvent):void {
+	    	listVisits();	    	
+	    }
+		
+		private function handleVisitClick(event:ListEvent):void {
+			if (event.columnIndex != event.currentTarget.columns.length-1){
+				var visit:XML = XML(event.currentTarget.selectedItem)
+				showVisitUpdateTitleWin(visit);
+			}
+		}
+		
+		private function showVisitUpdateTitleWin(visit:XML):void {				
+			visitUpdatePopUp = VisitUpdateTitleWin(PopUpManager.createPopUp(this, VisitUpdateTitleWin, true));
+			visitUpdatePopUp.patient = patient;
+			visitUpdatePopUp.visit = visit;
+			visitUpdatePopUp.visitTypes = visitTypes;
+			visitUpdatePopUp.conditions = conditions;
+			visitUpdatePopUp.doctors = doctors;
+			visitUpdatePopUp.visitTypeIdMap = visitTypeIdMap;	
+			visitUpdatePopUp.conditionIdMap = conditionIdMap;
+			visitUpdatePopUp.doctorIdMap = doctorIdMap;			
+			visitUpdatePopUp.languageArray = languageArray;
+			PopUpManager.centerPopUp(visitUpdatePopUp);
+			visitUpdatePopUp.addEventListener(PatientVisitEvent.PATIENT_VISIT_UPDATE, handleVisitUpdateEvent);
+			visitUpdatePopUp.addEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);
+			visitUpdatePopUp.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
+			visitUpdatePopUp.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);
+		}
+		
+		public function handleVisitUpdateEvent(event:PatientVisitEvent):void {			
+			listVisits();				
+			removeVisitUpdateEventListener();			
+		}
+		
+		public function removeVisitUpdateEventListener():void {				
+			if (visitUpdatePopUp.hasEventListener(PatientVisitEvent.PATIENT_VISIT_UPDATE)) {					
+				visitUpdatePopUp.removeEventListener(PatientVisitEvent.PATIENT_VISIT_UPDATE, handleVisitUpdateEvent);				
 			}			
-		}			
+		}
+		
+		public function handleVisitTypeCreateEvent(event:Event):void {			
+			dispatchEvent(new VisitTypeEvent(VisitTypeEvent.VISIT_TYPE_CREATE, null));
+			removeVisitTypeCreateEventListener();			
+		}
+		
+		public function removeVisitTypeCreateEventListener():void {				
+			if (visitUpdatePopUp.hasEventListener(VisitTypeEvent.VISIT_TYPE_CREATE)) {					
+				visitUpdatePopUp.removeEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);				
+			}			
+		}	
 	]]>
 	</mx:Script>
 	
@@ -703,6 +777,12 @@
         resultFormat="e4x"
         method="POST"
         result="handleMedicationsDestroyResult(event)"/>
+    
+    <mx:HTTPService
+        id="svcVisitsDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleVisitsDestroyResult(event)"/>
 		
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
@@ -863,7 +943,8 @@
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 		   			<mx:LinkButton label="{languageArray['Add New Visit']}" color="#0000FF" click="showVisitCreateTitleWin()"/>
 		   			<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{visitsXLC}" wordWrap="true" variableRowHeight="true">						
+		   				dataProvider="{visitsXLC}" wordWrap="true" variableRowHeight="true"
+		   				itemClick="handleVisitClick(event)">						
 		   				<mx:columns>
 		   					<mx:DataGridColumn headerText="{languageArray['Visit Date']}" width="85"
 				                dataField="visit_date"/>														
@@ -874,7 +955,15 @@
 							<mx:DataGridColumn headerText="{languageArray['Doctor Name']}" width="125"
 				                labelFunction="getDoctorName"/>	
 				            <mx:DataGridColumn headerText="{languageArray['Notes']}"
-				                dataField="notes"/>					
+				                dataField="notes"/>
+				            <mx:DataGridColumn headerText="" width="150" 
+				                    editable="false">
+				                    <mx:itemRenderer>
+				                        <mx:Component>
+				                            <mx:Button label="{outerDocument.languageArray['Delete Visit']}" click="outerDocument.deleteVisit(XML(data))" />
+				                        </mx:Component>
+				                    </mx:itemRenderer>
+							</mx:DataGridColumn>				
 		   				</mx:columns>					
 		   			</mx:DataGrid>
 	   			</mx:Panel>

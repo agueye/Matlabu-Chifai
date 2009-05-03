@@ -46,6 +46,7 @@ public function languageInit(str:String):void{
 		  	"Delete Patient":"Delete Patient",
 		  	"Delete Prescription":"Delete Prescription",
 		  	"Delete Vaccination":"Delete Vaccination",
+		  	"Delete Visit":"Delete Visit",
 		  	"Doctor Name":"Doctor Name",
 		  	"Dosage":"Dosage",
 		  	"Edit Allergy":"Edit Allergy",
@@ -53,6 +54,7 @@ public function languageInit(str:String):void{
 		  	"Edit Patient Information":"Edit Patient Information",
 		  	"Edit Medication":"Edit Medication",
 		  	"Edit Vaccination":"Edit Vaccination",
+		  	"Edit Visit":"Edit Visit",
 			"Emergency Contact Name": "Emergency Contact Name",
 			"Emergency Contact Relationship": "Emergency Contact Relationship",
 			"Emergency Contact Number": "Emergency Contact Number",
@@ -153,11 +155,13 @@ public function languageInit(str:String):void{
 		  "Delete Patient":"Patient D'effacement",
 		  "Delete Prescription":"Delete Prescription(French)",
 		  "Delete Vaccination":"Delete Vaccination(French)",
+		  "Delete Visit":"Delete Visit(French)",
 		  "Edit Allergy":"Edit Allergy(French)",
 		  "Edit Medication":"Edit Medication(French)",
 		  "Edit Note":"Edit Note(French)",
 		  "Edit Patient Information":"Edit Patient Information(French)",
 		  "Edit Vaccination":"Edit Vaccination(French)",
+		  "Edit Visit":"Edit Visit(French)",
 		  "Emergency Contact Name": "Contact en cas d'Urgence",
 		  "Emergency Contact Relationship": "Relation avec le contact",
 		  "Emergency Contact Number": "Telephone avec le contact",
@@ -206,6 +210,8 @@ public function languageInit(str:String):void{
 		  
 		  
 		  //to add
+		  "Delete Visit":"Delete Visit",
+		  "Edit Visit":"Edit Visit",
 		  "Edit Medication":"Edit Medication",
 		  "Edit Vaccination":"Edit Vaccination(French)",
 		  "Delete Vaccination":"Delete Vaccination",

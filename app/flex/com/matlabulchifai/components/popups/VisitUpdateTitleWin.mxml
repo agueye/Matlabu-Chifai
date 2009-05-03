@@ -5,8 +5,8 @@
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
 	width="450" 
-	height="525"
-	title="{languageArray['Edit Medication']}"
+	height="575"
+	title="{languageArray['Edit Visit']}"
 	showCloseButton="true"
 	creationComplete="init()"
     close="PopUpManager.removePopUp(this)">
@@ -20,70 +20,73 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.core.Application;
 			import mx.collections.ArrayCollection;
-			import com.matlabulchifai.events.patient.PatientMedicationEvent;
-			import com.matlabulchifai.events.medication.MedicationEvent;
+			import com.matlabulchifai.events.patient.PatientVisitEvent;
+			import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 			import com.matlabulchifai.events.condition.ConditionEvent;
 			import com.matlabulchifai.events.doctor.DoctorEvent;
 			
 			[Bindable]
 			public var patient:XML;
 			[Bindable]
-			public var medication:XML;
+			public var visit:XML;
 			[Bindable]
 			public var languageArray:Object;
 			[Bindable]
-			public var medicationIdMap:Object;
+			public var visitTypeIdMap:Object;
 			[Bindable]
 			public var conditionIdMap:Object;
 			[Bindable]
 			public var doctorIdMap:Object;
 			[Bindable]
-			public var medications:ArrayCollection;
+			public var visitTypes:ArrayCollection;
 			[Bindable]
 			public var conditions:ArrayCollection;
 			[Bindable]
 			public var doctors:ArrayCollection;
 			[Bindable]
-			private var gotMedication:Boolean = false;
+			private var gotVisitType:Boolean = false;
 			[Bindable]
 			private var gotCondition:Boolean = false;
 			[Bindable]
 			private var gotDoctor:Boolean = false;
 			
-			private var medicationId:String;
+			private var visitTypeId:String;
 			private var conditionId:String;
 			private var doctorId:String;
 			
 			private function init():void {
-				searchMedicationTI.selectedItemId = medication.medication_id;
-				searchConditionTI.selectedItemId = medication.condition_id;
-				searchDoctorTI.selectedItemId = medication.doctor_id;
-				medicationDateDF.selectedDate = DateUtil.parseW3CDTF(medication.date_given);
-				FrequencyTI.text = medication.frequency;				
-				DosageTI.text = medication.dosage;
-				medicationNotesTI.text = medication.notes;
+				searchVisitTypeTI.selectedItemId = visit.visit_type_id;
+				searchConditionTI.selectedItemId = visit.condition_id;
+				searchDoctorTI.selectedItemId = visit.doctor_id;
+				visitDateDF.selectedDate = DateUtil.parseW3CDTF(visit.visit_date);
+				HeightTI.text = visit.height;				
+				WeightTI.text = visit.weight;
+				BloodPressureTI.text = visit.blood_pressure;
+				PulseTI.text = visit.pulse;
+				TemperatureTI.text = visit.temperature;
+				visitNotesTI.text = visit.notes;
 			}
 			
-			private function handleUpdateMedicationResult(event:ResultEvent):void {
+			private function handleUpdateVisitResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
-				dispatchEvent(new PatientMedicationEvent(PatientMedicationEvent.PATIENT_MEDICATION_UPDATE, resultXML));
+				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.PATIENT_VISIT_UPDATE, resultXML));
 			}
 			
-			private function processMedicationUpdate():void {
-				var medicationSelected:Object = searchMedicationTI.selectedItem;
+			private function processVisitUpdate():void {
+				var visitTypeSelected:Object = searchVisitTypeTI.selectedItem;
 				var conditionSelected:Object = searchConditionTI.selectedItem;
 				var doctorSelected:Object = searchDoctorTI.selectedItem;
 				
-				//Stop processing if medication or condition is blank
+				//Stop processing if visit or condition is blank
 				//If item alredy exists, then set flag, otherwise create item
-				if (medicationSelected != null && 
+				if (visitTypeSelected != null && 
 					conditionSelected != null && 
 					doctorSelected != null) {
-					if (medicationSelected.hasOwnProperty("id")) {
-						medicationId = medicationSelected.id;
-						gotMedication = true;
+					if (visitTypeSelected.hasOwnProperty("id")) {
+						visitTypeId = visitTypeSelected.id;
+						gotVisitType = true;
 					} else {
-						svcMedicationCreate.send();
+						svcVisitTypeCreate.send();
 					}
 					
 					if (conditionSelected.hasOwnProperty("id")) {
@@ -100,27 +103,27 @@
 						svcDoctorCreate.send();
 					}
 					
-					//if both condition and medication already exist, then call update
-					if (gotMedication && gotCondition && gotDoctor) {
-						callMedicationUpdate();
+					//if both condition and visit type and doctor already exist, then call update
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitUpdate();
 					}					
 				}
 			}
 			
-			private function handleNewMedicationResult(event:ResultEvent):void {
-				var newMedication:XML = XML(event.result);
+			private function handleNewVisitTypeResult(event:ResultEvent):void {
+				var newVisitType:XML = XML(event.result);
 				
-				if (newMedication != null) {
-					//add new medication to medicationIdMap and medications collection
-					dispatchEvent(new MedicationEvent(MedicationEvent.MEDICATION_CREATE, newMedication));
+				if (newVisitType != null) {
+					//add new visit to visitIdMap and visits collection
+					dispatchEvent(new VisitTypeEvent(VisitTypeEvent.VISIT_TYPE_CREATE, newVisitType));
 					
 					//set flag and id field
-					medicationId = newMedication.id;
-					gotMedication = true;
+					visitTypeId = newVisitType.id;
+					gotVisitType = true;
 					
 					//if all other flag are ready, call update
-					if (gotMedication && gotCondition && gotDoctor) {
-						callMedicationUpdate();
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitUpdate();
 					}	
 				}
 			}
@@ -137,8 +140,8 @@
 					gotCondition = true;
 					
 					//if all other flag are ready, call update
-					if (gotMedication && gotCondition && gotDoctor) {
-						callMedicationUpdate();
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitUpdate();
 					}	
 				}
 			}
@@ -147,7 +150,7 @@
 				var newDoctor:XML = XML(event.result);
 				
 				if (newDoctor != null) {
-					//add new medication to medicationIdMap and medications collection
+					//add new visit to visitIdMap and visits collection
 					dispatchEvent(new DoctorEvent(DoctorEvent.DOCTOR_CREATE, newDoctor));
 					
 					//set flag and id field
@@ -155,25 +158,28 @@
 					gotDoctor = true;
 					
 					//if all other flag are ready, call update
-					if (gotMedication && gotCondition && gotDoctor) {
-						callMedicationUpdate();
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitUpdate();
 					}	
 				}
 			}
 			
-			private function callMedicationUpdate():void {
+			private function callVisitUpdate():void {
 				var	params:Object = new	Object();
-				params['patient_medication[medication_id]'] = medicationId;
-				params['patient_medication[condition_id]'] = conditionId;
-				params['patient_medication[doctor_id]'] = doctorId;
-				params['patient_medication[dosage]'] = DosageTI.text;
-				params['patient_medication[frequency]'] = FrequencyTI.text;
-				params['patient_medication[date_given]'] = medicationDateDF.text;
-				params['patient_medication[notes]'] = medicationNotesTI.text;
+				params['patient_visit[visit_type_id]'] = visitTypeId;
+				params['patient_visit[condition_id]'] = conditionId;
+				params['patient_visit[doctor_id]'] = doctorId;
+				params['patient_visit[height]'] = HeightTI.text;
+				params['patient_visit[weight]'] = WeightTI.text;
+				params['patient_visit[blood_pressure]'] = BloodPressureTI.text;
+				params['patient_visit[temperature]'] = TemperatureTI.text;
+				params['patient_visit[pulse]'] = PulseTI.text;
+				params['patient_visit[visit_date]'] = visitDateDF.text;
+				params['patient_visit[notes]'] = visitNotesTI.text;
 				params['_method'] = "PUT";
-				svcMedicationUpdate.url = "/patient_medications/" + medication.id + ".xml?authenticity_token=" +
+				svcVisitUpdate.url = "/patient_visits/" + visit.id + ".xml?authenticity_token=" +
 							Application.application.parameters.authenticityToken;
-				svcMedicationUpdate.send(params);
+				svcVisitUpdate.send(params);
 				PopUpManager.removePopUp(this);	
 			}
 
@@ -181,24 +187,24 @@
 	</mx:Script>
 	
 	<mx:HTTPService
-		id="svcMedicationUpdate"
+		id="svcVisitUpdate"
 		resultFormat="e4x"
 		method="POST"
-		result="handleUpdateMedicationResult(event)">
+		result="handleUpdateVisitResult(event)">
 	</mx:HTTPService>
 	
 	<mx:HTTPService
-		id="svcMedicationCreate"
-		url="/medications.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		id="svcVisitTypeCreate"
+		url="/visit_types.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
-		result="handleNewMedicationResult(event)">
+		result="handleNewVisitTypeResult(event)">
 		<mx:request>
-			<medication>
-				<name>{searchMedicationTI.selectedItem.toString()}</name>
+			<visit_type>
+				<name>{searchVisitTypeTI.selectedItem.toString()}</name>
 				<notes></notes>
-			</medication>
+			</visit_type>
 		</mx:request>
 	</mx:HTTPService>
 	
@@ -237,12 +243,11 @@
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Medication Name">
-				<hc:AutoComplete id="searchMedicationTI" dataProvider="{medications}" labelField="name"
+			<mx:FormItem label="Visit Type">
+				<hc:AutoComplete id="searchVisitTypeTI" dataProvider="{visitTypes}" labelField="name"
 					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
 					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
-			</mx:FormItem>
-			<mx:Spacer height="5" />
+			</mx:FormItem>			
 			<mx:FormItem label="Condition Name">
 				<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
 					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
@@ -254,26 +259,35 @@
 					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Dosage">
-				<mx:TextInput id="DosageTI"/>
+			<mx:FormItem label="Visit Date">
+				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Frequency">
-				<mx:TextInput id="FrequencyTI"/>
+			<mx:Text text="Physicals" fontWeight="bold" />
+			<mx:FormItem label="Height">
+				<mx:TextInput id="HeightTI"/>
 			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Date Administered">
-				<mx:DateField id="medicationDateDF" yearNavigationEnabled="true" minYear="1980"/>
+			<mx:FormItem label="Weight">
+				<mx:TextInput id="WeightTI"/>
+			</mx:FormItem>
+			<mx:FormItem label="Blood Pressure">
+				<mx:TextInput id="BloodPressureTI"/>
+			</mx:FormItem>
+			<mx:FormItem label="Pulse">
+				<mx:TextInput id="PulseTI"/>
+			</mx:FormItem>
+			<mx:FormItem label="Temperature">
+				<mx:TextInput id="TemperatureTI"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Notes">
-				<mx:TextArea id="medicationNotesTI" width="200" height="100" />
+				<mx:TextArea id="visitNotesTI" width="200" height="100" />
 			</mx:FormItem>
 		</mx:Form>
 	</mx:HBox>
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="10%">
-		<mx:Button label="OK" id="OKBtn" click="processMedicationUpdate()" />
+		<mx:Button label="OK" id="OKBtn" click="processVisitUpdate()" />
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	

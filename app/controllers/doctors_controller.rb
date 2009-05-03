@@ -83,7 +83,7 @@ class DoctorsController < ApplicationController
     @doctor = Doctor.find(params[:id])
     @doctor.destroy
     
-    APP_LOGGER_LOG.info "DOCTOR DELETED - " + @doctor[:last_name] + "by USER " + self.current_user[:login]
+    APP_LOGGER_LOG.info "DOCTOR DELETED - " + @doctor[:name] + "by USER " + self.current_user[:login]
         
     respond_to do |format|
       format.html { redirect_to(doctors_url) }

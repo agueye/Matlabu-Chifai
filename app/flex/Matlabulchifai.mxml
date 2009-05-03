@@ -32,11 +32,10 @@
     import com.matlabulchifai.events.patient.PatientEvent;
     import com.matlabulchifai.events.patient.PatientAlertEvent;
 	import com.matlabulchifai.events.patient.PatientConditionEvent;
-	import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 	import com.matlabulchifai.events.patient.PatientAllergyEvent;
 	import com.matlabulchifai.events.patient.PatientVaccinationEvent;
+	import com.matlabulchifai.events.patient.PatientVisitEvent;
 	import com.matlabulchifai.events.allergy.AllergyEvent;
-	import com.matlabulchifai.events.vaccination.VaccinationEvent;
 	import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 	import com.matlabulchifai.events.medication.MedicationEvent;
 	import com.matlabulchifai.events.condition.ConditionEvent;
@@ -107,9 +106,6 @@
 		this.addEventListener(PatientAlertEvent.PATIENT_ALERT_DESTROY, handleAlertDestroyEvent);
 		this.addEventListener(PatientAlertEvent.PATIENT_ALERT_UPDATE, handleAlertUpdateEvent);
 		this.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);
-		this.addEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);
-		this.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
-		this.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);
 		this.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);
 		this.addEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);
 		this.addEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);

@@ -71,8 +71,7 @@
 				doctors = new ArrayCollection();
 				for (i = 1; doctorIdMap[i] != null; i++) {
 					var doctor:XML = doctorIdMap[i];
-					doctors.addItem( { label: doctor.first_name + " " + 
-						doctor.middle_name + " " + doctor.last_name, data: doctor.id } );
+					doctors.addItem( { label: doctor.name, data: doctor.id } );
 				}
 			}
 				
@@ -84,7 +83,7 @@
 			private function handleNewVisitResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("visit created = \n" + resultXML);
-				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.VISIT_CREATE, resultXML));
+				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.PATIENT_VISIT_CREATE, resultXML));
 			}
 			
 			private function checkConditionCB(event:Event):void {

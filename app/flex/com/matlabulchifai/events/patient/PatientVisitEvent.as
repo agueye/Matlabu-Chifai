@@ -5,13 +5,14 @@
 	public class PatientVisitEvent extends Event 
 	{
 		
-		public static const VISIT_CREATE:String = "visitCreate";
+		public static const PATIENT_VISIT_CREATE:String = "patientVisitCreate";
+		public static const PATIENT_VISIT_UPDATE:String = "patientVisitUpdate";
     
-        public var visit:XML;
+        public var patientVisit:XML;
     
-        public function PatientVisitEvent(type:String, visit:XML) {
-            super(type);
-            this.visit = visit;
+        public function PatientVisitEvent(type:String, patientVisit:XML) {
+            super(type,true);
+            this.patientVisit = patientVisit;
         }
 	}
 	
