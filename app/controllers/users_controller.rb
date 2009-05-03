@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  # Can't verify a login when creating a new user
-  skip_before_filter :login_required
   
 # Be sure to include AuthenticationSystem in Application Controller instead
   #include AuthenticatedSystem
