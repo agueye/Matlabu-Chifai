@@ -3,7 +3,7 @@ class DoctorsController < ApplicationController
   # GET /doctors.xml
   def index
     @doctors = Doctor.find(:all)
-    @doctors.sort! {|x, y| x.last_name <=> y.last_name}
+    @doctors.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
       format.html # index.html.erb
@@ -43,7 +43,7 @@ class DoctorsController < ApplicationController
   def create
     @doctor = Doctor.new(params[:doctor])
     
-    APP_LOGGER_LOG.info "DOCTOR CREATED - " + @doctor[:last_name] + "by USER " + self.current_user[:login]
+    APP_LOGGER_LOG.info "DOCTOR CREATED - " + @doctor[:name] + "by USER " + self.current_user[:login]
     
     respond_to do |format|
       if @doctor.save
@@ -65,7 +65,7 @@ class DoctorsController < ApplicationController
     respond_to do |format|
       if @doctor.update_attributes(params[:doctor])
         
-        APP_LOGGER_LOG.info "DOCTOR UPDATED - " + @doctor[:last_name] + "by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "DOCTOR UPDATED - " + @doctor[:name] + "by USER " + self.current_user[:login]
             
         flash[:notice] = 'Doctor was successfully updated.'
         format.html { redirect_to(@doctor) }

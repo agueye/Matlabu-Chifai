@@ -51,6 +51,7 @@
 		import com.matlabulchifai.events.condition.ConditionEvent;
 		import com.matlabulchifai.events.medication.MedicationEvent;
 		import com.matlabulchifai.events.visit_type.VisitTypeEvent;
+		import com.matlabulchifai.events.doctor.DoctorEvent;
 
 		
 		[Bindable]
@@ -168,7 +169,7 @@
 		
 		private function getDoctorName(item:Object, column:DataGridColumn):String {
 			var doctor:XML = doctorIdMap[item.doctor_id];
-			return doctor.first_name + " " + doctor.middle_name + " " + doctor.last_name;
+			return doctor.name;
 		}
 		
 		private function getAllergyName(item:Object, column:DataGridColumn):String {
@@ -582,6 +583,7 @@
 			medicationUpdatePopUp.addEventListener(PatientMedicationEvent.PATIENT_MEDICATION_UPDATE, handleMedicationUpdateEvent);
 			medicationUpdatePopUp.addEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);
 			medicationUpdatePopUp.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
+			medicationUpdatePopUp.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);
 		}
 		
 		public function handleMedicationUpdateEvent(event:PatientMedicationEvent):void {			
@@ -599,6 +601,11 @@
 			removeConditionCreateEventListener();				
 		}
 		
+		public function handleDoctorCreateEvent(event:Event):void {			
+			dispatchEvent(new DoctorEvent(DoctorEvent.DOCTOR_CREATE, null));
+			removeDoctorCreateEventListener();				
+		}
+		
 		public function removeMedicationUpdateEventListener():void {				
 			if (medicationUpdatePopUp.hasEventListener(PatientMedicationEvent.PATIENT_MEDICATION_UPDATE)) {					
 				medicationUpdatePopUp.removeEventListener(PatientMedicationEvent.PATIENT_MEDICATION_UPDATE, handleMedicationUpdateEvent);				
@@ -614,6 +621,12 @@
 		public function removeConditionCreateEventListener():void {				
 			if (medicationUpdatePopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
 				medicationUpdatePopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
+			}			
+		}
+		
+		public function removeDoctorCreateEventListener():void {				
+			if (medicationUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
+				medicationUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
 			}			
 		}			
 	]]>

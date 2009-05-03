@@ -115,6 +115,7 @@
 		this.addEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);
 		this.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
 		this.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);
+		this.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);
  	}	    
 	
 	private function listAll():void {
@@ -301,15 +302,7 @@
             doctorIdMap[doctor.id] = doctor;
             
             var newDoctor:Object = new Object();
-    		var fname:String = doctor.first_name;
-    		var mname:String = doctor.middle_name;
-    		var lname:String = doctor.last_name;
-    		
-    		if (mname != "") 
-    			newDoctor.name = fname + " " + mname + " " + lname;
-    		else
-    			newDoctor.name = fname + " " + lname;
-    			
+    		newDoctor.name = doctor.name;
     		newDoctor.id = doctor.id;
     		doctors.addItem(newDoctor);
     		
@@ -571,7 +564,7 @@
 				<mx:Button click="bypassLogin()" label="Bypass Login"/>								
 			</mx:VBox>
 			<mlc:AlertGridBox id="alertBox"
-				patientsXLC="{patientsXLC}"
+				patients="{patients}"
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}" 
 				width="70%" height="90%" horizontalAlign="left"/>

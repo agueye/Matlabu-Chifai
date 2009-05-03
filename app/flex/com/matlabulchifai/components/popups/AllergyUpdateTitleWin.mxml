@@ -4,7 +4,7 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*" 
 	layout="vertical" 
-	width="420" 
+	width="450" 
 	height="530"
 	title="{languageArray['Edit Allergy']}"
 	showCloseButton="true"

@@ -14,14 +14,15 @@
 	import mx.managers.PopUpManager;
     import mx.rpc.events.ResultEvent;
     import mx.collections.XMLListCollection;
+    import mx.collections.ArrayCollection;
 	import mx.containers.ViewStack;
 	import com.matlabulchifai.events.patient.PatientAlertEvent;
 	import com.matlabulchifai.events.patient.PatientEvent;
 	import com.matlabulchifai.components.popups.AlertCreateBox;
 	import mx.core.Application;
     
-    [Bindable]
-	public var patientsXLC:XMLListCollection;
+	[Bindable]
+	public var patients:ArrayCollection;
 	[Bindable]        
     public var patientIdMap:Object;
 	[Bindable]
@@ -72,7 +73,7 @@
 	private function showAlertCreateBox():void {
 		alertPopUp = AlertCreateBox(PopUpManager.createPopUp(this, AlertCreateBox, true));
 		alertPopUp.addEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE, handleAlertEvent);
-		alertPopUp.patientsXLC = this.patientsXLC;
+		alertPopUp.patients = this.patients;
 		alertPopUp.languageArray = this.languageArray;
 		PopUpManager.centerPopUp(alertPopUp);
 	}

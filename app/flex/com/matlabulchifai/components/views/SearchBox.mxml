@@ -127,7 +127,7 @@
     
     private function getDoctorName(item:Object, column:DataGridColumn):String {
     	var doctor:XML = doctorIdMap[item.doctor_id];
-    	return doctor.first_name + " " + doctor.middle_name + " " + doctor.last_name;
+    	return doctor.name;
     }
     
     private function getAllergyName(item:Object, column:DataGridColumn):String {

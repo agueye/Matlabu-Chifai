@@ -2,17 +2,13 @@
 
 <table>
   <tr>
-    <th>First name</th>
-    <th>Middle name</th>
-    <th>Last name</th>
+    <th>Name</th>
     <th>Notes</th>
   </tr>
 
 <% for doctor in @doctors %>
   <tr>
-    <td><%=h doctor.first_name %></td>
-    <td><%=h doctor.middle_name %></td>
-    <td><%=h doctor.last_name %></td>
+    <td><%=h doctor.name %></td>
     <td><%=h doctor.notes %></td>
     <td><%= link_to 'Show', doctor %></td>
     <td><%= link_to 'Edit', edit_doctor_path(doctor) %></td>

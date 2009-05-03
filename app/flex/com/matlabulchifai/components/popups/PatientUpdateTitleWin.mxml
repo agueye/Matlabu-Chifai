@@ -205,7 +205,7 @@
 				</mx:FormItem>
 				
 				<mx:FormItem label="{languageArray['Patient Remarks']}">
-					<mx:TextArea id="notesTI"/>
+					<mx:TextArea id="notesTI" width="200" height="100"/>
 				</mx:FormItem>
 				
 		</mx:Form>
