@@ -79,6 +79,11 @@ ActiveRecord::Schema.define(:version => 20090503034020) do
     t.datetime "updated_at"
   end
 
+  create_table "patient_pictures", :force => true do |t|
+    t.integer "patient_id"
+    t.binary  "picture"
+  end
+
   create_table "patient_vaccinations", :force => true do |t|
     t.integer  "patient_id"
     t.integer  "vaccination_id"
