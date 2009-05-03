@@ -18,6 +18,7 @@
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.PatientPrescriptionEvent;
 			import mx.core.Application;
+			import mx.controls.Alert;
 			
 			[Bindable]
 			public var patient:XML;
@@ -80,8 +81,23 @@
 			}
 			
 			private function processPrescriptionCreate():void{
-				svcPrescriptionCreate.send();
-				PopUpManager.removePopUp(this);
+				var newBlankPer:Boolean = false;
+				var newBlankCon:Boolean = false;
+				
+				if(newTI.enabled == true && newTI.text == ''){
+					Alert.show(languageArray["Please enter a new prescription for 'New'"], languageArray["Error"]);
+					newBlankPer = true;
+				}
+				
+				if(otherTI.enabled == true && otherTI.text == ''){
+					Alert.show(languageArray["Please enter a new condition for 'Other'"], languageArray["Error"]);
+					newBlankPer = true;
+				}
+				
+				if(newBlankPer == false && newBlankCon == false){
+					svcPrescriptionCreate.send();
+					PopUpManager.removePopUp(this);
+				}
 			}
 			
 			private function checkConditionCB(event:Event):void {

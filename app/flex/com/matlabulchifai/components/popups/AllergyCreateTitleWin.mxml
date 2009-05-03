@@ -15,6 +15,7 @@
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.PatientAllergyEvent;
 			import mx.core.Application;
+			import mx.controls.Alert;
 			
 			[Bindable]
 			public var patient:XML;
@@ -53,8 +54,14 @@
 			}
 			
 			private function processAllergyCreate():void{
-				svcAllergyCreate.send();
-				PopUpManager.removePopUp(this);
+				
+				if(otherTI.enabled == true && otherTI.text == ''){
+					Alert.show(languageArray["Please enter a new allergy for 'Other'"], languageArray["Error"]);
+				}
+				else{
+					svcAllergyCreate.send();
+					PopUpManager.removePopUp(this);
+				}
 			}
 			
 			private function checkAllergyNameCB(event:Event):void {

@@ -19,6 +19,7 @@
 			import mx.core.Application;
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.PatientVaccinationEvent;
+			import mx.controls.Alert;
 			
 			[Bindable]
 			public var patient:XML;
@@ -46,8 +47,15 @@
 			}
 			
 			private function processVaccinationCreate():void{
-				svcVaccinationCreate.send();
-				PopUpManager.removePopUp(this);
+				if(otherTI.enabled == true && otherTI.text == ''){
+					Alert.show(languageArray["Please enter a new vaccination for 'Other'"], languageArray["Error"]);
+				}
+				else{
+					svcVaccinationCreate.send();
+					PopUpManager.removePopUp(this);
+				}
+				
+				
 			}
 			
 			private function handleNewVaccinationResult(event:ResultEvent):void{

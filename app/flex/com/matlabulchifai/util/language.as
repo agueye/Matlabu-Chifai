@@ -58,6 +58,7 @@ public function languageInit(str:String):void{
 			"Emergency Contact Name": "Emergency Contact Name",
 			"Emergency Contact Relationship": "Emergency Contact Relationship",
 			"Emergency Contact Number": "Emergency Contact Number",
+			"Error": "Error",
 		  	"Father Name": "Father Name",
 			"Father First Name": "Father First Name",
 			"Father Last Name": "Father Last Name",
@@ -90,6 +91,11 @@ public function languageInit(str:String):void{
 			"Patient Name": "Patient Name",
 			"Patient Remarks": "Patient Remarks",
 			"Patients": "Patients",
+			"Please enter a new allergy for 'Other'": "Please enter a new allergy for 'Other'",
+			"Please enter a new condition for 'Other'": "Please enter a new condition for 'Other'",
+			"Please enter a new prescription for 'New'": "Please enter a new prescription for 'New'",
+			"Please enter a new vaccination for 'Other'": "Please enter a new vaccination for 'Other'",
+			"Please enter a new visit type for 'New'": "Please enter a new visit type for 'New'",
 			"Prescriptions":"Prescriptions",
 			"Prescription List":"Prescription List",
 			"Reaction":"Reaction",
@@ -257,9 +263,13 @@ public function languageInit(str:String):void{
 		  "Delete Note":"Delete Note(French)",
 		  "Edit Patient Information":"Edit Patient Information(French)",
 		  "Cancel": "Cancel(French)",
+		  "Please enter a new prescription for 'New'": "Please enter a new prescription for 'New'(French)",
+		  "Please enter a new condition for 'Other'": "Please enter a new condition for 'Other'(French)",
+		  "Please enter a new allergy for 'Other'": "Please enter a new allergy for 'Other'(French)",
+		  "Please enter a new visit type for 'New'": "Please enter a new visit type for 'New'(French)",
+		  "Please enter a new vaccination for 'Other'": "Please enter a new vaccination for 'Other'(French)",
 		  
-		  
-		  
+		  "Error":"Error(French)",
 		  "Physical Data":"Physical Data(French)",
 		  "Data Graphs":"Data Graphs(French)"
 		 

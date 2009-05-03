@@ -17,6 +17,7 @@
 			import com.matlabulchifai.events.patient.PatientVisitEvent;
 			import com.matlabulchifai.events.patient.PatientConditionEvent;
 			import com.matlabulchifai.events.visit_type.VisitTypeEvent;
+			import mx.controls.Alert;
 			
 			import mx.core.Application;
 			
@@ -76,8 +77,25 @@
 			}
 				
 			private function processVisitCreate():void{
-				svcVisitCreate.send();
-				PopUpManager.removePopUp(this);
+				var newBlankType:Boolean = false;
+				var newBlankCon:Boolean = false;
+				
+				if(newTI.enabled == true && newTI.text == ''){
+					Alert.show(languageArray["Please enter a new visit type for 'New'"], languageArray["Error"]);
+					newBlankType = true;
+				}
+				
+				if(otherTI.enabled == true && otherTI.text == ''){
+					Alert.show(languageArray["Please enter a new condition for 'Other'"], languageArray["Error"]);
+					newBlankCon = true;
+				}
+				
+				if(newBlankType == false && newBlankCon == false){
+					svcVisitCreate.send();
+					PopUpManager.removePopUp(this);
+				}
+				
+				
 			}
 			
 			private function handleNewVisitResult(event:ResultEvent):void {
