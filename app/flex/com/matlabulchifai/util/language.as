@@ -256,10 +256,12 @@ public function languageInit(str:String):void{
 		  "Edit Note":"Edit Note(French)",
 		  "Delete Note":"Delete Note(French)",
 		  "Edit Patient Information":"Edit Patient Information(French)",
-		  "Cancel": "Cancel(French)"
+		  "Cancel": "Cancel(French)",
 		  
 		  
 		  
+		  "Physical Data":"Physical Data(French)",
+		  "Data Graphs":"Data Graphs(French)"
 		 
 		  
 		  

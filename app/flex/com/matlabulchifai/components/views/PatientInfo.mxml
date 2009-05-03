@@ -1029,6 +1029,74 @@
 		   				</mx:columns>					
 		   			</mx:DataGrid>
 	   			</mx:Panel>
+	   		</mx:VBox>
+	 <mx:Script><![CDATA[
+     import mx.collections.ArrayCollection;
+     [Bindable]
+     public var heights:ArrayCollection = new ArrayCollection([
+        {Date:"6-24-2000", Height:104},
+        {Date:"5-24-2002", Height:114},
+        {Date:"12-24-2003", Height:135},
+        {Date:"1-24-2004", Height:140},
+        {Date:"4-24-2006", Height:162},
+        {Date:"12-24-2008", Height:182},
+        {Date:"1-24-2008", Height:181},
+        {Date:"3-24-2008", Height:184}
+     ]);
+     public var weights:ArrayCollection = new ArrayCollection([
+        {Date:"6-24-2000", Weight:104},
+        {Date:"5-24-2002", Weight:114},
+        {Date:"12-24-2003", Weight:135},
+        {Date:"1-24-2004", Weight:154},
+        {Date:"4-24-2006", Weight:187},
+        {Date:"12-24-2008", Weight:200},
+        {Date:"1-24-2009", Weight:200},
+        {Date:"3-24-2009", Weight:203}
+     ]);
+  ]]></mx:Script>
+
+	   		<mx:VBox label="Physical Data" show="">
+	   			<mx:Panel title="Data Graphs" width="100%" height="100%" 
+	   				paddingTop="5" paddingLeft="5" paddingRight="5">
+	   				<mx:HBox>
+			   			<mx:Panel title="Height">
+						     <mx:LineChart id="heightChart" 
+						        dataProvider="{heights}" 
+						        showDataTips="true">
+						        <mx:horizontalAxis>
+						           <mx:CategoryAxis 
+						                dataProvider="{heights}" 
+						                categoryField="Date" />
+						        </mx:horizontalAxis>
+						        <mx:series>
+						  
+						           <mx:LineSeries 
+						                yField="Height" 
+						                displayName="Height"
+						           />
+						        </mx:series>
+						     </mx:LineChart>
+						</mx:Panel>
+						<mx:Panel title="Weight">
+						     <mx:LineChart id="weightChart" 
+						        dataProvider="{weights}" 
+						        showDataTips="true">
+						        <mx:horizontalAxis>
+						           <mx:CategoryAxis 
+						                dataProvider="{weights}" 
+						                categoryField="Date" />
+						        </mx:horizontalAxis>
+						        <mx:series>
+						  
+						           <mx:LineSeries 
+						                yField="Weight" 
+						                displayName="Weight"
+						           />
+						        </mx:series>
+						     </mx:LineChart>
+						</mx:Panel>
+	   				</mx:HBox>
+	   			</mx:Panel>
 	   		</mx:VBox>	   	
    		</mx:ViewStack>		
    	</mx:VBox>		
