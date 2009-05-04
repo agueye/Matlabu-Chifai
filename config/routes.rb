@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.vaccination_search '/patient_vaccinations/search.:format', :controller => "patient_vaccinations", :action => "find"
   map.medication_search '/patient_medications/search.:format', :controller => "patient_medications", :action => "find"
   map.condtion_search '/patient_visits/search.:format', :controller => "patient_visits", :action => "find"
-  
+  map.logout '/logout', :controller => "sessions", :action => "destroy"
   map.connect '/patients/:patient_id/patient_physicals/:action', 
               :controller => 'patient_physicals', :action => :action
               

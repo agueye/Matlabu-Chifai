@@ -370,7 +370,10 @@
 	}
 	
 	private function handleLogout():void{
-		// invalidate session by invoking ruby logout, possibly attach event to login box and handle there
+		svcLogout.send();
+	}
+	
+	private function handleLogoutResult(event:ResultEvent):void{
 		mainMenu.visible = false;
 		mainStack.selectedChild = loginBox;
 	}
@@ -492,6 +495,12 @@
 			
 	]]>
 </mx:Script>
+
+	<mx:HTTPService
+        id="svcLogout"
+        resultFormat="e4x"
+        url="/logout"
+        result="handleLogoutResult(event)"/>
 	
 	<mx:HTTPService
         id="svcPatientList"

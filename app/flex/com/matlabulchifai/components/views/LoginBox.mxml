@@ -19,6 +19,7 @@
 		
 		public function login():void{
 			svcAccountLogin.send({login: loginTI.text, password: passwordTI.text});
+			loginTI.text = passwordTI.text = '';
 		}
 		
 		private function handleAccountLoginResult(event:ResultEvent):void{

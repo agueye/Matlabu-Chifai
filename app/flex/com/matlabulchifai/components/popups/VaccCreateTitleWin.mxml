@@ -50,7 +50,7 @@
 				if(otherTI.enabled == true && otherTI.text == ''){
 					Alert.show(languageArray["Please enter a new vaccination for 'Other'"], languageArray["Error"]);
 				}
-				else{
+				else{ 
 					svcVaccinationCreate.send();
 					PopUpManager.removePopUp(this);
 				}
