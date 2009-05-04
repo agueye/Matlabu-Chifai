@@ -57,6 +57,13 @@
 		result="handleUpdateNoteResult(event)">
 	</mx:HTTPService>
 	
+	<mx:StringValidator 
+        id="noteValidator"
+        source="{NotesTI}" 
+        property="text"
+        minLength="2"
+    />
+	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />		

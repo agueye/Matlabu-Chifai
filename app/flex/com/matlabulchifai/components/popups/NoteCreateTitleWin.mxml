@@ -41,6 +41,12 @@
 		]]>
 	</mx:Script>
 	
+	<mx:StringValidator 
+        id="noteValidator"
+        source="{NotesTI}" 
+        property="text"
+        minLength="2"
+    />
 	<mx:HTTPService
 		id="svcNoteCreate"
 		url="/patient_notes.xml?authenticity_token={Application.application.parameters.authenticityToken}"

@@ -66,6 +66,15 @@
 		</patient_alert>
 	</mx:request>
 </mx:HTTPService>
+
+
+    <mx:StringValidator 
+        id="noteValidator"
+        source="{noteTA}" 
+        property="text"
+        minLength="2"
+    />
+
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form id="createAlertForm">

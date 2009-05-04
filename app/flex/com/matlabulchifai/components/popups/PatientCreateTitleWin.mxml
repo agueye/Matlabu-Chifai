@@ -63,7 +63,24 @@
 			}
 		]]>
 	</mx:Script>
-	
+	<mx:StringValidator 
+        id="lastnameValidator"
+        source="{lastnameTI}" 
+        property="text"
+        minLength="2"
+    />
+    <mx:StringValidator 
+        id="medicalrecordValidator"
+        source="{medicalrecordTI}" 
+        property="text"
+        minLength="2"
+    />
+    <mx:StringValidator 
+        id="addressValidator"
+        source="{addressTI}" 
+        property="text"
+        minLength="2"
+    />
 	<mx:HTTPService
 		id="svcPatientCreate"
 		url="/patients.xml?authenticity_token={Application.application.parameters.authenticityToken}"

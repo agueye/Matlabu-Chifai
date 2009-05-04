@@ -100,6 +100,13 @@
 		]]>
 	</mx:Script>
 	
+	<mx:StringValidator 
+        id="reactionValidator"
+        source="{allergyReactionTI}" 
+        property="text"
+        minLength="2"
+    />
+	
 	<mx:HTTPService
 		id="svcAllergyUpdate"
 		resultFormat="e4x"

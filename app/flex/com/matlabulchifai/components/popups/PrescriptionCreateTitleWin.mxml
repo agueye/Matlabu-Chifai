@@ -121,6 +121,19 @@
 		]]>
 	</mx:Script>
 	
+	<mx:StringValidator 
+        id="frequencyValidator"
+        source="{FrequencyTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="dosageValidator"
+        source="{DosageTI}" 
+        property="text"
+        minLength="2"
+    />
 	<mx:HTTPService
 		id="svcPrescriptionCreate"
 		url="/patient_medications.xml?authenticity_token={Application.application.parameters.authenticityToken}"

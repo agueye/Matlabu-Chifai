@@ -5,7 +5,9 @@
 	height="300"
 	title="Add New Alert"
 	showCloseButton="true"
-    close="PopUpManager.removePopUp(this)">
+	creationComplete="creationCompleteHandler();"
+    close="PopUpManager.removePopUp(this)"
+    >
 		
 <mx:Script>
 <![CDATA[
@@ -14,6 +16,9 @@
 	import mx.collections.ArrayCollection;
 	import com.matlabulchifai.events.patient.PatientAlertEvent;
 	import mx.core.Application;
+	import mx.validators.Validator;
+    import mx.events.ValidationResultEvent;
+    
 	
 	[Bindable]
 	public var patient:XML;
@@ -24,6 +29,37 @@
 	[Bindable]
 	public var languageArray:Object;
 	
+	[Bindable]
+    public var formIsValid:Boolean = false;
+
+    private var focusedFormControl:DisplayObject;
+    
+ 	private function validateForm(event:Event):void 
+    {                    
+          focusedFormControl = event.target as DisplayObject;                
+          formIsValid = true;            
+          validate(noteValidator);  
+     }
+
+    private function validate(validator:Validator):Boolean
+    {                
+         var validatorSource:DisplayObject = validator.source as DisplayObject;
+         var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         formIsValid = formIsValid && currentControlIsValid;                 
+         return currentControlIsValid;
+    }
+     
+    private function creationCompleteHandler():void
+    {
+        resetFocus();              
+    } 
+
+	private function resetFocus():void
+    {
+        focusManager.setFocus(notesTI);
+    }
 	
 	private function handleNewAlertResult(event:ResultEvent):void {
 		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_CREATE, null));
@@ -52,6 +88,13 @@
 		</mx:request>
 	</mx:HTTPService>
 	
+	<mx:StringValidator 
+        id="noteValidator"
+        source="{notesTI}" 
+        property="text"
+        minLength="2"
+    />
+	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="100%">
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" fontSize="10" />					
@@ -62,7 +105,7 @@
 			</mx:FormItem>
 			
 			<mx:FormItem label="Alert Note">
-				<mx:TextArea id="notesTI" width="300" height="100" />
+				<mx:TextArea id="notesTI" width="300" height="100"/>
 			</mx:FormItem>
 			
 		<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
