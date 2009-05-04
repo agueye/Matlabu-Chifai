@@ -367,6 +367,10 @@
 	
 	private function login(user:XML):void{
 		_user = user;
+		if(user.is_admin == 1)
+			this.setStyle('backgroundGradientColors',[0xCCCC00, 0xFFFFFF]);
+		else
+			this.setStyle('backgroundGradientColors',[0x007D0B, 0xFFFFFF]);
 		listPatients();
 	}
 	
