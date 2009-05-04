@@ -15,18 +15,15 @@
 			[Bindable]
 			public var languageArray:Object;
 			
-			[Bindable]
-			private var usersXLC:XMLListCollection;
-			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			
 			private function init():void{
-				
+				listUsers();
 			}
 			
-			private function listUsers():void{
+			public function listUsers():void{
 				var rnd:int = Math.round(Math.random()*10000);
-				svcUsersList.url += "?rnd=" + rnd;
+				svcUsersList.url = "/users.xml?rnd=" + rnd;
 				
 				try{
 					svcUsersList.send();
@@ -40,20 +37,29 @@
 				
 			}
 			
-			private function deleteUsers(user:XML):void {
-				svcUsersDestroy.url = "/" + user.id + ".xml" + authToken;
-				
-				try{
-					svcUsersDestroy.send({_method:"DELETE"});
+			public function deleteUser(user:XML):void {
+				if(user.is_admin == 1){
+					Alert.show(languageArray["Cannot delete admin account."], languageArray["Error"])
 				}
-				catch (error:Error){
-					Alert.show("Could not delete user.", "Server Error");
+				else if(user.login == 'tester'){
+					//TODO: remove this after testing
+					Alert.show("Cannot delete tester account.", languageArray["Error"])
+				}
+				else{
+					svcUsersDestroy.url = "/users/" + user.id + ".xml" + authToken;
+					
+					try{
+						svcUsersDestroy.send({_method:"DELETE"});
+					}
+					catch (error:Error){
+						Alert.show(languageArray["Could not delete user."], languageArray["Server Error"]);
+					}
 				}
 				
     		}
     		
     		private function handleUsersDestroyResult(event:ResultEvent):void{
-    			
+    			listUsers();
     		}
     		
     		private function showUserCreateBox():void{
@@ -65,13 +71,14 @@
 	
 	<mx:HTTPService
         id="svcUsersList"
-        url="/users.xml"
         resultFormat="e4x"
         result="handleUsersListResult(event)"/>
         
+    <mx:XMLListCollection id="usersXLC"
+        source="{XMLList(svcUsersList.lastResult.children())}"/>
+        
     <mx:HTTPService
         id="svcUsersDestroy"
-        url="/users"
         resultFormat="e4x"
         method="POST"
         result="handleUsersDestroyResult(event)"/>
@@ -95,7 +102,7 @@
 	                    editable="false">
 	                    <mx:itemRenderer>
 	                        <mx:Component>
-	                            <mx:Button label="Delete" click="" />
+	                            <mx:Button label="{outerDocument.languageArray['Delete User']}" click="outerDocument.deleteUser(XML(data))" />
 	                        </mx:Component>
 	                    </mx:itemRenderer>
 				</mx:DataGridColumn>

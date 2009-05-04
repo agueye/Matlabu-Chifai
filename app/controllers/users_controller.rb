@@ -9,6 +9,18 @@ class UsersController < ApplicationController
   def new
   end
 
+  # GET /users
+  # GET /users.xml
+  def index
+    @users = User.find(:all)
+    @users.sort! {|x, y| x.login <=> y.login}
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @users }
+    end
+  end
+
   def create
     cookies.delete :auth_token
     # protects against session fixation attacks, wreaks havoc with 
@@ -34,6 +46,20 @@ class UsersController < ApplicationController
       format.xml { render :text => "error" }
     end
     
+  end
+  
+  # DELETE /users/1
+  # DELETE /users/1.xml
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+    
+    APP_LOGGER_LOG.info "USER DELETED - " + @user[:login] + " by USER " + self.current_user[:login]
+        
+    respond_to do |format|
+      format.html { redirect_to(users_url) }
+      format.xml  { head :ok }
+    end
   end
 
 end

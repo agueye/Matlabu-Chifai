@@ -21,7 +21,7 @@
 			}
 			
 			private function handleAccountCreate(event:AccountCreateEvent):void{
-				// not sure if this is needed
+				accountViewBox.listUsers();
 			}
 			
 		]]>
