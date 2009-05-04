@@ -53,6 +53,7 @@
 		import com.matlabulchifai.events.medication.MedicationEvent;
 		import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 		import com.matlabulchifai.events.doctor.DoctorEvent;
+		import com.matlabulchifai.components.popups.uploadImageWin;
 
 		
 		[Bindable]
@@ -105,12 +106,31 @@
 		private var vaccinationUpdatePopUp:VaccinationUpdateTitleWin;
 		private var medicationUpdatePopUp:MedicationUpdateTitleWin;
 		private var visitUpdatePopUp:VisitUpdateTitleWin;
+		private var uploadPopUp:uploadImageWin;
 		
 		public function init():void {
+			if(patient == null){
+				patientInfoMain.visible = false;
+				patientTab.visible = false;
+				patientImage.visible = false;
+				uploadButton.visible = false;
+				errorMessage.visible = true;
+				return;
+			}
+			errorMessage.visible = false;
+			patientInfoMain.visible = true;
+			patientTab.visible = true;
+			patientImage.visible = true;
+			uploadButton.visible = true;
+			
+			Matlabulchifai.debug("PatientInfo init() called");
+			Matlabulchifai.debug("patient: " + patient);
+			Matlabulchifai.debug("Patient ID: " + patient.id);
 			patientID = patient.id;
 			rnd = Math.round(Math.random()*1000);
 			listAlerts();
-			patientInfoMain.selectedIndex = 0;			
+			patientInfoMain.selectedIndex = 0;
+			Matlabulchifai.debug("Leaving init in PatientInfo");		
 		}
 		
 		public function listAlerts():void {
@@ -313,6 +333,14 @@
 			notePopUp.patientID = this.patientID;
 			notePopUp.languageArray = this.languageArray;
 			PopUpManager.centerPopUp(notePopUp);
+		}
+		
+		private function showuploadImageWindow():void{
+			uploadPopUp = uploadImageWin(PopUpManager.createPopUp(this,uploadImageWin,true));
+			notePopUp.patient = this.patient;
+			notePopUp.patientID = this.patientID;
+			notePopUp.languageArray = this.languageArray;
+			PopUpManager.centerPopUp(uploadPopUp);
 		}
 		
 		public function handleNoteEvent(event:Event):void {
@@ -786,11 +814,13 @@
 		
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
-		<mx:Image source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>			
+		<mx:Image id="patientImage" source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>		
+		<mx:Button id="uploadButton" label="Upload Image" click="showuploadImageWindow()"/> <!-- TODO: Add to Language Array-->
 	</mx:VBox>
    	<mx:VBox height="100%" width="80%" verticalGap="0">
+   		<mx:Label id="errorMessage" text=languageArray['Error:  This patient has been deleted.'] fontSize="36" color="#171712"/>
    		<mx:TabBar dataProvider="{patientInfoMain}" 
-   			fontWeight="Bold" paddingTop="0" paddingBottom="0" />			
+   			fontWeight="Bold" paddingTop="0" paddingBottom="0" id="patientTab"/>			
    		<mx:ViewStack 
    			id="patientInfoMain" 
    			width="100%" 

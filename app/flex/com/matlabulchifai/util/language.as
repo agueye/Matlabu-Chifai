@@ -27,12 +27,10 @@ public function languageInit(str:String):void{
 			"Arrival Date": "Arrival Date",
 			"Cancel": "Cancel",
 			"City": "City",
-			"Cannot delete admin account.": "Cannot delete admin account.",
 			"Conditions":"Conditions",
 			"Condition List":"Condition List",
 			"Condition Name":"Condition Name",
 			"Confirm Password": "Confirm Password",
-			"Could not delete user.":"Could not delete user.",
 			"Could not retrieve user list.": "Could not retrieve user list.",
 			"Create Account": "Create a New Account",
 			"Create": "Create",
@@ -47,7 +45,6 @@ public function languageInit(str:String):void{
 		  	"Delete Note":"Delete Note",
 		  	"Delete Patient":"Delete Patient",
 		  	"Delete Prescription":"Delete Prescription",
-		  	'Delete User': 'Delete User',
 		  	"Delete Vaccination":"Delete Vaccination",
 		  	"Delete Visit":"Delete Visit",
 		  	"Doctor Name":"Doctor Name",
@@ -128,9 +125,10 @@ public function languageInit(str:String):void{
 			"Visit Type":"Visit Type",
 		    "View":"View",
 		    "View Patient": "View Patient",
-		    "You do not have permission to view this page.": "You do not have permission to view this page.",
-			"Zip": "Zip"
+			"Zip": "Zip",
 			
+			"Upload Image" : "Upload Image",
+			"Error:  This patient has been deleted." : "Error:  This patient has been deleted." 
 		}
 	}
 	if(str == "FRENCH"){
@@ -272,10 +270,7 @@ public function languageInit(str:String):void{
 		  "Please enter a new allergy for 'Other'": "Please enter a new allergy for 'Other'(French)",
 		  "Please enter a new visit type for 'New'": "Please enter a new visit type for 'New'(French)",
 		  "Please enter a new vaccination for 'Other'": "Please enter a new vaccination for 'Other'(French)",
-		  "You do not have permission to view this page.": "You do not have permission to view this page.(French)",
-		  'Delete User':'Delete User(French)',
-		  "Cannot delete admin account.":"Cannot delete admin account.(French)",
-		  "Could not delete user.":"Could not delete user.(French)",
+		  
 		  "Error":"Error(French)",
 		  "Physical Data":"Physical Data(French)",
 		  "Data Graphs":"Data Graphs(French)"
