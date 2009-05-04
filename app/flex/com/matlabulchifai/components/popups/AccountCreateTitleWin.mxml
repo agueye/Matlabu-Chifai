@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="100%" 
-	height="100%"
-	label="Create Account"
-	horizontalAlign="center">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" width="400" height="300"
+	title="{languageArray['Create Account']}"
+	showCloseButton="true"
+	creationComplete="init()"
+    close="PopUpManager.removePopUp(this)">
 
-	<mx:Metadata>
-		[Event(name="accountCreate", type="com.matlabulchifai.events.login.AccountCreateEvent")]
-	</mx:Metadata>
-	
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
-			import com.matlabulchifai.events.login.AccountCreateEvent;
+			import com.matlabulchifai.events.admin.AccountCreateEvent;
 			import mx.core.Application;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var languageArray:Object;
+			
+			private function init():void{
+				
+			}
 			
 			private function createAccount():void{
-				svcAccountCreate.send();
+				try{
+					svcAccountCreate.send();
+				}
+				catch(error:Error){
+					Alert.show(languageArray["Could not contact server."], languageArray["Server Error"])
+				}
 			}
 			
 			private function handleAccountCreateResult(event:ResultEvent):void{
@@ -26,14 +34,12 @@
 				if(result == "error"){
 					Alert.show("The account was not created.", "Error");
 				}else{
-					Alert.show("The account was created successfully.", "Success");
-					firstNameTI.text = lastNameTI.text = passwordTI.text = 
-						confirmPasswordTI.text = loginTI.text = "";
-					dispatchEvent(new AccountCreateEvent(XML(result)));
+					//Alert.show("The account was created successfully.", "Success");
+					dispatchEvent(new AccountCreateEvent());
+					PopUpManager.removePopUp(this);
 				}
 			}
-			[Bindable]
-			public var languageArray:Object;
+			
 		]]>
 	</mx:Script>
 
@@ -53,8 +59,9 @@
 			</user>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:Panel title="{languageArray['Create Account']}">
-		<mx:Form id="accountCreateForm">
+
+	<mx:VBox>
+		<mx:Form id="accountCreateForm" textAlign="left" labelWidth="100" defaultButton="{createAccountBtn}">
 			<mx:FormItem required="true" label="{languageArray['Username']}">
 				<mx:TextInput id="loginTI"/>
 			</mx:FormItem>
@@ -80,6 +87,6 @@
 					click="createAccount()"/>
 			</mx:FormItem>
 		</mx:Form>
-	</mx:Panel>
+	</mx:VBox>
 	
-</mx:VBox>
+</mx:TitleWindow>

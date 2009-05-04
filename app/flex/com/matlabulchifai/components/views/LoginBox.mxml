@@ -44,7 +44,7 @@
 		method="POST"
 		result="handleAccountLoginResult(event)"/>
 	<mx:Panel title="{languageArray['Login']}">
-		<mx:Form id="loginForm">
+		<mx:Form id="loginForm" defaultButton="{loginBtn}">
 			<mx:FormItem required="true" label="{languageArray['Username']}">
 				<mx:TextInput id="loginTI"/>
 			</mx:FormItem>

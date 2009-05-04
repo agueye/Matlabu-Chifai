@@ -6,6 +6,8 @@ public function languageInit(str:String):void{
 	if (str == "ENGLISH"){
 		languageArray = {
 			"Account Management": "Account Management",
+			'Accounts': 'Accounts',
+			'Accounts List':'Accounts List',
 			"Add New Alert": "Add New Alert",
 		  	"Add New Note":"Add New Note",
 		  	"Add New Visit":"Add New Visit",
@@ -31,6 +33,8 @@ public function languageInit(str:String):void{
 			"Condition List":"Condition List",
 			"Condition Name":"Condition Name",
 			"Confirm Password": "Confirm Password",
+			"Could not contact server.":"Could not contact server.",
+			"Could not delete user.":"Could not delete user.",
 			"Could not retrieve user list.": "Could not retrieve user list.",
 			"Create Account": "Create a New Account",
 			"Create": "Create",
@@ -69,6 +73,7 @@ public function languageInit(str:String):void{
 		  	"General Information":"General Information",
 			"Hello": "Hello",
 			"Last Name": "Last Name",
+			'Log':'Log',
 			"Login": "Login",
 			"Logout": "Logout",
 			"Male": "Male",
@@ -273,7 +278,11 @@ public function languageInit(str:String):void{
 		  
 		  "Error":"Error(French)",
 		  "Physical Data":"Physical Data(French)",
-		  "Data Graphs":"Data Graphs(French)"
+		  "Data Graphs":"Data Graphs(French)",
+		  'Log':'Log(French)',
+		  "Could not contact server.":"Could not contact server.(French)",
+		  'Accounts List':'Accounts List(French)',
+		  'Accounts':'Accounts(French)'
 		 
 		  
 		  

@@ -1,16 +1,14 @@
-package com.matlabulchifai.events.login
+package com.matlabulchifai.events.admin
 {
 	import flash.events.Event;
 
 	public class AccountCreateEvent extends Event
 	{
 		public static const ACCOUNT_CREATE:String = "accountCreate";
-		public var user:XML;
 		
-		public function AccountCreateEvent(user:XML)
+		public function AccountCreateEvent()
 		{
 			super(ACCOUNT_CREATE, true);
-			this.user = user;
 		}
 		
 	}

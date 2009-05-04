@@ -7,15 +7,21 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import com.matlabulchifai.events.admin.AccountCreateEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
 			import mx.collections.XMLListCollection;
 			import mx.core.Application;
+			import com.matlabulchifai.components.popups.AccountCreateTitleWin;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.events.admin.AccountCreateEvent;
 			
 			[Bindable]
 			public var languageArray:Object;
 			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
+			
+			private var accountPopUp:AccountCreateTitleWin;
 			
 			private function init():void{
 				listUsers();
@@ -55,7 +61,6 @@
 						Alert.show(languageArray["Could not delete user."], languageArray["Server Error"]);
 					}
 				}
-				
     		}
     		
     		private function handleUsersDestroyResult(event:ResultEvent):void{
@@ -63,7 +68,20 @@
     		}
     		
     		private function showUserCreateBox():void{
-    			// doesn't exist yet
+    			accountPopUp = 
+					AccountCreateTitleWin(PopUpManager.createPopUp(this, AccountCreateTitleWin, true));		
+				accountPopUp.languageArray = languageArray;
+				PopUpManager.centerPopUp(accountPopUp);
+				
+				accountPopUp.addEventListener(AccountCreateEvent.ACCOUNT_CREATE, handleAccountCreateEvent);
+    		}
+    		
+    		private function handleAccountCreateEvent(evt:AccountCreateEvent):void{
+    			listUsers();
+    			
+    			if (accountPopUp.hasEventListener(AccountCreateEvent.ACCOUNT_CREATE)) {
+					accountPopUp.removeEventListener(AccountCreateEvent.ACCOUNT_CREATE, handleAccountCreateEvent);
+				}
     		}
     		
 		]]>
@@ -83,9 +101,7 @@
         method="POST"
         result="handleUsersDestroyResult(event)"/>
 	
-	<mx:Panel title="{languageArray['User List']}" width="100%" height="100%" 
-		paddingTop="5" paddingLeft="5" paddingRight="5">
-		<mx:LinkButton label="{languageArray['Add User']}" color="#0000FF" click="showUserCreateBox()"/>
+		<mx:LinkButton label="{languageArray['Create Account']}" color="#0000FF" click="showUserCreateBox()"/>
 		
 		<mx:DataGrid id="usersGrid" width="100%" height="100%" wordWrap="true" textAlign="center"
 			variableRowHeight="true" dataProvider="{usersXLC}">
@@ -108,6 +124,5 @@
 				</mx:DataGridColumn>
 			</mx:columns>
 		</mx:DataGrid>
-	</mx:Panel>	
 	
 </mx:VBox>
