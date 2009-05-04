@@ -484,7 +484,7 @@
 		listVisitTypes();
 	}
 	
-	//update allergies id map upon allergy  creation by requesting new svcAllergiesList
+	//update allergies id map upon allergy creation by requesting new svcAllergiesList
 	private function handleAllergyCreateEvent(event:Event):void {
 		listAllergies();
 	}

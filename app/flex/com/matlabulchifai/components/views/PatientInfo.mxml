@@ -169,7 +169,7 @@
 			Matlabulchifai.debug("patient_vaccinations = \n" + resultXML);
 		}
 		
-		public function listAllergies():void {
+		public function listPatientAllergies():void {
 			svcAllergiesList.url="/patients/" + patientID + "/patient_allergies.xml";
 			svcAllergiesList.send();
 		}
@@ -272,21 +272,17 @@
 		
 		private function showAllergyCreateTitleWin():void{
 			allergyPopUp = AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));
-			allergyPopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, handlePatientAllergyEvent);
 			allergyPopUp.patient = this.patient;
 			allergyPopUp.patientID = this.patientID;
 			allergyPopUp.languageArray = this.languageArray;
-			allergyPopUp.allergyIdMap = this.allergyIdMap;
+			allergyPopUp.allergies = allergies;
 			PopUpManager.centerPopUp(allergyPopUp);
+			allergyPopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, handlePatientAllergyEvent);
+			allergyPopUp.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);
 		}
 
-		//upon receiving a fresh patient allergy:
-		//update the allergies id map via dispatching a new AllergyEvent
-		//make sure that the event is dispatched before calling listAllergies()	
 		public function handlePatientAllergyEvent(event:Event):void {
-			var resultXML:XML;
-			dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, resultXML));
-			listAllergies();
+			listPatientAllergies();
 			removePatientAllergyEventListener();
 		}
 		
@@ -298,24 +294,24 @@
 		
 		private function showVisitCreateTitleWin():void {
 			visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
-			visitPopUp.addEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE, handleVisitEvent);
 			visitPopUp.patient = this.patient;
 			visitPopUp.patientID = this.patientID;
 			visitPopUp.visitTypeIdMap = this.visitTypeIdMap;
 			visitPopUp.conditionIdMap = this.conditionIdMap;
 			visitPopUp.doctorIdMap = this.doctorIdMap;
+			visitPopUp.visitTypes = this.visitTypes;
+			visitPopUp.doctors = this.doctors;
+			visitPopUp.conditions = this.conditions;
 			visitPopUp.languageArray = this.languageArray;
 			PopUpManager.centerPopUp(visitPopUp);
+			visitPopUp.addEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE, handleVisitEvent);
+			visitPopUp.addEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);
+			visitPopUp.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
+			visitPopUp.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);
 		}
 		
-		//upon receiving a fresh patient visit:
-		//update the conditions id map via dispatching a new ConditionEvent
-		//update the visit type id map via dispatching a new VisitTypeEvent
-		//make sure events are dispatched before calling listVisits()
+
 		public function handleVisitEvent(event:Event):void {
-			var resultXML:XML;
-			dispatchEvent(new PatientConditionEvent(PatientConditionEvent.PATIENT_CONDITION_CREATE, resultXML));
-			dispatchEvent(new VisitTypeEvent(VisitTypeEvent.VISIT_TYPE_CREATE, resultXML));
 			listVisits();
 			removeVisitEventListener();
 		}
@@ -487,7 +483,7 @@
 	    }
 	    
 	    private function handleAllergiesDestroyResult(event:ResultEvent):void {
-	    	listAllergies();	    	
+	    	listPatientAllergies();	    	
 	    }
 		
 		private function handleAllergyClick(event:ListEvent):void {
@@ -501,36 +497,32 @@
 			allergyUpdatePopUp = AllergyUpdateTitleWin(PopUpManager.createPopUp(this, AllergyUpdateTitleWin, true));
 			allergyUpdatePopUp.patient = patient;
 			allergyUpdatePopUp.allergy = allergy;
-			allergyUpdatePopUp.allergies = allergies;
-			allergyUpdatePopUp.allergyIdMap = allergyIdMap					
+			allergyUpdatePopUp.allergies = allergies;				
 			allergyUpdatePopUp.languageArray = languageArray;
 			PopUpManager.centerPopUp(allergyUpdatePopUp);
-			allergyUpdatePopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, handleAllergyUpdateEvent);
+			allergyUpdatePopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, handlePatientAllergyUpdateEvent);
 			allergyUpdatePopUp.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);
 			
 		}
 		
-		public function handleAllergyUpdateEvent(event:PatientAllergyEvent):void {			
-			listAllergies();				
+		public function handlePatientAllergyUpdateEvent(event:PatientAllergyEvent):void {			
+			listPatientAllergies();
 			removeAllergyUpdateEventListener();			
 		}
 		
 		public function handleAllergyCreateEvent(event:AllergyEvent):void {			
 			dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, null));			
-			removeAllergyCreateEventListener();			
+			var popUp:Object = (allergyPopUp || allergyUpdatePopUp);
+			if (popUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {					
+						allergyPopUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);				
+					}
 		}
 		
 		public function removeAllergyUpdateEventListener():void {				
 			if (allergyUpdatePopUp.hasEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE)) {					
-				allergyUpdatePopUp.removeEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, handleAllergyUpdateEvent);				
+				allergyUpdatePopUp.removeEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, handlePatientAllergyUpdateEvent);				
 			}			
-		}
-		
-		public function removeAllergyCreateEventListener():void {				
-			if (allergyUpdatePopUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {					
-				allergyUpdatePopUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);				
-			}			
-		}				    	
+		}			    	
 		
 		public function deleteVaccination(vaccination:XML):void {
 			svcVaccinationsDestroy.url = "/patient_vaccinations/" + vaccination.id + ".xml" + authToken;
@@ -617,8 +609,8 @@
 		}
 		
 		public function handleMedicationUpdateEvent(event:PatientMedicationEvent):void {			
-			listMedications();				
-			removeMedicationUpdateEventListener();			
+			listMedications();
+			removeMedicationUpdateEventListener();		
 		}
 		
 		public function handleMedicationCreateEvent(event:Event):void {			
@@ -660,20 +652,31 @@
 					visitUpdatePopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
 				}
 			}
+			
+			if (visitPopUp != null) {
+				if (visitPopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
+					visitPopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
+				}
+			}
 		}
 		
 		public function removeDoctorCreateEventListener():void {				
 			if (medicationUpdatePopUp != null) {
 				if (medicationUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
-					medicationUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleConditionCreateEvent);				
+					medicationUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
 				}	
 			}	
 			
 			if (visitUpdatePopUp != null) {
 				if (visitUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
-					visitUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleConditionCreateEvent);				
+					visitUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
 				}
-			}	
+			}
+			if (visitPopUp != null) {
+				if (visitPopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
+					visitPopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
+				}
+			}
 		}
 		
 		public function deleteVisit(visit:XML):void {
@@ -711,7 +714,7 @@
 		}
 		
 		public function handleVisitUpdateEvent(event:PatientVisitEvent):void {			
-			listVisits();				
+			listVisits();		
 			removeVisitUpdateEventListener();			
 		}
 		
@@ -727,8 +730,16 @@
 		}
 		
 		public function removeVisitTypeCreateEventListener():void {				
-			if (visitUpdatePopUp.hasEventListener(VisitTypeEvent.VISIT_TYPE_CREATE)) {					
-				visitUpdatePopUp.removeEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);				
+			if (visitUpdatePopUp != null) {
+				if (visitUpdatePopUp.hasEventListener(VisitTypeEvent.VISIT_TYPE_CREATE)) {					
+					visitUpdatePopUp.removeEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);				
+				}
+			}
+			
+			if (visitPopUp != null) {
+				if (visitPopUp.hasEventListener(VisitTypeEvent.VISIT_TYPE_CREATE)) {					
+					visitPopUp.removeEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);				
+				}
 			}			
 		}	
 	]]>
@@ -937,7 +948,7 @@
 		   			</mx:DataGrid>
 	   			</mx:Panel>
 	   		</mx:VBox>
-	   		<mx:VBox label="{languageArray['Allergies']}" show="listAllergies()">
+	   		<mx:VBox label="{languageArray['Allergies']}" show="listPatientAllergies()">
 	   			<mx:Panel title="{languageArray['Allergy List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 		   			<mx:LinkButton label="{languageArray['Add New Allergy']}" color="#0000FF" 

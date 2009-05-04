@@ -30,8 +30,6 @@
 			[Bindable]
 			public var languageArray:Object;
 			[Bindable]
-			public var allergyIdMap:Object;
-			[Bindable]
 			public var allergies:ArrayCollection;
 			
 			private var allergyId:String;
@@ -77,7 +75,6 @@
 				if (newAllergy != null) {
 					//add new allergy to allergyIdMap and allergies collection
 					dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, newAllergy));
-					
 					allergyId = newAllergy.id;
 					callAllergyUpdate();
 				}
@@ -99,13 +96,6 @@
 
 		]]>
 	</mx:Script>
-	
-	<mx:StringValidator 
-        id="reactionValidator"
-        source="{allergyReactionTI}" 
-        property="text"
-        minLength="2"
-    />
 	
 	<mx:HTTPService
 		id="svcAllergyUpdate"

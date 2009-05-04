@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*" 
 	layout="vertical" 
 	width="420" 
 	height="530"
@@ -14,6 +16,7 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.PatientAllergyEvent;
+			import com.matlabulchifai.events.allergy.AllergyEvent;
 			import mx.core.Application;
 			import mx.controls.Alert;
 			
@@ -24,9 +27,11 @@
 			[Bindable]
 			public var languageArray:Object;
 			[Bindable]
-			public var allergyIdMap:Object;
+			public var allergies:ArrayCollection;
 			[Bindable]
-			private var allergyNames:ArrayCollection;	
+			private var allergyNames:ArrayCollection;
+			
+			private var allergyId:String;	
 			[Bindable]
 			private var severities:ArrayCollection = new ArrayCollection(
             [ { label:"10", data:"10" }, { label:"9", data:"9" }, { label:"8", data:"8" }, { label:"7", data:"7" },
@@ -34,57 +39,61 @@
 				{label:"2", data:"2" }, { label:"1", data:"1" } ]);
 			
 			private function init():void {
-				initAllergyNames();
+				//initAllergyNames();
 			}
 			
-			private function initAllergyNames():void {
-				var i:int;
-				allergyNames = new ArrayCollection();
-				for (i = 1; allergyIdMap[i] != null; i++) {
-					var allergy:XML = allergyIdMap[i];
-					allergyNames.addItem( { label: allergy.name, data: allergy.name } );
-				}
-				allergyNames.addItem( { label:"Other...", data:"" } );
-			}
 				
-			private function handleNewAllergyResult(event:ResultEvent):void {
+			private function handleNewPatientAllergyResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("allergy created = \n" + resultXML);
 				dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, resultXML));
 			}
 			
-			private function processAllergyCreate():void{
+			private function processPatientAllergyCreate():void {
+				var allergySelected:Object = searchAllergyTI.selectedItem;
 				
-				if(otherTI.enabled == true && otherTI.text == ''){
-					Alert.show(languageArray["Please enter a new allergy for 'Other'"], languageArray["Error"]);
+				if (allergySelected != null) {
+					//check to see if selected allergy already exists
+					if (allergySelected.hasOwnProperty("id")) {
+						allergyId = allergySelected.id;
+						callPatientAllergyCreate();
+					} else {
+						//if allergy does not exits then create new allergy 
+						//and then create patient_allergy						
+						svcAllergyCreate.send();
+					}
 				}
-				else{
-					svcAllergyCreate.send();
-					PopUpManager.removePopUp(this);
+			}		
+			
+			private function handleNewAllergyResult(event:ResultEvent):void {
+				var newAllergy:XML = XML(event.result);
+				
+				if (newAllergy != null) {
+					//add new allergy to allergyIdMap and allergies collection
+					dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, newAllergy));
+					allergyId = newAllergy.id;
+					callPatientAllergyCreate();
 				}
 			}
 			
-			private function checkAllergyNameCB(event:Event):void {
-				if (allergyNameCB.selectedLabel == "Other...") {
-					otherTI.enabled = true;
-				} else {
-					otherTI.text = "";
-					otherTI.enabled = false;
-				}
+			private function callPatientAllergyCreate():void {
+				svcPatientAllergyCreate.send();
+				PopUpManager.removePopUp(this);
 			}
 		]]>
 	</mx:Script>
 	
 	<mx:HTTPService
-		id="svcAllergyCreate"
+		id="svcPatientAllergyCreate"
 		url="/patient_allergies.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
-		result="handleNewAllergyResult(event)">
+		result="handleNewPatientAllergyResult(event)">
 		<mx:request>
 			<patient_allergy>
-				<name>{allergyNameCB.value + otherTI.text}</name>
+				<name>{searchAllergyTI.text}</name>
+				<allergy_id>allergyId</allergy_id>
 				<date_observed>{allergyDateDF.text}</date_observed>
 				<severity>{severityCB.text}</severity>
 				<reaction>{allergyReactionTI.text}</reaction>
@@ -94,24 +103,29 @@
 		</mx:request>
 	</mx:HTTPService>
 	
-	<mx:StringValidator 
-        id="reactionValidator"
-        source="{allergyReactionTI}" 
-        property="text"
-        minLength="2"
-    />
-	
+	<mx:HTTPService
+		id="svcAllergyCreate"
+		url="/allergies.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewAllergyResult(event)">
+		<mx:request>
+			<allergy>
+				<name>{searchAllergyTI.selectedItem.toString()}</name>
+				<notes></notes>
+			</allergy>
+		</mx:request>
+	</mx:HTTPService>
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Allergy">
-				<mx:ComboBox id="allergyNameCB" dataProvider="{allergyNames}" change="checkAllergyNameCB(event)" />
-			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Other" paddingLeft="10">
-				<mx:TextInput id="otherTI" enabled="false"  />
+			<mx:FormItem label="Allergy Name">
+				<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
+					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
@@ -135,7 +149,7 @@
 	
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
-		<mx:Button label="OK" id="OKBtn" click="processAllergyCreate()" />
+		<mx:Button label="OK" id="OKBtn" click="processPatientAllergyCreate()" />
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	

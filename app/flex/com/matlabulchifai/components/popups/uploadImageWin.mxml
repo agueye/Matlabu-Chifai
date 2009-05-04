@@ -21,13 +21,13 @@
             [Bindable]
             private var fileRef:FileReference;
  
-            private const FILE_UPLOAD_URL:String = Application.application.browserManager.base + "uploadImage";
+            //private const FILE_UPLOAD_URL:String = Application.application.browserManager.base + "uploadImage";
  
             private function init():void {
-                fileRef = new FileReference();
-                fileRef.addEventListener(Event.SELECT, fileRef_select);
-                fileRef.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-                fileRef.addEventListener(Event.COMPLETE, fileRef_complete);
+//                fileRef = new FileReference();
+//                fileRef.addEventListener(Event.SELECT, fileRef_select);
+//                fileRef.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+//                fileRef.addEventListener(Event.COMPLETE, fileRef_complete);
             }
  
             private function browseAndUpload():void {
@@ -35,7 +35,7 @@
                 message.text = "";
             }
  
-            private function fileRef_select(evt:Event):void {
+/*             private function fileRef_select(evt:Event):void {
                 try {
                     message.text = "size (bytes): " + numberFormatter.format(fileRef.size);
                     var request:URLRequest = new URLRequest(FILE_UPLOAD_URL);
@@ -46,7 +46,7 @@
                 } catch (err:Error) {
                     message.text = "ERROR: zero-byte file";
                 }
-            }
+            } */
  
             private function fileRef_progress(evt:ProgressEvent):void {
                 progressBar.setProgress(Number(evt.bytesLoaded), Number(evt.bytesTotal));

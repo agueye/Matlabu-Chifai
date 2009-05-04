@@ -59,19 +59,14 @@ class PatientVisitsController < ApplicationController
 	type = params["patient_visit"].delete("type")
 	patient = params["patient_visit"].delete("patient_id")
 	condition_n = params["patient_visit"].delete("condition")
-	doctor = params["patient_visit"].delete("doctor")
+	doctor_n = params["patient_visit"].delete("doctor")
     @patient_visit = PatientVisit.new(params[:patient_visit])
     visit_t = VisitType.find_by_name(type)
-	if !visit_t
-		visit_t = VisitType.new(:name => type)
-	end
+	doctor = Doctor.find_by_name(doctor_n)
 	condition = Condition.find_by_name(condition_n)
-	if !condition
-		condition = Condition.new(:name => condition_n)
-	end
 	@patient_visit.visit_type = visit_t
 	@patient_visit.condition = condition
-	@patient_visit.doctor = Doctor.find(doctor)
+	@patient_visit.doctor = doctor
 	@patient_visit.patient = Patient.find(patient)
 
     respond_to do |format|

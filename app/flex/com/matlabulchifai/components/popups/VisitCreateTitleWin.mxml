@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
 	width="425" 
 	height="550"
@@ -17,6 +19,8 @@
 			import com.matlabulchifai.events.patient.PatientVisitEvent;
 			import com.matlabulchifai.events.patient.PatientConditionEvent;
 			import com.matlabulchifai.events.visit_type.VisitTypeEvent;
+			import com.matlabulchifai.events.doctor.DoctorEvent;
+			import com.matlabulchifai.events.condition.ConditionEvent;
 			import mx.controls.Alert;
 			
 			import mx.core.Application;
@@ -32,95 +36,132 @@
 			[Bindable]
 			public var doctorIdMap:Object;
 			[Bindable]
-			private var conditions:ArrayCollection;
+			public var conditions:ArrayCollection;
 			[Bindable]
-			private var visitTypes:ArrayCollection;
+			public var visitTypes:ArrayCollection;
 			[Bindable]
-			private var doctors:ArrayCollection;
+			public var doctors:ArrayCollection;
 			[Bindable]
 			public var languageArray:Object;
+			[Bindable]
+			private var gotVisitType:Boolean = false;
+			[Bindable]
+			private var gotCondition:Boolean = false;
+			[Bindable]
+			private var gotDoctor:Boolean = false;
+			private var visitTypeId:String;
+			private var conditionId:String;
+			private var doctorId:String;
 			
 			
 			private function init():void {
-				initVisitType();
-				initConditions();
-				initDoctors();
+
 			}
 			
-			private function initVisitType():void {
-				var i:int;
-				visitTypes = new ArrayCollection();
-				for (i = 1; visitTypeIdMap[i] != null; i++) {
-					var vt:XML = visitTypeIdMap[i];
-					visitTypes.addItem( { label: vt.name, data: vt.name } );
+			
+			private function processVisitCreate():void {
+				var visitTypeSelected:Object = searchVisitTypeTI.selectedItem;
+				var conditionSelected:Object = searchConditionTI.selectedItem;
+				var doctorSelected:Object = searchDoctorTI.selectedItem;
+				
+				//Stop processing if visit or condition is blank
+				//If item alredy exists, then set flag, otherwise create item
+				if (visitTypeSelected != null && 
+					conditionSelected != null && 
+					doctorSelected != null) {
+					if (visitTypeSelected.hasOwnProperty("id")) {
+						visitTypeId = visitTypeSelected.id;
+						gotVisitType = true;
+					} else {
+						svcVisitTypeCreate.send();
+					}
+					
+					if (conditionSelected.hasOwnProperty("id")) {
+						conditionId = conditionSelected.id;
+						gotCondition = true;
+					} else {
+						svcConditionCreate.send();
+					}
+					
+					if (doctorSelected.hasOwnProperty("id")) {
+						doctorId = doctorSelected.id;
+						gotDoctor = true;
+					} else {
+						svcDoctorCreate.send();
+					}
+					
+					//if both condition and visit type and doctor already exist, then call update
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitCreate();
+					}					
 				}
-				visitTypes.addItem( { label:"New...", data:"" } );
 			}
 			
-			private function initConditions():void {
-				var i:int;
-				conditions = new ArrayCollection();
-				for (i = 1; conditionIdMap[i] != null; i++) {
-					var cond:XML = conditionIdMap[i];
-					conditions.addItem( { label: cond.name, data: cond.name } );
-				}
-				conditions.addItem( { label:"Other...", data:"" } );
+			private function callVisitCreate():void {
+				svcVisitCreate.send();
+				PopUpManager.removePopUp(this);	
 			}
 			
-			private function initDoctors():void {
-				var i:int;
-				doctors = new ArrayCollection();
-				for (i = 1; doctorIdMap[i] != null; i++) {
-					var doctor:XML = doctorIdMap[i];
-					doctors.addItem( { label: doctor.name, data: doctor.id } );
+			private function handleNewVisitTypeResult(event:ResultEvent):void {
+				var newVisitType:XML = XML(event.result);
+				
+				if (newVisitType != null) {
+					//add new visit to visitIdMap and visits collection
+					dispatchEvent(new VisitTypeEvent(VisitTypeEvent.VISIT_TYPE_CREATE, newVisitType));
+					
+					//set flag and id field
+					visitTypeId = newVisitType.id;
+					gotVisitType = true;
+					
+					//if all other flag are ready, call update
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitCreate();
+					}	
 				}
-			}
-				
-			private function processVisitCreate():void{
-				var newBlankType:Boolean = false;
-				var newBlankCon:Boolean = false;
-				
-				if(newTI.enabled == true && newTI.text == ''){
-					Alert.show(languageArray["Please enter a new visit type for 'New'"], languageArray["Error"]);
-					newBlankType = true;
-				}
-				
-				if(otherTI.enabled == true && otherTI.text == ''){
-					Alert.show(languageArray["Please enter a new condition for 'Other'"], languageArray["Error"]);
-					newBlankCon = true;
-				}
-				
-				if(newBlankType == false && newBlankCon == false){
-					svcVisitCreate.send();
-					PopUpManager.removePopUp(this);
-				}
-				
-				
 			}
 			
-			private function handleNewVisitResult(event:ResultEvent):void {
+			private function handleNewConditionResult(event:ResultEvent):void {
+				var newCondition:XML = XML(event.result);
+				
+				if (newCondition != null) {
+					//add new condition to conditionIdMap and conditions collection
+					dispatchEvent(new ConditionEvent(ConditionEvent.CONDITION_CREATE, newCondition));
+					
+					//set flag and id field
+					conditionId = newCondition.id;
+					gotCondition = true;
+					
+					//if all other flag are ready, call update
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitCreate();
+					}	
+				}
+			}
+			
+			private function handleNewDoctorResult(event:ResultEvent):void {
+				var newDoctor:XML = XML(event.result);
+				
+				if (newDoctor != null) {
+					//add new visit to visitIdMap and visits collection
+					dispatchEvent(new DoctorEvent(DoctorEvent.DOCTOR_CREATE, newDoctor));
+					
+					//set flag and id field
+					doctorId = newDoctor.id;
+					gotDoctor = true;
+					
+					//if all other flag are ready, call update
+					if (gotVisitType && gotCondition && gotDoctor) {
+						callVisitCreate();
+					}	
+				}
+			}
+			
+			private function handleNewPatientResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("visit created = \n" + resultXML);
 				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.PATIENT_VISIT_CREATE, resultXML));
 			}
 			
-			private function checkConditionCB(event:Event):void {
-				if (conditionCB.selectedLabel == "Other...") {
-					otherTI.enabled = true;
-				} else {
-					otherTI.text = "";
-					otherTI.enabled = false;
-				}
-			}
-			
-			private function checkTypeCB(event:Event):void {
-				if (typeCB.selectedLabel == "New...") {
-					newTI.enabled = true;
-				} else {
-					newTI.text = "";
-					newTI.enabled = false;
-				}
-			}
 			
 		]]>
 	</mx:Script>
@@ -130,16 +171,61 @@
 	</mx:Metadata>
 	
 	<mx:HTTPService
+		id="svcVisitTypeCreate"
+		url="/visit_types.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewVisitTypeResult(event)">
+		<mx:request>
+			<visit_type>
+				<name>{searchVisitTypeTI.selectedItem.toString()}</name>
+				<notes></notes>
+			</visit_type>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcConditionCreate"
+		url="/conditions.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewConditionResult(event)">
+		<mx:request>
+			<condition>
+				<name>{searchConditionTI.selectedItem.toString()}</name>
+				<notes></notes>
+			</condition>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcDoctorCreate"
+		url="/doctors.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewDoctorResult(event)">
+		<mx:request>
+			<doctor>
+				<name>{searchDoctorTI.selectedItem.toString()}</name>
+				<notes></notes>
+			</doctor>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService
 		id="svcVisitCreate"
 		url="/patient_visits.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
-		result="handleNewVisitResult(event)">
+		result="handleNewPatientResult(event)">
 		<mx:request>
 			<patient_visit>
-				<condition>{conditionCB.value + otherTI.text}</condition>
-				<type>{typeCB.value + newTI.text}</type>
+				<condition>{searchConditionTI.selectedItem.toString()}</condition>
+				<type>{searchVisitTypeTI.selectedItem.toString()}</type>
 				<visit_date>{visitDateDF.text}</visit_date>
 				<notes>{visitNotesTA.text}</notes>
 				<height>{HeightTI.text}</height>
@@ -147,7 +233,7 @@
 				<blood_pressure>{BloodPressureTI.text}</blood_pressure>
 				<pulse>{PulseTI.text}</pulse>
 				<temperature>{TemperatureTI.text}</temperature>
-				<doctor>{String(doctorCB.value)}</doctor>
+				<doctor>{searchDoctorTI.selectedItem.toString()}</doctor>
 				<patient_id>{patientID}</patient_id>
 			</patient_visit>
 		</mx:request>
@@ -159,28 +245,26 @@
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" fontSize="10" />					
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Visit Type">
-				<mx:ComboBox id="typeCB" dataProvider="{visitTypes}" change="checkTypeCB(event)" />
+				<hc:AutoComplete id="searchVisitTypeTI" dataProvider="{visitTypes}" labelField="name"
+					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
+			</mx:FormItem>	
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Condition Name">
+				<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
+					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="New" paddingLeft="10">
-				<mx:TextInput id="newTI" enabled="false" width="100%"/>
-			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Condition">
-			<mx:ComboBox id="conditionCB" dataProvider="{conditions}" change="checkConditionCB(event)" />
-			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Other" paddingLeft="10">
-				<mx:TextInput id="otherTI" enabled="false" width="100%"/>
+			<mx:FormItem label="Doctor Name">
+				<hc:AutoComplete id="searchDoctorTI" dataProvider="{doctors}" labelField="name"
+					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
+					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
 				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"
 					creationComplete="visitDateDF.selectedDate = new Date();" />
-			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Doctor">
-				<mx:ComboBox id="doctorCB" dataProvider="{doctors}" />
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:Text text="Physicals" fontWeight="bold" />
