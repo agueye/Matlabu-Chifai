@@ -818,7 +818,7 @@
 		<mx:Button id="uploadButton" label="Upload Image" click="showuploadImageWindow()"/> <!-- TODO: Add to Language Array-->
 	</mx:VBox>
    	<mx:VBox height="100%" width="80%" verticalGap="0">
-   		<mx:Label id="errorMessage" text=languageArray['Error:  This patient has been deleted.'] fontSize="36" color="#171712"/>
+   		<mx:Label id="errorMessage" text="{languageArray['Error:  This patient has been deleted.']}" fontSize="36" color="#171712"/>
    		<mx:TabBar dataProvider="{patientInfoMain}" 
    			fontWeight="Bold" paddingTop="0" paddingBottom="0" id="patientTab"/>			
    		<mx:ViewStack 
