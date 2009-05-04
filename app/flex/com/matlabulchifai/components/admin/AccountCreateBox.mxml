@@ -59,11 +59,11 @@
 				<mx:TextInput id="loginTI"/>
 			</mx:FormItem>
 			
-			<mx:FormItem label="{languageArray['First Name']}">
+			<mx:FormItem label="{languageArray['First Name']}" required="true">
 				<mx:TextInput id="firstNameTI"/>
 			</mx:FormItem>
 			
-			<mx:FormItem label="{languageArray['Last Name']}">
+			<mx:FormItem label="{languageArray['Last Name']}" required="true">
 				<mx:TextInput id="lastNameTI"/>
 			</mx:FormItem>
 			

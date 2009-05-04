@@ -6,11 +6,11 @@ class User < ActiveRecord::Base
   validates_presence_of     :login, :first_name, :last_name
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
-  validates_length_of       :password, :within => 5..40, :if => :password_required?
+  validates_length_of       :password, :within => 5..80, :if => :password_required?
   validates_confirmation_of :password,                   :if => :password_required?
-  validates_length_of       :login,    :within => 3..40
+  validates_length_of       :login,    :within => 3..80
   validates_uniqueness_of   :login, :case_sensitive => false
-  before_save :encrypt_password
+  before_save :encrypt_password, :set_admin
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -78,5 +78,9 @@ class User < ActiveRecord::Base
       crypted_password.blank? || !password.blank?
     end
     
+    def set_admin
+      return if self.is_admin == 1
+      self.is_admin = 0
+    end
     
 end

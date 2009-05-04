@@ -364,6 +364,12 @@
 		loginFormBox.passwordTI.text = "tester";
 		loginFormBox.login();
 	}	
+	
+	private function bypassLoginAdmin():void {			
+		loginFormBox.loginTI.text = "admin";			
+		loginFormBox.passwordTI.text = "admintest";
+		loginFormBox.login();
+	}	
 
 	private function handleLogin(e:LoginEvent):void{
 		login(e.user);
@@ -375,7 +381,8 @@
 	
 	private function handleLogoutResult(event:ResultEvent):void{
 		mainMenu.visible = false;
-		mainStack.selectedChild = loginBox;
+		mainStack.visible = false;
+		navigateToURL(new URLRequest('/matlabulchifai'),'_self')
 	}
 
 	private function handleMenuClick(e:MouseEvent):void {		
@@ -385,12 +392,15 @@
 		else if(e.currentTarget.selectedIndex == 1) {				
 			mainStack.selectedChild = searchBox;			
 		}			
-		else if(e.currentTarget.selectedIndex == 2) {
+		else if(e.currentTarget.selectedIndex == 2 && _user["is_admin"] == 1) {
 			mainStack.selectedChild = adminBox;				
 		}			
 		else if(e.currentTarget.selectedIndex == 3) {				
 			handleLogout();							
-		}			
+		}
+		else{
+			Alert.show(languageArray["You do not have permission to view this page."], languageArray["Error"]);
+		}
 		mainMenu.selectedIndex = -1;		
 	}				
 	
@@ -498,7 +508,7 @@
 
 	<mx:HTTPService
         id="svcLogout"
-        resultFormat="e4x"
+        resultFormat="text"
         url="/logout"
         result="handleLogoutResult(event)"/>
 	
@@ -566,7 +576,8 @@
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" languageArray="{languageArray}" login="handleLogin(event)"/>
-				<mx:Button click="bypassLogin()" label="Bypass Login"/>								
+				<mx:Button click="bypassLogin()" label="Bypass Login"/>	
+				<mx:Button click="bypassLoginAdmin()" label="Bypass Login (Admin)"/>			
 			</mx:VBox>
 			<mlc:AlertGridBox id="alertBox"
 				patients="{patients}"
