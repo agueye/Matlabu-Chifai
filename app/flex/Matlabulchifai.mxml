@@ -15,6 +15,17 @@
 	historyManagementEnabled="false"
 	creationComplete="init();"
 	preinitialize="languageInit('ENGLISH');">
+	
+	<mx:Style>
+		VDividedBox{
+			fontSize: 16;
+		}
+		
+		TitleWindow{
+			fontSize: 16;
+		}
+	</mx:Style>
+	
 <mx:Script source="com/matlabulchifai/util/language.as"/>
 <mx:Script>
 	<![CDATA[

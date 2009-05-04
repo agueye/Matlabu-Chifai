@@ -5,6 +5,12 @@
 	height="100%"
     label="PatientInfo"
 	show="init()">
+	
+	<mx:Style>
+		Label{
+			fontSize: 16;
+		}
+	</mx:Style>
 
 	<mx:Metadata>
 		[Event(name="patientConditionCreate", type="com.matlabulchifai.events.patient.PatientConditionEvent")]

@@ -131,6 +131,7 @@ public function languageInit(str:String):void{
 		    "View":"View",
 		    "View Patient": "View Patient",
 			"Zip": "Zip",
+			"You do not have permission to view this page.":"You do not have permission to view this page.",
 			
 			"Upload Image" : "Upload Image",
 			"Error:  This patient has been deleted." : "Error:  This patient has been deleted." 
@@ -275,6 +276,7 @@ public function languageInit(str:String):void{
 		  "Please enter a new allergy for 'Other'": "Please enter a new allergy for 'Other'(French)",
 		  "Please enter a new visit type for 'New'": "Please enter a new visit type for 'New'(French)",
 		  "Please enter a new vaccination for 'Other'": "Please enter a new vaccination for 'Other'(French)",
+		  "You do not have permission to view this page.":"You do not have permission to view this page.(French)",
 		  
 		  "Error":"Error(French)",
 		  "Physical Data":"Physical Data(French)",
