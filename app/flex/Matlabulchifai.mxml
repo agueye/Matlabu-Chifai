@@ -367,10 +367,14 @@
 	
 	private function login(user:XML):void{
 		_user = user;
-		if(user.is_admin == 1)
+		if(user.is_admin == 1) {
 			this.setStyle('backgroundGradientColors',[0xCCCC00, 0xFFFFFF]);
-		else
+			mainMenu.setStyle("fillColors", [0x007D0B, 0xFFFFFF]);
+		}
+		else {
 			this.setStyle('backgroundGradientColors',[0x007D0B, 0xFFFFFF]);
+			mainMenu.setStyle("fillColors", [0x0000FF, 0xFFFFFF]);
+		}
 		listPatients();
 	}
 	
@@ -580,7 +584,7 @@
 					<mx:Button click="languageInit('HINDI');" label="Use Hindi" />
 				</mx:HBox>
 		</mx:Canvas>
-		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false" borderColor="#0000FF">
+		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false" fontWeight="bold">
 			<mx:XMLList>
 	            <menuitem label="{languageArray['Alerts']}"/>
 	            <menuitem label="{languageArray['Search']}" />
