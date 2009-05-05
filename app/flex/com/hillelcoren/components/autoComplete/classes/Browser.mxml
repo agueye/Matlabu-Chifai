@@ -30,8 +30,8 @@
 			private var _dataProvider:ArrayCollection;		
 			private var _dataProviderChanged:Boolean;
 			
-			private var _isMultiSelect:Boolean;	
-			private var _isMultiSelectChanged:Boolean;
+			private var _allowMultipleSelection:Boolean;	
+			private var _allowMultipleSelectionChanged:Boolean;
 					
 			[Bindable]
 			private var _originalSelectedItems:ArrayCollection;
@@ -175,10 +175,10 @@
 				_labelFunction = value;
 			}
 			
-			public function set isMultiSelect( value:Boolean ):void
+			public function set allowMultipleSelection( value:Boolean ):void
 			{
-				_isMultiSelect = value;
-				_isMultiSelectChanged = true;	
+				_allowMultipleSelection = value;
+				_allowMultipleSelectionChanged = true;	
 				
 				invalidateProperties();
 			}
@@ -200,17 +200,17 @@
 			{
 				super.commitProperties();
 				
-				if (_isMultiSelectChanged)
+				if (_allowMultipleSelectionChanged)
 				{
-					_isMultiSelectChanged = false;
+					_allowMultipleSelectionChanged = false;
 					
 					if (_list)
 					{
-						_list.allowMultipleSelection = _isMultiSelect;
+						_list.allowMultipleSelection = _allowMultipleSelection;
 					}
 					else if (_list)
 					{
-						_list.allowMultipleSelection = _isMultiSelect;
+						_list.allowMultipleSelection = _allowMultipleSelection;
 					}					
 				}
 					
@@ -233,7 +233,7 @@
 				}
 			}
 			
-			private function filterFunctionWrapper( item:Object ):Boolean
+			protected function filterFunctionWrapper( item:Object ):Boolean
 			{
 				return _filterFunction( item, searchTextInput.text );
 			}

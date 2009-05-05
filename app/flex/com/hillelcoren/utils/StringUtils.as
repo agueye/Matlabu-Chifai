@@ -1,13 +1,15 @@
 package com.hillelcoren.utils
 {
+	import com.hillelcoren.components.AutoComplete;
+	
 	import mx.utils.StringUtil;
 	
 	public class StringUtils
 	{
 		/**
-		 * Check if the string begins with the pattern
+		 * Check if the string begins with the searchStr
 		 */
-		public static function beginsWith( string:String, pattern:String):Boolean
+		public static function beginsWith( string:String, searchStr:String):Boolean
 		{
 			if (!string)
 			{
@@ -15,19 +17,26 @@ package com.hillelcoren.utils
 			}
 			
 			string  = string.toLowerCase();
-			pattern = pattern.toLowerCase();
+			searchStr = searchStr.toLowerCase();
 			
-			return pattern == string.substr( 0, pattern.length );
+			return searchStr == string.substr( 0, searchStr.length );
 		}
 		
-		public static function anyWordBeginsWith( string:String, pattern:String ):Boolean
+		public static function contains( string:String, searchStr:String ):Boolean
+		{
+			var regExp:RegExp = new RegExp( searchStr, "i" );
+			
+			return regExp.test( string );			
+		}
+		
+		public static function anyWordBeginsWith( string:String, searchStr:String ):Boolean
 		{
 			if (!string)
 			{
 				return false;
 			}
 			
-			if (beginsWith( string, pattern ))
+			if (beginsWith( string, searchStr ))
 			{
 				return true;
 			}
@@ -37,7 +46,7 @@ package com.hillelcoren.utils
 			
 			for each (var word:String in words)
 			{
-				if (beginsWith( word, pattern ))
+				if (beginsWith( word, searchStr ))
 				{
 					return true;
 				}
@@ -115,32 +124,53 @@ package com.hillelcoren.utils
 			return returnStr;		
 		}
 		
-		/* given a string it will return true, iff it is "true", everything else will be false */
-		public static function toBoolean( value:String ):Boolean
-		{
-			if ( value == "true" || value == "Yes" )
-			{
-				return true;
-			}	
-			return false;
-			
-		}
-		
 		public static function trimCommas( value:String ):String
 		{
 			value = StringUtil.trim( value );
 			
-			while (value.length > 0 && value.charAt(0) == ",")
+			while (value.length > 0 && value.charAt( 0 ) == ",")
 			{
 				value = value.substring( 1, value.length );
 			}
 			
 			while (value.length > 0 && value.charAt( value.length - 1 ) == ",")
 			{
-				value = value.substring( 0, value.length - 1);
+				value = value.substring( 0, value.length - 1 );
 			}
 			
 			return value;
+		}
+		
+		public static function highlighMatch( string:String, searchStr:String, matchType:String = "" ):String
+		{
+			if (!matchType)
+			{
+				matchType = AutoComplete.MATCH_ANY_PART;
+			}
+			
+			var matchPos:int = string.toLowerCase().indexOf( searchStr.toLowerCase() );
+			
+			// if we're matching on word then we need to make sure 
+			// we're highliting the right part (ie, search for "st" in "Test String" 
+			// would need to higlight the "st" in String)
+			if (matchType == AutoComplete.MATCH_WORD)
+			{
+				if (matchPos > 0 && string.charAt( matchPos - 1 ) != " ")
+				{
+					matchPos = string.toLowerCase().indexOf( " " + searchStr.toLowerCase() ) + 1;	
+				}
+			}
+			
+			var returnStr:String = string.substring( 0, matchPos );
+			var matchedPart:String = string.substr( matchPos, searchStr.length);
+			
+			// there are problems using ">"s and "<"s
+			matchedPart = matchedPart.replace( "<", "&lt;" ).replace( ">", "&gt;" );
+			
+			returnStr += "<b><u>" + matchedPart + "</u></b>";
+			returnStr += string.substr( matchPos + searchStr.length, string.length ) + " ";		
+			
+			return returnStr;
 		}
 	}
 }

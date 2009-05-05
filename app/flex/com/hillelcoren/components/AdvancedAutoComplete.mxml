@@ -18,6 +18,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.LinkButton;
+			import mx.controls.Button;
 			import mx.core.EdgeMetrics;
 			import mx.events.ResizeEvent;
 			import mx.events.MoveEvent;
@@ -64,7 +66,7 @@
 			private var _actionsMenuDataProviderChanged:Boolean;
 					
 			private var _actionsMenu:ActionsMenu;
-					
+			
 			private function init():void
 			{
 				addEventListener( MoveEvent.MOVE, handleMove );
@@ -100,8 +102,9 @@
 					if (_actionsMenuDataProvider)
 					{
 						var button:Button = new Button();
-						button.width = 24;
-						button.height = 14;
+						button.setStyle( "styleName", "actionsMenuButton" );
+						//button.width = 24;
+						//button.height = 16;
 						button.addEventListener( MouseEvent.CLICK, handleButtonClick );
 						
 						inlineButton = button;						
@@ -201,12 +204,12 @@
 			{
 				callLater( positionActionsMenu );
 			}
-									
+			
 			private function handleBrowseClick( event:Event ):void
 			{
 				showBrowser();
 			}
-				
+			
 			public function showBrowser():void
 			{
 				if (!_dataProvider)

@@ -3,8 +3,8 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
-	width="425" 
-	height="550"
+	width="475" 
+	height="575"
 	title="{languageArray['Add New Visit']}"
 	showCloseButton="true"
 	creationComplete="init()"
@@ -241,29 +241,29 @@
 	</mx:HTTPService>
 	
 	
-	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
+	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
 		<mx:Form>
-			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" fontSize="10" />					
-			<mx:Spacer height="5" />
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold"/>
+			<mx:Spacer height="5" />			
 			<mx:FormItem label="Visit Type">
-				<hc:AutoComplete id="searchVisitTypeTI" dataProvider="{visitTypes}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
-			</mx:FormItem>	
-			<mx:Spacer height="5" />
+				<hc:AdvancedAutoComplete id="searchVisitTypeTI" dataProvider="{visitTypes}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+			</mx:FormItem>
 			<mx:FormItem label="Condition Name">
-				<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
+				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
 			</mx:FormItem>
-			<mx:Spacer height="5" />
 			<mx:FormItem label="Doctor Name">
-				<hc:AutoComplete id="searchDoctorTI" dataProvider="{doctors}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
+				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
 			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Date">
+			<mx:FormItem label="Visit Date">
 				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"
 					creationComplete="visitDateDF.selectedDate = new Date();" />
 			</mx:FormItem>
@@ -271,32 +271,28 @@
 			<mx:Text text="Physicals" fontWeight="bold" />
 			<mx:FormItem label="Height">
 				<mx:TextInput id="HeightTI" width="100%"/>
-			</mx:FormItem>
-			<mx:Spacer height="5" />
+			</mx:FormItem>			
 			<mx:FormItem label="Weight">
 				<mx:TextInput id="WeightTI" width="100%"/>
 			</mx:FormItem>
-			<mx:Spacer height="5" />
 			<mx:FormItem label="Blood Pressure">
 				<mx:TextInput id="BloodPressureTI" width="100%"/>
 			</mx:FormItem>
-			<mx:Spacer height="5" />
 			<mx:FormItem label="Pulse">
 				<mx:TextInput id="PulseTI" width="100%"/>
 			</mx:FormItem>
-			<mx:Spacer height="5" />
 			<mx:FormItem label="Temperature">
 				<mx:TextInput id="TemperatureTI" width="100%"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Notes">
-				<mx:TextArea id="visitNotesTA" width="200" height="150" />
+				<mx:TextArea id="visitNotesTA" width="200" height="100" />
 			</mx:FormItem>
 		</mx:Form>
 	</mx:VBox>
 	
 	
-	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="10%">
 		<mx:Button label="OK" id="OKBtn" click="processVisitCreate()" />
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>

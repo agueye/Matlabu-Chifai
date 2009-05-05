@@ -80,9 +80,10 @@
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form id="createAlertForm">
 			<mx:FormItem label="{languageArray['Patient']}">
-	            <hc:AutoComplete id="patientsCB" dataProvider="{patients}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" backspaceAction="remove" width="150"/>
+				<hc:AdvancedAutoComplete id="patientsCB" dataProvider="{patients}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"/>
         	</mx:FormItem>
 			<mx:FormItem required="true" label="Alert Date">
 				<mx:DateField id="dateTI" yearNavigationEnabled="true" minYear="1980"

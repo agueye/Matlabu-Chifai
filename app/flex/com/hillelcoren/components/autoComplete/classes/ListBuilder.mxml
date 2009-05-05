@@ -35,8 +35,8 @@
 			[Bindable]
 			private var _labelFunction:Function;
 			
-			private var _isOrderable:Boolean;
-			private var _isOrderableChanged:Boolean;
+			private var _showOrderButtons:Boolean;
+			private var _showOrderButtonsChanged:Boolean;
 			
 			public function init():void
 			{
@@ -61,10 +61,10 @@
 				invalidateProperties();
 			}
 			
-			public function set isOrderable( value:Boolean ):void
+			public function set showOrderButtons( value:Boolean ):void
 			{
-				_isOrderable = value;
-				_isOrderableChanged = true;
+				_showOrderButtons = value;
+				_showOrderButtonsChanged = true;
 				
 				invalidateProperties();
 			}
@@ -81,12 +81,12 @@
 					_dataProvider.refresh();
 				}		
 				
-				if (_isOrderableChanged)
+				if (_showOrderButtonsChanged)
 				{
-					_isOrderableChanged = false;
+					_showOrderButtonsChanged = false;
 					
-					orderingButtons.visible = _isOrderable;
-					orderingButtons.includeInLayout = _isOrderable;
+					orderingButtons.visible = _showOrderButtons;
+					orderingButtons.includeInLayout = _showOrderButtons;
 				}										
 			}
 			
@@ -230,6 +230,16 @@
 				_dataProvider.refresh();		
 			}
 	
+			private function handleLeftDoubleClick():void
+			{
+				handleAddSelectedClick();
+			}
+	
+			private function handleRightDoubleClick():void
+			{
+				handleRemoveSelectedClick();
+			}
+	
 			private function handleRemoveSelectedClick():void
 			{
 				for each (var item:Object in rightList.selectedItems)
@@ -260,25 +270,25 @@
 			<mx:VBox width="45%" height="100%">
 				<hc:PromptTextInput prompt="Filter Items" id="leftTextInput" change="handleLeftSearchChange()" width="100%"/>
 				<mx:List id="leftList" dataProvider="{ _dataProvider }" labelFunction="{ _labelFunction }" allowMultipleSelection="true" rowCount="10" width="100%"
-					dragEnabled="true" dropEnabled="true" variableRowHeight="true" dragDrop="handleLeftDrop(event)"/>				
+					dragEnabled="true" dropEnabled="true" variableRowHeight="true" dragDrop="handleLeftDrop(event)" doubleClickEnabled="true" doubleClick="handleLeftDoubleClick()"/>				
 			</mx:VBox>
 		
 			<mx:VBox verticalAlign="middle" height="100%">
-				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/right.png')" width="50" click="handleAddSelectedClick()" toolTip="Add Selected"/>
-				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/left.png')" width="50" click="handleRemoveSelectedClick()" toolTip="Remove Selected"/> 
+				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/right.png')" width="50" click="handleAddSelectedClick()" toolTip="Add Selected"/>
+				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/left.png')" width="50" click="handleRemoveSelectedClick()" toolTip="Remove Selected"/> 
 				<mx:VBox id="orderingButtons">
 					<mx:Spacer height="20"/>
-					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/top.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_TOP ) }" toolTip="Move to top"/>
-					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/up.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_UP ) }" toolTip="Move up"/>
-					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/down.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_DOWN ) }" toolTip="Move down"/>
-					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/bottom.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_BOTTOM ) }" toolTip="Move to bottom"/>	
+					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/top.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_TOP ) }" toolTip="Move to top"/>
+					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/up.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_UP ) }" toolTip="Move up"/>
+					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/down.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_DOWN ) }" toolTip="Move down"/>
+					<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/bottom.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_BOTTOM ) }" toolTip="Move to bottom"/>	
 				</mx:VBox>							
 			</mx:VBox>
 		
 			<mx:VBox width="45%" height="100%">
 				<hc:PromptTextInput prompt="Filter Selected" id="rightTextInput" change="handleRightSearchChange()" width="100%"/>
 				<mx:List id="rightList" dataProvider="{ _selectedItems }" labelFunction="{ _labelFunction }" allowMultipleSelection="true" rowCount="10" width="100%"
-					dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" variableRowHeight="true" dragDrop="handleRightDrop(event)"/>	
+					dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" variableRowHeight="true" dragDrop="handleRightDrop(event)" doubleClickEnabled="true" doubleClick="handleRightDoubleClick()"/>	
 			</mx:VBox>
 			
 		</mx:HBox>

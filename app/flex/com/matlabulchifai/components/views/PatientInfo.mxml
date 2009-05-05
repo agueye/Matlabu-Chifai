@@ -145,6 +145,12 @@
 			svcAlertsList.send();
 		}
 		
+		private function handleAlertsListResult(event:ResultEvent):void {
+			var resultXML:XML = XML(event.result);
+			Matlabulchifai.debug("prescriptions_notes = \n" + resultXML);
+			this.enabled = true;
+		}
+		
 		public function listMedications():void {
 			medicationsXLC.removeAll();
 			svcMedicationsList.url="/patients/" + patientID + "/patient_medications.xml?";
@@ -154,6 +160,7 @@
 		private function handleMedicationsListResult(event:ResultEvent):void {
 			var resultXML:XML = XML(event.result);
 			Matlabulchifai.debug("prescriptions_notes = \n" + resultXML);
+			this.enabled = true;
 		}
 		
 		public function listNotes():void {
@@ -165,6 +172,7 @@
 		private function handleNotesListResult(event:ResultEvent):void {
 			var resultXML:XML = XML(event.result);
 			Matlabulchifai.debug("patient_notes = \n" + resultXML);
+			this.enabled = true;
 		}
 		
 		
@@ -177,6 +185,7 @@
 		private function handleVaccinationsListResult(event:ResultEvent):void {
 			var resultXML:XML = XML(event.result);
 			Matlabulchifai.debug("patient_vaccinations = \n" + resultXML);
+			this.enabled = true;
 		}
 		
 		public function listPhysicals():void {
@@ -206,6 +215,7 @@
 		private function handleAllergiesListResult(event:ResultEvent):void {
 			var resultXML:XML = XML(event.result);
 			Matlabulchifai.debug("patient_allergies = \n" + resultXML);
+			this.enabled = true;
 		}
 		
 		public function listVisits():void {
@@ -217,6 +227,7 @@
 		private function handleVisitsListResult(event:ResultEvent):void {
 			var resultXML:XML = XML(event.result);
 			Matlabulchifai.debug("visit_allergies = \n" + resultXML);
+			this.enabled = true;
 		}
 		
 		private function getDoctorName(item:Object, column:DataGridColumn):String {
@@ -434,6 +445,7 @@
 		public function deleteAlert(alert:XML):void {
 			svcAlertsDestroy.url = "/patient_alerts/" + alert.id + ".xml" + authToken;
 			svcAlertsDestroy.send({_method:"DELETE"});
+			this.enabled = false;
 	    }
 	    
 	    private function handleAlertsDestroyResult(event:ResultEvent):void {
@@ -472,12 +484,13 @@
 		}
 		
 		public function deleteNote(note:XML):void {
+			this.enabled = false;
 			svcNotesDestroy.url = "/patient_notes/" + note.id + ".xml" + authToken;
 			svcNotesDestroy.send({_method:"DELETE"});
 	    }
 	    
 	    private function handleNotesDestroyResult(event:ResultEvent):void {
-	    	listNotes();	    	
+	    	listNotes();
 	    }
 		
 		private function handleNoteClick(event:ListEvent):void {
@@ -508,12 +521,13 @@
 		}
 		
 		public function deleteAllergy(allergy:XML):void {
+			this.enabled = false;
 			svcAllergiesDestroy.url = "/patient_allergies/" + allergy.id + ".xml" + authToken;
 			svcAllergiesDestroy.send({_method:"DELETE"});
 	    }
 	    
 	    private function handleAllergiesDestroyResult(event:ResultEvent):void {
-	    	listPatientAllergies();	    	
+	    	listPatientAllergies();
 	    }
 		
 		private function handleAllergyClick(event:ListEvent):void {
@@ -544,7 +558,7 @@
 			dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, null));			
 			var popUp:Object = (allergyPopUp || allergyUpdatePopUp);
 			if (popUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {					
-						allergyPopUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);				
+						popUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);				
 					}
 		}
 		
@@ -555,12 +569,13 @@
 		}			    	
 		
 		public function deleteVaccination(vaccination:XML):void {
+			this.enabled = false;
 			svcVaccinationsDestroy.url = "/patient_vaccinations/" + vaccination.id + ".xml" + authToken;
 			svcVaccinationsDestroy.send({_method:"DELETE"});
 	    }
 	    
 	    private function handleVaccinationsDestroyResult(event:ResultEvent):void {
-	    	listVaccinations();	    	
+	    	listVaccinations();
 	    }
 		
 		private function handleVaccinationClick(event:ListEvent):void {
@@ -605,12 +620,13 @@
 		}
 		
 		public function deleteMedication(medication:XML):void {
+			this.enabled = false;
 			svcMedicationsDestroy.url = "/patient_medications/" + medication.id + ".xml" + authToken;
 			svcMedicationsDestroy.send({_method:"DELETE"});
 	    }
 	    
 	    private function handleMedicationsDestroyResult(event:ResultEvent):void {
-	    	listMedications();	    	
+	    	listMedications();
 	    }
 		
 		private function handleMedicationClick(event:ListEvent):void {
@@ -710,12 +726,13 @@
 		}
 		
 		public function deleteVisit(visit:XML):void {
+			this.enabled = false;
 			svcVisitsDestroy.url = "/patient_visits/" + visit.id + ".xml" + authToken;
 			svcVisitsDestroy.send({_method:"DELETE"});
 	    }
 	    
 	    private function handleVisitsDestroyResult(event:ResultEvent):void {
-	    	listVisits();	    	
+	    	listVisits();
 	    }
 		
 		private function handleVisitClick(event:ListEvent):void {
@@ -813,7 +830,7 @@
     <mx:HTTPService
         id="svcAlertsList"
         resultFormat="e4x"
-        result=""/>
+        result="handleAlertsListResult(event)"/>
 	<mx:XMLListCollection id="alertsXLC"
         source="{XMLList(svcAlertsList.lastResult.children())}"/>
         

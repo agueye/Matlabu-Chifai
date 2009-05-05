@@ -3,7 +3,7 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*" 
 	layout="vertical" 
-	width="420" 
+	width="450" 
 	height="530"
 	title="{languageArray['Add New Allergy']}"
 	showCloseButton="true"
@@ -123,9 +123,10 @@
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Allergy Name">
-				<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>
+				<hc:AdvancedAutoComplete id="searchAllergyTI" dataProvider="{allergies}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>	
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">

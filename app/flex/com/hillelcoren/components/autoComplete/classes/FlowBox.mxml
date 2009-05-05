@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Container
+<mx:Canvas
 	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="com.hillelcoren.components.autoComplete.classes.*"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	borderStyle="inset" backgroundColor="#FFFFFF"
-	initialize="init()" clipContent="false">
+	initialize="init()" clipContent="true">
+	
+	<mx:Metadata>
+		[Event(name="change")]
+	</mx:Metadata>
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Button;
+			import mx.events.ResizeEvent;
+			import mx.events.MoveEvent;
+			import mx.events.FlexEvent;
+			import mx.events.MenuEvent;
+			import mx.managers.PopUpManager;
 			import mx.core.UIComponent;
 			import mx.controls.VRule;
 			import mx.core.Container;
@@ -14,54 +25,89 @@
 			import mx.core.IUIComponent;
 			import com.hillelcoren.components.autoComplete.interfaces.iComboItem;
 			
-			private var _style:String;
-			private var _styleChanged:Boolean;
+			private var _showRemoveIcon:Boolean;
+			private var _showRemoveIconChanged:Boolean;
 			
-			private var _enableRemoveIcon:Boolean;
-			private var _enableRemoveIconChanged:Boolean;
+			private var _inlineButton:Button;
+			private var _inlineButtonChanged:Boolean;
 			
 			private var _enableMultiRow:Boolean;
 			
+						
 			private function init():void
 			{
-				addEventListener( FocusEvent.FOCUS_IN, handleFocusIn );		
-				addEventListener( FocusEvent.FOCUS_OUT, handleFocusOut );
-			}
-			
-			private function handleFocusIn( event:Event ):void
-			{
-				// this is needed to make sure the focus border is drawn correctly
-				validateNow();
+				addEventListener( MouseEvent.CLICK, handleClick );
 				
-				drawFocus( true );				
+				addEventListener( MouseEvent.MOUSE_MOVE, handleMouseMove );
+				addEventListener( MouseEvent.ROLL_OUT, handleRollOut );				
+								
+				addEventListener( FocusEvent.FOCUS_IN, handleFocusIn );		
+				addEventListener( FocusEvent.FOCUS_OUT, handleFocusOut );		
 			}
 			
-			private function handleFocusOut( event:Event ):void
+			private function handleMouseMove( event:MouseEvent ):void
+			{
+				if (_inlineButton)
+				{
+					buttonTextInput.buttonVisible = true;
+				}
+			}
+			
+			private function handleRollOut( event:MouseEvent ):void
+			{
+				if (!_inlineButton)
+				{
+					return;
+				}
+				
+				buttonTextInput.buttonVisible = false;
+			}
+			
+			private function handleClick( event:MouseEvent ):void
+			{
+				buttonTextInput.buttonVisible = false;
+			}
+			
+			private function handleFocusIn( event:FocusEvent ):void
+			{
+				drawFocus( true );													
+			}
+			
+			private function handleFocusOut( event:FocusEvent ):void
 			{
 				drawFocus( false );
 			}
+			
+			private function handleChange( event:Event ):void
+			{
+				dispatchEvent( event );
+			}			
 			
 			override protected function commitProperties():void
 			{
 				super.commitProperties();
 				
-				if (_styleChanged || _enableRemoveIconChanged)
+				if (_showRemoveIconChanged)
 				{
-					_styleChanged = false;
-					_enableRemoveIconChanged = false;
+					_showRemoveIconChanged = false;
 					
 					for each (var item:iComboItem in getChildren())
 					{
 						if (item is SelectedItem)
 						{
-							SelectedItem( item ).style = _style;
-							SelectedItem( item ).enableRemoveIcon = _enableRemoveIcon;	
+							SelectedItem( item ).showRemoveIcon = _showRemoveIcon;	
 						}						
 					}
 				}
+				
+				if (_inlineButtonChanged)
+				{
+					_inlineButtonChanged = false;
+					buttonTextInput.button = _inlineButton;
+				}
 			}
 			
-			internal function getItemPosition( comboItem:iComboItem ):Point
+			public function getItemPosition( comboItem:iComboItem ):Point
 			{
 				var lastY:int;
 				var col:uint;
@@ -87,7 +133,7 @@
 				return null;
 			}
 			
-			internal function getItemByPosition( pos:Point ):iComboItem
+			public function getItemByPosition( pos:Point ):iComboItem
 			{
 				var lastY:int;
 				var row:uint;
@@ -115,137 +161,122 @@
 				return null;	
 			}								
 			
-			internal function set style( value:String ):void
+			public function set inlineButton( value:Button ):void
 			{
-				_style = value;
-				_styleChanged = true;
+				_inlineButton = value;
+				_inlineButtonChanged = true;
 				
 				invalidateProperties();
 			}
 			
-			internal function set enableRemoveIcon( value:Boolean ):void
+			public function set showRemoveIcon( value:Boolean ):void
 			{
-				_enableRemoveIcon = value;
-				_enableRemoveIconChanged = true;
+				_showRemoveIcon = value;
+				_showRemoveIconChanged = true;
 				
 				invalidateProperties();
 			}
 			
-			internal function set enableMultiRow( value:Boolean ):void
+			public function set enableMultiRow( value:Boolean ):void
 			{
 				_enableMultiRow = value;
 			}
 			
-			override protected function measure():void
-			{
-				super.measure();
+	        override protected function measure():void
+	        {
+	        	super.measure();
 				
-				var minWidth:Number = 0;
-				var minHeight:Number = 0;
-				
-				var preferredWidth:Number = 0;
-				var preferredHeight:Number = 0;
-				
-				var n:int = numChildren;
-				var numGaps:int = -1;
-	
-				for (var i:int = 0; i < n; i++)
-				{
-					var child:IUIComponent = IUIComponent(getChildAt(i));
-					
-					if (!child.includeInLayout)
-					{
-						continue;
-					}	
-					
-					numGaps++;
-					var wPref:Number = child.getExplicitOrMeasuredWidth();
-					var hPref:Number = child.getExplicitOrMeasuredHeight();
-					
-					minWidth = Math.max(minWidth, wPref);
-					minHeight = Math.max(minHeight, hPref);
-					preferredWidth += wPref;
-				}
-				
-				var vm:EdgeMetrics = viewMetricsAndPadding;
-				var wPadding:Number = vm.left + vm.right + numGaps * getStyle("horizontalGap");
-				var hPadding:Number = vm.top + vm.bottom;
-				
-				//measuredMinWidth = minWidth + wPadding;
-				measuredMinHeight = minHeight + hPadding;
-				
-				//measuredWidth = preferredWidth + wPadding;
-				measuredHeight = minHeight + hPadding;
-				
-				measuredMinWidth = width;
-				measuredWidth = width;
-			}
-			
+				var comp:DisplayObject = getChildAt( numChildren - 1 );
+	        	var height:int = comp.y + comp.height;
+	        	
+	        	if (height > 0)
+	        	{
+	        		var vm:EdgeMetrics = viewMetricsAndPadding;
+	        		height += vm.bottom + vm.top;
+	        	
+	        		measuredHeight = measuredMinHeight = height;
+	        	}
+	        }
+		
+			/**
+			 * The flow layout algorithm was written by Eric Cancil
+			 * http://blog.appdivision.com/2009/02/18/flex-flowcontainer/
+			 */
 			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-			{
+			{	        	
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				
-				var vm:EdgeMetrics = viewMetricsAndPadding;
+				var prevTallest:Number = 0;
+				var prevWidest:Number = 0;
+				var tallestForRow:Number = 0;
+				var rowNumber:Number = -1;    
+				var widestForColumn:Number = 0;
+				var columnNumber:Number = -1;        
 				
-				var xPos:Number = vm.left;
-				var yPos:Number = vm.top;
-				var maxYPos:Number = 0;
-				
-				var n:int = numChildren;
-				var child:IUIComponent;
-				var lastChild:IUIComponent;
-				var childWidth:int;
-				var childHeight:int;
-				
-				var xEnd:Number = unscaledWidth - vm.right;
-				
-				for (var i:int = 0; i < n; i++)
+				for (var i:Number = 0; i < numChildren; i ++)
 				{
-					child = IUIComponent(getChildAt(i));
+					var child:UIComponent = getChildAt(i) as UIComponent;
+					var prevChild:DisplayObject;
 					
-					if (!child.includeInLayout)
+					if (child.height >= tallestForRow)
 					{
-						continue;
+						prevTallest = tallestForRow;
+						tallestForRow = child.height;
 					}
 					
-					childWidth = child.getExplicitOrMeasuredWidth();
-					childHeight = child.getExplicitOrMeasuredHeight();
-					
-					// Start a new row?
-					if (xPos + childWidth > xEnd && xPos != vm.left && _enableMultiRow)
+					if (i == 0)
 					{
-						yPos = maxYPos;
-						xPos = vm.left;
+						child.x = child.y = 0;
+					}
+					else
+					{
+						prevChild = getChildAt(i - 1);
 						
-						if (child is VRule)
+						var newWidth:Number = prevChild.width + prevChild.x;
+						var newHeight:Number = prevChild.y;
+						
+						if (newWidth + child.minWidth > width)
 						{
-							child.setActualSize(0, 0);
-							child.move(xPos, yPos);
-							continue;
+							child.x = 0;
+							
+							if (child.height == tallestForRow)
+							{
+								child.y = newHeight + prevTallest;
+							}
+							else
+							{
+								child.y = newHeight + tallestForRow;
+							}
+							
+							tallestForRow = child.height;                            
 						}
-						else if (lastChild is VRule)
+						else
 						{
-							lastChild.setActualSize(0, 0);
+							child.x = newWidth;
+							child.y = prevChild.y;
 						}
 					}
 					
-					child.setActualSize(childWidth, childHeight)
-					child.move(xPos, yPos);
-					lastChild = child;
-					
-					maxYPos = Math.max(maxYPos, yPos + childHeight);
-					xPos += childWidth;
+					/*
+					if (child is ButtonTextInput && child.width > parent.width)
+					{
+						var width:int = parent.width - 4;
+						
+						if (prevChild && prevChild.y == child.y)
+						{
+							width -= (prevChild.x + prevChild.width); 
+						}
+							
+						child.width = width;			
+					}
+					*/
 				}
-				
-				maxYPos += vm.bottom;
-				
-				if (height != maxYPos)
-				{
-					height = maxYPos;
-				}
-			}
-			
+			}           
+
+						
 		]]>
 	</mx:Script>
 	
-</mx:Container>
+	<ButtonTextInput id="buttonTextInput" change="handleChange(event)" width="100%" height="100%" borderStyle="none"/>
+	
+</mx:Canvas>

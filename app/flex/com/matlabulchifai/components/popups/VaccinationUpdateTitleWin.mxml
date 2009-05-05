@@ -4,7 +4,7 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
-	width="400" 
+	width="475" 
 	height="450"
 	title="{languageArray['Edit Vaccination']}"
 	showCloseButton="true"
@@ -117,9 +117,10 @@
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Vaccine Name">
-				<hc:AutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>
+				<hc:AdvancedAutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date Administered">

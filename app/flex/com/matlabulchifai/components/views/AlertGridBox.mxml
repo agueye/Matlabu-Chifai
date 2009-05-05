@@ -50,6 +50,7 @@
     }
     
     public function deleteAlert(alert:XML):void {
+    	this.enabled = false;
 		svcAlertsDestroy.url = "/patient_alerts/" + alert.id + ".xml" + authToken;
 		svcAlertsDestroy.send({_method:"DELETE"});
     }
@@ -62,6 +63,7 @@
     private function handleAlertListResult(event:ResultEvent):void {
 		var resultXML: XML = XML(event.result);		
 		Matlabulchifai.debug("alerts = \n" + resultXML);
+		this.enabled = true;
 	}
 	
 	private function handleAlertsDestroyResult(event:ResultEvent):void {

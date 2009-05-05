@@ -71,6 +71,10 @@
     	svcPatientsList.url = "/patients.xml?rnd=" + rnd;
 	    svcPatientsList.send();
     }
+    
+    private function handleShowAllPatients(event:ResultEvent):void {
+    	this.enabled = true;
+    }
 	
 	private function showAllAllergies():void {
     	searchAllergyTI.selectedItem = null;
@@ -111,6 +115,7 @@
 	}
 	
 	public function deletePatient(patient:XML):void {
+		this.enabled = false;
 		svcPatientDestroy.url = "/patients/" + patient.id + ".xml" + authToken;
 		svcPatientDestroy.send({_method:"DELETE"});
     }
@@ -252,7 +257,7 @@
     <mx:HTTPService
         id="svcPatientsList"
         resultFormat="e4x"
-        result=""/>
+        result="handleShowAllPatients(event)"/>
 	<mx:XMLListCollection id="patientsXLC"
         source="{XMLList(svcPatientsList.lastResult.children())}"/>    
 	<mx:HTTPService
@@ -288,11 +293,11 @@
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Patient Name']}: "></mx:Label>
-					<hc:AutoComplete id="searchPatientTI" dataProvider="{patients}" labelField="name"
-						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						change="handlePatientAutoCompleteChange()" enableRemoveIcon="true"
-						backspaceAction="remove"/>
-					<mx:Spacer width="100" />
+					<hc:AdvancedAutoComplete id="searchPatientTI" dataProvider="{patients}" 
+						labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+						showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+						allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"
+						change="handlePatientAutoCompleteChange()"/>					
 					<mx:Button id="showAllPatientsButton" label="{languageArray['Show All']}" click="showAllPatients()"/>
 					<mx:Spacer width="20" />
 					<mx:LinkButton label="{languageArray['Add New Patient']}" color="#0000FF" click="showPatientCreateTitleWin()"/>
@@ -333,11 +338,11 @@
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Allergy Name']}: "></mx:Label>					
-					<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
-						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						change="handleAllergyAutoCompleteChange()" enableRemoveIcon="true"
-						backspaceAction="remove"/>
-					<mx:Spacer width="100" />
+					<hc:AdvancedAutoComplete id="searchAllergyTI" dataProvider="{allergies}" 
+						labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+						showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+						allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"
+						change="handleAllergyAutoCompleteChange()"/>
 					<mx:Button id="showAllAllergiesButton" label="{languageArray['Show All']}" click="showAllAllergies()"/>
 				</mx:HBox>
 				
@@ -375,11 +380,11 @@
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Vaccination Name']}: "></mx:Label>
-					<hc:AutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" labelField="name"
-						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						change="handleVaccinationAutoCompleteChange()" enableRemoveIcon="true"
-						backspaceAction="remove"/>
-					<mx:Spacer width="100" />
+					<hc:AdvancedAutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" 
+						labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+						showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+						allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"
+						change="handleVaccinationAutoCompleteChange()"/>
 					<mx:Button id="showAllVaccinationsButton" label="{languageArray['Show All']}" click="showAllVaccinations()"/>
 				</mx:HBox>
 				
@@ -414,11 +419,11 @@
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Condition Name']}: "></mx:Label>
-					<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
-						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						change="handleConditionAutoCompleteChange()" enableRemoveIcon="true"
-						backspaceAction="remove"/>
-					<mx:Spacer width="100" />
+					<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
+						labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+						showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+						allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"
+						change="handleConditionAutoCompleteChange()"/>
 					<mx:Button id="showAllConditionsButton" label="{languageArray['Show All']}" click="showAllConditions()"/>
 				</mx:HBox>
 				
@@ -456,11 +461,11 @@
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				<mx:HBox>
 					<mx:Label fontWeight="bold" text="{languageArray['Search by Medicine Name']}: "></mx:Label>
-					<hc:AutoComplete id="searchMedicationTI" dataProvider="{medications}" labelField="name"
-						style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-						change="handleMedicationAutoCompleteChange()" enableRemoveIcon="true"
-						backspaceAction="remove"/>
-					<mx:Spacer width="100" />
+					<hc:AdvancedAutoComplete id="searchMedicationTI" dataProvider="{medications}" 
+						labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+						showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+						allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"
+						change="handleMedicationAutoCompleteChange()"/>
 					<mx:Button id="showAllMedicationsButton" label="{languageArray['Show All']}" click="showAllMedications()"/>
 				</mx:HBox>
 				

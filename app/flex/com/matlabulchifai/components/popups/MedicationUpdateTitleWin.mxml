@@ -4,7 +4,7 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
-	width="450" 
+	width="475" 
 	height="525"
 	title="{languageArray['Edit Medication']}"
 	showCloseButton="true"
@@ -246,20 +246,22 @@
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Medication Name">
-				<hc:AutoComplete id="searchMedicationTI" dataProvider="{medications}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
-			</mx:FormItem>
-			<mx:Spacer height="5" />
+				<hc:AdvancedAutoComplete id="searchMedicationTI" dataProvider="{medications}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+			</mx:FormItem>			
 			<mx:FormItem label="Condition Name">
-				<hc:AutoComplete id="searchConditionTI" dataProvider="{conditions}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
+				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
 			</mx:FormItem>
 			<mx:FormItem label="Doctor Name">
-				<hc:AutoComplete id="searchDoctorTI" dataProvider="{doctors}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="150" isStrict="false" backspaceAction="remove"/>
+				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>	
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Dosage">
@@ -270,7 +272,7 @@
 				<mx:TextInput id="FrequencyTI"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date Administered">
+			<mx:FormItem label="Date Given">
 				<mx:DateField id="medicationDateDF" yearNavigationEnabled="true" minYear="1980"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />

@@ -16,57 +16,39 @@
 						
 			[Bindable]
 			private var _dataProvider:ArrayCollection;
-			private var _dataProviderChanged:Boolean;
 			
 			[Bindable]
 			private var _labelFunction:Function;
 			
 			[Bindable]
-			private var _isOrderable:Boolean;
-			private var _isOrderableChanged:Boolean;
+			private var _showOrderButtons:Boolean;
+			
+			[Bindable]
+			private var _showRemoveButton:Boolean;
 			
 			[Bindable]
 			private var _removeLabel:String;
-			
-			public function set dataProvider( value:ArrayCollection ):void
-			{
-				_dataProvider = value;
-				_dataProviderChanged = true;
-				
-				invalidateProperties();
-			}
 			
 			public function set labelFunction( value:Function ):void
 			{
 				_labelFunction = value;
 			}
 			
-			public function set isOrderable( value:Boolean ):void
+			public function set dataProvider( value:ArrayCollection ):void
 			{
-				_isOrderable = value;
-				_isOrderableChanged = true;
-				
-				invalidateProperties();
+				_dataProvider = value;
 			}
 			
-			override protected function commitProperties():void
+			public function set showOrderButtons( value:Boolean ):void
 			{
-				super.commitProperties();
-				
-				if (_dataProviderChanged)
-				{
-					_dataProviderChanged = false;
-					list.dataProvider = _dataProvider;
-				}
-				
-				if (_isOrderableChanged)
-				{
-					_isOrderableChanged = false;
-					orderingButtons.visible = _isOrderable;
-					orderingButtons.includeInLayout = _isOrderable;
-				}
+				_showOrderButtons = value;
 			}
 			
+			public function set showRemoveButton( value:Boolean ):void
+			{
+				_showRemoveButton = value;
+			}
+						
 			private function handleRemoveClick():void
 			{
 				if (list.selectedIndices.length == 0)
@@ -138,22 +120,22 @@
 	
 	
 	<mx:GridItem width="100%">
-		<mx:List id="list" dataProvider="{ _dataProvider }" rowCount="10" width="100%" allowMultipleSelection="true" labelFunction="{ _labelFunction }"
-			variableRowHeight="true" dragEnabled="{ _isOrderable }" dragMoveEnabled="{ _isOrderable }" dropEnabled="{ _isOrderable }" dragDrop="handleDragDrop(event)"/>
+		<mx:List id="list" dataProvider="{ _dataProvider }" rowCount="8" width="100%" allowMultipleSelection="true" labelFunction="{ _labelFunction }"
+			variableRowHeight="true" dragEnabled="{ _showOrderButtons }" dragMoveEnabled="{ _showOrderButtons }" dropEnabled="{ _showOrderButtons }" dragDrop="handleDragDrop(event)"/>
 	</mx:GridItem>
 	
 	<mx:GridItem>
 		<mx:VBox height="100%">
-			<mx:Button id="removeButton" label="{ _removeLabel }" click="handleRemoveClick()" width="{ Consts.BUTTON_WIDTH }"/>
+			<mx:Button id="removeButton" label="{ _removeLabel }" click="handleRemoveClick()" 
+				width="{ Consts.BUTTON_WIDTH }" visible="{ _showRemoveButton }" includeInLayout="{ _showRemoveButton }"/>
 			<mx:Spacer height="100%"/>
-			<mx:VBox id="orderingButtons">
-				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/top.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_TOP ) }" toolTip="Move to top"/>
-				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/up.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_UP ) }" toolTip="Move up"/>
-				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/down.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_DOWN ) }" toolTip="Move down"/>
-				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/bottom.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_BOTTOM ) }" toolTip="Move to bottom"/>	
+			<mx:VBox id="orderingButtons" visible="{ _showOrderButtons }" includeInLayout="{ _showOrderButtons }">
+				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/top.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_TOP ) }" toolTip="Move to top"/>
+				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/up.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_UP ) }" toolTip="Move up"/>
+				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/down.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_DOWN ) }" toolTip="Move down"/>
+				<mx:Button icon="@Embed(source='/com/hillelcoren/assets/icons/bottom.png')" width="50" click="{ moveItems( ArrayCollectionUtils.MOVE_BOTTOM ) }" toolTip="Move to bottom"/>	
 			</mx:VBox>				
 		</mx:VBox>
 	</mx:GridItem>
-	
-		
+			
 </mx:GridRow>

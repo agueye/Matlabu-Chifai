@@ -125,9 +125,10 @@
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Allergy Name">
-				<hc:AutoComplete id="searchAllergyTI" dataProvider="{allergies}" labelField="name"
-					style="facebook" matchType="anyPart" isBrowseable="true" browserFields="name"
-					enableRemoveIcon="true" width="120" isStrict="false" backspaceAction="remove"/>
+				<hc:AdvancedAutoComplete id="searchAllergyTI" dataProvider="{allergies}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date Observed">

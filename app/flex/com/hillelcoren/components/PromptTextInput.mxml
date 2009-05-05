@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"	
-	implements="com.hillelcoren.components.autoComplete.interfaces.iComboItem"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	verticalAlign="middle" backgroundColor="#FFFFFF"
-	width="100" borderStyle="inset" initialize="init()" 
+	width="100" borderStyle="inset" initialize="init()"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*">
 	
 	<mx:Metadata>
 		[Event("change")]
+		[Style(name="promptColor", type="uint", format="Color", inherit="yes")]
 	</mx:Metadata>
 	
 	<mx:Script>
@@ -28,11 +28,10 @@
 			private var _enablePrompt:Boolean = true;
 			private var _isMouseOver:Boolean;
 			
-			[Embed(source="/com/hillelcoren/assets/clear.png")]
-			private var _clearAsset:Class;
-			
 			private var _text:String;
 			private var _textChanged:Boolean;
+			
+			private var _promptColor:String;
 			
 			private function init():void
 			{
@@ -42,6 +41,8 @@
 				addEventListener( MouseEvent.MOUSE_OUT, handleMouseOut );
 				
 				textInput.addEventListener( Event.CHANGE, handleChange );				
+				
+				_promptColor = getStyle( "promptColor" ) ? getStyle( "promptColor" ) : Consts.COLOR_TEXT_DISABLED;
 				
 				showPrompt();
 			}
@@ -54,6 +55,21 @@
 				{
 					_textChanged = false;
 					setNewText();
+				}
+			}						
+			
+			override public function styleChanged( styleProp:String ):void 
+			{
+				super.styleChanged( styleProp );
+				
+				if (!styleProp || styleProp=="promptColor") 
+				{
+					_promptColor = getStyle( "promptColor" ) ? getStyle( "promptColor" ) : Consts.COLOR_TEXT_DISABLED;
+					
+					if (_isPromptSet)
+					{
+						setStyle( "color", _promptColor );
+					}
 				}
 			}
 			
@@ -79,8 +95,8 @@
 				
 				_isPromptSet = true;
 				textInput.text = _prompt;
-				
-				setStyle( "color", Consts.COLOR_TEXT_DISABLED );
+
+				setStyle( "color", _promptColor );
 				setStyle( "fontStyle", "italic" );
 			}
 			
@@ -145,25 +161,6 @@
 				}
 			}
 			
-			public function get item():Object
-			{
-				return null;
-			}
-			
-			/*
-			public function get htmlText():String
-			{
-				if (_isPromptSet)
-				{
-					return "";
-				}
-				else
-				{
-					return textInput.htmlText;
-				}
-			}
-			*/
-			
 			public function get selectionBeginIndex():int
 			{
 				return textInput.selectionBeginIndex;
@@ -195,26 +192,7 @@
 				
 				textInput.validateNow();
 			}
-			
-			/*
-			public function set htmlText( value:String ):void
-			{
-				if (value == null)
-				{
-					textInput.htmlText = "";
-					textInput.setSelection( 0, 0 );
-					
-					showPrompt();
-					hideClearIcon();
-				}	
-				else
-				{
-					hidePrompt();
-					textInput.htmlText = value;																		
-				}					
-			}
-			*/
-			
+						
 			public function setTextSelected( value:Boolean ):void
 			{
 				var startPos:uint = value ? 0 : text.length;
@@ -357,11 +335,6 @@
 				return selectionBeginIndex == text.length;
 			}
 
-			public function isEditable():Boolean
-			{
-				return true;
-			}
-			
 			public function setCursorPosition( value:int ):void
 			{
 				_setCursorPosition( value );
@@ -378,7 +351,7 @@
 	</mx:Script>
 	
 	<classes:ShorterTextInput id="textInput" width="100%" borderStyle="none"/> 
-	<mx:Image id="clearIcon" source="@Embed('/com/hillelcoren/assets/clear.png')" verticalAlign="middle" 
+	<mx:Image id="clearIcon" source="@Embed('/com/hillelcoren/assets/icons/clear.png')" verticalAlign="middle" 
 		visible="false" includeInLayout="{ _enableClearIcon }" click="handleClearClick()"/>
 			
 </mx:HBox>

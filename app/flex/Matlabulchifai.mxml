@@ -18,11 +18,11 @@
 	
 	<mx:Style>
 		VDividedBox{
-			fontSize: 16;
+			fontSize: 12;
 		}
 		
 		TitleWindow{
-			fontSize: 16;
+			fontSize: 12;
 		}
 	</mx:Style>
 	
@@ -584,7 +584,8 @@
 					<mx:Button click="languageInit('HINDI');" label="Use Hindi" />
 				</mx:HBox>
 		</mx:Canvas>
-		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false" fontWeight="bold">
+		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false"
+			fontWeight="bold" fontSize="14">
 			<mx:XMLList>
 	            <menuitem label="{languageArray['Alerts']}"/>
 	            <menuitem label="{languageArray['Search']}" />

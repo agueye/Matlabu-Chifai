@@ -13,6 +13,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Button;
 			import mx.events.ResizeEvent;
 			import mx.events.MoveEvent;
 			import mx.managers.PopUpManager;
@@ -27,6 +28,7 @@
 			public static const MENU_PADDING:int = 6;
 			
 			private var _menu:Menu;
+			private var _button:Button;
 			private var _dataProvider:Object;
 			
 			[Bindable]
@@ -41,7 +43,7 @@
 				var localPoint:Point = new Point( 0, 0 );
 				var globalPoint:Point = localToGlobal( localPoint ); 
 				
-        		_menu = Menu.createMenu( null, _dataProvider, false );	
+        		_menu = Menu.createMenu( this, _dataProvider, false );	
 				_menu.labelField="@label";
 				_menu.setStyle( "openDuration", 0 );
 				_menu.setStyle( "dropShadowEnabled", false );
@@ -50,7 +52,13 @@
 				
 				_menu.addEventListener( MenuEvent.MENU_HIDE, handleMenuHide );
 				_menu.addEventListener( MenuEvent.MENU_SHOW, handleMenuShow );
-				_menu.addEventListener( MenuEvent.ITEM_CLICK, handleItemClick );	
+				_menu.addEventListener( MenuEvent.ITEM_CLICK, handleItemClick );
+				
+				_button = new Button();
+				_button.setStyle( "styleName", "actionsMenuButton" );
+				_button.x = _parentWidth - NUB_WIDTH;
+				_button.y = TOP_PADDING + ((_rowHeight - 16) / 2);
+				addChild( _button );				
 			}
 
 			private function handleMenuHide( event:MenuEvent ):void
