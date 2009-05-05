@@ -32,7 +32,7 @@ class PatientPhysicalsController < ApplicationController
   
     respond_to do |format|
       format.html # index.html.erb
-      # format.xml  { render :xml => @physicals }
+      format.xml  { render :xml => @visits }
     end
   end
 
@@ -42,7 +42,7 @@ class PatientPhysicalsController < ApplicationController
   
     respond_to do |format|
       format.html # index.html.erb
-      # format.xml  { render :xml => @physicals }
+      format.xml  { render :xml => @visits }
     end
   end
 
@@ -52,7 +52,7 @@ class PatientPhysicalsController < ApplicationController
   
     respond_to do |format|
       format.html # index.html.erb
-      # format.xml  { render :xml => @physicals }
+      format.xml  { render :xml => @visits }
     end
   end
   
@@ -62,7 +62,7 @@ class PatientPhysicalsController < ApplicationController
   
     respond_to do |format|
       format.html # index.html.erb
-      # format.xml  { render :xml => @physicals }
+      format.xml  { render :xml => @visits }
     end
   end
   
@@ -72,22 +72,27 @@ class PatientPhysicalsController < ApplicationController
   
     respond_to do |format|
       format.html # index.html.erb
-      # format.xml  { render :xml => @physicals }
+      format.xml  { render :xml => @visits }
     end
   end
 
   # GET /physicals/1
   # GET /physicals/1.xml
   def show
+    @visits = @patient.patient_visits.select {|v| v.height != ""}
+    @visits.sort! {|x,y| y.visit_date <=> x.visit_date}
+  
     respond_to do |format|
-      format.html # show.html.erb
-      # format.xml  { render :xml => @physical }
+      format.html # index.html.erb
+      format.xml  { render :xml => @visits }
     end
   end
   
   private
   
   def get_patient
-    @patient = Patient.find(params[:patient_id])
+  	if params[:patient_id]
+    	@patient = Patient.find(params[:patient_id])
+    end
   end
 end

@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   map.medication_search '/patient_medications/search.:format', :controller => "patient_medications", :action => "find"
   map.condtion_search '/patient_visits/search.:format', :controller => "patient_visits", :action => "find"
   map.logout '/logout', :controller => "sessions", :action => "destroy"
-  map.connect '/patients/:patient_id/patient_physicals/:action', 
+  map.connect '/patients/:patient_id/patient_physicals/:action.:format', 
               :controller => 'patient_physicals', :action => :action
               
   map.resources :patients do |patients|
