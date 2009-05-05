@@ -42,13 +42,6 @@
 				//initAllergyNames();
 			}
 			
-				
-			private function handleNewPatientAllergyResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("allergy created = \n" + resultXML);
-				dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, resultXML));
-			}
-			
 			private function processPatientAllergyCreate():void {
 				var allergySelected:Object = searchAllergyTI.selectedItem;
 				
@@ -78,6 +71,13 @@
 			
 			private function callPatientAllergyCreate():void {
 				svcPatientAllergyCreate.send();
+				this.enabled = false;
+			}
+			
+			private function handleNewPatientAllergyResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("allergy created = \n" + resultXML);
+				dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, resultXML));
 				PopUpManager.removePopUp(this);
 			}
 		]]>

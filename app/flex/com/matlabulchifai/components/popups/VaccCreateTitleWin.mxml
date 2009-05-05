@@ -52,7 +52,7 @@
 				}
 				else{ 
 					svcVaccinationCreate.send();
-					PopUpManager.removePopUp(this);
+					this.enabled = false;
 				}
 				
 				
@@ -61,7 +61,8 @@
 			private function handleNewVaccinationResult(event:ResultEvent):void{
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("vaccination created = \n" + resultXML);
-				dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, resultXML));	
+				dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, resultXML));
+				PopUpManager.removePopUp(this);	
 			}
 			
 			private function checkVaccNameCB(event:Event):void {

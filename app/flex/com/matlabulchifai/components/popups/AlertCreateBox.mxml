@@ -40,14 +40,15 @@
 		if (patientSelected != null) {
 			svcAlertCreate.url = "/patients/" + patientsCB.selectedItem.id + "/patient_alerts.xml" + authToken;
 	    	svcAlertCreate.send();
-			PopUpManager.removePopUp(this);	
+			this.enabled = false;
 		}
     }
     
     private function handleNewAlertResult(event:ResultEvent):void{
 		var resultXML:XML = XML(event.result);
 		Matlabulchifai.debug("alert created = \n" + resultXML);
-		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_CREATE, resultXML)); 
+		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_CREATE, resultXML));
+		PopUpManager.removePopUp(this);	 
 	}
 	
 ]]>

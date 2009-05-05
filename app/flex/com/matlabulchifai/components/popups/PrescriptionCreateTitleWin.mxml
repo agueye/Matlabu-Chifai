@@ -74,12 +74,6 @@
 				}
 			}
 			
-			private function handleNewPrescriptionResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				Matlabulchifai.debug("note created = \n" + resultXML);
-				dispatchEvent(new PatientPrescriptionEvent(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE, resultXML));
-			}
-			
 			private function processPrescriptionCreate():void{
 				var newBlankPer:Boolean = false;
 				var newBlankCon:Boolean = false;
@@ -96,8 +90,15 @@
 				
 				if(newBlankPer == false && newBlankCon == false){
 					svcPrescriptionCreate.send();
-					PopUpManager.removePopUp(this);
+					this.enabled = false;
 				}
+			}
+			
+			private function handleNewPrescriptionResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("note created = \n" + resultXML);
+				dispatchEvent(new PatientPrescriptionEvent(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE, resultXML));
+				PopUpManager.removePopUp(this);
 			}
 			
 			private function checkConditionCB(event:Event):void {

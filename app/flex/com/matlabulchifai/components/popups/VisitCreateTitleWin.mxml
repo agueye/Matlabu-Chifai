@@ -97,11 +97,6 @@
 				}
 			}
 			
-			private function callVisitCreate():void {
-				svcVisitCreate.send();
-				PopUpManager.removePopUp(this);	
-			}
-			
 			private function handleNewVisitTypeResult(event:ResultEvent):void {
 				var newVisitType:XML = XML(event.result);
 				
@@ -156,10 +151,16 @@
 				}
 			}
 			
+			private function callVisitCreate():void {
+				svcVisitCreate.send();
+				this.enabled = false;
+			}
+			
 			private function handleNewPatientResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("visit created = \n" + resultXML);
 				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.PATIENT_VISIT_CREATE, resultXML));
+				PopUpManager.removePopUp(this);	
 			}
 			
 			

@@ -64,11 +64,6 @@
 				medicationNotesTI.text = medication.notes;
 			}
 			
-			private function handleUpdateMedicationResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				dispatchEvent(new PatientMedicationEvent(PatientMedicationEvent.PATIENT_MEDICATION_UPDATE, resultXML));
-			}
-			
 			private function processMedicationUpdate():void {
 				var medicationSelected:Object = searchMedicationTI.selectedItem;
 				var conditionSelected:Object = searchConditionTI.selectedItem;
@@ -174,9 +169,15 @@
 				svcMedicationUpdate.url = "/patient_medications/" + medication.id + ".xml?authenticity_token=" +
 							Application.application.parameters.authenticityToken;
 				svcMedicationUpdate.send(params);
-				PopUpManager.removePopUp(this);	
+				this.enabled = false;
+				
 			}
-
+			
+			private function handleUpdateMedicationResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new PatientMedicationEvent(PatientMedicationEvent.PATIENT_MEDICATION_UPDATE, resultXML));
+				PopUpManager.removePopUp(this);
+			}
 		]]>
 	</mx:Script>
 	

@@ -53,6 +53,31 @@
 				notesTI.text = patient.notes;
 			}
 			
+			private function clearForm():void{
+				medicalrecordTI.text = "";
+				firstnameTI.text = "";
+				middlenameTI.text = "";
+				lastnameTI.text = "";
+				arrivaldateTI.text = "";
+				birthdateTI.text = "";
+				genderTI.text = "";
+				addressTI.text = "";
+				cityTI.text = "";
+				stateTI.text = "";
+				zipTI.text = "";
+				telephoneTI.text = "";
+				fatherfirstnameTI.text = "";
+				fatherlastnameTI.text = "";
+				motherfirstnameTI.text = "";
+				motherlastnameTI.text = "";
+				emergencycontactnameTI.text = "";
+				emergencycontactrelationshipTI.text = "";
+				emergencycontactnumberTI.text = "";
+				notesTI.text = "";
+				//refocus back on the first field
+				focusManager.setFocus(medicalrecordTI);
+			}
+			
 			private function processPatientUpdate():void{
 				var	params:Object = new	Object();
 				params['patient[medical_record_number]'] = medicalrecordTI.text;
@@ -79,37 +104,13 @@
 				svcPatientUpdate.url = "/patients/" + patient.id + ".xml?authenticity_token=" +
 					Application.application.parameters.authenticityToken;
 				svcPatientUpdate.send(params);
-				PopUpManager.removePopUp(this);
-			}
-			
-			private function clearForm():void{
-				medicalrecordTI.text = "";
-				firstnameTI.text = "";
-				middlenameTI.text = "";
-				lastnameTI.text = "";
-				arrivaldateTI.text = "";
-				birthdateTI.text = "";
-				genderTI.text = "";
-				addressTI.text = "";
-				cityTI.text = "";
-				stateTI.text = "";
-				zipTI.text = "";
-				telephoneTI.text = "";
-				fatherfirstnameTI.text = "";
-				fatherlastnameTI.text = "";
-				motherfirstnameTI.text = "";
-				motherlastnameTI.text = "";
-				emergencycontactnameTI.text = "";
-				emergencycontactrelationshipTI.text = "";
-				emergencycontactnumberTI.text = "";
-				notesTI.text = "";
-				//refocus back on the first field
-				focusManager.setFocus(medicalrecordTI);
+				this.enabled = false;
 			}
 			
 			private function handleUpdatePatientResult(event:ResultEvent):void {
 				var patient:XML = XML(event.result);
 				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_UPDATE, patient));
+				PopUpManager.removePopUp(this);
 				clearForm();		
 			}
 		]]>

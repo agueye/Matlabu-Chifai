@@ -41,11 +41,6 @@
 				vaccinationNotesTI.text = vaccination.notes;
 			}
 			
-			private function handleUpdateVaccinationResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_UPDATE, resultXML));
-			}
-			
 			private function processVaccinationUpdate():void {
 				var vaccinationSelected:Object = searchVaccinationTI.selectedItem;
 				
@@ -83,9 +78,14 @@
 				svcVaccinationUpdate.url = "/patient_vaccinations/" + vaccination.id + ".xml?authenticity_token=" +
 							Application.application.parameters.authenticityToken;
 				svcVaccinationUpdate.send(params);
-				PopUpManager.removePopUp(this);
+				this.enabled = false;
 			}
 
+			private function handleUpdateVaccinationResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_UPDATE, resultXML));
+				PopUpManager.removePopUp(this);
+			}
 		]]>
 	</mx:Script>
 	

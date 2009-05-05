@@ -27,11 +27,6 @@
 			  	{label:"Female", data:"Female"}]);
 			
 			
-			private function processPatientCreate():void{
-				svcPatientCreate.send();
-				PopUpManager.removePopUp(this);
-			}
-			
 			private function clearForm():void{
 				medicalrecordTI.text = "";
 				firstnameTI.text = "";
@@ -57,8 +52,14 @@
 				focusManager.setFocus(medicalrecordTI);
 			}
 			
+			private function processPatientCreate():void{
+				svcPatientCreate.send();
+				this.enabled = false;
+			}
+			
 			private function handleNewPatientResult(event:ResultEvent):void {
 				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
+				PopUpManager.removePopUp(this);
 				clearForm();		
 			}
 		]]>

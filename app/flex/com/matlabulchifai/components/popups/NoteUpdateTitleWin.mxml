@@ -31,11 +31,6 @@
 				noteDateDF.selectedDate = DateUtil.parseW3CDTF(note.note_date);
 			}
 			
-			private function handleUpdateNoteResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				dispatchEvent(new NoteEvent(NoteEvent.NOTE_UPDATE, resultXML));
-			}
-			
 			private function processNoteUpdate():void{
 				var	params:Object = new	Object();
 				params['patient_note[note_date]'] = noteDateDF.text;
@@ -44,9 +39,14 @@
 				svcNoteUpdate.url = "/patient_notes/" + note.id + ".xml?authenticity_token=" +
 							Application.application.parameters.authenticityToken;
 				svcNoteUpdate.send(params);
-				PopUpManager.removePopUp(this);
+				this.enabled = false;
 			}
-			
+
+			private function handleUpdateNoteResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new NoteEvent(NoteEvent.NOTE_UPDATE, resultXML));
+				PopUpManager.removePopUp(this);
+			}			
 		]]>
 	</mx:Script>
 	

@@ -67,11 +67,6 @@
 				visitNotesTI.text = visit.notes;
 			}
 			
-			private function handleUpdateVisitResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.PATIENT_VISIT_UPDATE, resultXML));
-			}
-			
 			private function processVisitUpdate():void {
 				var visitTypeSelected:Object = searchVisitTypeTI.selectedItem;
 				var conditionSelected:Object = searchConditionTI.selectedItem;
@@ -180,9 +175,14 @@
 				svcVisitUpdate.url = "/patient_visits/" + visit.id + ".xml?authenticity_token=" +
 							Application.application.parameters.authenticityToken;
 				svcVisitUpdate.send(params);
-				PopUpManager.removePopUp(this);	
+				this.enabled = false;
 			}
 
+			private function handleUpdateVisitResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new PatientVisitEvent(PatientVisitEvent.PATIENT_VISIT_UPDATE, resultXML));
+				PopUpManager.removePopUp(this);	
+			}
 		]]>
 	</mx:Script>
 	

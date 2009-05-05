@@ -42,12 +42,13 @@
 		svcAlertUpdate.url = "/patient_alerts/" + alert.id + ".xml?authenticity_token=" +
 					Application.application.parameters.authenticityToken;
 		svcAlertUpdate.send(params);
-		PopUpManager.removePopUp(this);
+		this.enabled = false;
 	}
 	
 	private function handleAlertUpdateResult(event:ResultEvent):void {
 		var alert:XML = XML(event.result);
 		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_UPDATE, alert));
+		PopUpManager.removePopUp(this);
 	}
 ]]>
 </mx:Script>

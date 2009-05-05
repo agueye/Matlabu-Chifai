@@ -580,7 +580,7 @@
 					<mx:Button click="languageInit('HINDI');" label="Use Hindi" />
 				</mx:HBox>
 		</mx:Canvas>
-		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false">
+		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false" borderColor="#0000FF">
 			<mx:XMLList>
 	            <menuitem label="{languageArray['Alerts']}"/>
 	            <menuitem label="{languageArray['Search']}" />

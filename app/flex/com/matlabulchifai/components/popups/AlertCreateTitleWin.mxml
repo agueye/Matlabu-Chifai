@@ -60,16 +60,18 @@
     {
         focusManager.setFocus(notesTI);
     }
-	
-	private function handleNewAlertResult(event:ResultEvent):void {
-		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_CREATE, null));
-	}
+
 	
 	private function processAlertCreate():void{
 		svcAlertCreate.url = "/patients/" + patientID + 
 			"/patient_alerts.xml?authenticity_token=" + 
 			Application.application.parameters.authenticityToken
 		svcAlertCreate.send();
+		this.enabled = false;
+	}
+	
+	private function handleNewAlertResult(event:ResultEvent):void {
+		dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_CREATE, null));
 		PopUpManager.removePopUp(this);
 	}
 ]]>

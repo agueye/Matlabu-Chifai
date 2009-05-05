@@ -23,6 +23,7 @@
 			private function createAccount():void{
 				try{
 					svcAccountCreate.send();
+					this.enabled = false;
 				}
 				catch(error:Error){
 					Alert.show(languageArray["Could not contact server."], languageArray["Server Error"])

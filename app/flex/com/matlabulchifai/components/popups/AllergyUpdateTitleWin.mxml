@@ -47,11 +47,6 @@
 				allergyNotesTI.text = allergy.notes;
 				severityCB.selectedIndex = 10 - parseInt(allergy.severity);
 			}
-				
-			private function handleUpdateAllergyResult(event:ResultEvent):void {
-				var resultXML:XML = XML(event.result);
-				dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, resultXML));
-			}
 			
 			private function processAllergyUpdate():void {
 				var allergySelected:Object = searchAllergyTI.selectedItem;
@@ -91,6 +86,12 @@
 				svcAllergyUpdate.url = "/patient_allergies/" + allergy.id + ".xml?authenticity_token=" +
 							Application.application.parameters.authenticityToken;
 				svcAllergyUpdate.send(params);
+				this.enabled = false;
+			}
+			
+			private function handleUpdateAllergyResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new PatientAllergyEvent(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, resultXML));
 				PopUpManager.removePopUp(this);
 			}
 

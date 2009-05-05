@@ -27,16 +27,18 @@
 			public var languageArray:Object;
 			
 			
+			private function processNoteCreate():void{
+				svcNoteCreate.send();
+				this.enabled = false;
+			}
+						
 			private function handleNewNoteResult(event:ResultEvent):void {
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("note created = \n" + resultXML);
 				dispatchEvent(new NoteEvent(NoteEvent.NOTE_CREATE, resultXML));
-			}
-			
-			private function processNoteCreate():void{
-				svcNoteCreate.send();
 				PopUpManager.removePopUp(this);
 			}
+
 			
 		]]>
 	</mx:Script>
