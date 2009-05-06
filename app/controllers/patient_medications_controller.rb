@@ -57,22 +57,17 @@ class PatientMedicationsController < ApplicationController
   # POST /patient_medications
   # POST /patient_medications.xml
   def create
-	name = params["patient_prescription"].delete("name")
-	patient = params["patient_prescription"].delete("patient_id")
-	condition_n = params["patient_prescription"].delete("condition")
-	doctor = params["patient_prescription"].delete("doctor")
-    @patient_medication = PatientMedication.new(params[:patient_prescription])
+	name = params["patient_medication"].delete("name")
+	patient = params["patient_medication"].delete("patient_id")
+	condition_n = params["patient_medication"].delete("condition")
+	doctor_n = params["patient_medication"].delete("doctor")
+    @patient_medication = PatientMedication.new(params[:patient_medication])
 	medication = Medication.find_by_name(name)
-	if !medication
-		medication = Medication.new(:name => name)
-	end
 	condition = Condition.find_by_name(condition_n)
-	if !condition
-		condition = Condition.new(:name => name)
-	end
+	doctor = Doctor.find_by_name(doctor_n)
 	@patient_medication.medication = medication
 	@patient_medication.condition = condition
-	@patient_medication.doctor = Doctor.find(doctor)
+	@patient_medication.doctor = doctor
 	@patient_medication.patient = Patient.find(patient)
 
     

@@ -41,7 +41,7 @@
 		import com.matlabulchifai.components.popups.NoteUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
 		import com.matlabulchifai.components.popups.VisitUpdateTitleWin;
-		import com.matlabulchifai.components.popups.PrescriptionCreateTitleWin;
+		import com.matlabulchifai.components.popups.MedicationCreateTitleWin;
 		import com.matlabulchifai.components.popups.MedicationUpdateTitleWin;
 		import com.matlabulchifai.events.patient.PatientEvent;
 		import com.matlabulchifai.events.patient.PatientVaccinationEvent;
@@ -52,7 +52,6 @@
 		import com.matlabulchifai.events.patient.PatientAlertEvent;
 		import com.matlabulchifai.events.patient.PatientMedicationEvent;
 		import com.matlabulchifai.events.patient.PatientConditionEvent;
-		import com.matlabulchifai.events.patient.PatientPrescriptionEvent;
 		import com.matlabulchifai.events.allergy.AllergyEvent;
 		import com.matlabulchifai.events.vaccination.VaccinationEvent;
 		import com.matlabulchifai.events.condition.ConditionEvent;
@@ -104,7 +103,7 @@
 		private var allergyPopUp:AllergyCreateTitleWin;
 		private var visitPopUp:VisitCreateTitleWin;
 		private var notePopUp:NoteCreateTitleWin;
-		private var prescriptionPopUp:PrescriptionCreateTitleWin;
+		private var medicationPopUp:MedicationCreateTitleWin;
 		private var alertPopUp:AlertCreateTitleWin;
 		private var alertUpdatePopUp:AlertUpdateTitleWin;
 		private var noteUpdatePopUp:NoteUpdateTitleWin;
@@ -392,33 +391,36 @@
 			}			
 		}						
 		
-		private function showPrescriptionCreateTitleWin():void {				    			
-			prescriptionPopUp = PrescriptionCreateTitleWin(PopUpManager.createPopUp(this, PrescriptionCreateTitleWin, true));    			
-			prescriptionPopUp.addEventListener(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE, handlePatientPrescriptionEvent);
-			prescriptionPopUp.patient = this.patient;				
-			prescriptionPopUp.patientID = this.patientID;  
-			prescriptionPopUp.medicationIdMap = this.medicationIdMap;
-			prescriptionPopUp.doctorIdMap = this.doctorIdMap;
-			prescriptionPopUp.conditionIdMap = this.conditionIdMap;
-			prescriptionPopUp.languageArray = this.languageArray;
-			PopUpManager.centerPopUp(prescriptionPopUp);    		
+		private function showMedicationCreateTitleWin():void {				    			
+			medicationPopUp = MedicationCreateTitleWin(PopUpManager.createPopUp(this, MedicationCreateTitleWin, true));
+			medicationPopUp.patient = this.patient;				
+			medicationPopUp.patientID = this.patientID;  
+			medicationPopUp.medicationIdMap = this.medicationIdMap;
+			medicationPopUp.doctorIdMap = this.doctorIdMap;
+			medicationPopUp.conditionIdMap = this.conditionIdMap;
+			medicationPopUp.conditions = this.conditions;
+			medicationPopUp.doctors = this.doctors;
+			medicationPopUp.medications = this.medications;
+			medicationPopUp.languageArray = this.languageArray;
+			PopUpManager.centerPopUp(medicationPopUp);
+			medicationPopUp.addEventListener(PatientMedicationEvent.PATIENT_MEDICATION_CREATE, handlePatientMedicationEvent);
+			medicationPopUp.addEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);
+			medicationPopUp.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
+			medicationPopUp.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);		
 		}						
 		
 		//upon receiving a fresh patient prescription:
 		//update the conditions id map via dispatching a new ConditionEvent
 		//update the medication id map via dispatching a new PrescriptionEvent
 		//make sure events are dispatched before calling listMedications()
-		public function handlePatientPrescriptionEvent(event:Event):void {
-			var resultXML:XML;
-			dispatchEvent(new PatientConditionEvent(PatientConditionEvent.PATIENT_CONDITION_CREATE, resultXML));
-			dispatchEvent(new PrescriptionEvent(PrescriptionEvent.PRESCRIPTION_CREATE, resultXML));
+		public function handlePatientMedicationEvent(event:Event):void {
 			listMedications();				
-			removePatientPrescriptionEventListener();			
+			removePatientMedicationEventListener();			
 		}						
 		
-		public function removePatientPrescriptionEventListener():void {				
-			if (prescriptionPopUp.hasEventListener(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE)) {					
-				prescriptionPopUp.removeEventListener(PatientPrescriptionEvent.PATIENT_PRESCRIPTION_CREATE, handlePatientPrescriptionEvent);				
+		public function removePatientMedicationEventListener():void {				
+			if (medicationPopUp.hasEventListener(PatientMedicationEvent.PATIENT_MEDICATION_CREATE)) {					
+				medicationPopUp.removeEventListener(PatientMedicationEvent.PATIENT_MEDICATION_CREATE, handlePatientMedicationEvent);				
 			}			
 		}	
 		
@@ -690,24 +692,34 @@
 		}
 		
 		public function removeMedicationCreateEventListener():void {				
-			if (medicationUpdatePopUp.hasEventListener(MedicationEvent.MEDICATION_CREATE)) {					
-				medicationUpdatePopUp.removeEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);				
+			if (medicationPopUp != null) {
+				if (medicationPopUp.hasEventListener(MedicationEvent.MEDICATION_CREATE)) {					
+					medicationPopUp.removeEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);				
+				}
+			}
+			if (medicationUpdatePopUp != null) {
+				if (medicationUpdatePopUp.hasEventListener(MedicationEvent.MEDICATION_CREATE)) {					
+					medicationUpdatePopUp.removeEventListener(MedicationEvent.MEDICATION_CREATE, handleMedicationCreateEvent);				
+				}
 			}			
 		}
 		
 		public function removeConditionCreateEventListener():void {	
+			if (medicationPopUp != null) {
+				if (medicationPopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
+					medicationPopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
+				}	
+			}
 			if (medicationUpdatePopUp != null) {
 				if (medicationUpdatePopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
 					medicationUpdatePopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
 				}	
 			}	
-			
 			if (visitUpdatePopUp != null) {
 				if (visitUpdatePopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
 					visitUpdatePopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
 				}
 			}
-			
 			if (visitPopUp != null) {
 				if (visitPopUp.hasEventListener(ConditionEvent.CONDITION_CREATE)) {					
 					visitPopUp.removeEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);				
@@ -716,12 +728,16 @@
 		}
 		
 		public function removeDoctorCreateEventListener():void {				
+			if (medicationPopUp != null) {
+				if (medicationPopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
+					medicationPopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
+				}	
+			}	
 			if (medicationUpdatePopUp != null) {
 				if (medicationUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
 					medicationUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
 				}	
 			}	
-			
 			if (visitUpdatePopUp != null) {
 				if (visitUpdatePopUp.hasEventListener(DoctorEvent.DOCTOR_CREATE)) {					
 					visitUpdatePopUp.removeEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);				
@@ -1106,7 +1122,7 @@
 	   			<mx:Panel title="{languageArray['Prescription List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 		   			<mx:LinkButton label="{languageArray['Add New Prescription']}" color="#0000FF" 
-		   				click="showPrescriptionCreateTitleWin()"/>
+		   				click="showMedicationCreateTitleWin()"/>
 		   			<mx:DataGrid id="prescriptionsGrid" width="100%" height="100%" textAlign="center" 
 		   				dataProvider="{medicationsXLC}" wordWrap="true" variableRowHeight="true"
 		   				itemClick="handleMedicationClick(event)">						

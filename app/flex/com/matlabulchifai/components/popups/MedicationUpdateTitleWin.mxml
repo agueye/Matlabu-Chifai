@@ -49,6 +49,12 @@
 			private var gotCondition:Boolean = false;
 			[Bindable]
 			private var gotDoctor:Boolean = false;
+			[Bindable]
+			private var doctorSearchStr:String;
+			[Bindable]
+			private var medicationSearchStr:String;
+			[Bindable]
+			private var conditionSearchStr:String;
 			
 			private var medicationId:String;
 			private var conditionId:String;
@@ -77,21 +83,27 @@
 					if (medicationSelected.hasOwnProperty("id")) {
 						medicationId = medicationSelected.id;
 						gotMedication = true;
+						medicationSearchStr = searchMedicationTI.text;
 					} else {
+						medicationSearchStr = String(medicationSelected);
 						svcMedicationCreate.send();
 					}
 					
 					if (conditionSelected.hasOwnProperty("id")) {
 						conditionId = conditionSelected.id;
 						gotCondition = true;
+						conditionSearchStr = searchConditionTI.selectedItem;
 					} else {
+						conditionSearchStr = String(conditionSelected);
 						svcConditionCreate.send();
 					}
 					
 					if (doctorSelected.hasOwnProperty("id")) {
 						doctorId = doctorSelected.id;
 						gotDoctor = true;
+						doctorSearchStr = searchDoctorTI.text;
 					} else {
+						doctorSearchStr = String(doctorSelected);
 						svcDoctorCreate.send();
 					}
 					
@@ -197,7 +209,7 @@
 		result="handleNewMedicationResult(event)">
 		<mx:request>
 			<medication>
-				<name>{searchMedicationTI.selectedItem.toString()}</name>
+				<name>{medicationSearchStr}</name>
 				<notes></notes>
 			</medication>
 		</mx:request>
@@ -212,7 +224,7 @@
 		result="handleNewConditionResult(event)">
 		<mx:request>
 			<condition>
-				<name>{searchConditionTI.selectedItem.toString()}</name>
+				<name>{conditionSearchStr}</name>
 				<notes></notes>
 			</condition>
 		</mx:request>
@@ -227,7 +239,7 @@
 		result="handleNewDoctorResult(event)">
 		<mx:request>
 			<doctor>
-				<name>{searchDoctorTI.selectedItem.toString()}</name>
+				<name>{doctorSearchStr}</name>
 				<notes></notes>
 			</doctor>
 		</mx:request>
