@@ -52,7 +52,12 @@
 			private var visitTypeId:String;
 			private var conditionId:String;
 			private var doctorId:String;
-			
+			[Bindable]
+			private var doctorSearchStr:String;
+			[Bindable]
+			private var visitTypeSearchStr:String;
+			[Bindable]
+			private var conditionSearchStr:String;
 			
 			private function init():void {
 
@@ -72,21 +77,27 @@
 					if (visitTypeSelected.hasOwnProperty("id")) {
 						visitTypeId = visitTypeSelected.id;
 						gotVisitType = true;
+						visitTypeSearchStr = searchVisitTypeTI.text;
 					} else {
+						visitTypeSearchStr = String(visitTypeSelected);
 						svcVisitTypeCreate.send();
 					}
 					
 					if (conditionSelected.hasOwnProperty("id")) {
 						conditionId = conditionSelected.id;
 						gotCondition = true;
+						conditionSearchStr = searchConditionTI.text;
 					} else {
+						conditionSearchStr = String(conditionSelected);
 						svcConditionCreate.send();
 					}
 					
 					if (doctorSelected.hasOwnProperty("id")) {
 						doctorId = doctorSelected.id;
 						gotDoctor = true;
+						doctorSearchStr = searchDoctorTI.text;
 					} else {
+						doctorSearchStr = String(doctorSelected);
 						svcDoctorCreate.send();
 					}
 					
@@ -180,7 +191,7 @@
 		result="handleNewVisitTypeResult(event)">
 		<mx:request>
 			<visit_type>
-				<name>{searchVisitTypeTI.selectedItem.toString()}</name>
+				<name>{visitTypeSearchStr}</name>
 				<notes></notes>
 			</visit_type>
 		</mx:request>
@@ -195,7 +206,7 @@
 		result="handleNewConditionResult(event)">
 		<mx:request>
 			<condition>
-				<name>{searchConditionTI.selectedItem.toString()}</name>
+				<name>{conditionSearchStr}</name>
 				<notes></notes>
 			</condition>
 		</mx:request>
@@ -210,7 +221,7 @@
 		result="handleNewDoctorResult(event)">
 		<mx:request>
 			<doctor>
-				<name>{searchDoctorTI.selectedItem.toString()}</name>
+				<name>{doctorSearchStr}</name>
 				<notes></notes>
 			</doctor>
 		</mx:request>
@@ -225,8 +236,8 @@
 		result="handleNewPatientResult(event)">
 		<mx:request>
 			<patient_visit>
-				<condition>{searchConditionTI.selectedItem.toString()}</condition>
-				<type>{searchVisitTypeTI.selectedItem.toString()}</type>
+				<condition>{conditionSearchStr}</condition>
+				<type>{visitTypeSearchStr}</type>
 				<visit_date>{visitDateDF.text}</visit_date>
 				<notes>{visitNotesTA.text}</notes>
 				<height>{HeightTI.text}</height>
@@ -234,7 +245,7 @@
 				<blood_pressure>{BloodPressureTI.text}</blood_pressure>
 				<pulse>{PulseTI.text}</pulse>
 				<temperature>{TemperatureTI.text}</temperature>
-				<doctor>{searchDoctorTI.selectedItem.toString()}</doctor>
+				<doctor>{doctorSearchStr}</doctor>
 				<patient_id>{patientID}</patient_id>
 			</patient_visit>
 		</mx:request>
