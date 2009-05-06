@@ -37,6 +37,8 @@
             [ { label:"10", data:"10" }, { label:"9", data:"9" }, { label:"8", data:"8" }, { label:"7", data:"7" },
 				{label:"6", data:"6" }, { label:"5", data:"5" }, { label:"4", data:"4" }, { label:"3", data:"3" },
 				{label:"2", data:"2" }, { label:"1", data:"1" } ]);
+			[Bindable]
+			private var searchStr:String;
 			
 			private function init():void {
 				//initAllergyNames();
@@ -53,6 +55,7 @@
 					} else {
 						//if allergy does not exits then create new allergy 
 						//and then create patient_allergy						
+						searchStr = String(allergySelected);
 						svcAllergyCreate.send();
 					}
 				}
@@ -92,8 +95,8 @@
 		result="handleNewPatientAllergyResult(event)">
 		<mx:request>
 			<patient_allergy>
-				<name>{searchAllergyTI.text}</name>
-				<allergy_id>allergyId</allergy_id>
+				<name>{searchStr}</name>
+				<allergy_id>{allergyId}</allergy_id>
 				<date_observed>{allergyDateDF.text}</date_observed>
 				<severity>{severityCB.text}</severity>
 				<reaction>{allergyReactionTI.text}</reaction>
@@ -112,7 +115,7 @@
 		result="handleNewAllergyResult(event)">
 		<mx:request>
 			<allergy>
-				<name>{searchAllergyTI.selectedItem.toString()}</name>
+				<name>{searchStr}</name>
 				<notes></notes>
 			</allergy>
 		</mx:request>
