@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
 	width="475" 
 	height="450"
@@ -19,6 +21,7 @@
 			import mx.core.Application;
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.PatientVaccinationEvent;
+			import com.matlabulchifai.events.vaccination.VaccinationEvent;
 			import mx.controls.Alert;
 			
 			[Bindable]
@@ -30,48 +33,55 @@
 			[Bindable]
 			public var vaccinationIdMap:Object;
 			[Bindable]
-			private var vaccinationNames:ArrayCollection;
+			public var vaccinations:ArrayCollection;
+			[Bindable]
+			private var vaccinationSearchStr:String;
+			private var vaccinationId:String;
 			
 			private function init():void {
-				initVaccinationNames();
 			}
 			
-			private function initVaccinationNames():void {
-				var i:int;
-				vaccinationNames = new ArrayCollection();
-				for (i = 1; vaccinationIdMap[i] != null; i++) {
-					var vacc:XML = vaccinationIdMap[i];
-					vaccinationNames.addItem( { label: vacc.name, data: vacc.name } );
-				}
-				vaccinationNames.addItem( { label:"Other...", data:"" } );
-			}
-			
-			private function processVaccinationCreate():void{
-				if(otherTI.enabled == true && otherTI.text == ''){
-					Alert.show(languageArray["Please enter a new vaccination for 'Other'"], languageArray["Error"]);
-				}
-				else{ 
-					svcVaccinationCreate.send();
-					this.enabled = false;
-				}
+
+			private function processVaccinationCreate():void {
+				var vaccinationSelected:Object = searchVaccinationTI.selectedItem;
 				
-				
+				if (vaccinationSelected != null) {
+					//check to see if selected vaccination already exists
+					if (vaccinationSelected.hasOwnProperty("id")) {
+						vaccinationId = vaccinationSelected.id;
+						vaccinationSearchStr = searchVaccinationTI.text;
+						callPatientVaccinationCreate();
+					} else {
+						//if vaccination does not exits then create new vaccination 
+						//and then create patient_vaccination
+						vaccinationSearchStr = String(vaccinationSelected);						
+						svcVaccinationCreate.send();
+					}
+				}
 			}
 			
-			private function handleNewVaccinationResult(event:ResultEvent):void{
+			private function handleNewPatientVaccinationResult(event:ResultEvent):void{
 				var resultXML:XML = XML(event.result);
 				Matlabulchifai.debug("vaccination created = \n" + resultXML);
 				dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, resultXML));
 				PopUpManager.removePopUp(this);	
 			}
 			
-			private function checkVaccNameCB(event:Event):void {
-				if (vaccNameCB.selectedLabel == "Other...") {
-					otherTI.enabled = true;
-				} else {
-					otherTI.text = "";
-					otherTI.enabled = false;
+			private function handleNewVaccinationResult(event:ResultEvent):void {
+				var newVaccination:XML = XML(event.result);
+				
+				if (newVaccination != null) {
+					//add new vaccination to vaccinationIdMap and vaccinations collection
+					dispatchEvent(new VaccinationEvent(VaccinationEvent.VACCINATION_CREATE, newVaccination));
+					
+					vaccinationId = newVaccination.id;
+					callPatientVaccinationCreate();
 				}
+			}
+			
+			private function callPatientVaccinationCreate():void {
+				svcPatientVaccinationCreate.send();
+				this.enabled = false;
 			}
 
 		]]>
@@ -79,14 +89,29 @@
 	
 	<mx:HTTPService
 		id="svcVaccinationCreate"
-		url="/patient_vaccinations.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		url="/vaccinations.xml?authenticity_token={Application.application.parameters.authenticityToken}"
 		resultFormat="e4x"
 		contentType="application/xml"
 		method="POST"
 		result="handleNewVaccinationResult(event)">
 		<mx:request>
+			<vaccination>
+				<name>{vaccinationSearchStr}</name>
+				<notes></notes>
+			</vaccination>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcPatientVaccinationCreate"
+		url="/patient_vaccinations.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewPatientVaccinationResult(event)">
+		<mx:request>
 			<patient_vaccination>
-				<name>{vaccNameCB.value + otherTI.text}</name>
+				<name>{vaccinationSearchStr}</name>
 				<date_admined>{vaccDateDF.text}</date_admined>
 				<notes>{vaccNotesTA.text}</notes>
 				<patient_id>{patientID}</patient_id>
@@ -99,12 +124,11 @@
 		<mx:Form>
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Vaccine">
-				<mx:ComboBox id="vaccNameCB" dataProvider="{vaccinationNames}" change="checkVaccNameCB(event)" />
-			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Other" paddingLeft="10">
-				<mx:TextInput id="otherTI" enabled="false" />
+			<mx:FormItem label="Vaccine Name">
+				<hc:AdvancedAutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date Administered">

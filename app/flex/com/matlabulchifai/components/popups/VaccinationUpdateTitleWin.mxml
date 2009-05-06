@@ -32,7 +32,8 @@
 			public var vaccinationIdMap:Object;
 			[Bindable]
 			public var vaccinations:ArrayCollection;
-			
+			[Bindable]
+			private var vaccinationSearchStr:String;
 			private var vaccinationId:String;
 			
 			private function init():void {
@@ -48,10 +49,12 @@
 					//check to see if selected vaccination already exists
 					if (vaccinationSelected.hasOwnProperty("id")) {
 						vaccinationId = vaccinationSelected.id;
+						vaccinationSearchStr = searchVaccinationTI.text;
 						callVaccinationUpdate();
 					} else {
 						//if vaccination does not exits then create new vaccination 
 						//and then create patient_vaccination						
+						vaccinationSearchStr = String(vaccinationSelected);
 						svcVaccinationCreate.send();
 					}
 				}
@@ -105,7 +108,7 @@
 		result="handleNewVaccinationResult(event)">
 		<mx:request>
 			<vaccination>
-				<name>{searchVaccinationTI.selectedItem.toString()}</name>
+				<name>{vaccinationSearchStr}</name>
 				<notes></notes>
 			</vaccination>
 		</mx:request>

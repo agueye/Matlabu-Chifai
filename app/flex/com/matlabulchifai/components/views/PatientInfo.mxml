@@ -291,16 +291,17 @@
 			vaccPopUp.patient = this.patient;
 			vaccPopUp.languageArray = this.languageArray;
 			vaccPopUp.patientID = this.patientID;
+			vaccPopUp.vaccinations = this.vaccinations;
 			vaccPopUp.vaccinationIdMap = this.vaccinationIdMap;
 			PopUpManager.centerPopUp(vaccPopUp);
+			vaccPopUp.addEventListener(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, handlePatientVaccEvent);
+			vaccPopUp.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);
 		}
 		
 		//upon receiving a fresh patient vaccination:
 		//update the vaccinations id map via dispatching a new VaccinationEvent
 		//make sure that the event is dispatched before calling listVaccinations()	
 		public function handlePatientVaccEvent(event:Event):void {
-			var resultXML:XML;
-			dispatchEvent(new PatientVaccinationEvent(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, resultXML));
 			listVaccinations();
 			removePatientVaccEventListener();
 		}
@@ -614,9 +615,17 @@
 		}
 		
 		public function removeVaccinationCreateEventListener():void {				
-			if (vaccinationUpdatePopUp.hasEventListener(VaccinationEvent.VACCINATION_CREATE)) {					
-				vaccinationUpdatePopUp.removeEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);				
-			}			
+			if (vaccinationUpdatePopUp != null) {
+				if (vaccinationUpdatePopUp.hasEventListener(VaccinationEvent.VACCINATION_CREATE)) {					
+					vaccinationUpdatePopUp.removeEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);				
+				}
+			}
+			
+			if (vaccPopUp != null) {
+				if (vaccPopUp.hasEventListener(VaccinationEvent.VACCINATION_CREATE)) {					
+					vaccPopUp.removeEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);				
+				}
+			}
 		}
 		
 		public function deleteMedication(medication:XML):void {
