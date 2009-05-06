@@ -2,6 +2,7 @@
 
 <table>
   <tr>
+  	<th></th>
     <th>Medical record number</th>
     <th>First name</th>
     <th>Middle name</th>
@@ -26,6 +27,7 @@
 
 <% for patient in @patients %>
   <tr>
+  	<td><%= image_tag patient.photo.url(:tiny) %></td>
     <td><%=h patient.medical_record_number %></td>
     <td><%=h patient.first_name %></td>
     <td><%=h patient.middle_name %></td>

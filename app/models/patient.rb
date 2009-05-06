@@ -1,4 +1,10 @@
-class Patient < ActiveRecord::Base
+class Patient < ActiveRecord::Base   
+  has_attached_file :photo, 
+      :url => "/:class/:attachment/:id/:style_:basename.:extension",
+      :path => ":rails_root/public/:class/:attachment/:id/:style_:basename.:extension",
+      :styles => {:thumb=> "100x100>", :small  => "150x150>", :tiny => "50x50#", :medium => "250x250>" }
+      
+
   has_many :patient_notes, :dependent => :destroy
   has_many :patient_alerts, :dependent => :destroy
   has_many :patient_visits, :dependent => :destroy

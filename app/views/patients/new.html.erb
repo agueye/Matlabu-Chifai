@@ -1,8 +1,10 @@
 <h1>New patient</h1>
 
-<% form_for(@patient) do |f| %>
+<% form_for :patient, :html => { :multipart => true } do |f| %>
   <%= f.error_messages %>
-
+  <p>
+  	<%= f.file_field :photo%>
+  </p>
   <p>
     <%= f.label :medical_record_number %><br />
     <%= f.text_field :medical_record_number %>

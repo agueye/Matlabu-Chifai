@@ -1,8 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :patients
   map.resources :users
-
   map.resource :session
-  
   
   map.flex '/matlabulchifai', :controller => "flex", :action => "index"
   
@@ -12,10 +11,12 @@ ActionController::Routing::Routes.draw do |map|
   map.vaccination_search '/patient_vaccinations/search.:format', :controller => "patient_vaccinations", :action => "find"
   map.medication_search '/patient_medications/search.:format', :controller => "patient_medications", :action => "find"
   map.condtion_search '/patient_visits/search.:format', :controller => "patient_visits", :action => "find"
+  
+  
   map.logout '/logout', :controller => "sessions", :action => "destroy"
   map.connect '/patients/:patient_id/patient_physicals/:action.:format', 
               :controller => 'patient_physicals', :action => :action
-              
+  
   map.resources :patients do |patients|
   	patients.resources :patient_alerts
     patients.resources :patient_notes
@@ -50,7 +51,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :doctors
 
-  map.resources :patients
 
   # The priority is based upon order of creation: first created -> highest priority.
 

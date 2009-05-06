@@ -136,6 +136,19 @@
 			listAlerts();
 			patientInfoMain.selectedIndex = 0;
 			Matlabulchifai.debug("Leaving init in PatientInfo");		
+			
+			displayPatientPicture();
+		}
+		
+		private function displayPatientPicture():void {
+			var photoURL:String = patient.photo_file_name;
+			
+			if (photoURL != null) {
+				patientImage.source =  "/patients/photos/" + patient.id + 
+									   "/medium_" + patient.photo_file_name;
+			} else {
+				patientImage.source = "/patients/photos/missing.jpg";
+			}
 		}
 		
 		public function listAlerts():void {
@@ -934,7 +947,7 @@
 		
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
-		<mx:Image id="patientImage" source="http://parentalwisdom.files.wordpress.com/2007/08/einstein.png"/>		
+		<mx:Image id="patientImage"/>		
 		<mx:Button id="uploadButton" label="Upload Image" click="showuploadImageWindow()"/> <!-- TODO: Add to Language Array-->
 	</mx:VBox>
    	<mx:VBox height="100%" width="80%" verticalGap="0">

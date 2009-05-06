@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090503034020) do
+ActiveRecord::Schema.define(:version => 20090506111333) do
 
   create_table "allergies", :force => true do |t|
     t.string   "name"
@@ -132,6 +132,9 @@ ActiveRecord::Schema.define(:version => 20090503034020) do
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
   end
 
   create_table "users", :force => true do |t|
@@ -144,6 +147,7 @@ ActiveRecord::Schema.define(:version => 20090503034020) do
     t.datetime "updated_at"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
+    t.integer  "is_admin"
   end
 
   create_table "vaccinations", :force => true do |t|
