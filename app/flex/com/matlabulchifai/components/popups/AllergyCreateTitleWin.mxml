@@ -46,11 +46,11 @@
 			
 			private function processPatientAllergyCreate():void {
 				var allergySelected:Object = searchAllergyTI.selectedItem;
-				
 				if (allergySelected != null) {
 					//check to see if selected allergy already exists
 					if (allergySelected.hasOwnProperty("id")) {
 						allergyId = allergySelected.id;
+						searchStr = searchAllergyTI.text;
 						callPatientAllergyCreate();
 					} else {
 						//if allergy does not exits then create new allergy 
