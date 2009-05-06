@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
+	layout="vertical" 
+	width="475" 
+	height="520"
+	title="{languageArray['Add New Medication']}"
+	showCloseButton="true"
+	creationComplete="init()"
+    close="PopUpManager.removePopUp(this)">
+	<mx:Metadata>
+		[Event(name="patientMedicationCreate", type="com.matlabulchifai.events.patient.PatientMedicationEvent")]
+	</mx:Metadata>
+		
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.collections.ArrayCollection;
+			import com.matlabulchifai.events.patient.PatientMedicationEvent;
+			import com.matlabulchifai.events.medication.MedicationEvent;
+			import com.matlabulchifai.events.condition.ConditionEvent;
+			import com.matlabulchifai.events.doctor.DoctorEvent;
+			import mx.core.Application;
+			import mx.controls.Alert;
+			
+			[Bindable]
+			public var patient:XML;
+			[Bindable]
+			public var patientID:Number;
+			[Bindable]
+			public var conditionIdMap:Object;
+			[Bindable]
+			public var medicationIdMap:Object;
+			[Bindable]
+			public var doctorIdMap:Object;
+			[Bindable]
+			public var conditions:ArrayCollection;
+			[Bindable]
+			public var medications:ArrayCollection;
+			[Bindable]
+			public var doctors:ArrayCollection;
+			[Bindable]
+			private var gotMedication:Boolean = false;
+			[Bindable]
+			private var gotCondition:Boolean = false;
+			[Bindable]
+			private var gotDoctor:Boolean = false;
+			[Bindable]
+			public var languageArray:Object;
+			[Bindable]
+			private var doctorSearchStr:String;
+			[Bindable]
+			private var medicationSearchStr:String;
+			[Bindable]
+			private var conditionSearchStr:String;
+			
+			private var medicationId:String;
+			private var conditionId:String;
+			private var doctorId:String;
+			
+			private function init():void {
+			}
+
+			
+			private function processMedicationCreate():void {
+				var medicationSelected:Object = searchMedicationTI.selectedItem;
+				var conditionSelected:Object = searchConditionTI.selectedItem;
+				var doctorSelected:Object = searchDoctorTI.selectedItem;
+				
+				//Stop processing if medication or condition is blank
+				//If item alredy exists, then set flag, otherwise create item
+				if (medicationSelected != null && 
+					conditionSelected != null && 
+					doctorSelected != null) {
+					if (medicationSelected.hasOwnProperty("id")) {
+						medicationId = medicationSelected.id;
+						gotMedication = true;
+						medicationSearchStr = searchMedicationTI.text;
+					} else {
+						medicationSearchStr = String(medicationSelected);
+						svcMedicationCreate.send();
+					}
+					
+					if (conditionSelected.hasOwnProperty("id")) {
+						conditionId = conditionSelected.id;
+						gotCondition = true;
+						conditionSearchStr = searchConditionTI.text;
+					} else {
+						conditionSearchStr = String(conditionSelected);
+						svcConditionCreate.send();
+					}
+					
+					if (doctorSelected.hasOwnProperty("id")) {
+						doctorId = doctorSelected.id;
+						gotDoctor = true;
+						doctorSearchStr = searchDoctorTI.text;
+					} else {
+						doctorSearchStr = String(doctorSelected);
+						svcDoctorCreate.send();
+					}
+					
+					//if both condition and medication already exist, then call update
+					if (gotMedication && gotCondition && gotDoctor) {
+						callMedicationCreate();
+					}					
+				}
+			}
+			
+			private function handleNewMedicationResult(event:ResultEvent):void {
+				var newMedication:XML = XML(event.result);
+				
+				if (newMedication != null) {
+					//add new medication to medicationIdMap and medications collection
+					dispatchEvent(new MedicationEvent(MedicationEvent.MEDICATION_CREATE, newMedication));
+					
+					//set flag and id field
+					medicationId = newMedication.id;
+					gotMedication = true;
+					
+					//if all other flag are ready, call update
+					if (gotMedication && gotCondition && gotDoctor) {
+						callMedicationCreate();
+					}	
+				}
+			}
+			
+			private function handleNewConditionResult(event:ResultEvent):void {
+				var newCondition:XML = XML(event.result);
+				
+				if (newCondition != null) {
+					//add new condition to conditionIdMap and conditions collection
+					dispatchEvent(new ConditionEvent(ConditionEvent.CONDITION_CREATE, newCondition));
+					
+					//set flag and id field
+					conditionId = newCondition.id;
+					gotCondition = true;
+					
+					//if all other flag are ready, call update
+					if (gotMedication && gotCondition && gotDoctor) {
+						callMedicationCreate();
+					}	
+				}
+			}
+			
+			private function handleNewDoctorResult(event:ResultEvent):void {
+				var newDoctor:XML = XML(event.result);
+				
+				if (newDoctor != null) {
+					//add new medication to medicationIdMap and medications collection
+					dispatchEvent(new DoctorEvent(DoctorEvent.DOCTOR_CREATE, newDoctor));
+					
+					//set flag and id field
+					doctorId = newDoctor.id;
+					gotDoctor = true;
+					
+					//if all other flag are ready, call update
+					if (gotMedication && gotCondition && gotDoctor) {
+						callMedicationCreate();
+					}	
+				}
+			}
+			
+			private function callMedicationCreate():void {
+				svcPatientMedicationCreate.send();
+				this.enabled = false;
+			}
+			
+			private function handleNewPatientMedicationResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				dispatchEvent(new PatientMedicationEvent(PatientMedicationEvent.PATIENT_MEDICATION_CREATE, resultXML));
+				PopUpManager.removePopUp(this);
+			}
+			
+
+			
+		]]>
+	</mx:Script>
+	
+	<mx:StringValidator 
+        id="frequencyValidator"
+        source="{FrequencyTI}" 
+        property="text"
+        minLength="2"/>
+    
+    <mx:StringValidator 
+        id="dosageValidator"
+        source="{DosageTI}" 
+        property="text"
+        minLength="2"/>
+        
+	<mx:HTTPService
+		id="svcPatientMedicationCreate"
+		url="/patient_medications.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewPatientMedicationResult(event)">
+		<mx:request>
+			<patient_medication>				
+				<patient_id>{patientID}</patient_id>
+				<name>{medicationSearchStr}</name>
+				<dosage>{DosageTI.text}</dosage>
+				<frequency>{FrequencyTI.text}</frequency>
+				<date_given>{MedicationDateDF.text}</date_given>
+				<condition>{conditionSearchStr}</condition>
+				<doctor>{doctorSearchStr}</doctor>
+				<notes>{NotesTA.text}</notes>
+			</patient_medication>
+		</mx:request>
+	</mx:HTTPService>
+	
+		<mx:HTTPService
+		id="svcMedicationCreate"
+		url="/medications.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewMedicationResult(event)">
+		<mx:request>
+			<medication>
+				<name>{medicationSearchStr}</name>
+				<notes></notes>
+			</medication>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcConditionCreate"
+		url="/conditions.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewConditionResult(event)">
+		<mx:request>
+			<condition>
+				<name>{conditionSearchStr}</name>
+				<notes></notes>
+			</condition>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService
+		id="svcDoctorCreate"
+		url="/doctors.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		resultFormat="e4x"
+		contentType="application/xml"
+		method="POST"
+		result="handleNewDoctorResult(event)">
+		<mx:request>
+			<doctor>
+				<name>{doctorSearchStr}</name>
+				<notes></notes>
+			</doctor>
+		</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
+		<mx:Form>
+			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Medication Name">
+				<hc:AdvancedAutoComplete id="searchMedicationTI" dataProvider="{medications}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+			</mx:FormItem>			
+			<mx:FormItem label="Condition Name">
+				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+			</mx:FormItem>
+			<mx:FormItem label="Doctor Name">
+				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>	
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Dosage">
+				<mx:TextInput id="DosageTI"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Frequency">
+				<mx:TextInput id="FrequencyTI"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Date Given">
+				<mx:DateField id="MedicationDateDF" yearNavigationEnabled="true" minYear="1980"/>
+			</mx:FormItem>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Notes">
+				<mx:TextArea id="NotesTA" width="200" height="100" />
+			</mx:FormItem>
+		</mx:Form>
+	</mx:HBox>
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="10%">
+		<mx:Button label="OK" id="OKBtn" click="processMedicationCreate()" />
+		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+	</mx:HBox>
+	
+</mx:TitleWindow>
