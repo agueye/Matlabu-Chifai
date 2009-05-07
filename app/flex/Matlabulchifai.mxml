@@ -14,7 +14,7 @@
 	height="100%"
 	historyManagementEnabled="false"
 	creationComplete="init();"
-	preinitialize="langUpdate('ENGLISH');">
+	preinitialize="langUpdate('ENGLISH');">  
 	
 	<mx:Style>
 		VDividedBox{
@@ -88,7 +88,7 @@
 	public var visitTypes:ArrayCollection;
 	[Bindable]
 	public var doctors:ArrayCollection;
-	
+
 	[Bindable]
 	private var userMenuXLC:XMLListCollection;
 	
@@ -426,7 +426,7 @@
 		loginFormBox.loginTI.text = "tester";			
 		loginFormBox.passwordTI.text = "tester";
 		loginFormBox.login();
-	}	
+	}
 	
 	private function bypassLoginAdmin():void {			
 		loginFormBox.loginTI.text = "admin";			

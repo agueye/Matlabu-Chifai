@@ -8,7 +8,9 @@
 </libraryPath>
 <sourceAttachmentPath/>
 </compiler>
-<applications/>
+<applications>
+<application path="Matlabulchifai.mxml"/>
+</applications>
 <modules/>
 <buildCSSFiles/>
 </actionScriptProperties>

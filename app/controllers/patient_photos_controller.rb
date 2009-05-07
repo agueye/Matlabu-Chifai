@@ -4,7 +4,7 @@ class PatientPhotosController < ApplicationController
   def index
    @photo = params[:Filename].to_s
    @test = "Upinder"
-   APP_LOGGER_LOG.info "THIS IS CALLED -  FileName: " + @photo " by test " + @test
+   #APP_LOGGER_LOG.info "THIS IS CALLED -  FileName: " + @photo " by test " + @test
   end
 
   # GET /patient_photos/1
