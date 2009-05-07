@@ -25,7 +25,7 @@ class AllergiesController < ApplicationController
   # GET /allergies/new
   # GET /allergies/new.xml
   def new
-    @allergy = Allergy.new
+    @allergy = Allergy.new		
 
     respond_to do |format|
       format.html # new.html.erb
@@ -41,8 +41,18 @@ class AllergiesController < ApplicationController
   # POST /allergies
   # POST /allergies.xml
   def create
-    @allergy = Allergy.new(params[:allergy])
-
+	@allergy = Allergy.new(params[:allergy])
+	#@allergy = Allergy.new
+	#@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	#@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	#@allergy.enter_password @masterKey
+	#@allergy.name = @allergyNew.name
+	#@allergy.notes = @allergyNew.notes
+	
+	
+	
     respond_to do |format|
       if @allergy.save
         flash[:notice] = 'Allergy was successfully created.'

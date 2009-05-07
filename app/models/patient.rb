@@ -14,6 +14,8 @@ class Patient < ActiveRecord::Base
   has_many :patient_vaccinations, :dependent => :destroy
   has_many :visiting_doctors, :through => :patient_visits
   has_many :medicating_doctors, :through => :patient_medications
+  #set fields to encrypt in a patient object
+  encrypt :medical_record_number, :gender, :address, :city, :state, :zip, :father_first_name, :father_last_name, :mother_first_name, :mother_last_name, :telephone, :emergency_contact_name, :emergency_contact_relationship, :emergency_contact_number, :notes
 
   
   validates_presence_of :first_name

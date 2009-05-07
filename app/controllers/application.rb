@@ -47,6 +47,7 @@ end
 
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
+  include EzCrypto
   helper :all # include all helpers, all the time
   before_filter :login_required
   after_filter :flex_error_handling

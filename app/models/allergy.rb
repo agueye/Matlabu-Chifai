@@ -1,6 +1,7 @@
 class Allergy < ActiveRecord::Base
   has_many :patient_allergies, :dependent => :destroy
   has_many :patients, :through => :patient_allergies
+  encrypt :name, :notes
   
   validates_presence_of :name
   

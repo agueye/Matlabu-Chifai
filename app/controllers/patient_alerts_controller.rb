@@ -4,8 +4,18 @@ class PatientAlertsController < ApplicationController
   # GET /patient_alerts
   # GET /patient_alerts.xml
   def index
+  		@user = User.find_by_id(cookies[:userID])
+		#get master key using cookieSalt and password 
+		@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+		@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+		
+		@patient_alerts = PatientAlert.find(:all)
+		for @patient_alert in @patient_alerts
+			@patient_alert.enter_password @masterKey
+		end
     if params[:patient_id]
-    	@patient_alerts = @patient.patient_alerts
+
+		
     	@patient_alerts.sort! {|x, y| x.alert_date <=> y.alert_date} 
     else
     	@patient_alerts = PatientAlert.find(:all, :order => "alert_date")
@@ -21,7 +31,13 @@ class PatientAlertsController < ApplicationController
   # GET /patient_alerts/1.xml
   def show
     @patient_alert = PatientAlert.find(params[:id])
-
+	
+	@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	
+	@patient_alert.enter_password @masterKey
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @patient_alert }
@@ -47,8 +63,17 @@ class PatientAlertsController < ApplicationController
   # POST /patient_alerts
   # POST /patient_alerts.xml
   def create
-    @patient_alert = PatientAlert.new(params[:patient_alert])
-    @patient_alert.patient = @patient
+      
+	@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	
+	@patient_alert = PatientAlert.new(params[:patient_alert])
+	@patient_alert.enter_password @masterKey
+	
+	 @patient_alert.patient = @patient
+	
 	
     respond_to do |format|
       if @patient_alert.save
@@ -101,7 +126,12 @@ class PatientAlertsController < ApplicationController
 private
 	def get_patient
 		if (params[:patient_id])
+			@user = User.find_by_id(cookies[:userID])
+			#get master key using cookieSalt and password 
+			@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+			@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
 			@patient = Patient.find(params[:patient_id])
+			@patient.enter_password @masterKey
 		end
 	end 
 end

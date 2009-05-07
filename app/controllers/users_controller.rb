@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  # Can't verify a login when creating a new user
+  skip_before_filter :login_required
   
 # Be sure to include AuthenticationSystem in Application Controller instead
   #include AuthenticatedSystem
@@ -27,7 +29,16 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
-    @user = User.new(params[:user])
+	
+	@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	
+    @user = User.new(params[:user])    
+    @encrypted=EzCrypto::Key.encrypt_with_password @user.password, "system salt",@masterKey
+    @user.encryptedKey = @encrypted
+
     @user.save!
     
     APP_LOGGER_LOG.info "USER CREATED - " + @user[:login]
