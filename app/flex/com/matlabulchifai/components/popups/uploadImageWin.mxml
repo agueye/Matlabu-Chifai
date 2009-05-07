@@ -5,68 +5,66 @@
 	height="300"
 	title="{languageArray['Upload Image']}"
 	showCloseButton="true"
-	creationComplete="init()"
-    close="PopUpManager.removePopUp(this)">
+    close="PopUpManager.removePhhopUp(this)">
 	 <mx:Script>
         <![CDATA[
+        	import flash.net.FileReference;
+   			import flash.net.URLRequestHeader;
         	import mx.managers.PopUpManager;
-        	
         	[Bindable]
 			public var patient:XML;
 			[Bindable]
 			public var patientID:Number;
 			
-			[Bindable]
-			public var languageArray:Object;
-            [Bindable]
-            private var fileRef:FileReference;
+			private var uploadFileRefList:FileReference = new FileReference();
+   			private var uploadURLReq:URLRequest;
+   			private var URLString:String="/patient_photos";
+   			
  
-            //private const FILE_UPLOAD_URL:String = Application.application.browserManager.base + "uploadImage";
  
-            private function init():void {
-//                fileRef = new FileReference();
-//                fileRef.addEventListener(Event.SELECT, fileRef_select);
-//                fileRef.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-//                fileRef.addEventListener(Event.COMPLETE, fileRef_complete);
-            }
- 
-            private function browseAndUpload():void {
-                fileRef.browse();
-                message.text = "";
-            }
- 
-/*             private function fileRef_select(evt:Event):void {
-                try {
-                    message.text = "size (bytes): " + numberFormatter.format(fileRef.size);
-                    var request:URLRequest = new URLRequest(FILE_UPLOAD_URL);
-                    request.method = URLRequestMethod.POST;
-                    var uploaderReqVars:URLVariables = new URLVariables("var=samevalue");
-                    request.data = uploaderReqVars;
-                    fileRef.upload(request, "file");
-                } catch (err:Error) {
-                    message.text = "ERROR: zero-byte file";
-                }
-            } */
- 
-            private function fileRef_progress(evt:ProgressEvent):void {
-                progressBar.setProgress(Number(evt.bytesLoaded), Number(evt.bytesTotal));
-            }
- 
-            private function progressHandler(event:ProgressEvent):void {
-            var file:FileReference = FileReference(event.target);
-            progressBar.setProgress( Number(event.bytesLoaded), Number(event.bytesTotal));
-        }
- 
-            private function fileRef_complete(evt:Event):void {
-                message.text += " (complete)";
-            }
+  private function uploadFiles():void
+  {
+   		uploadFileRefList.addEventListener(Event.SELECT, uploadSelectHandler);
+   		try {
+           var success:Boolean = uploadFileRefList.browse();
+   		} catch (error:Error) {
+           trace("Unable to browse for files. " + error);
+   		}
+   }
+   
+   private function doUpload(file:FileReference):void
+   {
+       uploadURLReq = new URLRequest(URLString);
+       file.addEventListener(Event.COMPLETE, uploadCompleteHandler);
+       file.addEventListener(IOErrorEvent.IO_ERROR, uploadIoErrorHandler);
+       file.addEventListener(ProgressEvent.PROGRESS, uploadProgressHandler);
+       try
+       {
+           file.upload(uploadURLReq);
+       } catch (error:Error) {
+           trace("Unable to upload file. " + error);
+       }
+   }
+   private function uploadSelectHandler(event:Event):void
+   {
+       doUpload(uploadFileRefList);
+   }
+   private function uploadProgressHandler (event:ProgressEvent):void
+   {
+       upload_btn.enabled=false;
+       trace(Math.floor((event.bytesLoaded/event.bytesTotal)*100) + "% complete");
+   }
+   private function uploadIoErrorHandler (event:Event):void
+   {
+       trace("Upload failed: " + event);
+   }
+   private function uploadCompleteHandler (event:Event):void
+   {
+       upload_btn.enabled=true;
+       trace("Upload successfull: ");
+   }
+   
+
         ]]>
     </mx:Script>
-<mx:NumberFormatter id="numberFormatter" />
-	<mx:ApplicationControlBar>
-	    <mx:Button label="Upload file" click="browseAndUpload();" />
-	    <mx:Label id="message" />
-	    <mx:ProgressBar id="progressBar" mode="manual" visible="true" />
-	</mx:ApplicationControlBar>
-	
 </mx:TitleWindow>
