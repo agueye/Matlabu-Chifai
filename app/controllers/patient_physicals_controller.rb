@@ -28,7 +28,7 @@ class PatientPhysicalsController < ApplicationController
   
   def height
     @visits = @patient.patient_visits.select {|v| v.height != ""}
-    @visits.sort! {|x,y| y.visit_date <=> x.visit_date}
+    @visits.sort! {|y,x| y.visit_date <=> x.visit_date}
   
     respond_to do |format|
       format.html # index.html.erb
@@ -38,7 +38,7 @@ class PatientPhysicalsController < ApplicationController
 
   def weight
     @visits = @patient.patient_visits.select {|v| v.weight != ""}
-    @visits.sort! {|x,y| y.visit_date <=> x.visit_date}
+    @visits.sort! {|y,x| y.visit_date <=> x.visit_date}
   
     respond_to do |format|
       format.html # index.html.erb
@@ -48,7 +48,7 @@ class PatientPhysicalsController < ApplicationController
 
   def blood_pressure
     @visits = @patient.patient_visits.select {|v| v.blood_pressure != ""}
-    @visits.sort! {|x,y| y.visit_date <=> x.visit_date}
+    @visits.sort! {|y,x| y.visit_date <=> x.visit_date}
   
     respond_to do |format|
       format.html # index.html.erb
@@ -58,7 +58,7 @@ class PatientPhysicalsController < ApplicationController
   
   def pulse
     @visits = @patient.patient_visits.select {|v| v.pulse != ""}
-    @visits.sort! {|x,y| y.visit_date <=> x.visit_date}
+    @visits.sort! {|y,x| y.visit_date <=> x.visit_date}
   
     respond_to do |format|
       format.html # index.html.erb
@@ -68,7 +68,7 @@ class PatientPhysicalsController < ApplicationController
   
   def temperature
     @visits = @patient.patient_visits.select {|v| v.temperature != ""}
-    @visits.sort! {|x,y| y.visit_date <=> x.visit_date}
+    @visits.sort! {|y,x| y.visit_date <=> x.visit_date}
   
     respond_to do |format|
       format.html # index.html.erb

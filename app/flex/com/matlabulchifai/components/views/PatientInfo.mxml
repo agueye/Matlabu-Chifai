@@ -29,6 +29,7 @@
 		import mx.core.IFlexDisplayObject;
 		import mx.rpc.events.ResultEvent;
 		import mx.collections.XMLListCollection;
+    	import mx.collections.IViewCursor;
 		import mx.managers.PopUpManager;
 		import com.matlabulchifai.components.popups.AlertCreateTitleWin;
 		import com.matlabulchifai.components.popups.AlertUpdateTitleWin;
@@ -825,8 +826,109 @@
 				if (visitPopUp.hasEventListener(VisitTypeEvent.VISIT_TYPE_CREATE)) {					
 					visitPopUp.removeEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);				
 				}
-			}			
-		}	
+			}
+		}
+		[Bindable]
+		public var heights:ArrayCollection;
+		public function handlePhysicalHeight(event:ResultEvent):void{
+			
+    		heights = new ArrayCollection();
+			var heightsCursor:IViewCursor =
+		            heightsXLC.createCursor();
+		        while (!heightsCursor.afterLast) {
+		            var visit:XML = XML(heightsCursor.current);   
+		        	var newHeight:Object = new Object();
+		    		newHeight.value = visit.height;
+		    		newHeight.visit_date = visit.visit_date;
+		    		heights.addItem(newHeight);
+		            heightsCursor.moveNext();
+		        }
+		}
+		[Bindable]
+		public var weights:ArrayCollection;
+		public function handlePhysicalWeight(event:ResultEvent):void{
+    		weights = new ArrayCollection();
+			var weightsCursor:IViewCursor =
+		            weightsXLC.createCursor();
+		        while (!weightsCursor.afterLast) {
+		            var visit:XML = XML(weightsCursor.current);   
+		        	var newWeight:Object = new Object();
+		    		newWeight.value = visit.weight;
+		    		newWeight.visit_date = visit.visit_date;
+		    		weights.addItem(newWeight);
+		            weightsCursor.moveNext();
+		        }
+		}
+		[Bindable]
+		public var pulses:ArrayCollection;
+		public function handlePhysicalPulse(event:ResultEvent):void{
+    		pulses = new ArrayCollection();
+			var pulsesCursor:IViewCursor =
+		            pulsesXLC.createCursor();
+		        while (!pulsesCursor.afterLast) {
+		            var visit:XML = XML(pulsesCursor.current);   
+		        	var newPulse:Object = new Object();
+		    		newPulse.value = visit.pulse;
+		    		newPulse.visit_date = visit.visit_date;
+		    		pulses.addItem(newPulse);
+		            pulsesCursor.moveNext();
+		        }
+		}
+		[Bindable]
+		public var temps:ArrayCollection;
+		public function handlePhysicalTemp(event:ResultEvent):void{
+    		temps = new ArrayCollection();
+			var tempsCursor:IViewCursor =
+		            temperaturesXLC.createCursor();
+		        while (!tempsCursor.afterLast) {
+		            var visit:XML = XML(tempsCursor.current);   
+		        	var newTemp:Object = new Object();
+		    		newTemp.value = visit.temperature;
+		    		newTemp.visit_date = visit.visit_date;
+		    		temps.addItem(newTemp);
+		            tempsCursor.moveNext();
+		        }
+		}
+		[Bindable]
+		public var bps:ArrayCollection;
+		public function handlePhysicalBP(event:ResultEvent):void{
+    		bps = new ArrayCollection();
+    		//0:48, 9:57
+    		//mx.controls.Alert.show(String(9).charCodeAt(0).toString());
+			var bpsCursor:IViewCursor =
+		            bloodPressuresXLC.createCursor();
+		        while (!bpsCursor.afterLast) {
+		            var visit:XML = XML(bpsCursor.current);   
+		        	var newbps:Object = new Object();
+		        	var temp:String = visit.blood_pressure;
+		        	var i = 0;
+		        	
+		        	//First #
+		        	/*
+		        	for (;i<temp.length;i++){     
+		        		if ( temp.charCodeAt(i) < 48 && temp.charCodeAt(i) > 57 ){
+		        			newbps.value = temp.substring(0,i);
+		        			break;	
+		        		}
+		        	}
+		        	/*
+		        	//Second #
+		        	for (;i<temp.length;i++){		        
+		        		if (temp.charCodeAt(i) >=47 && temp.charCodeAt(i) <= 57){
+		        			newbps.value2 = temp.substring(0,i);
+		        			break;	
+		        		}
+		        	}
+		        	*/
+		        	newbps.value = visit.blood_pressure;
+		        	//mx.controls.Alert.show(newbps.value+"_"+newbps.value2);
+		    		newbps.visit_date = visit.visit_date;
+		    		bps.addItem(newbps);
+		            bpsCursor.moveNext();
+		        }
+		   
+		}
+		
 	]]>
 	</mx:Script>
 	
@@ -875,35 +977,35 @@
     <mx:HTTPService
         id="svcPhysicalHeightsList"
         resultFormat="e4x"
-        result=""/>
+        result="handlePhysicalHeight(event)"/>
 	<mx:XMLListCollection id="heightsXLC"
         source="{XMLList(svcPhysicalHeightsList.lastResult.children())}"/>
     
     <mx:HTTPService
         id="svcPhysicalWeightsList"
         resultFormat="e4x"
-        result=""/>
+        result="handlePhysicalWeight(event)"/>
 	<mx:XMLListCollection id="weightsXLC"
         source="{XMLList(svcPhysicalWeightsList.lastResult.children())}"/>
     
     <mx:HTTPService
         id="svcPhysicalBloodPressuresList"
         resultFormat="e4x"
-        result=""/>
+        result="handlePhysicalBP(event)"/>
 	<mx:XMLListCollection id="bloodPressuresXLC"
         source="{XMLList(svcPhysicalBloodPressuresList.lastResult.children())}"/>
     
     <mx:HTTPService
         id="svcPhysicalTemperaturesList"
         resultFormat="e4x"
-        result=""/>
+        result="handlePhysicalTemp(event)"/>
 	<mx:XMLListCollection id="temperaturesXLC"
         source="{XMLList(svcPhysicalTemperaturesList.lastResult.children())}"/>
     
     <mx:HTTPService
         id="svcPhysicalPulsesList"
         resultFormat="e4x"
-        result=""/>
+        result="handlePhysicalPulse(event)"/>
 	<mx:XMLListCollection id="pulsesXLC"
         source="{XMLList(svcPhysicalPulsesList.lastResult.children())}"/>
         
@@ -942,9 +1044,7 @@
         resultFormat="e4x"
         method="POST"
         result="handleVisitsDestroyResult(event)"/>
-        
-        
-		
+        	
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
 		<mx:Image id="patientImage"/>		
@@ -952,13 +1052,15 @@
 	</mx:VBox>
    	<mx:VBox height="100%" width="80%" verticalGap="0">
    		<mx:Label id="errorMessage" text="{languageArray['Error:  This patient has been deleted.']}" fontSize="36" color="#171712"/>
+  		
    		<mx:TabBar dataProvider="{patientInfoMain}" 
-   			fontWeight="Bold" paddingTop="0" paddingBottom="0" id="patientTab"/>			
+   			fontWeight="Bold" paddingTop="0" paddingBottom="0" id="patientTab"/>
+ 		
    		<mx:ViewStack 
    			id="patientInfoMain" 
    			width="100%" 
    			height="100%">
-	   		<mx:VBox label="{languageArray['Alerts']}" show="listAlerts()">
+	   		<mx:VBox id="alertVbox" label="{languageArray['Alerts']}" show="listAlerts()">
 	   			<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 		   			<mx:LinkButton label="{languageArray['Add New Alert']}" color="#0000FF" 
@@ -1193,67 +1295,40 @@
 		   			</mx:DataGrid>
 	   			</mx:Panel>
 	   		</mx:VBox>
-	 <mx:Script><![CDATA[
-     import mx.collections.ArrayCollection;
-     [Bindable]
-     public var heights:ArrayCollection = new ArrayCollection([
-        {Date:"6-24-2000", Height:104},
-        {Date:"5-24-2002", Height:114},
-        {Date:"12-24-2003", Height:135},
-        {Date:"1-24-2004", Height:140},
-        {Date:"4-24-2006", Height:162},
-        {Date:"12-24-2008", Height:182},
-        {Date:"1-24-2008", Height:181},
-        {Date:"3-24-2008", Height:184}
-     ]);
-     public var weights:ArrayCollection = new ArrayCollection([
-        {Date:"6-24-2000", Weight:104},
-        {Date:"5-24-2002", Weight:114},
-        {Date:"12-24-2003", Weight:135},
-        {Date:"1-24-2004", Weight:154},
-        {Date:"4-24-2006", Weight:187},
-        {Date:"12-24-2008", Weight:200},
-        {Date:"1-24-2009", Weight:200},
-        {Date:"3-24-2009", Weight:203}
-     ]);
-  ]]></mx:Script>
 
 	   		<mx:VBox label="Physical Data" show="listPhysicals()">
 	   			<mx:Panel title="Data Graphs" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-	   				<mx:HBox>
-			   			<mx:Panel title="Height">
-						     <mx:LineChart id="heightChart" 
+	   				<mx:HBox width="100%">
+	   					<mx:VBox width="20%">
+	   						<mx:Button id="heightBut" width="100%" label="Height" click="graphChart.dataProvider=heights;lineSeries1.displayName='Height';lineSeries2.visible=false;"/>
+	   						<mx:Button id="weightBut" width="100%" label="Weight" click="graphChart.dataProvider=weights;lineSeries1.displayName='Weight';lineSeries2.visible=false;"/>
+	   						<mx:Button id="bpBut" width="100%" label="Blood Pressure" click="graphChart.dataProvider=bps;lineSeries1.displayName='Blood Pressure';lineSeries2.visible=true;"/>
+	   						<mx:Button id="tempBut" width="100%" label="Temperature" click="graphChart.dataProvider=temps;lineSeries1.displayName='Temperature';lineSeries2.visible=false;"/>
+	   						<mx:Button id="pulseBut" width="100%" label="Pulse" click="graphChart.dataProvider=pulses;lineSeries1.displayName='Pulse';lineSeries2.visible=false;"/>
+	   					</mx:VBox>
+			   			<mx:Panel width="80%" id="graphPan" label="Height" title="Height">
+						     <mx:LineChart width="100%" id="graphChart" 
 						        dataProvider="{heights}" 
 						        showDataTips="true">
+						        <mx:horizontalAxisRenderer>
+							        <mx:AxisRenderer showLine="false" showLabels="false" tickPlacement="none" />
+							     </mx:horizontalAxisRenderer>
 						        <mx:horizontalAxis>
 						           <mx:CategoryAxis 
 						                dataProvider="{heights}" 
-						                categoryField="Date" />
+						                categoryField="visit_date" />
 						        </mx:horizontalAxis>
 						        <mx:series>
 						  
-						           <mx:LineSeries 
-						                yField="Height" 
+						           <mx:LineSeries id="lineSeries1"
+						                yField="value" 
 						                displayName="Height"
 						           />
-						        </mx:series>
-						     </mx:LineChart>
-						</mx:Panel>
-						<mx:Panel title="Weight">
-						     <mx:LineChart id="weightChart" 
-						        dataProvider="{weights}" 
-						        showDataTips="true">
-						        <mx:horizontalAxis>
-						           <mx:CategoryAxis 
-						                dataProvider="{weights}" 
-						                categoryField="Date" />
-						        </mx:horizontalAxis>
-						        <mx:series>
-						  
-						           <mx:LineSeries 
-						                yField="Weight" 
-						                displayName="Weight"
+						           <mx:LineSeries id="lineSeries2"
+						                yField="value2" 
+						                displayName="Height"
+						                visible="false"
 						           />
 						        </mx:series>
 						     </mx:LineChart>
