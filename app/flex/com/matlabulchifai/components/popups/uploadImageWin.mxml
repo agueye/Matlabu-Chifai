@@ -5,20 +5,25 @@
 	height="300"
 	title="{languageArray['Upload Image']}"
 	showCloseButton="true"
-    close="PopUpManager.removePhhopUp(this)">
+    close="PopUpManager.removePopUp(this)">
 	 <mx:Script>
         <![CDATA[
         	import flash.net.FileReference;
    			import flash.net.URLRequestHeader;
         	import mx.managers.PopUpManager;
+        	
         	[Bindable]
 			public var patient:XML;
 			[Bindable]
 			public var patientID:Number;
 			
+			[Bindable]
+			public var languageArray:Object;
+			
 			private var uploadFileRefList:FileReference = new FileReference();
    			private var uploadURLReq:URLRequest;
-   			private var URLString:String="/patient_photos";
+   			private var URLString:String="/patient_photos/" + patientID + ".xml?authenticity_token=" +
+							mx.core.Application.application.parameters.authenticityToken;
    			
  
  
@@ -51,7 +56,7 @@
    }
    private function uploadProgressHandler (event:ProgressEvent):void
    {
-       upload_btn.enabled=false;
+       //upload_btn.enabled=false;
        trace(Math.floor((event.bytesLoaded/event.bytesTotal)*100) + "% complete");
    }
    private function uploadIoErrorHandler (event:Event):void
@@ -60,11 +65,17 @@
    }
    private function uploadCompleteHandler (event:Event):void
    {
-       upload_btn.enabled=true;
+       //upload_btn.enabled=true;
        trace("Upload successfull: ");
    }
    
 
         ]]>
     </mx:Script>
+    <mx:NumberFormatter id="numberFormatter" />
+	<mx:ApplicationControlBar>
+	    <mx:Button label="Upload file" click="uploadFiles();" />
+	    <mx:Label id="message" />
+	    <mx:ProgressBar id="progressBar" mode="manual" visible="true" />
+	</mx:ApplicationControlBar>
 </mx:TitleWindow>

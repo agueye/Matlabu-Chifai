@@ -1,21 +1,17 @@
 class PatientPhotosController < ApplicationController
+ 
   # GET /patient_photos
   # GET /patient_photos.xml
   def index
-   @photo = params[:Filename].to_s
-   @test = "Upinder"
-   #APP_LOGGER_LOG.info "THIS IS CALLED -  FileName: " + @photo " by test " + @test
   end
 
   # GET /patient_photos/1
   # GET /patient_photos/1.xml
   def show
-    @patient_photo = PatientPhoto.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @patient_photo }
-    end
+    @patient = Patient.find(params[:id])
+    @photo = params[:Filename].to_s
+    @test = "Upinder"
+    #APP_LOGGER_LOG.info "THIS IS CALLED -  FileName: " + @photo " by test " + @test
   end
 
   # GET /patient_photos/new
