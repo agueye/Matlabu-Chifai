@@ -49,6 +49,7 @@ public function languageInit(str:String):void{
 		  	"Delete Note":"Delete Note",
 		  	"Delete Patient":"Delete Patient",
 		  	"Delete Prescription":"Delete Prescription",
+		  	'Delete User': 'Delete User',
 		  	"Delete Vaccination":"Delete Vaccination",
 		  	"Delete Visit":"Delete Visit",
 		  	"Doctor Name":"Doctor Name",
@@ -284,7 +285,8 @@ public function languageInit(str:String):void{
 		  'Log':'Log(French)',
 		  "Could not contact server.":"Could not contact server.(French)",
 		  'Accounts List':'Accounts List(French)',
-		  'Accounts':'Accounts(French)'
+		  'Accounts':'Accounts(French)',
+		  'Delete User':'Delete User(French)'
 		 
 		  
 		  

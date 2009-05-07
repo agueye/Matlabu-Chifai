@@ -14,7 +14,7 @@
 	height="100%"
 	historyManagementEnabled="false"
 	creationComplete="init();"
-	preinitialize="languageInit('ENGLISH');">
+	preinitialize="langUpdate('ENGLISH');">
 	
 	<mx:Style>
 		VDividedBox{
@@ -88,7 +88,26 @@
 	public var visitTypes:ArrayCollection;
 	[Bindable]
 	public var doctors:ArrayCollection;
-    	
+	
+	[Bindable]
+	private var userMenuXLC:XMLListCollection;
+	
+ 	private var userMenu:XMLList = <>
+ 		<menuitem label="Alerts"/>
+ 		<menuitem label="Search"/>
+ 		<menuitem label="Logout"/>
+ 	</>;
+ 		
+ 	[Bindable]
+ 	private var adminMenuXLC:XMLListCollection;
+ 	
+ 	private var adminMenu:XMLList = <>
+ 		<menuitem label="Alerts"/>
+ 		<menuitem label="Search"/>
+ 		<menuitem label="Administration"/>
+ 		<menuitem label="Logout"/>
+ 	</>;
+ 	
     private var authToken:String;	
 	
 	private var rnd:Number;
@@ -104,6 +123,26 @@
 		application.debugPanel.addMessage(
 		new DebugMessage(str));
 	}		
+	
+	private function langUpdate(lang:String):void{
+		languageInit(lang);
+		
+		if(_user){
+			if(_user.is_admin){
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Alerts']+"'/>"),0);
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),1);
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Administration']+"'/>"),2);
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),3);
+				mainMenu.dataProvider = adminMenuXLC;
+			}
+			else{
+				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Alerts']+"'/>"),0);
+				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),1);
+				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),3);
+				mainMenu.dataProvider = userMenuXLC;
+			}
+		}
+	}
  	
  	private function init():void{
  		initHistoryManager();
@@ -123,6 +162,9 @@
 		this.addEventListener(ConditionEvent.CONDITION_CREATE, handleConditionCreateEvent);
 		this.addEventListener(VaccinationEvent.VACCINATION_CREATE, handleVaccinationCreateEvent);
 		this.addEventListener(DoctorEvent.DOCTOR_CREATE, handleDoctorCreateEvent);
+		
+		userMenuXLC = new XMLListCollection(userMenu);
+		adminMenuXLC = new XMLListCollection(adminMenu);
  	}	    
 	
 	private function listAll():void {
@@ -368,10 +410,12 @@
 	private function login(user:XML):void{
 		_user = user;
 		if(user.is_admin == 1) {
+			mainMenu.dataProvider = adminMenu;
 			this.setStyle('backgroundGradientColors',[0xCCCC00, 0xFFFFFF]);
 			mainMenu.setStyle("fillColors", [0x007D0B, 0xFFFFFF]);
 		}
 		else {
+			mainMenu.dataProvider = userMenu;
 			this.setStyle('backgroundGradientColors',[0x007D0B, 0xFFFFFF]);
 			mainMenu.setStyle("fillColors", [0x0000FF, 0xFFFFFF]);
 		}
@@ -404,23 +448,34 @@
 		navigateToURL(new URLRequest('/matlabulchifai'),'_self')
 	}
 
-	private function handleMenuClick(e:MouseEvent):void {		
-		if(e.currentTarget.selectedIndex == 0) {
-			mainStack.selectedChild = alertBox;				
-		}			
-		else if(e.currentTarget.selectedIndex == 1) {				
-			mainStack.selectedChild = searchBox;			
-		}			
-		else if(e.currentTarget.selectedIndex == 2 && _user["is_admin"] == 1) {
-			mainStack.selectedChild = adminBox;				
-		}			
-		else if(e.currentTarget.selectedIndex == 3) {				
-			handleLogout();							
+	private function handleMenuClick(e:MouseEvent):void {	
+		if(_user["is_admin"] == 1){
+			if(e.currentTarget.selectedIndex == 0) {
+				mainStack.selectedChild = alertBox;				
+			}			
+			else if(e.currentTarget.selectedIndex == 1) {				
+				mainStack.selectedChild = searchBox;			
+			}			
+			else if(e.currentTarget.selectedIndex == 2) {
+				mainStack.selectedChild = adminBox;				
+			}			
+			else if(e.currentTarget.selectedIndex == 3) {				
+				handleLogout();							
+			}
 		}
 		else{
-			Alert.show(languageArray["You do not have permission to view this page."], languageArray["Error"]);
+			if(e.currentTarget.selectedIndex == 0) {
+				mainStack.selectedChild = alertBox;				
+			}			
+			else if(e.currentTarget.selectedIndex == 1) {				
+				mainStack.selectedChild = searchBox;			
+			}			
+			else if(e.currentTarget.selectedIndex == 2) {				
+				handleLogout();							
+			}
+			
 		}
-		mainMenu.selectedIndex = -1;		
+		mainMenu.selectedIndex = -1;
 	}				
 	
 	private function handlePatientListResult(event:ResultEvent):void {
@@ -579,19 +634,14 @@
 		<mx:Canvas width="100%" height="75">
 				<mx:HBox height="100%" width="80%" horizontalAlign="center">
 					<mx:Text height="100%" width="100%" fontFamily="Comic Sans MS" fontSize="55" color="white" text="Matlabul Chifai"/>
-					<mx:Button click="languageInit('FRENCH');" label="Use French" />
-					<mx:Button click="languageInit('ENGLISH');" label="Use English" />
-					<mx:Button click="languageInit('HINDI');" label="Use Hindi" />
+					<mx:Button click="langUpdate('FRENCH');" label="Use French" />
+					<mx:Button click="langUpdate('ENGLISH');" label="Use English" />
+					<mx:Button click="langUpdate('HINDI');" label="Use Hindi" />
 				</mx:HBox>
 		</mx:Canvas>
 		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false"
 			fontWeight="bold" fontSize="14">
-			<mx:XMLList>
-	            <menuitem label="{languageArray['Alerts']}"/>
-	            <menuitem label="{languageArray['Search']}" />
-	            <menuitem label="{languageArray['Administration']}"/>
-	            <menuitem label="{languageArray['Logout']}"/>
-	        </mx:XMLList>
+
 		</mx:MenuBar>
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
