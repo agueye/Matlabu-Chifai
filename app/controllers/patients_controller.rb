@@ -10,7 +10,9 @@ class PatientsController < ApplicationController
     @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
 	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
 	for temp in @patients
-		temp.enter_password @masterKey
+		if !temp.nil?
+			temp.enter_password @masterKey
+		end
 	end
     @patients.sort! {|x,y| x.last_name <=> y.last_name}
 
