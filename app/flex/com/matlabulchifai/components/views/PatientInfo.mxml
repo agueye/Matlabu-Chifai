@@ -4,7 +4,7 @@
 	width="100%" 
 	height="100%"
     label="PatientInfo"
-	show="init()">
+	show="init()" xmlns:patient="com.matlabulchifai.components.patient.*">
 	
 	<mx:Style>
 		Label{
@@ -31,8 +31,6 @@
 		import mx.collections.XMLListCollection;
     	import mx.collections.IViewCursor;
 		import mx.managers.PopUpManager;
-		import com.matlabulchifai.components.popups.AlertCreateTitleWin;
-		import com.matlabulchifai.components.popups.AlertUpdateTitleWin;
 		import com.matlabulchifai.components.popups.PatientUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 		import com.matlabulchifai.components.popups.VaccinationUpdateTitleWin;
@@ -50,7 +48,6 @@
 		import com.matlabulchifai.events.patient.PatientVisitEvent;
 		import com.matlabulchifai.events.patient.NoteEvent;
 		import com.matlabulchifai.events.patient.PrescriptionEvent;
-		import com.matlabulchifai.events.patient.PatientAlertEvent;
 		import com.matlabulchifai.events.patient.PatientMedicationEvent;
 		import com.matlabulchifai.events.patient.PatientConditionEvent;
 		import com.matlabulchifai.events.allergy.AllergyEvent;
@@ -60,6 +57,8 @@
 		import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 		import com.matlabulchifai.events.doctor.DoctorEvent;
 		import com.matlabulchifai.components.popups.uploadImageWin;
+		
+		import com.matlabulchifai.components.patient.*;
 
 		
 		[Bindable]
@@ -105,8 +104,6 @@
 		private var visitPopUp:VisitCreateTitleWin;
 		private var notePopUp:NoteCreateTitleWin;
 		private var medicationPopUp:MedicationCreateTitleWin;
-		private var alertPopUp:AlertCreateTitleWin;
-		private var alertUpdatePopUp:AlertUpdateTitleWin;
 		private var noteUpdatePopUp:NoteUpdateTitleWin;
 		private var allergyUpdatePopUp:AllergyUpdateTitleWin;
 		private var vaccinationUpdatePopUp:VaccinationUpdateTitleWin;
@@ -134,7 +131,7 @@
 			Matlabulchifai.debug("Patient ID: " + patient.id);
 			patientID = patient.id;
 			rnd = Math.round(Math.random()*1000);
-			listAlerts();
+			alertVbox.listAlerts();
 			patientInfoMain.selectedIndex = 0;
 			Matlabulchifai.debug("Leaving init in PatientInfo");		
 			
@@ -152,17 +149,7 @@
 			}
 		}
 		
-		public function listAlerts():void {
-			alertsXLC.removeAll();
-			svcAlertsList.url="/patients/" + patientID + "/patient_alerts.xml?";
-			svcAlertsList.send();
-		}
 		
-		private function handleAlertsListResult(event:ResultEvent):void {
-			var resultXML:XML = XML(event.result);
-			Matlabulchifai.debug("prescriptions_notes = \n" + resultXML);
-			this.enabled = true;
-		}
 		
 		public function listMedications():void {
 			medicationsXLC.removeAll();
@@ -437,68 +424,6 @@
 				medicationPopUp.removeEventListener(PatientMedicationEvent.PATIENT_MEDICATION_CREATE, handlePatientMedicationEvent);				
 			}			
 		}	
-		
-		private function showAlertCreateTitleWin():void {				
-			alertPopUp = AlertCreateTitleWin(PopUpManager.createPopUp(this, AlertCreateTitleWin, true));
-			alertPopUp.patient = this.patient;
-			alertPopUp.patientID = this.patientID;
-			alertPopUp.languageArray = languageArray;
-			PopUpManager.centerPopUp(alertPopUp);
-			alertPopUp.addEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE, handleAlertEvent);
-		}
-		
-		public function handleAlertEvent(event:Event):void {
-			dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_CREATE, null));
-			listAlerts();				
-			removeAlertEventListener();			
-		}						
-		
-		public function removeAlertEventListener():void {				
-			if (alertPopUp.hasEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE)) {					
-				alertPopUp.removeEventListener(PatientAlertEvent.PATIENT_ALERT_CREATE, handleAlertEvent);				
-			}			
-		}
-		
-		public function deleteAlert(alert:XML):void {
-			svcAlertsDestroy.url = "/patient_alerts/" + alert.id + ".xml" + authToken;
-			svcAlertsDestroy.send({_method:"DELETE"});
-			this.enabled = false;
-	    }
-	    
-	    private function handleAlertsDestroyResult(event:ResultEvent):void {
-	    	var alert:XML = XML(event.result);
-	    	listAlerts();
-	    	dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_DESTROY, alert));
-	    }
-		
-		private function handleAlertClick(event:ListEvent):void {
-			if (event.columnIndex != event.currentTarget.columns.length-1){
-				var alert:XML = XML(event.currentTarget.selectedItem)
-				showAlertUpdateTitleWin(alert);
-			}
-		}
-		
-		private function showAlertUpdateTitleWin(alert:XML):void {				
-			alertUpdatePopUp = AlertUpdateTitleWin(PopUpManager.createPopUp(this, AlertUpdateTitleWin, true));
-			alertUpdatePopUp.patient = patient;
-			alertUpdatePopUp.alert = alert;			
-			alertUpdatePopUp.languageArray = languageArray;
-			PopUpManager.centerPopUp(alertUpdatePopUp);
-			alertUpdatePopUp.addEventListener(PatientAlertEvent.PATIENT_ALERT_UPDATE, handleAlertUpdateEvent);
-		}
-		
-		public function handleAlertUpdateEvent(event:PatientAlertEvent):void {
-			var patientAlert:XML = XML(event.patientAlert);
-			dispatchEvent(new PatientAlertEvent(PatientAlertEvent.PATIENT_ALERT_UPDATE, patientAlert));
-			listAlerts();				
-			removeAlertUpdateEventListener();			
-		}
-		
-		public function removeAlertUpdateEventListener():void {				
-			if (alertUpdatePopUp.hasEventListener(PatientAlertEvent.PATIENT_ALERT_UPDATE)) {					
-				alertUpdatePopUp.removeEventListener(PatientAlertEvent.PATIENT_ALERT_UPDATE, handleAlertUpdateEvent);				
-			}			
-		}
 		
 		public function deleteNote(note:XML):void {
 			this.enabled = false;
@@ -966,13 +891,6 @@
         result="handleMedicationsListResult(event)"/>
 	<mx:XMLListCollection id="medicationsXLC"
         source="{XMLList(svcMedicationsList.lastResult.children())}"/>
-    
-    <mx:HTTPService
-        id="svcAlertsList"
-        resultFormat="e4x"
-        result="handleAlertsListResult(event)"/>
-	<mx:XMLListCollection id="alertsXLC"
-        source="{XMLList(svcAlertsList.lastResult.children())}"/>
         
     <mx:HTTPService
         id="svcPhysicalHeightsList"
@@ -1008,12 +926,6 @@
         result="handlePhysicalPulse(event)"/>
 	<mx:XMLListCollection id="pulsesXLC"
         source="{XMLList(svcPhysicalPulsesList.lastResult.children())}"/>
-        
-    <mx:HTTPService
-        id="svcAlertsDestroy"
-        resultFormat="e4x"
-        method="POST"
-        result="handleAlertsDestroyResult(event)"/>
         
     <mx:HTTPService
         id="svcNotesDestroy"
@@ -1060,31 +972,8 @@
    			id="patientInfoMain" 
    			width="100%" 
    			height="100%">
-	   		<mx:VBox id="alertVbox" label="{languageArray['Alerts']}" show="listAlerts()">
-	   			<mx:Panel title="{languageArray['Alert List']}" width="100%" height="100%" 
-	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="{languageArray['Add New Alert']}" color="#0000FF" 
-		   				click="showAlertCreateTitleWin()"/>
-		   			<mx:DataGrid id="alertsGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{alertsXLC}" wordWrap="true" variableRowHeight="true"
-		   				 itemClick="handleAlertClick(event)">						
-		   				<mx:columns>														
-		   					<mx:DataGridColumn headerText="{languageArray['Alert Date']}" 
-		   						dataField="alert_date" width="90"/>							
-		   					<mx:DataGridColumn headerText="{languageArray['Alert Note']}" 
-		   						dataField="notes"/>
-		   					<mx:DataGridColumn headerText="" width="150" 
-				                    editable="false">
-				                    <mx:itemRenderer>
-				                        <mx:Component>
-				                            <mx:Button label="{outerDocument.languageArray['Delete Alert']}" click="outerDocument.deleteAlert(XML(data))" />
-				                        </mx:Component>
-				                    </mx:itemRenderer>
-							</mx:DataGridColumn>				
-		   				</mx:columns>					
-		   			</mx:DataGrid>
-	   			</mx:Panel>
-	   		</mx:VBox>
+	   		<patient:PatientAlertViewBox id="alertVbox" patient="{patient}" patientID="{patientID}"/>
+	   			
 	   		<mx:VBox label="{languageArray['General Information']}" show="">
 	   			<mx:Panel title="{languageArray['General Information']}" width="100%" height="100%" 
 	   				paddingTop="10" paddingLeft="5" paddingRight="5">	

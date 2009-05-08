@@ -108,7 +108,7 @@
  		<menuitem label="Logout"/>
  	</>;
  	
-    private var authToken:String;	
+    private var authToken:String;
 	
 	private var rnd:Number;
 
