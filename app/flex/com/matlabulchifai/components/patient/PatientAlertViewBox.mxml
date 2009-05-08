@@ -68,7 +68,8 @@
 			
 			public function listAlerts():void {
 				alertsXLC.removeAll();
-				svcAlertsList.url="/patients/" + patientID + "/patient_alerts.xml?";
+				var rnd:int = Math.round(Math.random()*10000);
+				svcAlertsList.url="/patients/" + patientID + "/patient_alerts.xml?rnd=" + rnd;
 				svcAlertsList.send();
 			}
 			

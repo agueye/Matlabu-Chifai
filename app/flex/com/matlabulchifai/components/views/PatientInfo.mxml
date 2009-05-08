@@ -35,8 +35,6 @@
 		import com.matlabulchifai.components.popups.VaccinationUpdateTitleWin;
 		import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
 		import com.matlabulchifai.components.popups.AllergyUpdateTitleWin;
-		import com.matlabulchifai.components.popups.NoteCreateTitleWin;
-		import com.matlabulchifai.components.popups.NoteUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
 		import com.matlabulchifai.components.popups.VisitUpdateTitleWin;
 		import com.matlabulchifai.components.popups.MedicationCreateTitleWin;
@@ -45,7 +43,6 @@
 		import com.matlabulchifai.events.patient.PatientVaccinationEvent;
 		import com.matlabulchifai.events.patient.PatientAllergyEvent;
 		import com.matlabulchifai.events.patient.PatientVisitEvent;
-		import com.matlabulchifai.events.patient.NoteEvent;
 		import com.matlabulchifai.events.patient.PrescriptionEvent;
 		import com.matlabulchifai.events.patient.PatientMedicationEvent;
 		import com.matlabulchifai.events.patient.PatientConditionEvent;
@@ -100,9 +97,7 @@
 		private var vaccPopUp:VaccCreateTitleWin;
 		private var allergyPopUp:AllergyCreateTitleWin;
 		private var visitPopUp:VisitCreateTitleWin;
-		private var notePopUp:NoteCreateTitleWin;
 		private var medicationPopUp:MedicationCreateTitleWin;
-		private var noteUpdatePopUp:NoteUpdateTitleWin;
 		private var allergyUpdatePopUp:AllergyUpdateTitleWin;
 		private var vaccinationUpdatePopUp:VaccinationUpdateTitleWin;
 		private var medicationUpdatePopUp:MedicationUpdateTitleWin;
@@ -160,19 +155,6 @@
 			Matlabulchifai.debug("prescriptions_notes = \n" + resultXML);
 			this.enabled = true;
 		}
-		
-		public function listNotes():void {
-			notesXLC.removeAll();
-			svcNotesList.url="/patients/" + patientID + "/patient_notes.xml?";
-			svcNotesList.send();
-		}
-		
-		private function handleNotesListResult(event:ResultEvent):void {
-			var resultXML:XML = XML(event.result);
-			Matlabulchifai.debug("patient_notes = \n" + resultXML);
-			this.enabled = true;
-		}
-		
 		
 		public function listVaccinations():void {
 			vaccinationsXLC.removeAll();
@@ -340,34 +322,11 @@
 				visitPopUp.removeEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE, handleVisitEvent);
 			}
 		}
-		
-		private function showNoteCreateTitleWin():void {				
-			notePopUp = NoteCreateTitleWin(PopUpManager.createPopUp(this, NoteCreateTitleWin, true));
-			notePopUp.addEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);
-			notePopUp.patient = this.patient;
-			notePopUp.patientID = this.patientID;
-			notePopUp.languageArray = this.languageArray;
-			PopUpManager.centerPopUp(notePopUp);
-		}
-		
+
 		private function showuploadImageWindow():void{
 			uploadPopUp = uploadImageWin(PopUpManager.createPopUp(this,uploadImageWin,true));
-			notePopUp.patient = this.patient;
-			notePopUp.patientID = this.patientID;
-			notePopUp.languageArray = this.languageArray;
 			PopUpManager.centerPopUp(uploadPopUp);
-		}
-		
-		public function handleNoteEvent(event:Event):void {
-			listNotes();				
-			removeNoteEventListener();			
-		}						
-		
-		public function removeNoteEventListener():void {				
-			if (notePopUp.hasEventListener(NoteEvent.NOTE_CREATE)) {					
-				notePopUp.removeEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);				
-			}			
-		}						
+		}					
 		
 		private function showMedicationCreateTitleWin():void {				    			
 			medicationPopUp = MedicationCreateTitleWin(PopUpManager.createPopUp(this, MedicationCreateTitleWin, true));
@@ -401,43 +360,6 @@
 				medicationPopUp.removeEventListener(PatientMedicationEvent.PATIENT_MEDICATION_CREATE, handlePatientMedicationEvent);				
 			}			
 		}	
-		
-		public function deleteNote(note:XML):void {
-			this.enabled = false;
-			svcNotesDestroy.url = "/patient_notes/" + note.id + ".xml" + authToken;
-			svcNotesDestroy.send({_method:"DELETE"});
-	    }
-	    
-	    private function handleNotesDestroyResult(event:ResultEvent):void {
-	    	listNotes();
-	    }
-		
-		private function handleNoteClick(event:ListEvent):void {
-			if (event.columnIndex != event.currentTarget.columns.length-1){
-				var note:XML = XML(event.currentTarget.selectedItem)
-				showNoteUpdateTitleWin(note);
-			}
-		}
-		
-		private function showNoteUpdateTitleWin(note:XML):void {				
-			noteUpdatePopUp = NoteUpdateTitleWin(PopUpManager.createPopUp(this, NoteUpdateTitleWin, true));
-			noteUpdatePopUp.patient = patient;
-			noteUpdatePopUp.note = note;			
-			noteUpdatePopUp.languageArray = languageArray;
-			PopUpManager.centerPopUp(noteUpdatePopUp);
-			noteUpdatePopUp.addEventListener(NoteEvent.NOTE_UPDATE, handleNoteUpdateEvent);
-		}
-		
-		public function handleNoteUpdateEvent(event:NoteEvent):void {			
-			listNotes();				
-			removeNoteUpdateEventListener();			
-		}
-		
-		public function removeNoteUpdateEventListener():void {				
-			if (noteUpdatePopUp.hasEventListener(NoteEvent.NOTE_UPDATE)) {					
-				noteUpdatePopUp.removeEventListener(NoteEvent.NOTE_UPDATE, handleNoteUpdateEvent);				
-			}			
-		}
 		
 		public function deleteAllergy(allergy:XML):void {
 			this.enabled = false;
@@ -856,13 +778,6 @@
         source="{XMLList(svcVisitsList.lastResult.children())}"/>
 		
 	<mx:HTTPService
-        id="svcNotesList"
-        resultFormat="e4x"
-        result="handleNotesListResult(event)"/>
-	<mx:XMLListCollection id="notesXLC"
-        source="{XMLList(svcNotesList.lastResult.children())}"/>
-		
-	<mx:HTTPService
         id="svcMedicationsList"
         resultFormat="e4x"
         result="handleMedicationsListResult(event)"/>
@@ -903,12 +818,6 @@
         result="handlePhysicalPulse(event)"/>
 	<mx:XMLListCollection id="pulsesXLC"
         source="{XMLList(svcPhysicalPulsesList.lastResult.children())}"/>
-        
-    <mx:HTTPService
-        id="svcNotesDestroy"
-        resultFormat="e4x"
-        method="POST"
-        result="handleNotesDestroyResult(event)"/>
     
     <mx:HTTPService
         id="svcAllergiesDestroy"
@@ -953,31 +862,8 @@
 	   			
 	   		<patient:PatientGeneralViewBox id="generalVbox" patient="{patient}" patientIdMap="{patientIdMap}"/>
 	   		
-	   		<mx:VBox label="{languageArray['Notes']}" show="listNotes()">
-	   			<mx:Panel title="{languageArray['Note List']}" width="100%" height="100%" 
-	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="{languageArray['Add New Note']}" color="#0000FF" 
-		   				click="showNoteCreateTitleWin()"/>
-		   			<mx:DataGrid id="notesGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{notesXLC}" wordWrap="true" variableRowHeight="true"
-		   				itemClick="handleNoteClick(event)">						
-		   				<mx:columns>
-		   					<mx:DataGridColumn headerText="{languageArray['Note Date']}" 
-		   						dataField="note_date" width="90"/>							
-		   					<mx:DataGridColumn headerText="{languageArray['Note']}" 
-		   						dataField="body"/>
-		   					<mx:DataGridColumn headerText="" width="150" 
-				                    editable="false">
-				                    <mx:itemRenderer>
-				                        <mx:Component>
-				                            <mx:Button label="{outerDocument.languageArray['Delete Note']}" click="outerDocument.deleteNote(XML(data))" />
-				                        </mx:Component>
-				                    </mx:itemRenderer>
-							</mx:DataGridColumn>					
-		   				</mx:columns>					
-		   			</mx:DataGrid>
-	   			</mx:Panel>
-	   		</mx:VBox>
+	   		<patient:PatientNotesViewBox id="notesVbox" patient="{patient}" patientID="{patientID}"/>
+	   		
 	   		<mx:VBox label="{languageArray['Allergies']}" show="listPatientAllergies()">
 	   			<mx:Panel title="{languageArray['Allergy List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
