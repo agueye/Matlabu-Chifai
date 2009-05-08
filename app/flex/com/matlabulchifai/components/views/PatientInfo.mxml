@@ -33,15 +33,12 @@
 		import mx.managers.PopUpManager;
 		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 		import com.matlabulchifai.components.popups.VaccinationUpdateTitleWin;
-		import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
-		import com.matlabulchifai.components.popups.AllergyUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
 		import com.matlabulchifai.components.popups.VisitUpdateTitleWin;
 		import com.matlabulchifai.components.popups.MedicationCreateTitleWin;
 		import com.matlabulchifai.components.popups.MedicationUpdateTitleWin;
 		import com.matlabulchifai.events.patient.PatientEvent;
 		import com.matlabulchifai.events.patient.PatientVaccinationEvent;
-		import com.matlabulchifai.events.patient.PatientAllergyEvent;
 		import com.matlabulchifai.events.patient.PatientVisitEvent;
 		import com.matlabulchifai.events.patient.PrescriptionEvent;
 		import com.matlabulchifai.events.patient.PatientMedicationEvent;
@@ -95,10 +92,8 @@
 		private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 		private var rnd:Number;
 		private var vaccPopUp:VaccCreateTitleWin;
-		private var allergyPopUp:AllergyCreateTitleWin;
 		private var visitPopUp:VisitCreateTitleWin;
 		private var medicationPopUp:MedicationCreateTitleWin;
-		private var allergyUpdatePopUp:AllergyUpdateTitleWin;
 		private var vaccinationUpdatePopUp:VaccinationUpdateTitleWin;
 		private var medicationUpdatePopUp:MedicationUpdateTitleWin;
 		private var visitUpdatePopUp:VisitUpdateTitleWin;
@@ -186,18 +181,6 @@
 			
 		}
 		
-		public function listPatientAllergies():void {
-			allergiesXLC.removeAll();
-			svcAllergiesList.url="/patients/" + patientID + "/patient_allergies.xml";
-			svcAllergiesList.send();
-		}
-		
-		private function handleAllergiesListResult(event:ResultEvent):void {
-			var resultXML:XML = XML(event.result);
-			Matlabulchifai.debug("patient_allergies = \n" + resultXML);
-			this.enabled = true;
-		}
-		
 		public function listVisits():void {
 			visitsXLC.removeAll();
 			svcVisitsList.url="/patients/" + patientID + "/patient_visits.xml?";
@@ -213,11 +196,6 @@
 		private function getDoctorName(item:Object, column:DataGridColumn):String {
 			var doctor:XML = doctorIdMap[item.doctor_id];
 			return doctor.name;
-		}
-		
-		private function getAllergyName(item:Object, column:DataGridColumn):String {
-			var allergy:XML = allergyIdMap[item.allergy_id];
-			return allergy.name;
 		}
 		
 		private function getVaccinationName(item:Object, column:DataGridColumn):String {
@@ -268,28 +246,6 @@
 		public function removePatientVaccEventListener():void {
 			if (vaccPopUp.hasEventListener(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE)) {
 				vaccPopUp.removeEventListener(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, handlePatientVaccEvent);
-			}
-		}
-		
-		private function showAllergyCreateTitleWin():void{
-			allergyPopUp = AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));
-			allergyPopUp.patient = this.patient;
-			allergyPopUp.patientID = this.patientID;
-			allergyPopUp.languageArray = this.languageArray;
-			allergyPopUp.allergies = allergies;
-			PopUpManager.centerPopUp(allergyPopUp);
-			allergyPopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, handlePatientAllergyEvent);
-			allergyPopUp.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);
-		}
-
-		public function handlePatientAllergyEvent(event:Event):void {
-			listPatientAllergies();
-			removePatientAllergyEventListener();
-		}
-		
-		public function removePatientAllergyEventListener():void {
-			if (allergyPopUp.hasEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE)) {
-				allergyPopUp.removeEventListener(PatientAllergyEvent.PATIENT_ALLERGY_CREATE, handlePatientAllergyEvent);
 			}
 		}
 		
@@ -359,55 +315,7 @@
 			if (medicationPopUp.hasEventListener(PatientMedicationEvent.PATIENT_MEDICATION_CREATE)) {					
 				medicationPopUp.removeEventListener(PatientMedicationEvent.PATIENT_MEDICATION_CREATE, handlePatientMedicationEvent);				
 			}			
-		}	
-		
-		public function deleteAllergy(allergy:XML):void {
-			this.enabled = false;
-			svcAllergiesDestroy.url = "/patient_allergies/" + allergy.id + ".xml" + authToken;
-			svcAllergiesDestroy.send({_method:"DELETE"});
-	    }
-	    
-	    private function handleAllergiesDestroyResult(event:ResultEvent):void {
-	    	listPatientAllergies();
-	    }
-		
-		private function handleAllergyClick(event:ListEvent):void {
-			if (event.columnIndex != event.currentTarget.columns.length-1){
-				var allergy:XML = XML(event.currentTarget.selectedItem)
-				showAllergyUpdateTitleWin(allergy);
-			}
-		}
-		
-		private function showAllergyUpdateTitleWin(allergy:XML):void {				
-			allergyUpdatePopUp = AllergyUpdateTitleWin(PopUpManager.createPopUp(this, AllergyUpdateTitleWin, true));
-			allergyUpdatePopUp.patient = patient;
-			allergyUpdatePopUp.allergy = allergy;
-			allergyUpdatePopUp.allergies = allergies;				
-			allergyUpdatePopUp.languageArray = languageArray;
-			PopUpManager.centerPopUp(allergyUpdatePopUp);
-			allergyUpdatePopUp.addEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, handlePatientAllergyUpdateEvent);
-			allergyUpdatePopUp.addEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);
-			
-		}
-		
-		public function handlePatientAllergyUpdateEvent(event:PatientAllergyEvent):void {			
-			listPatientAllergies();
-			removeAllergyUpdateEventListener();			
-		}
-		
-		public function handleAllergyCreateEvent(event:AllergyEvent):void {			
-			dispatchEvent(new AllergyEvent(AllergyEvent.ALLERGY_CREATE, null));			
-			var popUp:Object = (allergyPopUp || allergyUpdatePopUp);
-			if (popUp.hasEventListener(AllergyEvent.ALLERGY_CREATE)) {					
-						popUp.removeEventListener(AllergyEvent.ALLERGY_CREATE, handleAllergyCreateEvent);				
-					}
-		}
-		
-		public function removeAllergyUpdateEventListener():void {				
-			if (allergyUpdatePopUp.hasEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE)) {					
-				allergyUpdatePopUp.removeEventListener(PatientAllergyEvent.PATIENT_ALLERGY_UPDATE, handlePatientAllergyUpdateEvent);				
-			}			
-		}			    	
+		}	    	
 		
 		public function deleteVaccination(vaccination:XML):void {
 			this.enabled = false;
@@ -762,13 +670,6 @@
         result="handleVaccinationsListResult(event)"/>
 	<mx:XMLListCollection id="vaccinationsXLC"
         source="{XMLList(svcVaccinationsList.lastResult.children())}"/>
-	
-	<mx:HTTPService
-        id="svcAllergiesList"
-        resultFormat="e4x"
-        result="handleAllergiesListResult(event)"/>
-	<mx:XMLListCollection id="allergiesXLC"
-        source="{XMLList(svcAllergiesList.lastResult.children())}"/>
 
 	<mx:HTTPService
         id="svcVisitsList"
@@ -820,12 +721,6 @@
         source="{XMLList(svcPhysicalPulsesList.lastResult.children())}"/>
     
     <mx:HTTPService
-        id="svcAllergiesDestroy"
-        resultFormat="e4x"
-        method="POST"
-        result="handleAllergiesDestroyResult(event)"/>
-    
-    <mx:HTTPService
         id="svcVaccinationsDestroy"
         resultFormat="e4x"
         method="POST"
@@ -864,37 +759,9 @@
 	   		
 	   		<patient:PatientNotesViewBox id="notesVbox" patient="{patient}" patientID="{patientID}"/>
 	   		
-	   		<mx:VBox label="{languageArray['Allergies']}" show="listPatientAllergies()">
-	   			<mx:Panel title="{languageArray['Allergy List']}" width="100%" height="100%" 
-	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="{languageArray['Add New Allergy']}" color="#0000FF" 
-		   				click="showAllergyCreateTitleWin()"/>
-		   			<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
-		   				dataProvider="{allergiesXLC}" wordWrap="true" variableRowHeight="true"
-		   				itemClick="handleAllergyClick(event)">						
-		   				<mx:columns>														
-		   					<mx:DataGridColumn headerText="{languageArray['Allergy Name']}" width="250"
-				                labelFunction="getAllergyName"/>
-				            <mx:DataGridColumn headerText="{languageArray['Date Observed']}" width="125"
-				                dataField="date_observed"/>	
-							<mx:DataGridColumn headerText="{languageArray['Severity']}" width="85"
-				                dataField="severity"/>
-				            <mx:DataGridColumn headerText="{languageArray['Reaction']}" width="85"
-				                dataField="reaction"/>
-				            <mx:DataGridColumn headerText="{languageArray['Notes']}"
-				                dataField="notes"/>	
-				            <mx:DataGridColumn headerText="" width="150" 
-				                    editable="false">
-				                    <mx:itemRenderer>
-				                        <mx:Component>
-				                            <mx:Button label="{outerDocument.languageArray['Delete Allergy']}" click="outerDocument.deleteAllergy(XML(data))" />
-				                        </mx:Component>
-				                    </mx:itemRenderer>
-							</mx:DataGridColumn>						
-		   				</mx:columns>					
-		   			</mx:DataGrid>
-	   			</mx:Panel>
-	   		</mx:VBox>
+	   		<patient:PatientAllergyViewBox id="allergyVbox" patient="{patient}" patientID="{patientID}" 
+	   			allergies="{allergies}" allergyIdMap="{allergyIdMap}"/>
+	   		
 	   		<mx:VBox label="{languageArray['Visits-Conditions']}" show="listVisits()">
 	   			<mx:Panel title="{languageArray['Visits List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
