@@ -31,7 +31,6 @@
 		import mx.collections.XMLListCollection;
     	import mx.collections.IViewCursor;
 		import mx.managers.PopUpManager;
-		import com.matlabulchifai.components.popups.PatientUpdateTitleWin;
 		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
 		import com.matlabulchifai.components.popups.VaccinationUpdateTitleWin;
 		import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
@@ -98,7 +97,6 @@
 		
 		private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 		private var rnd:Number;
-		private var patientUpdatePopUp:PatientUpdateTitleWin;
 		private var vaccPopUp:VaccCreateTitleWin;
 		private var allergyPopUp:AllergyCreateTitleWin;
 		private var visitPopUp:VisitCreateTitleWin;
@@ -262,27 +260,6 @@
 			while (visitTypeIdMap[item.visit_type_id] == null) {}
 			visitType = visitTypeIdMap[item.visit_type_id];
 			return visitType.name;
-		}
-		
-		private function showPatientUpdateTitleWin():void {
-			patientUpdatePopUp = PatientUpdateTitleWin(PopUpManager.createPopUp(this, PatientUpdateTitleWin, true));
-			patientUpdatePopUp.addEventListener(PatientEvent.PATIENT_UPDATE, handlePatientUpdateEvent);
-			patientUpdatePopUp.patient = this.patient;
-			patientUpdatePopUp.languageArray = this.languageArray;
-			PopUpManager.centerPopUp(patientUpdatePopUp);
-		}
-		
-		public function handlePatientUpdateEvent(event:PatientEvent):void {
-			patient = event.patient;			
-			patientIdMap[patient.id] = patient;
-			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_UPDATE, patient));
-			removePatientUpdateEventListener();
-		}
-		
-		public function removePatientUpdateEventListener():void {
-			if (patientUpdatePopUp.hasEventListener(PatientEvent.PATIENT_UPDATE)) {
-				patientUpdatePopUp.removeEventListener(PatientEvent.PATIENT_UPDATE, handlePatientUpdateEvent);
-			}
 		}
 		
 		private function showVaccCreateTitleWin():void {
@@ -974,68 +951,8 @@
    			height="100%">
 	   		<patient:PatientAlertViewBox id="alertVbox" patient="{patient}" patientID="{patientID}"/>
 	   			
-	   		<mx:VBox label="{languageArray['General Information']}" show="">
-	   			<mx:Panel title="{languageArray['General Information']}" width="100%" height="100%" 
-	   				paddingTop="10" paddingLeft="5" paddingRight="5">	
-	   				<mx:LinkButton label="{languageArray['Edit Patient Information']}" color="#0000FF" 
-		   				click="showPatientUpdateTitleWin()"/>								
-					<mx:HBox>
-						<mx:Label text="{languageArray['Medical Record ID']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['medical_record_number']}" fontSize="12"/>				
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Patient Name']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['first_name'] + ' ' + patient['middle_name'] + ' ' + patient['last_name']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Arrival Date']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['arrival_date']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Date of Birth']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['date_of_birth']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Gender']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['gender']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:Spacer height="20" />
-					<mx:HBox>
-						<mx:Label text="{languageArray['Address']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['address'] + ' ' + patient['city'] + ' ' + patient['state'] + ' ' + patient['zip']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Telephone']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['telephone']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Father Name']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['father_first_name'] + ' ' + patient['father_last_name']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Mother Name']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['mother_first_name'] + ' ' + patient['mother_last_name']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:Spacer height="20" />
-					<mx:HBox>
-						<mx:Label text="{languageArray['Emergency Contact Name']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['emergency_contact_name']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Emergency Contact Relationship']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['emergency_contact_relationship']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="{languageArray['Emergency Contact Number']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['emergency_contact_number']}" fontSize="12"/>
-					</mx:HBox>
-					<mx:Spacer height="20" />
-					<mx:HBox>
-						<mx:Label text="{languageArray['Notes']}:" fontSize="12" fontWeight="bold"/>
-						<mx:Label text="{patient['notes']}" fontSize="12"/>
-					</mx:HBox>
-	   			</mx:Panel>
-	   		</mx:VBox>
+	   		<patient:PatientGeneralViewBox id="generalVbox" patient="{patient}" patientIdMap="{patientIdMap}"/>
+	   		
 	   		<mx:VBox label="{languageArray['Notes']}" show="listNotes()">
 	   			<mx:Panel title="{languageArray['Note List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+	label="{languageArray['General Information']}">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.matlabulchifai.components.popups.PatientUpdateTitleWin;
+			import com.matlabulchifai.events.patient.PatientEvent;
+			import mx.core.Application;
+			import mx.managers.PopUpManager;
+			
+			private var patientUpdatePopUp:PatientUpdateTitleWin;
+			
+			[Bindable]
+			private var languageArray:Object = Application.application.languageArray;
+			
+			[Bindable]
+			public var patient:XML;
+			[Bindable]        
+			public var patientIdMap:Object;
+			
+			private function showPatientUpdateTitleWin():void {
+				patientUpdatePopUp = PatientUpdateTitleWin(PopUpManager.createPopUp(this, PatientUpdateTitleWin, true));
+				patientUpdatePopUp.addEventListener(PatientEvent.PATIENT_UPDATE, handlePatientUpdateEvent);
+				patientUpdatePopUp.patient = this.patient;
+				patientUpdatePopUp.languageArray = this.languageArray;
+				PopUpManager.centerPopUp(patientUpdatePopUp);
+			}
+			
+			public function handlePatientUpdateEvent(event:PatientEvent):void {
+				patient = event.patient;			
+				patientIdMap[patient.id] = patient;
+				dispatchEvent(new PatientEvent(PatientEvent.PATIENT_UPDATE, patient));
+				removePatientUpdateEventListener();
+			}
+			
+			public function removePatientUpdateEventListener():void {
+				if (patientUpdatePopUp.hasEventListener(PatientEvent.PATIENT_UPDATE)) {
+					patientUpdatePopUp.removeEventListener(PatientEvent.PATIENT_UPDATE, handlePatientUpdateEvent);
+				}
+			}
+		]]>
+	</mx:Script>
+	
+   	<mx:Panel title="{languageArray['General Information']}" width="100%" height="100%" 
+   		paddingTop="10" paddingLeft="5" paddingRight="5">	
+   		<mx:LinkButton label="{languageArray['Edit Patient Information']}" color="#0000FF" 
+   			click="showPatientUpdateTitleWin()"/>								
+		<mx:HBox>
+			<mx:Label text="{languageArray['Medical Record ID']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['medical_record_number']}" fontSize="12"/>				
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Patient Name']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['first_name'] + ' ' + patient['middle_name'] + ' ' + patient['last_name']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Arrival Date']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['arrival_date']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Date of Birth']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['date_of_birth']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Gender']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['gender']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:Spacer height="20" />
+		<mx:HBox>
+			<mx:Label text="{languageArray['Address']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['address'] + ' ' + patient['city'] + ' ' + patient['state'] + ' ' + patient['zip']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Telephone']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['telephone']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Father Name']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['father_first_name'] + ' ' + patient['father_last_name']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Mother Name']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['mother_first_name'] + ' ' + patient['mother_last_name']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:Spacer height="20" />
+		<mx:HBox>
+			<mx:Label text="{languageArray['Emergency Contact Name']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['emergency_contact_name']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Emergency Contact Relationship']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['emergency_contact_relationship']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="{languageArray['Emergency Contact Number']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['emergency_contact_number']}" fontSize="12"/>
+		</mx:HBox>
+		<mx:Spacer height="20" />
+		<mx:HBox>
+			<mx:Label text="{languageArray['Notes']}:" fontSize="12" fontWeight="bold"/>
+			<mx:Label text="{patient['notes']}" fontSize="12"/>
+		</mx:HBox>
+   	</mx:Panel>
+
+</mx:VBox>
