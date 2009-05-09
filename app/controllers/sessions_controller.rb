@@ -58,6 +58,9 @@ class SessionsController < ApplicationController
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session
+    
+    APP_LOGGER_LOG.info "SESSION DELETED - USER " + self.current_user[:login]
+    
     flash[:notice] = "You have been logged out."
     #redirect_back_or_default('/')
     respond_to do |format|
