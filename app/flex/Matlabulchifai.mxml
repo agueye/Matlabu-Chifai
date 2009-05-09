@@ -430,7 +430,7 @@
 	
 	private function bypassLoginAdmin():void {			
 		loginFormBox.loginTI.text = "admin";			
-		loginFormBox.passwordTI.text = "admintest";
+		loginFormBox.passwordTI.text = "admin";
 		loginFormBox.login();
 	}	
 

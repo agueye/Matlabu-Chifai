@@ -1,6 +1,7 @@
 # This controller handles the login/logout function of the site.  
 class SessionsController < ApplicationController
-
+  skip_before_filter :login_required
+  
   # Be sure to include AuthenticationSystem in Application Controller instead
   #include AuthenticatedSystem
 
@@ -58,6 +59,10 @@ class SessionsController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
-    redirect_back_or_default('/')
+    #redirect_back_or_default('/')
+    respond_to do |format|
+        format.html { render :text => 'logout' }
+        format.xml { render :text => 'logout' }
+    end
   end
 end
