@@ -12,9 +12,34 @@
 			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.components.admin.LogBox;
 			import mx.core.Application;
+			import mx.collections.ArrayCollection;
 					
 			[Bindable]
 			public var languageArray:Object;
+			[Bindable]        
+			public var allergyIdMap:Object;
+			[Bindable]        
+			public var vaccinationIdMap:Object;
+			[Bindable]        
+			public var conditionIdMap:Object;
+			[Bindable]        
+			public var medicationIdMap:Object;	
+			[Bindable]        
+			public var visitTypeIdMap:Object;
+			[Bindable]        
+			public var doctorIdMap:Object;
+			[Bindable]
+			public var allergies:ArrayCollection;
+			[Bindable]
+			public var vaccinations:ArrayCollection;
+			[Bindable]
+			public var medications:ArrayCollection;
+			[Bindable]
+			public var conditions:ArrayCollection;
+			[Bindable]
+			public var visitTypes:ArrayCollection;
+			[Bindable]
+			public var doctors:ArrayCollection;
 			
 			private function init():void{
 				
@@ -38,6 +63,19 @@
 			</mx:Panel>
 		</mx:VBox>
 		
+		<mx:VBox label="{languageArray['Conditions']}">
+			<mx:Panel title="{languageArray['Conditions']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+			
+				<mx:HBox width="100%" height="100%">
+					<mlc:ConditionsViewBox id="conditionsBox"
+						languageArray="{languageArray}"
+						conditionIdMap="{conditionIdMap}"
+						conditions="{conditions}" />
+				</mx:HBox>
+			</mx:Panel>
+		</mx:VBox>
+		
 		<mx:VBox label="{languageArray['Log']}">
 			<mx:Panel title="{languageArray['Log']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
@@ -47,6 +85,7 @@
 				</mx:HBox>
 			</mx:Panel>
 		</mx:VBox>
+		
 	</mx:ViewStack>
 	
 </mx:VBox>

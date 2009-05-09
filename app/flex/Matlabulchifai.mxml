@@ -668,7 +668,20 @@
 				vaccinations="{vaccinations}"
 				conditions="{conditions}"
 				medications="{medications}"/>
-			<mlc:AdminBox id="adminBox" languageArray="{languageArray}"/>
+			<mlc:AdminBox id="adminBox" 
+				languageArray="{languageArray}"
+				allergyIdMap="{allergyIdMap}"
+				vaccinationIdMap="{vaccinationIdMap}"
+				conditionIdMap="{conditionIdMap}"
+				medicationIdMap="{medicationIdMap}"
+				visitTypeIdMap="{visitTypeIdMap}"
+				doctorIdMap="{doctorIdMap}"
+				allergies="{allergies}"
+				vaccinations="{vaccinations}"
+				medications="{medications}"
+				conditions="{conditions}"
+				visitTypes="{visitTypes}"
+				doctors="{doctors}" />
 			<mlc:PatientInfo id="patientInfoBox" 
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}"
