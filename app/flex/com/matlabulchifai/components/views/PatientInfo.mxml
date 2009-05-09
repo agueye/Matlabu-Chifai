@@ -22,6 +22,7 @@
 		
 	<mx:Script>
 	<![CDATA[
+		import mx.controls.Alert;
 		import mx.core.Application;
 		import mx.collections.ArrayCollection;
 		import flash.events.Event;
@@ -605,6 +606,7 @@
 		    		pulses.addItem(newPulse);
 		            pulsesCursor.moveNext();
 		        }
+	   		
 		}
 		[Bindable]
 		public var temps:ArrayCollection;
@@ -633,25 +635,6 @@
 		            var visit:XML = XML(bpsCursor.current);   
 		        	var newbps:Object = new Object();
 		        	var temp:String = visit.blood_pressure;
-		        	var i = 0;
-		        	
-		        	//First #
-		        	/*
-		        	for (;i<temp.length;i++){     
-		        		if ( temp.charCodeAt(i) < 48 && temp.charCodeAt(i) > 57 ){
-		        			newbps.value = temp.substring(0,i);
-		        			break;	
-		        		}
-		        	}
-		        	/*
-		        	//Second #
-		        	for (;i<temp.length;i++){		        
-		        		if (temp.charCodeAt(i) >=47 && temp.charCodeAt(i) <= 57){
-		        			newbps.value2 = temp.substring(0,i);
-		        			break;	
-		        		}
-		        	}
-		        	*/
 		        	newbps.value = visit.blood_pressure;
 		        	//mx.controls.Alert.show(newbps.value+"_"+newbps.value2);
 		    		newbps.visit_date = visit.visit_date;
@@ -660,7 +643,7 @@
 		        }
 		   
 		}
-		
+
 	]]>
 	</mx:Script>
 	
@@ -855,26 +838,26 @@
 	   			</mx:Panel>
 	   		</mx:VBox>
 
-	   		<mx:VBox label="Physical Data" show="listPhysicals()">
+	   		<mx:VBox label="Physical Data" show="listPhysicals();graphPan.title='Height';graphChart.dataProvider=heights;catAxis.dataProvider=heights;lineSeries1.displayName='Height';lineSeries2.visible=false;">
 	   			<mx:Panel title="Data Graphs" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 	   				<mx:HBox width="100%">
 	   					<mx:VBox width="20%">
-	   						<mx:Button id="heightBut" width="100%" label="Height" click="graphChart.dataProvider=heights;lineSeries1.displayName='Height';lineSeries2.visible=false;"/>
-	   						<mx:Button id="weightBut" width="100%" label="Weight" click="graphChart.dataProvider=weights;lineSeries1.displayName='Weight';lineSeries2.visible=false;"/>
-	   						<mx:Button id="bpBut" width="100%" label="Blood Pressure" click="graphChart.dataProvider=bps;lineSeries1.displayName='Blood Pressure';lineSeries2.visible=true;"/>
-	   						<mx:Button id="tempBut" width="100%" label="Temperature" click="graphChart.dataProvider=temps;lineSeries1.displayName='Temperature';lineSeries2.visible=false;"/>
-	   						<mx:Button id="pulseBut" width="100%" label="Pulse" click="graphChart.dataProvider=pulses;lineSeries1.displayName='Pulse';lineSeries2.visible=false;"/>
+	   						<mx:Button id="heightBut" width="100%" label="Height" click="graphPan.title='Height';graphChart.dataProvider=heights;catAxis.dataProvider=heights;lineSeries1.displayName='Height';lineSeries2.visible=false;"/>
+	   						<mx:Button id="weightBut" width="100%" label="Weight" click="graphPan.title='Weight';graphChart.dataProvider=weights;catAxis.dataProvider=weights;lineSeries1.displayName='Weight';lineSeries2.visible=false;"/>
+	   						<mx:Button id="bpBut" width="100%" label="Blood Pressure" click="graphPan.title='Blood Pressure';graphChart.dataProvider=bps;catAxis.dataProvider=bps;lineSeries1.displayName='Blood Pressure';lineSeries2.visible=true;"/>
+	   						<mx:Button id="tempBut" width="100%" label="Temperature" click="graphPan.title='Temperature';graphChart.dataProvider=temps;catAxis.dataProvider=temps;lineSeries1.displayName='Temperature';lineSeries2.visible=false;"/>
+	   						<mx:Button id="pulseBut" width="100%" label="Pulse" click="graphPan.title='Pulse';graphChart.dataProvider=pulses;catAxis.dataProvider=pulses;lineSeries1.displayName='Pulse';lineSeries2.visible=false;"/>
 	   					</mx:VBox>
 			   			<mx:Panel width="80%" id="graphPan" label="Height" title="Height">
-						     <mx:LineChart width="100%" id="graphChart" 
+						     <mx:LineChart width="100%" id="graphChart"
 						        dataProvider="{heights}" 
 						        showDataTips="true">
 						        <mx:horizontalAxisRenderer>
 							        <mx:AxisRenderer showLine="false" showLabels="false" tickPlacement="none" />
 							     </mx:horizontalAxisRenderer>
 						        <mx:horizontalAxis>
-						           <mx:CategoryAxis 
+						           <mx:CategoryAxis id="catAxis"
 						                dataProvider="{heights}" 
 						                categoryField="visit_date" />
 						        </mx:horizontalAxis>
