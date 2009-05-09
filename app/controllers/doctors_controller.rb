@@ -3,7 +3,7 @@ class DoctorsController < ApplicationController
   # GET /doctors.xml
   def index
     @doctors = Doctor.find(:all)
-    @doctors.sort! {|x, y| x.last_name <=> y.last_name}
+    @doctors.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
       format.html # index.html.erb
