@@ -138,15 +138,18 @@ ActiveRecord::Schema.define(:version => 20090506111333) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "login",                                   :null => false
+    t.string   "login",                                    :null => false
     t.string   "crypted_password",          :limit => 40
     t.string   "salt",                      :limit => 40
-    t.string   "first_name",                :limit => 80, :null => false
-    t.string   "last_name",                 :limit => 80, :null => false
+    t.string   "first_name",                :limit => 80,  :null => false
+    t.string   "last_name",                 :limit => 80,  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
+    t.string   "encryptedKey",              :limit => nil
+    t.string   "cookieSalt",                :limit => nil
+    t.string   "encryptedPassword",         :limit => nil
     t.integer  "is_admin"
   end
 
