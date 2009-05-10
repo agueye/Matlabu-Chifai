@@ -28,6 +28,7 @@ public function languageInit(str:String):void{
 			"Allergy Name": "Allergy Name",
 			"Arrival Date": "Arrival Date",
 			"Cancel": "Cancel",
+			"Cannot delete admin account.":"Cannot delete admin account.",
 			"City": "City",
 			"Conditions":"Conditions",
 			"Condition List":"Condition List",
@@ -307,7 +308,8 @@ public function languageInit(str:String):void{
 		  'Delete User':'Delete User(French)',
 		  'Doctors':'Doctors(French)',
 		  'Doctors List':'Doctors List(French)',
-		  'Delete Doctor':'Delete Doctor(French)'
+		  'Delete Doctor':'Delete Doctor(French)',
+		  "Cannot delete admin account.":"Cannot delete admin account."
 		 
 		  
 		  

@@ -73,7 +73,7 @@ class PatientVisitsController < ApplicationController
       if @patient_visit.save
         flash[:notice] = "The patient's visit was successfully created."
         
-        APP_LOGGER_LOG.info "VISIT CREATED - for PATIENT ID " + @patient_visit[:patient_id].to_s + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "VISIT CREATED - for PATIENT ID " + @patient_visit.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(patient_patient_visit_path(@patient, @patient_visit)) }
         format.xml  { render :xml => @patient_visit, :status => :created, :location => @patient_visit }
@@ -92,8 +92,8 @@ class PatientVisitsController < ApplicationController
     respond_to do |format|
       if @patient_visit.update_attributes(params[:patient_visit])
         flash[:notice] = "The patient's visit was successfully updated."
-        
-        APP_LOGGER_LOG.info "VISIT UPDATED - for PATIENT ID " + @patient_visit[:patient_id].to_s + " by USER " + self.current_user[:login]
+        get_patient_by_visit
+        APP_LOGGER_LOG.info "VISIT UPDATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(patient_patient_visit_path(@patient, @patient_visit)) }
         format.xml  { render :xml => @patient_visit }
@@ -109,8 +109,8 @@ class PatientVisitsController < ApplicationController
   def destroy
     @patient_visit = PatientVisit.find(params[:id])
     @patient_visit.destroy
-    
-    APP_LOGGER_LOG.info "VISIT DELETED - for PATIENT ID " + @patient_visit[:patient_id].to_s + " by USER " + self.current_user[:login]
+    get_patient_by_visit
+    APP_LOGGER_LOG.info "VISIT DELETED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       format.html { redirect_to(patient_patient_visits_path(@patient)) }
@@ -124,5 +124,14 @@ class PatientVisitsController < ApplicationController
   	if params[:patient_id]
     	@patient = Patient.find(params[:patient_id])
     end
+  end
+
+  def get_patient_by_visit
+    #@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @patient = Patient.find(@patient_visit[:patient_id])
+    #@patient.enter_password @masterKey
   end
 end

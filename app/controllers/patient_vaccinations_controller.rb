@@ -67,7 +67,7 @@ class PatientVaccinationsController < ApplicationController
 	@patient_vaccination.vaccination = vacc
     @patient_vaccination.patient = Patient.find(patient)
     
-    APP_LOGGER_LOG.info "VACCINATION CREATED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
+    APP_LOGGER_LOG.info "VACCINATION CREATED - for PATIENT ID " + @patient_vaccination.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       if @patient_vaccination.save
@@ -89,8 +89,8 @@ class PatientVaccinationsController < ApplicationController
     respond_to do |format|
       if @patient_vaccination.update_attributes(params[:patient_vaccination])
         flash[:notice] = "The patient's vaccination was successfully updated."
-        
-        APP_LOGGER_LOG.info "VACCINATION UPDATED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
+        get_patient_by_vaccination
+        APP_LOGGER_LOG.info "VACCINATION UPDATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(patient_patient_vaccinations_path(@patient)) }
         format.xml  { render :xml => @patient_vaccination }
@@ -106,8 +106,8 @@ class PatientVaccinationsController < ApplicationController
   def destroy
     @patient_vaccination = PatientVaccination.find(params[:id])
     @patient_vaccination.destroy
-
-    APP_LOGGER_LOG.info "VACCINATION DELETED - for PATIENT ID " + @patient_vaccination[:patient_id].to_s + " by USER " + self.current_user[:login]
+    get_patient_by_vaccination
+    APP_LOGGER_LOG.info "VACCINATION DELETED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       format.html { redirect_to(patient_patient_vaccinations_path(@patient)) }
@@ -121,5 +121,14 @@ class PatientVaccinationsController < ApplicationController
     if params[:patient_id]
       @patient = Patient.find(params[:patient_id])
     end
+  end
+
+  def get_patient_by_vaccination
+    #@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @patient = Patient.find(@patient_vaccination[:patient_id])
+    #@patient.enter_password @masterKey
   end
 end

@@ -51,7 +51,7 @@ class PatientNotesController < ApplicationController
       if @patient_note.save
         flash[:notice] = 'PatientNote was successfully created.'
         
-        APP_LOGGER_LOG.info "NOTE CREATED - for PATIENT ID " + @patient_note[:patient_id].to_s + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "NOTE CREATED - for PATIENT ID " + @patient_note.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
             
         format.html { redirect_to(@patient_note) }
         format.xml  { render :xml => @patient_note, :status => :created, :location => @patient_note }
@@ -70,8 +70,8 @@ class PatientNotesController < ApplicationController
     respond_to do |format|
       if @patient_note.update_attributes(params[:patient_note])
         flash[:notice] = 'PatientNote was successfully updated.'
-        
-        APP_LOGGER_LOG.info "NOTE UPDATED - for PATIENT ID " + @patient_note[:patient_id].to_s + " by USER " + self.current_user[:login]
+        get_patient_by_notes
+        APP_LOGGER_LOG.info "NOTE UPDATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
         format.html { redirect_to(@patient_note) }
         format.xml  { render :xml => @patient_note }
@@ -87,8 +87,8 @@ class PatientNotesController < ApplicationController
   def destroy
     @patient_note = PatientNote.find(params[:id])
     @patient_note.destroy
-
-    APP_LOGGER_LOG.info "NOTE DELETED - for PATIENT ID " + @patient_note[:patient_id].to_s + " by USER " + self.current_user[:login]
+    get_patient_by_notes
+    APP_LOGGER_LOG.info "NOTE DELETED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       format.html { redirect_to(patient_notes_url) }
@@ -102,4 +102,13 @@ private
 			@patient = Patient.find(params[:patient_id])
 		end
 	end  
+
+  def get_patient_by_notes
+    #@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @patient = Patient.find(@patient_note[:patient_id])
+    #@patient.enter_password @masterKey
+  end
 end

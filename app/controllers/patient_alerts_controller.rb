@@ -84,7 +84,7 @@ class PatientAlertsController < ApplicationController
     respond_to do |format|
       if @patient_alert.save
         flash[:notice] = 'PatientAlert was successfully created.'
-        APP_LOGGER_LOG.info "ALERT CREATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "ALERT CREATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@patient_alert) }
         format.xml  { render :xml => @patient_alert, :status => :created, :location => @patient_alert }
@@ -103,7 +103,7 @@ class PatientAlertsController < ApplicationController
     respond_to do |format|
       if @patient_alert.update_attributes(params[:patient_alert])
         get_patient_by_alert
-        APP_LOGGER_LOG.info "ALERT UPDATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "ALERT UPDATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
         
         flash[:notice] = 'PatientAlert was successfully updated.'
         format.html { redirect_to(@patient_alert) }
@@ -121,7 +121,7 @@ class PatientAlertsController < ApplicationController
     @patient_alert = PatientAlert.find(params[:id])
     @patient_alert.destroy
     get_patient_by_alert
-    APP_LOGGER_LOG.info "ALERT DELETED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
+    APP_LOGGER_LOG.info "ALERT DELETED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       format.html { redirect_to(patient_alerts_url) }

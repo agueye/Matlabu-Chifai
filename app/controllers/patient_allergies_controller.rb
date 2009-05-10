@@ -61,11 +61,12 @@ class PatientAllergiesController < ApplicationController
 	allergy = Allergy.find_by_name(name)
     @patient_allergy.allergy = allergy
 	@patient_allergy.patient = Patient.find(patient)
+  
     respond_to do |format|
       if @patient_allergy.save
         flash[:notice] = "The patient's allergy was successfully created."
         
-        APP_LOGGER_LOG.info "ALLERGY CREATED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "ALLERGY CREATED - for PATIENT ID " + @patient_allergy.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
             
         format.html { redirect_to(patient_patient_allergies_path(@patient)) }
         format.xml  { render :xml => @patient_allergy, :status => :created, :location => @patient_allergy }
@@ -84,8 +85,8 @@ class PatientAllergiesController < ApplicationController
     respond_to do |format|
       if @patient_allergy.update_attributes(params[:patient_allergy])
         flash[:notice] = "The patient's allergy was successfully updated."
-        
-        APP_LOGGER_LOG.info "ALLERGY UPDATED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
+        get_patient_by_allergy
+        APP_LOGGER_LOG.info "ALLERGY UPDATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
             
         format.html { redirect_to(patient_patient_allergies_path(@patient)) }
         format.xml  { render :xml => @patient_allergy }
@@ -101,8 +102,8 @@ class PatientAllergiesController < ApplicationController
   def destroy
     @patient_allergy = PatientAllergy.find(params[:id])
     @patient_allergy.destroy
-    
-    APP_LOGGER_LOG.info "ALLERGY DELETED - for PATIENT ID " + @patient_allergy[:patient_id].to_s + " by USER " + self.current_user[:login]
+    get_patient_by_allergy
+    APP_LOGGER_LOG.info "ALLERGY DELETED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
         
     respond_to do |format|
       format.html { redirect_to(patient_patient_allergies_path(@patient)) }
@@ -116,4 +117,13 @@ private
 			@patient = Patient.find(params[:patient_id])
 		end
 	end
+
+  def get_patient_by_allergy
+    #@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @patient = Patient.find(@patient_allergy[:patient_id])
+    #@patient.enter_password @masterKey
+  end
 end

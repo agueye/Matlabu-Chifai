@@ -75,7 +75,7 @@ class PatientMedicationsController < ApplicationController
       if @patient_medication.save
         flash[:notice] = "The patient's medication was successfully created."
         
-        APP_LOGGER_LOG.info "MEDICATION CREATED - for PATIENT ID " + @patient_medication[:patient_id].to_s + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "MEDICATION CREATED - for PATIENT ID " + @patient_medication.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
             
         format.html { }
         format.xml  { render :xml => @patient_medication, :status => :created, :location => @patient_medication }
@@ -94,8 +94,8 @@ class PatientMedicationsController < ApplicationController
     respond_to do |format|
       if @patient_medication.update_attributes(params[:patient_medication])
         flash[:notice] = "The patient's medication was successfully updated."
-        
-        APP_LOGGER_LOG.info "MEDICATION UPDATED - for PATIENT ID " + @patient_medication[:patient_id].to_s + " by USER " + self.current_user[:login]
+        get_patient_by_medication
+        APP_LOGGER_LOG.info "MEDICATION UPDATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
             
         format.html { }
         format.xml  { render :xml => @patient_medication }
@@ -111,8 +111,8 @@ class PatientMedicationsController < ApplicationController
   def destroy
     @patient_medication = PatientMedication.find(params[:id])
     @patient_medication.destroy
-
-    APP_LOGGER_LOG.info "MEDICATION DELETED - for PATIENT ID " + @patient_medication[:patient_id].to_s + " by USER " + self.current_user[:login]
+    get_patient_by_medication
+    APP_LOGGER_LOG.info "MEDICATION DELETED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       format.html { }
@@ -127,4 +127,13 @@ class PatientMedicationsController < ApplicationController
 			@patient = Patient.find(params[:patient_id])
 		end
 	end
+
+  def get_patient_by_medication
+    #@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @patient = Patient.find(@patient_medication[:patient_id])
+    #@patient.enter_password @masterKey
+  end
 end
