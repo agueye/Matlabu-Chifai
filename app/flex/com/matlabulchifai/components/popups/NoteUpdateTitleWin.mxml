@@ -16,6 +16,8 @@
 			import mx.collections.ArrayCollection;
 			import com.matlabulchifai.events.patient.NoteEvent;
 			import mx.core.Application;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
 			
 			[Bindable]
 			public var patient:XML;
@@ -25,11 +27,40 @@
 			[Bindable]
 			public var languageArray:Object;
 			
+			[Bindable]
+    		public var formIsValid:Boolean = true;
+    		
+			private var focusedFormControl:DisplayObject;
 			
 			private function init():void {
 				NotesTI.text = note.body;
 				noteDateDF.selectedDate = DateUtil.parseW3CDTF(note.note_date);
+				resetFocus();
 			}
+			
+			private function validateForm(event:Event):void 
+    		{                    
+        		focusedFormControl = event.target as DisplayObject;                
+        	  	formIsValid = true;            
+    	      	validate(noteValidator);    	      	  
+    	      	validate(noteDateValidator);
+	     	}
+
+	    	private function validate(validator:Validator):Boolean
+    		{                
+        	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
+         		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         		formIsValid = formIsValid && currentControlIsValid;                 
+        		return currentControlIsValid;
+    		}
+    		
+    		private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(NotesTI);
+	    	}					
+
 			
 			private function processNoteUpdate():void{
 				var	params:Object = new	Object();
@@ -63,24 +94,30 @@
         property="text"
         minLength="2"
     />
+    
+    <mx:DateValidator 
+        id="noteDateValidator"
+        source="{noteDateDF}" 
+        property="text"        
+    />
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
-		<mx:Form>
+		<mx:Form defaultButton="{OKBtn}">
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />		
 			
-			<mx:FormItem label="Notes">
-				<mx:TextArea id="NotesTI" width="300" height="100" />
+			<mx:FormItem label="Notes" required="true">
+				<mx:TextArea id="NotesTI" width="300" height="100" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date">
-				<mx:DateField id="noteDateDF" yearNavigationEnabled="true" minYear="1980"/>
+			<mx:FormItem label="Date" required="true">
+				<mx:DateField id="noteDateDF" yearNavigationEnabled="true" minYear="1980" change="validateForm(event);"/>
 			</mx:FormItem>
 		</mx:Form>
 	</mx:VBox>
 	
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
-		<mx:Button label="OK" id="OKBtn" click="processNoteUpdate()" />
+		<mx:Button label="OK" id="OKBtn" click="processNoteUpdate()" enabled="{formIsValid}"/>
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	

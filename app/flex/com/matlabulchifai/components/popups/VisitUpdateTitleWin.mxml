@@ -24,6 +24,8 @@
 			import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 			import com.matlabulchifai.events.condition.ConditionEvent;
 			import com.matlabulchifai.events.doctor.DoctorEvent;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
 			
 			[Bindable]
 			public var patient:XML;
@@ -60,6 +62,10 @@
 			private var visitTypeSearchStr:String;
 			[Bindable]
 			private var conditionSearchStr:String;
+			[Bindable]
+    		public var formIsValid:Boolean = false;
+    		
+			private var focusedFormControl:DisplayObject;
 			
 			private function init():void {
 				searchVisitTypeTI.selectedItemId = visit.visit_type_id;
@@ -73,7 +79,33 @@
 				PulseTI.text = visit.pulse;
 				TemperatureTI.text = visit.temperature;
 				visitNotesTI.text = visit.notes;
+				resetFocus();
 			}
+			private function validateForm(event:Event):void 
+    		{                    
+        		focusedFormControl = event.target as DisplayObject;                
+        	  	formIsValid = true;            
+    	      	validate(visitTypeValidator);    	      	  
+    	      	validate(conditionNameValidator);
+    	      	validate(doctorNameValidator);
+    	      	validate(dateGivenValidator);
+	     	}
+
+	    	private function validate(validator:Validator):Boolean
+    		{                
+        	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
+         		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         		formIsValid = formIsValid && currentControlIsValid;                 
+        		return currentControlIsValid;
+    		}
+    		
+    		private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(searchVisitTypeTI);
+	    	}			
+			
 			
 			private function processVisitUpdate():void {
 				var visitTypeSelected:Object = searchVisitTypeTI.selectedItem;
@@ -252,32 +284,63 @@
 			</doctor>
 		</mx:request>
 	</mx:HTTPService>
+	<mx:StringValidator 
+        id="visitTypeValidator"
+        source="{searchVisitTypeTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="conditionNameValidator"
+        source="{searchConditionTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="doctorNameValidator"
+        source="{searchDoctorTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:DateValidator 
+        id="dateGivenValidator"
+        source="{visitDateDF}" 
+        property="text"        
+    />
+	
 	
 	
 	<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
-		<mx:Form>
+		<mx:Form defaultButton="{OKBtn}">
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Visit Type">
+			<mx:FormItem label="Visit Type" required="true">
 				<hc:AdvancedAutoComplete id="searchVisitTypeTI" dataProvider="{visitTypes}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
-					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
+					change="validateForm(event);"/>
 			</mx:FormItem>	
-			<mx:FormItem label="Condition Name">
+			<mx:FormItem label="Condition Name" required="true">
 				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
-					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
+					change="validateForm(event);"/>
 			</mx:FormItem>
-			<mx:FormItem label="Doctor Name">
+			<mx:FormItem label="Doctor Name" required="true">
 				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
-					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
+					change="validateForm(event);"/>
 			</mx:FormItem>
-			<mx:FormItem label="Visit Date">
-				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"/>
+			<mx:FormItem label="Visit Date" required="true">
+				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"
+				change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:Text text="Physicals" fontWeight="bold" />
@@ -307,7 +370,7 @@
 	</mx:HBox>
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="10%">
-		<mx:Button label="OK" id="OKBtn" click="processVisitUpdate()" />
+		<mx:Button label="OK" id="OKBtn" click="processVisitUpdate()" enabled="{formIsValid}"/>
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	

@@ -15,6 +15,8 @@
 			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.events.patient.PatientEvent;
 			import mx.core.Application;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
 			
 			[Bindable]
 			public var patient:Object;
@@ -28,6 +30,28 @@
         	public var genders:ArrayCollection = new ArrayCollection(
             	[ {label:"Male", data:"Male"}, 
 			  	{label:"Female", data:"Female"}]);
+			  	
+			[Bindable]
+    		public var formIsValid:Boolean = true;
+			private var focusedFormControl:DisplayObject;
+    
+ 			private function validateForm(event:Event):void 
+    		{                    
+        		focusedFormControl = event.target as DisplayObject;                
+        	  	formIsValid = true;            
+    	      	validate(lastnameValidator);
+    	      	validate(medicalrecordValidator);  
+	     	}
+
+	    	private function validate(validator:Validator):Boolean
+    		{                
+        	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
+         		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         		formIsValid = formIsValid && currentControlIsValid;                 
+        		return currentControlIsValid;
+    		}
 			
 			
 			private function init():void {
@@ -51,7 +75,13 @@
 				emergencycontactrelationshipTI.text = patient.emergency_contact_relationship;
 				emergencycontactnumberTI.text = patient.emergency_contact_number;
 				notesTI.text = patient.notes;
+				resetFocus();    
 			}
+			
+			private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(medicalrecordTI);
+	    	}
 			
 			private function clearForm():void{
 				medicalrecordTI.text = "";
@@ -135,18 +165,13 @@
         property="text"
         minLength="2"
     />
-    <mx:StringValidator 
-        id="addressValidator"
-        source="{addressTI}" 
-        property="text"
-        minLength="2"
-    />
+    
 	
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
-		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold">
+		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold" defaultButton="{OKBtn}">
 				<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
-					<mx:TextInput id="medicalrecordTI"/>
+					<mx:TextInput id="medicalrecordTI" change="validateForm(event);"/>
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['First Name']}">
@@ -158,12 +183,12 @@
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['Last Name']}">
-					<mx:TextInput id="lastnameTI"/>
+					<mx:TextInput id="lastnameTI" change="validateForm(event);"/>
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
 					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" 
-						minYear="1930" maxYear="{currDate.getFullYear()}"/>
+						minYear="1930" maxYear="{currDate.getFullYear()}" change="validateForm(event);"/>
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['Date of Birth']}">
@@ -172,7 +197,7 @@
 				</mx:FormItem>
 				
 				<mx:FormItem label="{languageArray['Gender']}">
-					<mx:ComboBox id="genderTI" dataProvider="{genders}"/>
+					<mx:ComboBox id="genderTI" dataProvider="{genders}" change="validateForm(event);"/>
 				</mx:FormItem>
 				
 				<mx:FormItem label="{languageArray['Address']}">
@@ -233,7 +258,7 @@
 	
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
-		<mx:Button label="OK" id="OKBtn" click="processPatientUpdate()" />
+		<mx:Button label="OK" id="OKBtn" click="processPatientUpdate()" enabled="{formIsValid}"/>
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	

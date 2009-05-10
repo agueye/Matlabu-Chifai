@@ -24,6 +24,8 @@
 			import com.matlabulchifai.events.medication.MedicationEvent;
 			import com.matlabulchifai.events.condition.ConditionEvent;
 			import com.matlabulchifai.events.doctor.DoctorEvent;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
 			
 			[Bindable]
 			public var patient:XML;
@@ -60,6 +62,12 @@
 			private var conditionId:String;
 			private var doctorId:String;
 			
+			[Bindable]
+    		public var formIsValid:Boolean = true;
+    		
+			private var focusedFormControl:DisplayObject;
+			
+			
 			private function init():void {
 				searchMedicationTI.selectedItemId = medication.medication_id;
 				searchConditionTI.selectedItemId = medication.condition_id;
@@ -68,7 +76,35 @@
 				FrequencyTI.text = medication.frequency;				
 				DosageTI.text = medication.dosage;
 				medicationNotesTI.text = medication.notes;
+				resetFocus();	
 			}
+			
+			private function validateForm(event:Event):void 
+    		{                    
+        		focusedFormControl = event.target as DisplayObject;                
+        	  	formIsValid = true;            
+    	      	validate(medicationNameValidator);    	      	  
+    	      	validate(conditionNameValidator);
+    	      	validate(doctorNameValidator);
+    	      	validate(dosageValidator);
+    	      	validate(frequencyValidator);
+    	      	validate(dateGivenValidator);
+	     	}
+
+	    	private function validate(validator:Validator):Boolean
+    		{                
+        	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
+         		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         		formIsValid = formIsValid && currentControlIsValid;                 
+        		return currentControlIsValid;
+    		}
+    		
+    		private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(searchMedicationTI);
+	    	}
 			
 			private function processMedicationUpdate():void {
 				var medicationSelected:Object = searchMedicationTI.selectedItem;
@@ -246,46 +282,84 @@
 	</mx:HTTPService>
 	
 	<mx:StringValidator 
-        id="medicationValidator"
-        source="{medicationNotesTI}" 
+        id="medicationNameValidator"
+        source="{searchMedicationTI}" 
         property="text"
         minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="conditionNameValidator"
+        source="{searchConditionTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="doctorNameValidator"
+        source="{searchDoctorTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="dosageValidator"
+        source="{DosageTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="frequencyValidator"
+        source="{FrequencyTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:DateValidator 
+        id="dateGivenValidator"
+        source="{medicationDateDF}" 
+        property="text"        
     />
 	
 	
 	<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
-		<mx:Form>
+		<mx:Form defaultButton="{OKBtn}">
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Medication Name">
+			<mx:FormItem label="Medication Name" required="true">
 				<hc:AdvancedAutoComplete id="searchMedicationTI" dataProvider="{medications}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
-					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
+					change="validateForm(event);"/>
 			</mx:FormItem>			
-			<mx:FormItem label="Condition Name">
+			<mx:FormItem label="Condition Name" required="true">
 				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
-					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
+					change="validateForm(event);"/>
 			</mx:FormItem>
-			<mx:FormItem label="Doctor Name">
+			<mx:FormItem label="Doctor Name" required="true">
 				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
-					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>	
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
+					change="validateForm(event);"/>	
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Dosage">
-				<mx:TextInput id="DosageTI"/>
+			<mx:FormItem label="Dosage" required="true">
+				<mx:TextInput id="DosageTI" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Frequency">
-				<mx:TextInput id="FrequencyTI"/>
+			<mx:FormItem label="Frequency" required="true">
+				<mx:TextInput id="FrequencyTI" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date Given">
-				<mx:DateField id="medicationDateDF" yearNavigationEnabled="true" minYear="1980"/>
+			<mx:FormItem label="Date Given" required="true">
+				<mx:DateField id="medicationDateDF" yearNavigationEnabled="true" minYear="1980"
+					change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Notes">
@@ -295,7 +369,7 @@
 	</mx:HBox>
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="10%">
-		<mx:Button label="OK" id="OKBtn" click="processMedicationUpdate()" />
+		<mx:Button label="OK" id="OKBtn" click="processMedicationUpdate()" enabled="{formIsValid}"/>
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	

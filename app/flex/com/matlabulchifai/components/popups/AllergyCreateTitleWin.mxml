@@ -19,6 +19,8 @@
 			import com.matlabulchifai.events.allergy.AllergyEvent;
 			import mx.core.Application;
 			import mx.controls.Alert;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
 			
 			[Bindable]
 			public var patient:XML;
@@ -40,9 +42,38 @@
 			[Bindable]
 			private var searchStr:String;
 			
+			[Bindable]
+    		public var formIsValid:Boolean = false;
+    		
+			private var focusedFormControl:DisplayObject;
+			
 			private function init():void {
 				//initAllergyNames();
+				resetFocus();
 			}
+    
+ 			private function validateForm(event:Event):void 
+    		{                    
+        		focusedFormControl = event.target as DisplayObject;                
+        	  	formIsValid = true;            
+    	      	validate(nameValidator);    	      	  
+	     	}
+
+	    	private function validate(validator:Validator):Boolean
+    		{                
+        	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
+         		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         		formIsValid = formIsValid && currentControlIsValid;                 
+        		return currentControlIsValid;
+    		}
+    		
+    		private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(searchAllergyTI);
+	    	}		
+			
 			
 			private function processPatientAllergyCreate():void {
 				var allergySelected:Object = searchAllergyTI.selectedItem;
@@ -121,15 +152,23 @@
 		</mx:request>
 	</mx:HTTPService>
 	
+	<mx:StringValidator 
+        id="nameValidator"
+        source="{searchAllergyTI}" 
+        property="text"
+        minLength="2"
+    />
+	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
-		<mx:Form>
+		<mx:Form defaultButton="{OKBtn}">
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Allergy Name">
+			<mx:FormItem required="true" label="Allergy Name">
 				<hc:AdvancedAutoComplete id="searchAllergyTI" dataProvider="{allergies}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
-					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"/>	
+					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
+					change="validateForm(event);"/>	
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="Date">
@@ -153,7 +192,7 @@
 	
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
-		<mx:Button label="OK" id="OKBtn" click="processPatientAllergyCreate()" />
+		<mx:Button label="OK" id="OKBtn" click="processPatientAllergyCreate()" enabled="{formIsValid}" />
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	

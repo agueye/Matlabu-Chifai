@@ -12,13 +12,44 @@
 			import com.matlabulchifai.events.admin.AccountCreateEvent;
 			import mx.core.Application;
 			import mx.managers.PopUpManager;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
 			
 			[Bindable]
 			public var languageArray:Object;
+			[Bindable]
+    		public var formIsValid:Boolean = false;
+			private var focusedFormControl:DisplayObject;
 			
 			private function init():void{
-				
+				resetFocus();    
 			}
+			    
+ 			private function validateForm(event:Event):void 
+    		{                    
+        		focusedFormControl = event.target as DisplayObject;                
+        	  	formIsValid = true;            
+    	      	validate(lastnameValidator);
+    	      	validate(loginValidator);
+    	      	validate(passwordValidator);
+    	      	validate(confirmValidator);   
+	     	}
+
+	    	private function validate(validator:Validator):Boolean
+    		{                
+        	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
+         		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         		formIsValid = formIsValid && currentControlIsValid;                 
+        		return currentControlIsValid;
+    		}
+    		
+    		private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(loginTI);
+	    	}
+
 			
 			private function createAccount():void{
 				try{
@@ -60,32 +91,58 @@
 			</user>
 		</mx:request>
 	</mx:HTTPService>
+	
+	<mx:StringValidator 
+        id="lastnameValidator"
+        source="{lastNameTI}" 
+        property="text"
+        minLength="2"
+    />
+    <mx:StringValidator 
+        id="loginValidator"
+        source="{loginTI}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <mx:StringValidator 
+        id="passwordValidator"
+        source="{passwordTI}" 
+        property="text"
+        minLength="2"
+    />
+    <mx:StringValidator 
+        id="confirmValidator"
+        source="{confirmPasswordTI}" 
+        property="text"
+        minLength="2"
+    />
 
 	<mx:VBox>
 		<mx:Form id="accountCreateForm" textAlign="left" labelWidth="100" defaultButton="{createAccountBtn}">
 			<mx:FormItem required="true" label="{languageArray['Username']}">
-				<mx:TextInput id="loginTI"/>
+				<mx:TextInput id="loginTI" change="validateForm(event);"/>
 			</mx:FormItem>
 			
-			<mx:FormItem label="{languageArray['First Name']}" required="true">
+			<mx:FormItem label="{languageArray['First Name']}">
 				<mx:TextInput id="firstNameTI"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="{languageArray['Last Name']}" required="true">
-				<mx:TextInput id="lastNameTI"/>
+				<mx:TextInput id="lastNameTI" change="validateForm(event);"/>
 			</mx:FormItem>
 			
 			<mx:FormItem required="true" label="{languageArray['Password']}">
-				<mx:TextInput id="passwordTI" displayAsPassword="true"/>
+				<mx:TextInput id="passwordTI" displayAsPassword="true" change="validateForm(event);"/>
 			</mx:FormItem>
 			
 			<mx:FormItem required="true" label="{languageArray['Confirm Password']}">
-				<mx:TextInput id="confirmPasswordTI" displayAsPassword="true"/>
+				<mx:TextInput id="confirmPasswordTI" displayAsPassword="true" change="validateForm(event);"/>
 			</mx:FormItem>
 			
 			<mx:FormItem>
 				<mx:Button id="createAccountBtn" label="{languageArray['Create Account']}"
-					click="createAccount()"/>
+					click="createAccount()" enabled="{formIsValid}"/>
 			</mx:FormItem>
 		</mx:Form>
 	</mx:VBox>

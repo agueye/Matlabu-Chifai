@@ -5,6 +5,7 @@
 	height="500"
 	title="{languageArray['Add New Patient']}"
 	showCloseButton="true"
+	creationComplete="creationCompleteHandler();"
     close="PopUpManager.removePopUp(this)">
 	
 	<mx:Script>
@@ -14,6 +15,8 @@
 			import mx.rpc.events.ResultEvent;
 			import com.matlabulchifai.events.patient.PatientEvent;
 			import mx.core.Application;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
 			
 			[Bindable]
 			public var languageArray:Object;
@@ -26,6 +29,39 @@
             	[ {label:"Male", data:"Male"}, 
 			  	{label:"Female", data:"Female"}]);
 			
+			[Bindable]
+    		public var formIsValid:Boolean = false;
+    		
+			private var focusedFormControl:DisplayObject;
+    
+ 			private function validateForm(event:Event):void 
+    		{                    
+        		focusedFormControl = event.target as DisplayObject;                
+        	  	formIsValid = true;            
+    	      	validate(lastnameValidator);
+    	      	validate(medicalrecordValidator);  
+	     	}
+
+	    	private function validate(validator:Validator):Boolean
+    		{                
+        	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
+         		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+         		formIsValid = formIsValid && currentControlIsValid;                 
+        		return currentControlIsValid;
+    		}
+     
+    		private function creationCompleteHandler():void
+    		{
+    		    resetFocus();              
+		    } 
+
+			private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(medicalrecordTI);
+	    	}
+
 			
 			private function clearForm():void{
 				medicalrecordTI.text = "";
@@ -54,7 +90,7 @@
 			
 			private function processPatientCreate():void{
 				svcPatientCreate.send();
-				this.enabled = false;
+				//this.enabled = false;
 			}
 			
 			private function handleNewPatientResult(event:ResultEvent):void {
@@ -76,12 +112,7 @@
         property="text"
         minLength="2"
     />
-    <mx:StringValidator 
-        id="addressValidator"
-        source="{addressTI}" 
-        property="text"
-        minLength="2"
-    />
+    
 	<mx:HTTPService
 		id="svcPatientCreate"
 		url="/patients.xml?authenticity_token={Application.application.parameters.authenticityToken}"
@@ -117,12 +148,12 @@
 	
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
-		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold">
+		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold" defaultButton="{OKBtn}">
 				<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
-					<mx:TextInput id="medicalrecordTI"/>
+					<mx:TextInput id="medicalrecordTI" change="validateForm(event);"/>
 				</mx:FormItem>
 				
-				<mx:FormItem required="true" label="{languageArray['First Name']}">
+				<mx:FormItem label="{languageArray['First Name']}">
 					<mx:TextInput id="firstnameTI"/>
 				</mx:FormItem>
 				
@@ -131,22 +162,23 @@
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['Last Name']}">
-					<mx:TextInput id="lastnameTI"/>
+					<mx:TextInput id="lastnameTI" change="validateForm(event);"/>
 				</mx:FormItem>
 				
 				<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
 					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" 
 						minYear="1930" maxYear="{currDate.getFullYear()}"
-						creationComplete="arrivaldateTI.selectedDate = new Date();"/>
+						creationComplete="arrivaldateTI.selectedDate = new Date();" 
+						change="validateForm(event);"/>
 				</mx:FormItem>
 				
-				<mx:FormItem required="true" label="{languageArray['Date of Birth']}">
+				<mx:FormItem label="{languageArray['Date of Birth']}">
 					<mx:DateField id="birthdateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" 
 						displayedMonth="0" displayedYear="1990" showToday="false" />
 				</mx:FormItem>
 				
-				<mx:FormItem label="{languageArray['Gender']}">
-					<mx:ComboBox id="genderTI" dataProvider="{genders}"/>
+				<mx:FormItem required="true" label="{languageArray['Gender']}">
+					<mx:ComboBox id="genderTI" dataProvider="{genders}" change="validateForm(event);"/>
 				</mx:FormItem>
 				
 				<mx:FormItem label="{languageArray['Address']}">
@@ -207,7 +239,7 @@
 	
 	
 	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%" height="15%">
-		<mx:Button label="OK" id="OKBtn" click="processPatientCreate()" />
+		<mx:Button label="OK" id="OKBtn" click="processPatientCreate()" enabled="{formIsValid}" />
 		<mx:Button label="{languageArray['Cancel']}" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 	</mx:HBox>
 	
