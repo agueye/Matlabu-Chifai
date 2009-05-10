@@ -1,12 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :patient_photos
-
-  map.resources :patients
-  map.resources :users
-  map.resource :session
-  
   map.flex '/matlabulchifai', :controller => "flex", :action => "index"
-  
   
   map.patient_search '/patients/search.:format', :controller => "patients", :action => "find"  
   map.allergy_search '/patient_allergies/search.:format', :controller => "patient_allergies", :action => "find"
@@ -16,7 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   
   
   map.logout '/logout', :controller => "sessions", :action => "destroy"
-  map.connect '/patients/:patient_id/patient_physicals/:action.:format', 
+  
+  map.physical '/patients/:patient_id/patient_physicals/:action.:format', 
               :controller => 'patient_physicals', :action => :action
   
   map.resources :patients do |patients|
@@ -28,6 +22,15 @@ ActionController::Routing::Routes.draw do |map|
     patients.resources :patient_allergies
     patients.resources :patient_physicals
   end
+
+  
+  map.resources :users
+  
+  map.resource :session
+  
+  map.resources :patients
+  
+  map.resources :patient_photos
 
   map.resources :patient_alerts
   

@@ -32,7 +32,9 @@
 			
 			private var _item:Object;
 			private var _isMouseOver:Boolean;
+			
 			private var _allowMultipleSelection:Boolean;
+			private var _allowMultipleSelectionChanged:Boolean;
 			
 			[Bindable]			
 			private var _showRemoveIcon:Boolean = true;
@@ -41,10 +43,6 @@
 			
 			private function init():void
 			{
-				//addEventListener( MouseEvent.MOUSE_OVER, handleMouseOver );
-				//addEventListener( MouseEvent.MOUSE_OUT, handleMouseOut );
-				//addEventListener( MouseEvent.MOUSE_DOWN, handleMouseDown );
-				
 				button.addEventListener( FocusEvent.FOCUS_OUT, handleButtonFocusOut );
 			}
 			
@@ -56,6 +54,12 @@
 				{
 					_textChanged = false;					
 					button.label = _text;
+				}
+				
+				if (_allowMultipleSelectionChanged)
+				{
+					_allowMultipleSelectionChanged = false;
+					button.allowMultipleSelection = _allowMultipleSelection;
 				}
 			}
 			
@@ -96,7 +100,7 @@
 				}
 				else
 				{
-					button.selected = false;
+					selected = false;
 				}
 			}
 			
@@ -155,9 +159,6 @@
 			
 			public function set text( value:String ):void
 			{
-				// there are problems using ">"s and "<"s
-				//value = value.replace( "<", "&lt;" ).replace( ">", "&gt;" );				
-				
 				if (_text != value)
 				{
 					_text = value;
@@ -185,7 +186,13 @@
 
 			public function set allowMultipleSelection( value:Boolean ):void
 			{
-				_allowMultipleSelection = value;
+				if (_allowMultipleSelection != value)
+				{
+					_allowMultipleSelection = value;
+					_allowMultipleSelectionChanged = true;
+					
+					invalidateProperties();
+				}
 			}
 						
 		]]>

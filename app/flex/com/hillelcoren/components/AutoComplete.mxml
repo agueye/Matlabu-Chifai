@@ -14,7 +14,7 @@
 		[IconFile("icon.png")]
 		
 		/**
-		 * Dispatched when an item is selected or de-selelcted
+		 * Dispatched when the selected items are changed by the user
 		 */
 		[Event(name="change")]
 		/**
@@ -22,7 +22,7 @@
 		 */
 		[Event(name="searchChange")]
 		/**
-		 * Dispatched when focusing out of the comment
+		 * Dispatched when the selected items are changed either by the user or programmitcally
 		 */
 		[Event(name="valueCommit")]
 		
@@ -177,6 +177,11 @@
 					dropDownLabelFunction = defaultDropDownLabelFunction;
 				}
 				
+				if (!width && !percentWidth)
+				{
+					width = DEFAULT_MEASURED_WIDTH;
+				}
+				
 				addEventListener( MoveEvent.MOVE, handleMove );
 				addEventListener( KeyboardEvent.KEY_DOWN, handleKeyDown );
 				addEventListener( FocusEvent.FOCUS_OUT, handleFocusOut );
@@ -187,11 +192,13 @@
 				positionDropDown();
 			}
 			
+			private function handleFlowBoxResize():void
+			{
+				positionDropDown();
+			}			
+			
 			private function handleFocusOut( event:FocusEvent ):void
 			{
-				var commitEvent:Event = new Event( FlexEvent.VALUE_COMMIT );
-				dispatchEvent( commitEvent );
-				
 				if (event.relatedObject && contains( event.relatedObject))
 				{
 					return;
@@ -353,7 +360,7 @@
 			{
 				var item:Object;
 				
-				flowBox.buttonTextInput.buttonVisible = false;
+				flowBox.buttonVisible = false;
 				
 				if (event.kind == CollectionEventKind.REMOVE)
 				{
@@ -387,6 +394,9 @@
 					
 					searchText = null;									
 				}
+				
+				var commitEvent:Event = new Event( FlexEvent.VALUE_COMMIT );
+				dispatchEvent( commitEvent );				
 			}
 			
 			private function checkIfDuplicate( searchFor:Object ):Boolean
@@ -517,6 +527,9 @@
 				var string:String = _labelFunction( item );
 				var searchStr:String = searchText;
 				
+				// there are problems using ">"s and "<"s in HTML
+				string = string.replace( "<", "&lt;" ).replace( ">", "&gt;" );				
+
 				var returnStr:String = StringUtils.highlighMatch( string, searchStr, _matchType );
 				
 				if (_selectedItems.getItemIndex( item ) >= 0)
@@ -541,7 +554,7 @@
 				_dropDown.labelFunction = _dropDownLabelFunction;
 				_dropDown.itemRenderer  = _dropDownItemRenderer ? _dropDownItemRenderer : new ClassFactory( DropDownItemRenderer );
 				_dropDown.addEventListener( ListEvent.ITEM_CLICK, handleDropDownItemClick );
-
+				
 				systemManager.addEventListener( MouseEvent.MOUSE_DOWN, handleMouseDown );
 			}
 			
@@ -769,14 +782,6 @@
 							textInput.setFocus();
 						}
 					}
-					/*
-					else if (focused is SelectedItem && event.keyCode != Keyboard.TAB)
-					{
-						_selectedItems.removeItemAt( index );
-						iComboItem( flowBox.getChildAt( index ) ).setTextFocus();
-						dispatchEvent( new Event( Event.CHANGE ) );	
-					}
-					*/					
 				}
 			}
 			
@@ -872,17 +877,6 @@
 						flowBox.addChildAt( selectedItem, flowBox.numChildren - 1 );
 					}
 				}
-				/*
-				// this means the user entered a comma after a value which has already
-				// been added, in this case we just need to readd the comma
-				else if (_selectedItems.getItemIndex( item ) >= 0 && isNew)
-				{
-					var index:int = _selectedItems.getItemIndex( item );
-					var comboItem:iComboItem = flowBox.getChildAt( index + 1 ) as iComboItem;
-					
-					comboItem.setTextFocus();
-				}
-				*/
 				
 				textInput.enablePrompt = flowBox.numChildren == 1;
 			}
@@ -965,7 +959,7 @@
 			public function handleChange( event:Event ):void
 			{
 				flowBox.invalidateDisplayList();
-				flowBox.buttonTextInput.buttonVisible = false;
+				flowBox.buttonVisible = false;
 				
 				if (selectedItem && !_allowMultipleSelection)
 				{
@@ -1000,6 +994,7 @@
 					{
 						if (isPerfectMatch())
 						{
+							_searchText = "";
 							continue;
 						}						
 					}
@@ -1030,7 +1025,7 @@
 				}
 				else
 				{
-					if (searchStr.length > 0 && _dataProvider.length > 0)
+					if (_searchText.length > 0 && _dataProvider.length > 0)
 					{
 						showDropDown();	
 					}
@@ -1056,7 +1051,7 @@
 					
 					if (_autoSelectFunction != null)
 					{
-						if (_autoSelectFunction( item, searchText ))
+						if (_autoSelectFunction( item, _searchText ))
 						{
 							_selectedItems.addItem( item );
 							dispatchEvent( new Event( Event.CHANGE ) );
@@ -1067,7 +1062,7 @@
 					{
 						var str:String = _labelFunction( item );
 						
-						if (str.toLowerCase() == searchText.toLowerCase())
+						if (str.toLowerCase() == _searchText.toLowerCase())
 						{
 							_selectedItems.addItem( item );
 							dispatchEvent( new Event( Event.CHANGE ) );
@@ -1110,6 +1105,11 @@
 					createDropDown();
 				}
 				
+				if (focusManager)
+				{
+					focusManager.defaultButtonEnabled = false;
+				}				
+				
 				_dropDown.width = _dropDownWidth ? _dropDownWidth : flowBox.width;
 				_dropDown.owner = this;
 				_dropDown.scrollToIndex(0);
@@ -1147,15 +1147,11 @@
 			
 			public function hideDropDown():void
 			{
-				// we're using a callLater here as a workaround for not being
-				// able to prevent the enter keyboard event from bubbling. Delaying
-				// the selection gives the UI a chance to check if the enter key
-				// was clicked while the drop down was visible 
-				callLater( _hideDropDown );					
-			}
-
-			private function _hideDropDown():void
-			{
+				if (focusManager)
+				{
+					focusManager.defaultButtonEnabled = true;
+				}				
+				
 				PopUpManager.removePopUp( _dropDown );
 			}
 			
@@ -1269,7 +1265,7 @@
 			
 			public function get textInput():PromptTextInput
 			{
-				return flowBox.buttonTextInput.textInput;
+				return flowBox.textInput;
 			}
 			
 			public function set dataProvider( value:ArrayCollection ):void
@@ -1387,7 +1383,7 @@
 				}
 			}
 			
-			public function isDropDownVisible():Boolean
+			private function isDropDownVisible():Boolean
 			{
 				return _dropDown && _dropDown.parent;
 			}
@@ -1523,7 +1519,7 @@
 	
 	<mx:GridRow id="mainGridRow" width="100%" height="100%">
 		<mx:GridItem id="mainGridItem" width="100%" height="100%">
-			<classes:FlowBox id="flowBox" width="100%" height="100%" change="handleChange(event)"/>
+			<classes:FlowBox id="flowBox" width="100%" height="100%" change="handleChange(event)" resize="handleFlowBoxResize()"/>
 		</mx:GridItem>
 	</mx:GridRow>
 	

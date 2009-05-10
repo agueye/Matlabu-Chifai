@@ -67,11 +67,16 @@
 					
 			private var _actionsMenu:ActionsMenu;
 			
+			[Embed(source="/com/hillelcoren/assets/icons/actionsUp.png")]
+			private var _upIcon:Class;
+			[Embed(source="/com/hillelcoren/assets/icons/actionsDown.png")]
+			private var _downIcon:Class;
+			[Embed(source="/com/hillelcoren/assets/icons/actionsOver.png")]
+			private var _overIcon:Class;
+						
 			private function init():void
 			{
 				addEventListener( MoveEvent.MOVE, handleMove );
-				
-				systemManager.addEventListener( ResizeEvent.RESIZE, handleResize );		
 			}							
 			
 			override protected function commitProperties():void
@@ -102,9 +107,10 @@
 					if (_actionsMenuDataProvider)
 					{
 						var button:Button = new Button();
+						button.setStyle( "upIcon", _upIcon );				
+						button.setStyle( "downIcon", _downIcon );				
+						button.setStyle( "overIcon", _overIcon );				
 						button.setStyle( "styleName", "actionsMenuButton" );
-						//button.width = 24;
-						//button.height = 16;
 						button.addEventListener( MouseEvent.CLICK, handleButtonClick );
 						
 						inlineButton = button;						
@@ -156,6 +162,8 @@
 				positionActionsMenu();
 				
 				PopUpManager.addPopUp( _actionsMenu, this );
+				
+				event.stopPropagation();
 			}
 			
 			private function positionActionsMenu():void
@@ -177,6 +185,8 @@
 			
 			private function handleMenuHide( event:Event ):void
 			{
+				flowBox.buttonEnabled = true;
+				
 				if (focusManager.getFocus() == _inlineButton)
 				{
 					stage.focus = null;
@@ -187,6 +197,8 @@
 			
 			private function handleMenuShow( event:MenuEvent ):void
 			{
+				flowBox.buttonEnabled = false;
+				
 				dispatchEvent( event );
 			}
 						
@@ -196,11 +208,6 @@
 			}								
 					
 			private function handleMove( event:Event ):void
-			{
-				callLater( positionActionsMenu );
-			}
-			
-			private function handleResize( event:Event ):void
 			{
 				callLater( positionActionsMenu );
 			}

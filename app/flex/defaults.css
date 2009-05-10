@@ -78,11 +78,8 @@ AutoComplete
 	selected-over-skin : ClassReference("com.hillelcoren.assets.skins.BlankSkin");
 	selected-up-skin : ClassReference("com.hillelcoren.assets.skins.BlankSkin");
 	selected-down-skin : ClassReference("com.hillelcoren.assets.skins.BlankSkin");
-	up-icon: Embed(source='/com/hillelcoren/assets/icons/actionsUp.png');
-	down-icon: Embed(source='/com/hillelcoren/assets/icons/actionsDown.png');
-	over-icon: Embed(source='/com/hillelcoren/assets/icons/actionsOver.png');
 	padding-top: 0;
 	padding-bottom: 0;
 	padding-left: 0;
 	padding-right: 4;			
-}		
+}

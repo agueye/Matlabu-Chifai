@@ -4,6 +4,7 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	verticalAlign="middle" backgroundColor="#FFFFFF"
 	width="100" borderStyle="inset" initialize="init()"
+	implements="com.hillelcoren.components.autoComplete.interfaces.iComboItem"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*">
 	
 	<mx:Metadata>
@@ -111,6 +112,11 @@
 				
 				clearStyle( "color" );
 				clearStyle( "fontStyle" );
+			}
+			
+			override public function get minWidth():Number
+			{
+				return measureText( text ).width + 10;
 			}
 			
 			public function set prompt( value:String ):void
@@ -319,6 +325,16 @@
 				textInput.setFocus();
 			}	
 			
+			public function get item():Object
+			{
+				return null;	
+			}						
+			
+			public function isEditable():Boolean
+			{
+				return true;	
+			}		
+						
 			public function setTextFocus():void
 			{
 				textInput.setSelection( 0, 0 );

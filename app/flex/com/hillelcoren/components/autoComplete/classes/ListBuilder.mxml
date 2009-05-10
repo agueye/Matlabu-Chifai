@@ -45,11 +45,9 @@
 			
 			public function set originalSelectedItems( value:ArrayCollection ):void
 			{
-				// we're going to copy the data so the profile has to click
+				// we're going to copy the data so the user has to click
 				// ok for the items to be copied over
 				_selectedItems = new ArrayCollection( value.toArray() );
-				
-				//_selectedItems.filterFunction = rightFilterFunction;
 				_selectedItems.addEventListener( CollectionEvent.COLLECTION_CHANGE, handleSelectedItemsChange );
 			}
 			

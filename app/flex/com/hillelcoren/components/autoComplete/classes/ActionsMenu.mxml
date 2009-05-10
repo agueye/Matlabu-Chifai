@@ -10,7 +10,7 @@
 		[Event(name="menuShow",type="mx.events.MenuEvent")]
 		[Event(name="itemClick",type="mx.events.MenuEvent")]
 	</mx:Metadata>
-	
+		
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Button;
@@ -23,7 +23,7 @@
 			
 			public static const TOP_PADDING:int = 3;
 			public static const RIGHT_PADDING:int = 3;
-			public static const NUB_WIDTH:int = 28;
+			public static const NUB_WIDTH:int = 25;
 			public static const RADIUS:int = 5;
 			public static const MENU_PADDING:int = 6;
 			
@@ -34,6 +34,9 @@
 			[Bindable]
 			private var _parentWidth:int;
 			private var _rowHeight:int;
+			
+			[Embed(source="/com/hillelcoren/assets/icons/actionsUp.png")]
+			private var _upIcon:Class;
 			
 			private function init():void
 			{
@@ -48,16 +51,18 @@
 				_menu.setStyle( "openDuration", 0 );
 				_menu.setStyle( "dropShadowEnabled", false );
 				_menu.setStyle( "borderStyle", "none" );				
-				_menu.show( 0, 0 );
 				
 				_menu.addEventListener( MenuEvent.MENU_HIDE, handleMenuHide );
 				_menu.addEventListener( MenuEvent.MENU_SHOW, handleMenuShow );
 				_menu.addEventListener( MenuEvent.ITEM_CLICK, handleItemClick );
 				
+				_menu.show( 0, 0 );
+								
 				_button = new Button();
 				_button.setStyle( "styleName", "actionsMenuButton" );
-				_button.x = _parentWidth - NUB_WIDTH;
-				_button.y = TOP_PADDING + ((_rowHeight - 16) / 2);
+				_button.setStyle( "upIcon", _upIcon );
+				_button.x = _parentWidth - NUB_WIDTH - 1;
+				_button.y = TOP_PADDING + ((_rowHeight - 14) / 2);
 				addChild( _button );				
 			}
 

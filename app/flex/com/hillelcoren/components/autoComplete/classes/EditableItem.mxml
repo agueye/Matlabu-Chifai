@@ -45,7 +45,6 @@
 				drawFocus( false );
 				
 				text = StringUtils.trimCommas( text );
-				//setSelection( 0, text.length );
 			}
 			
 			private function handleFocusOut( event:Event ):void

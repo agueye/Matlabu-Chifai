@@ -27,6 +27,7 @@
 			
 			private var _origColor:uint;
 			private var _showCommaChanged:Boolean;
+			private var _allowMultipleSelection:Boolean;
 			
 			private function init():void
 			{
@@ -54,22 +55,24 @@
 				
 				if (_showCommaChanged)
 				{
+					_showCommaChanged = false;
+					
 					var showComma:String = getStyle( "showComma" );
-					label = StringUtils.trimCommas( label ) + ( showComma == "yes" ? "," : "" );				
+					label = StringUtils.trimCommas( label ) + ( showComma == "yes" && _allowMultipleSelection ? "," : "" );
 				}
 			}
 			
 			override public function styleChanged( styleProp:String ):void
 			{
 				super.styleChanged( styleProp );
-				
+	
 				if (!styleProp || styleProp == "styleName")
 				{
 					_showCommaChanged = true;
 					invalidateProperties();
 				}
 			}
-					
+			
 			override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void
 			{
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
@@ -88,20 +91,25 @@
 					
 					if (getStyle( "selectedFontWeight" ) == "bold")
 					{
-						format.bold = true;
+						setStyle( "fontWeight", "bold" );								
 					}
+				}
+				else
+				{
+					setStyle( "fontWeight", "normal" );
 				}
 				
 				textField.setTextFormat( format );
 				
 				var showComma:String = getStyle( "showComma" );
 				
-				if (showComma == "yes")
+				if (showComma == "yes" && _allowMultipleSelection)
 				{
 					format.underline = false;
 					textField.setTextFormat( format, label.length - 1, label.length );
 				}
 			}
+			
 			
 			public function set showRemoveIcon( value:Boolean ):void
 			{
@@ -130,6 +138,16 @@
 		    	}		          
 		    }
 
+			public function set allowMultipleSelection( value:Boolean ):void
+			{
+				if (_allowMultipleSelection != value)
+				{
+					_allowMultipleSelection = value;
+					_showCommaChanged = true;
+				
+					invalidateProperties();
+				}
+			}
 						
 		]]>
 	</mx:Script>
