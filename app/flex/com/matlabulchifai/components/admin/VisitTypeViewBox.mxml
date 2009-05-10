@@ -11,9 +11,9 @@
 			import mx.core.Application;	
 			
 			[Bindable]
-			public var conditionIdMap:Object;
+			public var visitTypeIdMap:Object;
 			[Bindable]
-			public var conditions:ArrayCollection;
+			public var visitTypes:ArrayCollection;
 			[Bindable]
 			public var languageArray:Object;
 			
@@ -24,11 +24,11 @@
 		]]>
 	</mx:Script>
 	
-	<mx:DataGrid id="conditionsGrid" width="100%" height="100%" textAlign="center" 
-   			dataProvider="{conditions}" wordWrap="true" variableRowHeight="true"
+	<mx:DataGrid id="visitTypesGrid" width="100%" height="100%" textAlign="center" 
+   			dataProvider="{visitTypes}" wordWrap="true" variableRowHeight="true"
    			itemClick="handleConditionClick(event)">						
    		<mx:columns>														
-        	<mx:DataGridColumn headerText="{languageArray['Condition Name']}" width="50"
+        	<mx:DataGridColumn headerText="{languageArray['Visit Type']}" width="50"
                 dataField="name"/>
             <mx:DataGridColumn headerText="{languageArray['Notes']}" width="150"
                 dataField="notes"/>
@@ -36,7 +36,7 @@
                     editable="false">
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Button label="{outerDocument.languageArray['Delete Condition']}" />
+                            <mx:Button label="{outerDocument.languageArray['Delete Visit Type']}" />
                         </mx:Component>
                     </mx:itemRenderer>
 			</mx:DataGridColumn>

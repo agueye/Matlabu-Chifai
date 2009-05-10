@@ -63,15 +63,75 @@
 			</mx:Panel>
 		</mx:VBox>
 		
-		<mx:VBox label="{languageArray['Conditions']}">
+		<mx:VBox label="{languageArray['Doctors']}">
+			<mx:Panel title="{languageArray['Doctors List']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				
+				<mx:VBox width="100%" height="100%">
+					<mlc:DoctorViewBox id="doctorViewBox" 
+						languageArray="{languageArray}"
+						doctorIdMap="{doctorIdMap}"
+						doctors="{doctors}"/>
+				</mx:VBox>
+			</mx:Panel>
+		</mx:VBox>
+		
+		<mx:VBox label="{languageArray['Allergies']}">
+			<mx:Panel title="{languageArray['Allergies']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox width="100%" height="100%" horizontalAlign="center">
+					<mlc:AllergiesViewBox id="allergiesBox"
+						languageArray="{languageArray}"
+						allergyIdMap="{allergyIdMap}"
+						allergies="{allergies}" />
+				</mx:HBox>
+			</mx:Panel>
+		</mx:VBox>
+		
+		<mx:VBox label="{languageArray['Conditions']}" horizontalAlign="center">
 			<mx:Panel title="{languageArray['Conditions']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
-			
 				<mx:HBox width="100%" height="100%">
 					<mlc:ConditionsViewBox id="conditionsBox"
 						languageArray="{languageArray}"
 						conditionIdMap="{conditionIdMap}"
 						conditions="{conditions}" />
+				</mx:HBox>
+			</mx:Panel>
+		</mx:VBox>
+		
+		<mx:VBox label="{languageArray['Medications']}" horizontalAlign="center">
+			<mx:Panel title="{languageArray['Medications']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox width="100%" height="100%">
+					<mlc:MedicationsViewBox id="medicationsBox"
+						languageArray="{languageArray}"
+						medicationIdMap="{medicationIdMap}"
+						medications="{medications}" />
+				</mx:HBox>
+			</mx:Panel>
+		</mx:VBox>
+		
+		<mx:VBox label="{languageArray['Vaccinations']}" horizontalAlign="center">
+			<mx:Panel title="{languageArray['Vaccinations']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox width="100%" height="100%">
+					<mlc:VaccinationsViewBox id="vaccinationsBox"
+						languageArray="{languageArray}"
+						vaccinationIdMap="{vaccinationIdMap}"
+						vaccinations="{vaccinations}" />
+				</mx:HBox>
+			</mx:Panel>
+		</mx:VBox>
+		
+		<mx:VBox label="{languageArray['Visit Types']}" horizontalAlign="center">
+			<mx:Panel title="{languageArray['Visit Types']}" width="100%" height="100%" 
+				paddingTop="10" paddingLeft="5" paddingRight="5">
+				<mx:HBox width="100%" height="100%">
+					<mlc:VisitTypeViewBox id="visitTypesBox"
+						languageArray="{languageArray}"
+						visitTypeIdMap="{visitTypeIdMap}"
+						visitTypes="{visitTypes}" />
 				</mx:HBox>
 			</mx:Panel>
 		</mx:VBox>
