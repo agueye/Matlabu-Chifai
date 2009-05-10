@@ -13,7 +13,8 @@ class PatientVisit < ActiveRecord::Base
   
   validates_length_of   :height, :maximum => 100, :allow_blank => true
   validates_length_of   :weight, :maximum => 100, :allow_blank => true
-  validates_length_of   :blood_pressure, :maximum => 100, :allow_blank => true
+  validates_length_of   :systolic, :maximum => 100, :allow_blank => true
+  validates_length_of   :diastolic, :maximum => 100, :allow_blank => true
   validates_length_of   :pulse, :maximum => 100, :allow_blank => true
   validates_length_of   :temperature, :maximum => 100, :allow_blank => true
   validates_length_of   :notes, :maximum => 10000, :allow_blank => true
