@@ -18,15 +18,16 @@ class Patient < ActiveRecord::Base
   encrypt :medical_record_number, :gender, :address, :city, :state, :zip, :father_first_name, :father_last_name, :mother_first_name, :mother_last_name, :telephone, :emergency_contact_name, :emergency_contact_relationship, :emergency_contact_number, :notes
 
   
-  validates_presence_of :first_name
+  #validates_presence_of :first_name
   validates_presence_of :last_name  
   validates_presence_of :gender
-  validates_presence_of :date_of_birth
+  #validates_presence_of :date_of_birth
   validates_presence_of :arrival_date
+  validates_presence_of :medical_record_number
   
-  validates_uniqueness_of :first_name, 
-        :scope => [:middle_name, :last_name], 
-        :message => 'first name, middle name and last name combination is already in our database. Please enter a unique patient name.'
+  #validates_uniqueness_of :first_name, 
+        #:scope => [:middle_name, :last_name], 
+        #:message => 'first name, middle name and last name combination is already in our database. Please enter a unique patient name.'
   
   #validates_date        :date_of_birth, :allow_nil => true
   #validates_date        :arrival_date, :allow_nil => true
