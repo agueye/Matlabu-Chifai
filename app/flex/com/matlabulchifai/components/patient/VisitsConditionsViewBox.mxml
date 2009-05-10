@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+	label="{languageArray['Visits-Conditions']}"
+	show="listVisits()">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			import mx.events.ListEvent;
+			import mx.core.Application;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.components.popups.VisitCreateTitleWin;
+			import com.matlabulchifai.components.popups.VisitUpdateTitleWin;
+			import com.matlabulchifai.events.patient.PatientVisitEvent;
+			import com.matlabulchifai.events.condition.ConditionEvent;
+			import com.matlabulchifai.events.doctor.DoctorEvent;
+			import com.matlabulchifai.events.visit_type.VisitTypeEvent;
+			
+			[Bindable]
+			public var visitPopUp:VisitCreateTitleWin;
+			[Bindable]
+			public var visitUpdatePopUp:VisitUpdateTitleWin;
+			
+			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
+			
+			[Bindable]
+			public var languageArray:Object = Application.application.languageArray;
+			
+			[Bindable]
+			public var patientID:Number;
+			
+			[Bindable]
+			public var patient:XML;
+			[Bindable]
+			public var visitTypeIdMap:Object;
+			[Bindable]
+			public var conditionIdMap:Object;
+			[Bindable]
+			public var doctorIdMap:Object
+			[Bindable]
+			public var visitTypes:ArrayCollection;
+			[Bindable]
+			public var doctors:ArrayCollection;
+			[Bindable]
+			public var conditions:ArrayCollection;
+			
+			
+			public function listVisits():void {
+				visitsXLC.removeAll();
+				var rnd:int = Math.round(Math.random()*10000);
+				svcVisitsList.url="/patients/" + patientID + "/patient_visits.xml?rnd=" + rnd;
+				svcVisitsList.send();
+			}
+			
+			private function handleVisitsListResult(event:ResultEvent):void {
+				var resultXML:XML = XML(event.result);
+				Matlabulchifai.debug("visit_allergies = \n" + resultXML);
+				this.enabled = true;
+			}
+			
+			public function deleteVisit(visit:XML):void {
+				this.enabled = false;
+				svcVisitsDestroy.url = "/patient_visits/" + visit.id + ".xml" + authToken;
+				svcVisitsDestroy.send({_method:"DELETE"});
+		    }
+		    
+		    private function handleVisitsDestroyResult(event:ResultEvent):void {
+		    	listVisits();
+		    }
+			
+			private function handleVisitClick(event:ListEvent):void {
+				if (event.columnIndex != event.currentTarget.columns.length-1){
+					var visit:XML = XML(event.currentTarget.selectedItem)
+					showVisitUpdateTitleWin(visit);
+				}
+			}
+			
+			
+			
+			private function showVisitCreateTitleWin():void {
+				visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
+				visitPopUp.patient = this.patient;
+				visitPopUp.patientID = this.patientID;
+				visitPopUp.visitTypeIdMap = this.visitTypeIdMap;
+				visitPopUp.conditionIdMap = this.conditionIdMap;
+				visitPopUp.doctorIdMap = this.doctorIdMap;
+				visitPopUp.visitTypes = this.visitTypes;
+				visitPopUp.doctors = this.doctors;
+				visitPopUp.conditions = this.conditions;
+				visitPopUp.languageArray = this.languageArray;
+				PopUpManager.centerPopUp(visitPopUp);
+				visitPopUp.addEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE, handleVisitEvent);
+				visitPopUp.addEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);
+				visitPopUp.addEventListener(ConditionEvent.CONDITION_CREATE, this.parentDocument.handleConditionCreateEvent);
+				visitPopUp.addEventListener(DoctorEvent.DOCTOR_CREATE, this.parentDocument.handleDoctorCreateEvent);
+			}
+			
+	
+			public function handleVisitEvent(event:Event):void {
+				listVisits();
+				removeVisitEventListener();
+			}
+			
+			public function removeVisitEventListener():void {
+				if (visitPopUp.hasEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE)) {
+					visitPopUp.removeEventListener(PatientVisitEvent.PATIENT_VISIT_CREATE, handleVisitEvent);
+				}
+			}
+			
+			private function showVisitUpdateTitleWin(visit:XML):void {				
+				visitUpdatePopUp = VisitUpdateTitleWin(PopUpManager.createPopUp(this, VisitUpdateTitleWin, true));
+				visitUpdatePopUp.patient = patient;
+				visitUpdatePopUp.visit = visit;
+				visitUpdatePopUp.visitTypes = visitTypes;
+				visitUpdatePopUp.conditions = conditions;
+				visitUpdatePopUp.doctors = doctors;
+				visitUpdatePopUp.visitTypeIdMap = visitTypeIdMap;	
+				visitUpdatePopUp.conditionIdMap = conditionIdMap;
+				visitUpdatePopUp.doctorIdMap = doctorIdMap;			
+				visitUpdatePopUp.languageArray = languageArray;
+				PopUpManager.centerPopUp(visitUpdatePopUp);
+				visitUpdatePopUp.addEventListener(PatientVisitEvent.PATIENT_VISIT_UPDATE, handleVisitUpdateEvent);
+				visitUpdatePopUp.addEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);
+				visitUpdatePopUp.addEventListener(ConditionEvent.CONDITION_CREATE, this.parentDocument.handleConditionCreateEvent);
+				visitUpdatePopUp.addEventListener(DoctorEvent.DOCTOR_CREATE, this.parentDocument.handleDoctorCreateEvent);
+			}
+			
+			public function handleVisitUpdateEvent(event:PatientVisitEvent):void {			
+				listVisits();		
+				removeVisitUpdateEventListener();			
+			}
+			
+			public function removeVisitUpdateEventListener():void {				
+				if (visitUpdatePopUp.hasEventListener(PatientVisitEvent.PATIENT_VISIT_UPDATE)) {					
+					visitUpdatePopUp.removeEventListener(PatientVisitEvent.PATIENT_VISIT_UPDATE, handleVisitUpdateEvent);				
+				}			
+			}
+			
+			public function handleVisitTypeCreateEvent(event:Event):void {			
+				dispatchEvent(new VisitTypeEvent(VisitTypeEvent.VISIT_TYPE_CREATE, null));
+				removeVisitTypeCreateEventListener();			
+			}
+			
+			public function removeVisitTypeCreateEventListener():void {				
+				if (visitUpdatePopUp != null) {
+					if (visitUpdatePopUp.hasEventListener(VisitTypeEvent.VISIT_TYPE_CREATE)) {					
+						visitUpdatePopUp.removeEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);				
+					}
+				}
+				
+				if (visitPopUp != null) {
+					if (visitPopUp.hasEventListener(VisitTypeEvent.VISIT_TYPE_CREATE)) {					
+						visitPopUp.removeEventListener(VisitTypeEvent.VISIT_TYPE_CREATE, handleVisitTypeCreateEvent);				
+					}
+				}
+			}
+			
+			//need to loop for now because db (not optimized) is slow in responding
+			//does not respond fast enough to update the visitTypeIdMap
+			private function getVisitType(item:Object, column:DataGridColumn):String {
+				var visitType:XML;
+				while (visitTypeIdMap[item.visit_type_id] == null) {}
+				visitType = visitTypeIdMap[item.visit_type_id];
+				return visitType.name;
+			}
+			
+			private function getConditionName(item:Object, column:DataGridColumn):String {
+				var condition:XML = conditionIdMap[item.condition_id];
+				return condition.name;
+			}
+			
+			private function getDoctorName(item:Object, column:DataGridColumn):String {
+				var doctor:XML = doctorIdMap[item.doctor_id];
+				return doctor.name;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:XMLListCollection id="visitsXLC"
+        source="{XMLList(svcVisitsList.lastResult.children())}"/>
+        
+	<mx:HTTPService
+        id="svcVisitsList"
+        resultFormat="e4x"
+        result="handleVisitsListResult(event)"/>
+        
+    <mx:HTTPService
+        id="svcVisitsDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleVisitsDestroyResult(event)"/>
+	
+   <mx:Panel title="{languageArray['Visits List']}" width="100%" height="100%" 
+   	paddingTop="5" paddingLeft="5" paddingRight="5">
+   	<mx:LinkButton label="{languageArray['Add New Visit']}" color="#0000FF" click="showVisitCreateTitleWin()"/>
+   	<mx:DataGrid id="visitsGrid" width="100%" height="100%" textAlign="center" 
+   		dataProvider="{visitsXLC}" wordWrap="true" variableRowHeight="true"
+   		itemClick="handleVisitClick(event)">						
+   		<mx:columns>
+   			<mx:DataGridColumn headerText="{languageArray['Visit Date']}" width="85"
+                dataField="visit_date"/>														
+   			<mx:DataGridColumn headerText="{languageArray['Condition Name']}" width="250"
+                labelFunction="getConditionName"/>
+            <mx:DataGridColumn id="visit_type_column" headerText="{languageArray['Visit Type']}" width="125"
+                labelFunction="getVisitType" />
+			<mx:DataGridColumn headerText="{languageArray['Doctor Name']}" width="125"
+                labelFunction="getDoctorName"/>	
+            <mx:DataGridColumn headerText="{languageArray['Notes']}"
+                dataField="notes"/>
+            <mx:DataGridColumn headerText="" width="150" 
+                    editable="false">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:Button label="{outerDocument.languageArray['Delete Visit']}" click="outerDocument.deleteVisit(XML(data))" />
+                        </mx:Component>
+                    </mx:itemRenderer>
+			</mx:DataGridColumn>				
+   		</mx:columns>					
+   	</mx:DataGrid>
+   </mx:Panel>
+	
+</mx:VBox>
