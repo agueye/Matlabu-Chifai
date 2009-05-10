@@ -68,7 +68,8 @@
 				visitDateDF.selectedDate = DateUtil.parseW3CDTF(visit.visit_date);
 				HeightTI.text = visit.height;				
 				WeightTI.text = visit.weight;
-				BloodPressureTI.text = visit.blood_pressure;
+				SystolicTI.text = visit.systolic;
+				DiastolicTI.text = visit.diastolic;
 				PulseTI.text = visit.pulse;
 				TemperatureTI.text = visit.temperature;
 				visitNotesTI.text = visit.notes;
@@ -179,7 +180,8 @@
 				params['patient_visit[doctor_id]'] = doctorId;
 				params['patient_visit[height]'] = HeightTI.text;
 				params['patient_visit[weight]'] = WeightTI.text;
-				params['patient_visit[blood_pressure]'] = BloodPressureTI.text;
+				params['patient_visit[diastolic]'] = DiastolicTI.text;
+				params['patient_visit[systolic]'] = SystolicTI.text;
 				params['patient_visit[temperature]'] = TemperatureTI.text;
 				params['patient_visit[pulse]'] = PulseTI.text;
 				params['patient_visit[visit_date]'] = visitDateDF.text;
@@ -285,8 +287,11 @@
 			<mx:FormItem label="Weight">
 				<mx:TextInput id="WeightTI"/>
 			</mx:FormItem>
-			<mx:FormItem label="Blood Pressure">
-				<mx:TextInput id="BloodPressureTI"/>
+			<mx:FormItem label="Systolic Blood Pressure">
+				<mx:TextInput id="SystolicTI"/>
+			</mx:FormItem>
+			<mx:FormItem label="Diastolic Blood Pressure">
+				<mx:TextInput id="DiastolicTI"/>
 			</mx:FormItem>
 			<mx:FormItem label="Pulse">
 				<mx:TextInput id="PulseTI"/>

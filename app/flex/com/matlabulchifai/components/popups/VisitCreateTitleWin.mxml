@@ -242,7 +242,8 @@
 				<notes>{visitNotesTA.text}</notes>
 				<height>{HeightTI.text}</height>
 				<weight>{WeightTI.text}</weight>
-				<blood_pressure>{BloodPressureTI.text}</blood_pressure>
+				<systolic>{SystolicTI.text}</systolic>
+				<diastolic>{DiastolicTI.text}</diastolic>
 				<pulse>{PulseTI.text}</pulse>
 				<temperature>{TemperatureTI.text}</temperature>
 				<doctor>{doctorSearchStr}</doctor>
@@ -286,8 +287,11 @@
 			<mx:FormItem label="Weight">
 				<mx:TextInput id="WeightTI" width="100%"/>
 			</mx:FormItem>
-			<mx:FormItem label="Blood Pressure">
-				<mx:TextInput id="BloodPressureTI" width="100%"/>
+			<mx:FormItem label="Systolic Blood Pressure">
+				<mx:TextInput id="SystolicTI"/>
+			</mx:FormItem>
+			<mx:FormItem label="Diastolic Blood Pressure">
+				<mx:TextInput id="DiastolicTI"/>
 			</mx:FormItem>
 			<mx:FormItem label="Pulse">
 				<mx:TextInput id="PulseTI" width="100%"/>

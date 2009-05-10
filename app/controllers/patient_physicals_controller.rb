@@ -10,7 +10,7 @@ class PatientPhysicalsController < ApplicationController
     @weights = @patient.patient_visits.select {|v| v.weight != ""}
     @weights.sort! {|x,y| y.visit_date <=> x.visit_date}
     
-    @blood_pressures = @patient.patient_visits.select {|v| v.blood_pressure != ""}
+    @blood_pressures = @patient.patient_visits.select {|v| v.diastolic != ""}
     @blood_pressures.sort! {|x,y| y.visit_date <=> x.visit_date}
     
     @pulses = @patient.patient_visits.select {|v| v.pulse != ""}
@@ -47,7 +47,7 @@ class PatientPhysicalsController < ApplicationController
   end
 
   def blood_pressure
-    @visits = @patient.patient_visits.select {|v| v.blood_pressure != ""}
+    @visits = @patient.patient_visits.select {|v| v.diastolic != ""}
     @visits.sort! {|y,x| y.visit_date <=> x.visit_date}
   
     respond_to do |format|
