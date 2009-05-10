@@ -9,16 +9,22 @@ class PatientAlertsController < ApplicationController
 		@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
 		@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
 		
-		@patient_alerts = PatientAlert.find(:all)
-		for @patient_alert in @patient_alerts
-			@patient_alert.enter_password @masterKey
-		end
+		#@patient_alerts = PatientAlert.find(:all)
+		#for @patient_alert in @patient_alerts
+			#@patient_alert.enter_password @masterKey
+		#end
     if params[:patient_id]
-
-		
+      @patient_alerts = @patient.patient_alerts
+      for @patient_alert in @patient_alerts
+        @patient_alert.enter_password @masterKey
+      end
+      
     	@patient_alerts.sort! {|x, y| x.alert_date <=> y.alert_date} 
     else
     	@patient_alerts = PatientAlert.find(:all, :order => "alert_date")
+      for @patient_alert in @patient_alerts
+        @patient_alert.enter_password @masterKey
+      end
     end
 
     respond_to do |format|
@@ -78,7 +84,7 @@ class PatientAlertsController < ApplicationController
     respond_to do |format|
       if @patient_alert.save
         flash[:notice] = 'PatientAlert was successfully created.'
-        APP_LOGGER_LOG.info "ALERT CREATED - for PATIENT ID " + @patient_alert[:patient_id].to_s + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "ALERT CREATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
         
         format.html { redirect_to(@patient_alert) }
         format.xml  { render :xml => @patient_alert, :status => :created, :location => @patient_alert }
@@ -96,8 +102,8 @@ class PatientAlertsController < ApplicationController
 	
     respond_to do |format|
       if @patient_alert.update_attributes(params[:patient_alert])
-        
-        APP_LOGGER_LOG.info "ALERT UPDATED - for PATIENT ID " + @patient_alert[:patient_id].to_s + " by USER " + self.current_user[:login]
+        get_patient_by_alert
+        APP_LOGGER_LOG.info "ALERT UPDATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
         
         flash[:notice] = 'PatientAlert was successfully updated.'
         format.html { redirect_to(@patient_alert) }
@@ -114,8 +120,8 @@ class PatientAlertsController < ApplicationController
   def destroy
     @patient_alert = PatientAlert.find(params[:id])
     @patient_alert.destroy
-    
-    APP_LOGGER_LOG.info "ALERT DELETED - for PATIENT ID " + @patient_alert[:patient_id].to_s + " by USER " + self.current_user[:login]
+    get_patient_by_alert
+    APP_LOGGER_LOG.info "ALERT DELETED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       format.html { redirect_to(patient_alerts_url) }
@@ -133,5 +139,14 @@ private
 			@patient = Patient.find(params[:patient_id])
 			@patient.enter_password @masterKey
 		end
-	end 
+  end 
+
+  def get_patient_by_alert
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @patient = Patient.find(@patient_alert[:patient_id])
+    @patient.enter_password @masterKey
+  end
 end
