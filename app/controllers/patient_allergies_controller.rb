@@ -1,14 +1,27 @@
 class PatientAllergiesController < ApplicationController
-  before_filter :get_patient, :except => [:find, :create]
+  before_filter :get_patient ,:except => [:find, :create]
 
   # GET /patient_allergies
   # GET /patient_allergies.xml
   def index
+    
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
   	if (params[:patient_id])
     	@patient_allergies = @patient.patient_allergies
+      for @patient_allergy in @patient_allergies
+        @patient_allergy.enter_password @masterKey
+      end
+      
     	@patient_allergies.sort! {|y, x| x.date_observed <=> y.date_observed}
     else
     	@patient_allergies = PatientAllergy.find(:all, :order => "date_observed DESC")
+      for @patient_allergy in @patient_allergies
+        @patient_allergy.enter_password @masterKey
+      end
     end 
     respond_to do |format|
       format.html # index.html.erb
@@ -30,6 +43,13 @@ class PatientAllergiesController < ApplicationController
   # GET /patient_allergies/1.xml
   def show
     @patient_allergy = PatientAllergy.find(params[:id])
+     @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
+    @patient_allergy.enter_password @masterKey
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @patient_allergy }
@@ -57,10 +77,19 @@ class PatientAllergiesController < ApplicationController
   def create
 	name = params["patient_allergy"].delete("name")
 	patient = params["patient_allergy"].delete("patient_id")
-    @patient_allergy = PatientAllergy.new(params[:patient_allergy])
-	allergy = Allergy.find_by_name(name)
-    @patient_allergy.allergy = allergy
-	@patient_allergy.patient = Patient.find(patient)
+  @patient_allergy = PatientAllergy.new(params[:patient_allergy])
+	  
+  @user = User.find_by_id(cookies[:userID])
+  #get master key using cookieSalt and password 
+  @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+  @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+  name = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", name
+  allergy = Allergy.find_by_name(name)
+  @patient_allergy.allergy = allergy
+  @patient_allergy.patient = Patient.find(patient);
+
+  @patient_allergy.enter_password @masterKey
+  
   
     respond_to do |format|
       if @patient_allergy.save
