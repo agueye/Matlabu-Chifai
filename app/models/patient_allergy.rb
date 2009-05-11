@@ -1,7 +1,7 @@
 class PatientAllergy < ActiveRecord::Base
   belongs_to :patient
   belongs_to :allergy
-  
+  encrypt :severity, :reaction, :notes
   #validates_presence_of :patient_id
   validates_presence_of :allergy
   #validates_presence_of :date_observed
