@@ -2,7 +2,17 @@ class AllergiesController < ApplicationController
   # GET /allergies
   # GET /allergies.xml
   def index
+    
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
     @allergies = Allergy.find(:all)
+    for @allergy in @allergies
+        @allergy.enter_password @masterKey
+    end
+      
     @allergies.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
@@ -15,7 +25,12 @@ class AllergiesController < ApplicationController
   # GET /allergies/1.xml
   def show
     @allergy = Allergy.find(params[:id])
-
+    #@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    #@allergy.enter_password @masterKey
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @allergy }
@@ -43,13 +58,11 @@ class AllergiesController < ApplicationController
   def create
 	@allergy = Allergy.new(params[:allergy])
 	#@allergy = Allergy.new
-	#@user = User.find_by_id(cookies[:userID])
+	@user = User.find_by_id(cookies[:userID])
 	#get master key using cookieSalt and password 
-    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-	#@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-	#@allergy.enter_password @masterKey
-	#@allergy.name = @allergyNew.name
-	#@allergy.notes = @allergyNew.notes
+  @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	@allergy.enter_password @masterKey
 	
 	
 	
