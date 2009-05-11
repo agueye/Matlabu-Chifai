@@ -2,7 +2,17 @@ class VaccinationsController < ApplicationController
   # GET /vaccinations
   # GET /vaccinations.xml
   def index
+    
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
     @vaccinations = Vaccination.find(:all)
+    for @vaccination in @vaccinations
+        @vaccination.enter_password @masterKey
+    end
+    
     @vaccinations.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
@@ -42,7 +52,12 @@ class VaccinationsController < ApplicationController
   # POST /vaccinations.xml
   def create
     @vaccination = Vaccination.new(params[:vaccination])
-
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @vaccination.enter_password @masterKey
+  
     respond_to do |format|
       if @vaccination.save
         flash[:notice] = 'Vaccination was successfully created.'
