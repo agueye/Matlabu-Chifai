@@ -4,7 +4,21 @@ class PatientNotesController < ApplicationController
   # GET /patient_notes
   # GET /patient_notes.xml
   def index
-    @patient_notes = @patient.patient_notes
+	@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+	@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	#@patient = Patient.find(params[:id])
+	if (params[:patient_id])
+		@patient_notes=@patient.patient_notes
+	else
+		@patient_notes = PatientNote.find(:all)		
+	end
+	for @patient_note in @patient_notes
+			if @patient_note !=nil
+				@patient_note.enter_password @masterKey
+			end
+		end
     @patient_notes.sort! {|y, x| x.note_date <=> y.note_date}
 
     respond_to do |format|
@@ -16,7 +30,13 @@ class PatientNotesController < ApplicationController
   # GET /patient_notes/1
   # GET /patient_notes/1.xml
   def show
+	@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+	@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+
     @patient_note = PatientNote.find(params[:id])
+	@patient_note.enter_password @masterKey
 
     respond_to do |format|
       format.html # show.html.erb
@@ -43,9 +63,16 @@ class PatientNotesController < ApplicationController
   # POST /patient_notes
   # POST /patient_notes.xml
   def create
+	@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+	@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+		
   	patient = params["patient_note"].delete("patient_id")
     @patient_note = PatientNote.new(params[:patient_note])
     @patient_note.patient = Patient.find(patient)
+	
+	@patient_note.enter_password @masterKey
 
     respond_to do |format|
       if @patient_note.save
@@ -65,7 +92,13 @@ class PatientNotesController < ApplicationController
   # PUT /patient_notes/1
   # PUT /patient_notes/1.xml
   def update
+	@user = User.find_by_id(cookies[:userID])
+	#get master key using cookieSalt and password 
+	@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+		
     @patient_note = PatientNote.find(params[:id])
+	@patient_note.enter_password @masterKey
 
     respond_to do |format|
       if @patient_note.update_attributes(params[:patient_note])
