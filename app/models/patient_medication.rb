@@ -3,7 +3,7 @@ class PatientMedication < ActiveRecord::Base
   belongs_to :medication
   belongs_to :doctor
   belongs_to :condition
-  
+  encrypt :dosage, :frequency, :notes
   validates_presence_of     :patient
   validates_presence_of     :medication
   validates_presence_of     :doctor
