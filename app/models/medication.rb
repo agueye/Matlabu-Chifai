@@ -1,6 +1,7 @@
 class Medication < ActiveRecord::Base
   has_many :patient_medications, :dependent => :destroy
   has_many :patients, :through => :patient_medications
+  encrypt :notes, :name
   
   validates_presence_of   :name
   
