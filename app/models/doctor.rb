@@ -4,6 +4,7 @@ class Doctor < ActiveRecord::Base
   has_many :prescribed_patients, :through => :patient_medications
   has_many :treated_patients, :through => :patient_visits  
   
+  encrypt :notes, :name
   validates_presence_of :name
   
   validates_uniqueness_of :name, :message => 'doctor name is already in our database. Please enter a unique doctor name.'
