@@ -2,7 +2,18 @@ class MedicationsController < ApplicationController
   # GET /medications
   # GET /medications.xml
   def index
+    
+     @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
     @medications = Medication.find(:all)
+    for @medication in @medications
+        @medication.enter_password @masterKey
+        #@patient_allergy.allergy.enter_password @masterKey
+    end
+    
     @medications.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
@@ -42,7 +53,12 @@ class MedicationsController < ApplicationController
   # POST /medications.xml
   def create
     @medication = Medication.new(params[:medication])
-
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @medication.enter_password @masterKey
+  
     respond_to do |format|
       if @medication.save
         flash[:notice] = 'Medication was successfully created.'
