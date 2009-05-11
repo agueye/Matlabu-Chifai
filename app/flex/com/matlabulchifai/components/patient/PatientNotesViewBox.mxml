@@ -12,11 +12,11 @@
 			import mx.core.Application;
 			import com.matlabulchifai.events.patient.NoteEvent;
 			import mx.managers.PopUpManager;
-			import com.matlabulchifai.components.popups.NoteUpdateTitleWin;
-			import com.matlabulchifai.components.popups.NoteCreateTitleWin;
+			import com.matlabulchifai.components.popups.PatientNoteUpdateTitleWin;
+			import com.matlabulchifai.components.popups.PatientNoteCreateTitleWin;
 			
-			private var noteUpdatePopUp:NoteUpdateTitleWin;
-			private var notePopUp:NoteCreateTitleWin;
+			private var noteUpdatePopUp:PatientNoteUpdateTitleWin;
+			private var notePopUp:PatientNoteCreateTitleWin;
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			
 			[Bindable]
@@ -59,7 +59,7 @@
 		    }
 			
 			private function showNoteUpdateTitleWin(note:XML):void {				
-				noteUpdatePopUp = NoteUpdateTitleWin(PopUpManager.createPopUp(this, NoteUpdateTitleWin, true));
+				noteUpdatePopUp = PatientNoteUpdateTitleWin(PopUpManager.createPopUp(this, PatientNoteUpdateTitleWin, true));
 				noteUpdatePopUp.patient = patient;
 				noteUpdatePopUp.note = note;			
 				noteUpdatePopUp.languageArray = languageArray;
@@ -79,7 +79,7 @@
 			}
 			
 			private function showNoteCreateTitleWin():void {				
-				notePopUp = NoteCreateTitleWin(PopUpManager.createPopUp(this, NoteCreateTitleWin, true));
+				notePopUp = PatientNoteCreateTitleWin(PopUpManager.createPopUp(this, PatientNoteCreateTitleWin, true));
 				notePopUp.addEventListener(NoteEvent.NOTE_CREATE, handleNoteEvent);
 				notePopUp.patient = this.patient;
 				notePopUp.patientID = this.patientID;

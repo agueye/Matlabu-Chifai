@@ -12,17 +12,17 @@
 			import mx.events.ListEvent;
 			import mx.core.Application;
 			import mx.managers.PopUpManager;
-			import com.matlabulchifai.components.popups.VisitCreateTitleWin;
-			import com.matlabulchifai.components.popups.VisitUpdateTitleWin;
+			import com.matlabulchifai.components.popups.PatientVisitCreateTitleWin;
+			import com.matlabulchifai.components.popups.PatientVisitUpdateTitleWin;
 			import com.matlabulchifai.events.patient.PatientVisitEvent;
 			import com.matlabulchifai.events.condition.ConditionEvent;
 			import com.matlabulchifai.events.doctor.DoctorEvent;
 			import com.matlabulchifai.events.visit_type.VisitTypeEvent;
 			
 			[Bindable]
-			public var visitPopUp:VisitCreateTitleWin;
+			public var visitPopUp:PatientVisitCreateTitleWin;
 			[Bindable]
-			public var visitUpdatePopUp:VisitUpdateTitleWin;
+			public var visitUpdatePopUp:PatientVisitUpdateTitleWin;
 			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			
@@ -81,7 +81,7 @@
 			
 			
 			private function showVisitCreateTitleWin():void {
-				visitPopUp = VisitCreateTitleWin(PopUpManager.createPopUp(this, VisitCreateTitleWin, true));
+				visitPopUp = PatientVisitCreateTitleWin(PopUpManager.createPopUp(this, PatientVisitCreateTitleWin, true));
 				visitPopUp.patient = this.patient;
 				visitPopUp.patientID = this.patientID;
 				visitPopUp.visitTypeIdMap = this.visitTypeIdMap;
@@ -111,7 +111,7 @@
 			}
 			
 			private function showVisitUpdateTitleWin(visit:XML):void {				
-				visitUpdatePopUp = VisitUpdateTitleWin(PopUpManager.createPopUp(this, VisitUpdateTitleWin, true));
+				visitUpdatePopUp = PatientVisitUpdateTitleWin(PopUpManager.createPopUp(this, PatientVisitUpdateTitleWin, true));
 				visitUpdatePopUp.patient = patient;
 				visitUpdatePopUp.visit = visit;
 				visitUpdatePopUp.visitTypes = visitTypes;

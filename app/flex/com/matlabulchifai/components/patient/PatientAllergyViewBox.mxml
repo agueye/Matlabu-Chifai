@@ -14,14 +14,14 @@
 			import com.matlabulchifai.events.patient.NoteEvent;
 			import mx.managers.PopUpManager;
 			
-			import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
-			import com.matlabulchifai.components.popups.AllergyUpdateTitleWin;
+			import com.matlabulchifai.components.popups.PatientAllergyCreateTitleWin;
+			import com.matlabulchifai.components.popups.PatientAllergyUpdateTitleWin;
 			import com.matlabulchifai.events.patient.PatientAllergyEvent;
 			import com.matlabulchifai.events.allergy.AllergyEvent;
 			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
-			private var allergyPopUp:AllergyCreateTitleWin;
-			private var allergyUpdatePopUp:AllergyUpdateTitleWin;
+			private var allergyPopUp:PatientAllergyCreateTitleWin;
+			private var allergyUpdatePopUp:PatientAllergyUpdateTitleWin;
 			
 			[Bindable]
 			public var languageArray:Object = Application.application.languageArray;
@@ -50,7 +50,7 @@
 			}
 			
 			private function showAllergyCreateTitleWin():void{
-				allergyPopUp = AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));
+				allergyPopUp = PatientAllergyCreateTitleWin(PopUpManager.createPopUp(this, PatientAllergyCreateTitleWin, true));
 				allergyPopUp.patient = this.patient;
 				allergyPopUp.patientID = this.patientID;
 				allergyPopUp.languageArray = this.languageArray;
@@ -89,7 +89,7 @@
 			}
 			
 			private function showAllergyUpdateTitleWin(allergy:XML):void {				
-				allergyUpdatePopUp = AllergyUpdateTitleWin(PopUpManager.createPopUp(this, AllergyUpdateTitleWin, true));
+				allergyUpdatePopUp = PatientAllergyUpdateTitleWin(PopUpManager.createPopUp(this, PatientAllergyUpdateTitleWin, true));
 				allergyUpdatePopUp.patient = patient;
 				allergyUpdatePopUp.allergy = allergy;
 				allergyUpdatePopUp.allergies = allergies;				

@@ -32,12 +32,12 @@
 		import mx.collections.XMLListCollection;
     	import mx.collections.IViewCursor;
 		import mx.managers.PopUpManager;
-		import com.matlabulchifai.components.popups.VaccCreateTitleWin;
-		import com.matlabulchifai.components.popups.VaccinationUpdateTitleWin;
-		import com.matlabulchifai.components.popups.MedicationCreateTitleWin;
-		import com.matlabulchifai.components.popups.MedicationUpdateTitleWin;
-		import com.matlabulchifai.components.popups.VisitCreateTitleWin;
-		import com.matlabulchifai.components.popups.VisitUpdateTitleWin;
+		import com.matlabulchifai.components.popups.PatientVaccinationCreateTitleWin;
+		import com.matlabulchifai.components.popups.PatientVaccinationUpdateTitleWin;
+		import com.matlabulchifai.components.popups.PatientMedicationCreateTitleWin;
+		import com.matlabulchifai.components.popups.PatientMedicationUpdateTitleWin;
+		import com.matlabulchifai.components.popups.PatientVisitCreateTitleWin;
+		import com.matlabulchifai.components.popups.PatientVisitUpdateTitleWin;
 		import com.matlabulchifai.events.patient.PatientEvent;
 		import com.matlabulchifai.events.patient.PatientVaccinationEvent;
 		import com.matlabulchifai.events.patient.PrescriptionEvent;
@@ -90,16 +90,16 @@
 		
 		private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 		private var rnd:Number;
-		private var vaccPopUp:VaccCreateTitleWin;
-		private var medicationPopUp:MedicationCreateTitleWin;
-		private var vaccinationUpdatePopUp:VaccinationUpdateTitleWin;
-		private var medicationUpdatePopUp:MedicationUpdateTitleWin;
+		private var vaccPopUp:PatientVaccinationCreateTitleWin;
+		private var medicationPopUp:PatientMedicationCreateTitleWin;
+		private var vaccinationUpdatePopUp:PatientVaccinationUpdateTitleWin;
+		private var medicationUpdatePopUp:PatientMedicationUpdateTitleWin;
 		private var uploadPopUp:uploadImageWin;
 		
 		[Bindable]
-		private var visitPopUp:VisitCreateTitleWin;
+		private var visitPopUp:PatientVisitCreateTitleWin;
 		[Bindable]
-		private var visitUpdatePopUp:VisitUpdateTitleWin;
+		private var visitUpdatePopUp:PatientVisitUpdateTitleWin;
 		
 		public function init():void {
 			if(patient == null){
@@ -204,7 +204,7 @@
 		}
 		
 		private function showVaccCreateTitleWin():void {
-			vaccPopUp = VaccCreateTitleWin(PopUpManager.createPopUp(this, VaccCreateTitleWin, true));
+			vaccPopUp = PatientVaccinationCreateTitleWin(PopUpManager.createPopUp(this, PatientVaccinationCreateTitleWin, true));
 			vaccPopUp.addEventListener(PatientVaccinationEvent.PATIENT_VACCINATION_CREATE, handlePatientVaccEvent);
 			vaccPopUp.patient = this.patient;
 			vaccPopUp.languageArray = this.languageArray;
@@ -236,7 +236,7 @@
 		}					
 		
 		private function showMedicationCreateTitleWin():void {				    			
-			medicationPopUp = MedicationCreateTitleWin(PopUpManager.createPopUp(this, MedicationCreateTitleWin, true));
+			medicationPopUp = PatientMedicationCreateTitleWin(PopUpManager.createPopUp(this, PatientMedicationCreateTitleWin, true));
 			medicationPopUp.patient = this.patient;				
 			medicationPopUp.patientID = this.patientID;  
 			medicationPopUp.medicationIdMap = this.medicationIdMap;
@@ -286,7 +286,7 @@
 		}
 		
 		private function showVaccinationUpdateTitleWin(vaccination:XML):void {				
-			vaccinationUpdatePopUp = VaccinationUpdateTitleWin(PopUpManager.createPopUp(this, VaccinationUpdateTitleWin, true));
+			vaccinationUpdatePopUp = PatientVaccinationUpdateTitleWin(PopUpManager.createPopUp(this, PatientVaccinationUpdateTitleWin, true));
 			vaccinationUpdatePopUp.patient = patient;
 			vaccinationUpdatePopUp.vaccination = vaccination;
 			vaccinationUpdatePopUp.vaccinations = vaccinations;
@@ -345,7 +345,7 @@
 		}
 		
 		private function showMedicationUpdateTitleWin(medication:XML):void {				
-			medicationUpdatePopUp = MedicationUpdateTitleWin(PopUpManager.createPopUp(this, MedicationUpdateTitleWin, true));
+			medicationUpdatePopUp = PatientMedicationUpdateTitleWin(PopUpManager.createPopUp(this, PatientMedicationUpdateTitleWin, true));
 			medicationUpdatePopUp.patient = patient;
 			medicationUpdatePopUp.medication = medication;
 			medicationUpdatePopUp.medications = medications;
