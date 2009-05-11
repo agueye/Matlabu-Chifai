@@ -2,7 +2,17 @@ class ConditionsController < ApplicationController
   # GET /conditions
   # GET /conditions.xml
   def index
+    
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
     @conditions = Condition.find(:all)
+    for @condition in @conditions
+        @condition.enter_password @masterKey
+    end
+    
     @conditions.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
@@ -42,7 +52,13 @@ class ConditionsController < ApplicationController
   # POST /conditions.xml
   def create
     @condition = Condition.new(params[:condition])
-
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    @condition.enter_password @masterKey
+  
+  
     respond_to do |format|
       if @condition.save
         flash[:notice] = 'Condition was successfully created.'
