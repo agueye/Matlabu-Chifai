@@ -4,11 +4,24 @@ class PatientVaccinationsController < ApplicationController
   # GET /patient_vaccinations
   # GET /patient_vaccinations.xml
   def index
+    
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
   	if params[:patient_id]
     	@patient_vaccinations = @patient.patient_vaccinations
+      for @patient_vaccination in @patient_vaccinations
+         @patient_vaccination.enter_password @masterKey
+      end
+      
     	@patient_vaccinations.sort! {|y, x| x.date_admined <=> y.date_admined}
    	else
    		@patient_vaccinations = PatientVaccination.find(:all, :order => "date_admined DESC")
+      for @patient_vaccination in @patient_vaccinations
+        @patient_vaccination.enter_password @masterKey
+      end
    	end
     
     respond_to do |format|
@@ -31,7 +44,13 @@ class PatientVaccinationsController < ApplicationController
   # GET /patient_vaccinations/1.xml
   def show
     @patient_vaccination = PatientVaccination.find(params[:id])
-
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
+    @patient_vaccination.enter_password @masterKey
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @patient_vaccination }
@@ -59,14 +78,23 @@ class PatientVaccinationsController < ApplicationController
   def create
 	name = params["patient_vaccination"].delete("name")
 	patient = params["patient_vaccination"].delete("patient_id")
-    @patient_vaccination = PatientVaccination.new(params[:patient_vaccination])
+  @patient_vaccination = PatientVaccination.new(params[:patient_vaccination])
+  
+  @user = User.find_by_id(cookies[:userID])
+  #get master key using cookieSalt and password 
+  @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+  @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+  name = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", name
+  
 	vacc = Vaccination.find_by_name(name)
 	if !vacc
 		vacc = Vaccination.new(:name => name)
 	end
 	@patient_vaccination.vaccination = vacc
-    @patient_vaccination.patient = Patient.find(patient)
-    
+  @patient_vaccination.patient = Patient.find(patient)
+  
+  @patient_vaccination.enter_password @masterKey
+  
     APP_LOGGER_LOG.info "VACCINATION CREATED - for PATIENT ID " + @patient_vaccination.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
