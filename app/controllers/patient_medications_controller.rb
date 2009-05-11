@@ -4,11 +4,24 @@ class PatientMedicationsController < ApplicationController
   # GET /patient_medications
   # GET /patient_medications.xml
   def index
+    
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
   	if (params[:patient_id])
     	@patient_medications = @patient.patient_medications
+      for @patient_medication in @patient_medications
+        @patient_medication.enter_password @masterKey
+      end
+      
     	@patient_medications.sort! {|y, x| x.date_given <=> y.date_given}
     else
     	@patient_medications = PatientMedication.find(:all, :order => "date_given DESC")
+      for @patient_medication in @patient_medications
+        @patient_medication.enter_password @masterKey
+      end
     end
 
     respond_to do |format|
@@ -31,7 +44,13 @@ class PatientMedicationsController < ApplicationController
   # GET /patient_medications/1.xml
   def show
     @patient_medication = PatientMedication.find(params[:id])
-
+    @user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
+    @patient_medication.enter_password @masterKey
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @patient_medication }
@@ -61,7 +80,16 @@ class PatientMedicationsController < ApplicationController
 	patient = params["patient_medication"].delete("patient_id")
 	condition_n = params["patient_medication"].delete("condition")
 	doctor_n = params["patient_medication"].delete("doctor")
-    @patient_medication = PatientMedication.new(params[:patient_medication])
+  @patient_medication = PatientMedication.new(params[:patient_medication])
+    
+  @user = User.find_by_id(cookies[:userID])
+  #get master key using cookieSalt and password 
+  @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+  @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+  name = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", name
+  condition_n = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", condition_n
+  doctor_n = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", doctor_n
+  
 	medication = Medication.find_by_name(name)
 	condition = Condition.find_by_name(condition_n)
 	doctor = Doctor.find_by_name(doctor_n)
@@ -69,6 +97,8 @@ class PatientMedicationsController < ApplicationController
 	@patient_medication.condition = condition
 	@patient_medication.doctor = doctor
 	@patient_medication.patient = Patient.find(patient)
+  
+  @patient_medication.enter_password @masterKey
 
     
     respond_to do |format|
