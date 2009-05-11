@@ -9,7 +9,9 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import mx.core.Application;	
+			import mx.controls.Alert;
 			
+			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
 			public var allergyIdMap:Object;
 			[Bindable]
@@ -17,16 +19,33 @@
 			[Bindable]
 			public var languageArray:Object;
 			
-			private function handleConditionClick(event:Event) {
+			public function deleteAllergy(type:Object):void {
+				this.enabled=false;
+				svcAllergiesDestroy.url = "/allergies/" + type.id + ".xml" + authToken;
 				
+				try{
+					svcAllergiesDestroy.send({_method:"DELETE"});
+				}
+				catch (error:Error){
+					Alert.show(languageArray["Could not delete allergy."], languageArray["Server Error"]);
+				}
+    		}
+    		
+    		private function handleAllergiesDestroyResult(event:Event){
+				Application.application.svcAllergiesList.send();
 			}
 			
 		]]>
 	</mx:Script>
 	
+	<mx:HTTPService
+        id="svcAllergiesDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleAllergiesDestroyResult(event)"/>
+	
 	<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
-   			dataProvider="{allergies}" wordWrap="true" variableRowHeight="true"
-   			itemClick="handleConditionClick(event)">						
+   			dataProvider="{allergies}" wordWrap="true" variableRowHeight="true">						
    		<mx:columns>														
         	<mx:DataGridColumn headerText="{languageArray['Allergy Name']}" width="50"
                 dataField="name"/>
@@ -36,7 +55,7 @@
                     editable="false">
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Button label="{outerDocument.languageArray['Delete Allergy']}" />
+                            <mx:Button label="{outerDocument.languageArray['Delete Allergy']}" click="outerDocument.deleteAllergy(Object(data))" />
                         </mx:Component>
                     </mx:itemRenderer>
 			</mx:DataGridColumn>

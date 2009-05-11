@@ -260,7 +260,9 @@
     		allergies.addItem(newAllergy);
             
             allergiesCursor.moveNext();
-        }        
+        }
+        if (adminBox.allergiesBox != null)
+        	adminBox.allergiesBox.enabled=true;      
     }
 
     
@@ -280,7 +282,9 @@
     		vaccinations.addItem(newVaccination);
             
             vaccinationsCursor.moveNext();
-        }        
+        }
+    	if (adminBox.vaccinationsBox != null)
+        	adminBox.vaccinationsBox.enabled=true;  
     }
     
     private function updateConditionIdMap():void {
@@ -299,7 +303,9 @@
     		conditions.addItem(newCondition);
     		
 			conditionsCursor.moveNext();
-        }        
+        }
+        if (adminBox.conditionsBox != null)
+        	adminBox.conditionsBox.enabled=true;        
     }
     
     private function updateMedicationIdMap():void {
@@ -319,6 +325,8 @@
     		
     		medicationsCursor.moveNext();
         }
+        if (adminBox.medicationsBox != null)
+        	adminBox.medicationsBox.enabled=true;  
     }
     
     private function updateVisitTypeIdMap():void {
@@ -337,7 +345,9 @@
     		visitTypes.addItem(newVisitType);
     		
     		visitTypesCursor.moveNext();
-        }    	
+        }
+        if (adminBox.visitTypesBox != null)
+        	adminBox.visitTypesBox.enabled=true;   	
     }
     
     private function updateDoctorIdMap():void {
@@ -357,6 +367,8 @@
     		
     		doctorsCursor.moveNext();
         }
+        if (adminBox.doctorsBox != null)
+        	adminBox.doctorsBox.enabled=true; 
     }
      
  	private function initHistoryManager():void

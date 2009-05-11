@@ -68,7 +68,7 @@
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				
 				<mx:VBox width="100%" height="100%">
-					<mlc:DoctorViewBox id="doctorViewBox" 
+					<mlc:DoctorViewBox id="doctorsBox" 
 						languageArray="{languageArray}"
 						doctorIdMap="{doctorIdMap}"
 						doctors="{doctors}"/>

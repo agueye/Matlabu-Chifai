@@ -8,8 +8,10 @@
 		<![CDATA[
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
-			import mx.core.Application;	
+			import mx.core.Application;
+			import mx.controls.Alert;
 			
+			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
 			public var medicationIdMap:Object;
 			[Bindable]
@@ -17,16 +19,33 @@
 			[Bindable]
 			public var languageArray:Object;
 			
-			private function handleConditionClick(event:Event) {
+			public function deleteMedication(type:Object):void {
+				this.enabled=false;
+				svcMedicationsDestroy.url = "/medications/" + type.id + ".xml" + authToken;
 				
+				try{
+					svcMedicationsDestroy.send({_method:"DELETE"});
+				}
+				catch (error:Error){
+					Alert.show(languageArray["Could not delete medication."], languageArray["Server Error"]);
+				}
+    		}
+    		
+    		private function handleMedicationsDestroyResult(event:Event){
+				Application.application.svcMedicationsList.send();
 			}
 			
 		]]>
 	</mx:Script>
 	
+	<mx:HTTPService
+        id="svcMedicationsDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleMedicationsDestroyResult(event)"/>
+	
 	<mx:DataGrid id="medicationsGrid" width="100%" height="100%" textAlign="center" 
-   			dataProvider="{medications}" wordWrap="true" variableRowHeight="true"
-   			itemClick="handleConditionClick(event)">						
+   			dataProvider="{medications}" wordWrap="true" variableRowHeight="true">						
    		<mx:columns>														
         	<mx:DataGridColumn headerText="{languageArray['Medication Name']}" width="50"
                 dataField="name"/>
@@ -36,7 +55,7 @@
                     editable="false">
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Button label="{outerDocument.languageArray['Delete Medication']}" />
+                            <mx:Button label="{outerDocument.languageArray['Delete Medication']}" click="outerDocument.deleteMedication(Object(data))"/>
                         </mx:Component>
                     </mx:itemRenderer>
 			</mx:DataGridColumn>

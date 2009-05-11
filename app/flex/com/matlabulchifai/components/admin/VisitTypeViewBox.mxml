@@ -9,7 +9,9 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import mx.core.Application;	
+			import mx.controls.Alert;
 			
+			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
 			public var visitTypeIdMap:Object;
 			[Bindable]
@@ -17,16 +19,36 @@
 			[Bindable]
 			public var languageArray:Object;
 			
-			private function handleConditionClick(event:Event) {
+
+			
+			public function deleteVisitType(type:Object):void {
+				this.enabled=false;
+				Matlabulchifai.debug("visitType = \n" + type);
+				svcVisitTypesDestroy.url = "/visit_types/" + type.id + ".xml" + authToken;
 				
+				try{
+					svcVisitTypesDestroy.send({_method:"DELETE"});
+				}
+				catch (error:Error){
+					Alert.show(languageArray["Could not delete visit type."], languageArray["Server Error"]);
+				}
+    		}
+			
+			private function handleVisitTypesDestroyResult(event:Event){
+				Application.application.svcVisitTypesList.send();
 			}
 			
 		]]>
 	</mx:Script>
 	
+	<mx:HTTPService
+        id="svcVisitTypesDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handleVisitTypesDestroyResult(event)"/>
+	
 	<mx:DataGrid id="visitTypesGrid" width="100%" height="100%" textAlign="center" 
-   			dataProvider="{visitTypes}" wordWrap="true" variableRowHeight="true"
-   			itemClick="handleConditionClick(event)">						
+   			dataProvider="{visitTypes}" wordWrap="true" variableRowHeight="true">						
    		<mx:columns>														
         	<mx:DataGridColumn headerText="{languageArray['Visit Type']}" width="50"
                 dataField="name"/>
@@ -36,7 +58,7 @@
                     editable="false">
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Button label="{outerDocument.languageArray['Delete Visit Type']}" />
+                            <mx:Button label="{outerDocument.languageArray['Delete Visit Type']}" click="outerDocument.deleteVisitType(Object(data))" />
                         </mx:Component>
                     </mx:itemRenderer>
 			</mx:DataGridColumn>
