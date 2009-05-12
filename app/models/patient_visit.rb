@@ -4,7 +4,7 @@ class PatientVisit < ActiveRecord::Base
   belongs_to  :visit_type
   belongs_to  :condition
   
-  
+  encrypt :notes
   validates_presence_of :patient
   validates_presence_of :doctor
   validates_presence_of :visit_type

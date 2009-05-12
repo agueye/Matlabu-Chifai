@@ -2,9 +2,22 @@ class VisitTypesController < ApplicationController
   # GET /visit_types
   # GET /visit_types.xml
   def index
+	@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    
+  
     @visit_types = VisitType.find(:all)
+	
+	for @visit_type in @visit_types
+		if @visit_type !=nil
+			@visit_type.enter_password @masterKey
+		end
+	end
+	
     @visit_types.sort! {|x, y| x.name <=> y.name}
-
+	
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @visit_types }
@@ -15,7 +28,14 @@ class VisitTypesController < ApplicationController
   # GET /visit_types/1.xml
   def show
     @visit_type = VisitType.find(params[:id])
-
+	@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+    if @visit_type !=nil
+		@visit_type.enter_password @masterKey
+	end
+  
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @visit_type }
@@ -41,7 +61,13 @@ class VisitTypesController < ApplicationController
   # POST /visit_types
   # POST /visit_types.xml
   def create
+	@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
     @visit_type = VisitType.new(params[:visit_type])
+	@visit_type.enter_password @masterKey
+	
 
     respond_to do |format|
       if @visit_type.save
@@ -61,7 +87,14 @@ class VisitTypesController < ApplicationController
   # PUT /visit_types/1
   # PUT /visit_types/1.xml
   def update
+	@user = User.find_by_id(cookies[:userID])
+    #get master key using cookieSalt and password 
+    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
     @visit_type = VisitType.find(params[:id])
+	if @visit_type !=nil
+		@visit_type.enter_password @masterKey
+	end
 
     respond_to do |format|
       if @visit_type.update_attributes(params[:visit_type])
