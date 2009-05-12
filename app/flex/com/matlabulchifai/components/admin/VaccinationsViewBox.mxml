@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
 	 width="100%" 
-	 height="100%"
-	 horizontalAlign="center">
+	 height="100%">
 	
 	<mx:Script>
 		<![CDATA[
@@ -10,6 +9,8 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.Application;	
 			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.components.popups.VaccinationCreateTitleWin;
 			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
@@ -18,6 +19,8 @@
 			public var vaccinations:ArrayCollection;
 			[Bindable]
 			public var languageArray:Object;
+			
+			private var vaccinationPopUp:VaccinationCreateTitleWin;
 			
 			public function deleteVaccination(type:Object):void {
 				this.enabled=false;
@@ -29,6 +32,13 @@
 				catch (error:Error){
 					Alert.show(languageArray["Could not delete vaccination."], languageArray["Server Error"]);
 				}
+    		}
+    		
+    		private function showVaccinationCreateBox():void{
+    			vaccinationPopUp = 
+					VaccinationCreateTitleWin(PopUpManager.createPopUp(this, VaccinationCreateTitleWin, true));		
+				vaccinationPopUp.languageArray = languageArray;
+				PopUpManager.centerPopUp(vaccinationPopUp);
     		}
     		
     		private function handleVaccinationsDestroyResult(event:Event){
@@ -43,6 +53,8 @@
         resultFormat="e4x"
         method="POST"
         result="handleVaccinationsDestroyResult(event)"/>
+        
+    <mx:LinkButton label="{languageArray['Add New Vaccination']}" color="#0000FF" click="showVaccinationCreateBox()"/>
 	
 	<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" 
    			dataProvider="{vaccinations}" wordWrap="true" variableRowHeight="true">						

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" width="400" height="300"
+	title="{languageArray['Create Doctor']}"
+	showCloseButton="true"
+	creationComplete="init()"
+    close="PopUpManager.removePopUp(this)">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			import mx.core.Application;
+			import mx.managers.PopUpManager;
+			import mx.validators.Validator;
+    		import mx.events.ValidationResultEvent;
+    		import com.matlabulchifai.events.doctor.DoctorEvent;
+			
+			[Bindable]
+			public var languageArray:Object;
+			
+			private function init():void{
+				resetFocus();    
+			}
+			    
+
+	    	
+    		private function resetFocus():void
+    		{
+    	    	focusManager.setFocus(nameTI);
+	    	}
+
+			
+			private function createDoctor():void{
+				try{
+					svcDoctorCreate.send();
+					this.enabled = false;
+				}
+				catch(error:Error){
+					Alert.show(languageArray["Could not contact server."], languageArray["Server Error"])
+				}
+			}
+			
+			private function handleDoctorCreateResult(event:ResultEvent):void{
+				var result:Object = event.result;
+				if(result == "error"){
+					Alert.show("The account was not created.", "Error");
+				}else{
+					//Alert.show("The account was created successfully.", "Success");
+					Application.application.svcDoctorsList.send();
+					this.enabled = true;
+					PopUpManager.removePopUp(this);
+				}
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:HTTPService id="svcDoctorCreate"
+		url="/doctors.xml?authenticity_token={Application.application.parameters.authenticityToken}"
+		contentType="application/xml"
+		resultFormat="e4x"
+		method="POST"
+		result="handleDoctorCreateResult(event)">
+		<mx:request xmlns="">
+			<doctor>
+				<name>{nameTI.text}</name>
+				<notes>{notesTA.text}</notes>
+			</doctor>
+		</mx:request>
+	</mx:HTTPService>
+	
+
+	<mx:VBox>
+		<mx:Form id="doctorCreateForm" textAlign="left" labelWidth="110">
+			<mx:Label text="New Doctor" fontWeight="bold" />	
+			<mx:Spacer height="5" />
+			<mx:FormItem required="true" label="{languageArray['Doctor Name']}">
+				<mx:TextInput id="nameTI"/>
+			</mx:FormItem>
+			
+			<mx:Spacer height="5" />
+			<mx:FormItem label="Doctor Note">
+				<mx:TextArea id="notesTA" width="150" height="100"/>
+			</mx:FormItem>
+			
+			<mx:Spacer height="5" />
+			<mx:FormItem>
+				<mx:HBox>
+					<mx:Button label="OK" id="OKBtn" click="createDoctor()" />
+					<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />	
+				</mx:HBox>
+			</mx:FormItem>
+		</mx:Form>
+	</mx:VBox>
+	
+</mx:TitleWindow>

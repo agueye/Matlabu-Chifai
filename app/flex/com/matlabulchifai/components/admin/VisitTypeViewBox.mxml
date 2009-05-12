@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
 	 width="100%" 
-	 height="100%"
-	 horizontalAlign="center">
+	 height="100%">
 	
 	<mx:Script>
 		<![CDATA[
@@ -10,6 +9,8 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.Application;	
 			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.components.popups.VisitTypeCreateTitleWin;
 			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
@@ -19,7 +20,7 @@
 			[Bindable]
 			public var languageArray:Object;
 			
-
+			private var visitTypePopUp:VisitTypeCreateTitleWin;
 			
 			public function deleteVisitType(type:Object):void {
 				this.enabled=false;
@@ -33,6 +34,13 @@
 					Alert.show(languageArray["Could not delete visit type."], languageArray["Server Error"]);
 				}
     		}
+    		
+    		private function showVisitTypeCreateBox():void{
+    			visitTypePopUp = 
+					VisitTypeCreateTitleWin(PopUpManager.createPopUp(this, VisitTypeCreateTitleWin, true));		
+				visitTypePopUp.languageArray = languageArray;
+				PopUpManager.centerPopUp(visitTypePopUp);
+    		}
 			
 			private function handleVisitTypesDestroyResult(event:Event){
 				Application.application.svcVisitTypesList.send();
@@ -41,6 +49,8 @@
 		]]>
 	</mx:Script>
 	
+	<mx:LinkButton label="{languageArray['Add New Visit Type']}" color="#0000FF" click="showVisitTypeCreateBox()"/>
+
 	<mx:HTTPService
         id="svcVisitTypesDestroy"
         resultFormat="e4x"

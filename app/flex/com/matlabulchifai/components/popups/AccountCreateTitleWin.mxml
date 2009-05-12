@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" width="400" height="300"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" width="410" height="315"
 	title="{languageArray['Create Account']}"
 	showCloseButton="true"
 	creationComplete="init()"
@@ -119,27 +119,27 @@
     />
 
 	<mx:VBox>
-		<mx:Form id="accountCreateForm" textAlign="left" labelWidth="100" defaultButton="{createAccountBtn}">
+		<mx:Form id="accountCreateForm" textAlign="left" labelWidth="120" defaultButton="{createAccountBtn}">
 			<mx:FormItem required="true" label="{languageArray['Username']}">
 				<mx:TextInput id="loginTI" change="validateForm(event);"/>
 			</mx:FormItem>
-			
+			<mx:Spacer height="5" />
 			<mx:FormItem label="{languageArray['First Name']}">
 				<mx:TextInput id="firstNameTI"/>
 			</mx:FormItem>
-			
+			<mx:Spacer height="5" />
 			<mx:FormItem label="{languageArray['Last Name']}" required="true">
 				<mx:TextInput id="lastNameTI" change="validateForm(event);"/>
 			</mx:FormItem>
-			
+			<mx:Spacer height="5" />
 			<mx:FormItem required="true" label="{languageArray['Password']}">
 				<mx:TextInput id="passwordTI" displayAsPassword="true" change="validateForm(event);"/>
 			</mx:FormItem>
-			
+			<mx:Spacer height="5" />
 			<mx:FormItem required="true" label="{languageArray['Confirm Password']}">
 				<mx:TextInput id="confirmPasswordTI" displayAsPassword="true" change="validateForm(event);"/>
 			</mx:FormItem>
-			
+			<mx:Spacer height="5" />
 			<mx:FormItem>
 				<mx:Button id="createAccountBtn" label="{languageArray['Create Account']}"
 					click="createAccount()" enabled="{formIsValid}"/>

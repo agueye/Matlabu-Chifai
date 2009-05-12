@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
 	 width="100%" 
-	 height="100%"
-	 horizontalAlign="center">
+	 height="100%">
 	
 	<mx:Script>
 		<![CDATA[
@@ -10,6 +9,8 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.Application;
 			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.components.popups.MedicationCreateTitleWin;
 			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
@@ -18,6 +19,8 @@
 			public var medications:ArrayCollection;
 			[Bindable]
 			public var languageArray:Object;
+			
+			private var medicationPopUp:MedicationCreateTitleWin;
 			
 			public function deleteMedication(type:Object):void {
 				this.enabled=false;
@@ -29,6 +32,13 @@
 				catch (error:Error){
 					Alert.show(languageArray["Could not delete medication."], languageArray["Server Error"]);
 				}
+    		}
+    		
+    		private function showMedicationCreateBox():void{
+    			medicationPopUp = 
+					MedicationCreateTitleWin(PopUpManager.createPopUp(this, MedicationCreateTitleWin, true));		
+				medicationPopUp.languageArray = languageArray;
+				PopUpManager.centerPopUp(medicationPopUp);
     		}
     		
     		private function handleMedicationsDestroyResult(event:Event){
@@ -43,6 +53,8 @@
         resultFormat="e4x"
         method="POST"
         result="handleMedicationsDestroyResult(event)"/>
+        
+    <mx:LinkButton label="{languageArray['Add New Medication']}" color="#0000FF" click="showMedicationCreateBox()"/>
 	
 	<mx:DataGrid id="medicationsGrid" width="100%" height="100%" textAlign="center" 
    			dataProvider="{medications}" wordWrap="true" variableRowHeight="true">						

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
 	 width="100%" 
-	 height="100%"
-	 horizontalAlign="center">
+	 height="100%">
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.containers.TitleWindow;
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import mx.core.Application;
 			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.events.condition.ConditionEvent;
+			import com.matlabulchifai.components.popups.ConditionCreateTitleWin;
 
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
@@ -18,6 +21,8 @@
 			public var conditions:ArrayCollection;
 			[Bindable]
 			public var languageArray:Object;
+			
+			private var conditionPopUp:ConditionCreateTitleWin;
 			
 			public function deleteCondition(type:Object):void {
 				this.enabled=false;
@@ -29,6 +34,13 @@
 				catch (error:Error){
 					Alert.show(languageArray["Could not delete condition."], languageArray["Server Error"]);
 				}
+    		}
+    		
+    		private function showConditionCreateBox():void{
+    			conditionPopUp = 
+					ConditionCreateTitleWin(PopUpManager.createPopUp(this, ConditionCreateTitleWin, true));		
+				conditionPopUp.languageArray = languageArray;
+				PopUpManager.centerPopUp(conditionPopUp);
     		}
     		
     		private function handleConditionsDestroyResult(event:Event){
@@ -43,6 +55,8 @@
         resultFormat="e4x"
         method="POST"
         result="handleConditionsDestroyResult(event)"/>
+	
+	<mx:LinkButton label="{languageArray['Add New Condition']}" color="#0000FF" click="showConditionCreateBox()"/>
 	
 	<mx:DataGrid id="conditionsGrid" width="100%" height="100%" textAlign="center" 
    			dataProvider="{conditions}" wordWrap="true" variableRowHeight="true">						

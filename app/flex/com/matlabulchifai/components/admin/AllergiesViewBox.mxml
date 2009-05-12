@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
 	 width="100%" 
-	 height="100%"
-	 horizontalAlign="center">
+	 height="100%">
 	
 	<mx:Script>
 		<![CDATA[
@@ -10,6 +9,9 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.Application;	
 			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import com.matlabulchifai.events.allergy.AllergyEvent;
+			import com.matlabulchifai.components.popups.AllergyCreateTitleWin;
 			
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			[Bindable]
@@ -18,6 +20,8 @@
 			public var allergies:ArrayCollection;
 			[Bindable]
 			public var languageArray:Object;
+			
+			private var allergyPopUp:AllergyCreateTitleWin;
 			
 			public function deleteAllergy(type:Object):void {
 				this.enabled=false;
@@ -31,7 +35,14 @@
 				}
     		}
     		
-    		private function handleAllergiesDestroyResult(event:Event){
+    		private function showAllergyCreateBox():void{
+    			allergyPopUp = 
+					AllergyCreateTitleWin(PopUpManager.createPopUp(this, AllergyCreateTitleWin, true));		
+				allergyPopUp.languageArray = languageArray;
+				PopUpManager.centerPopUp(allergyPopUp);
+    		}
+    		
+    		private function handleAllergiesDestroyResult(event:Event):void{
 				Application.application.svcAllergiesList.send();
 			}
 			
@@ -43,6 +54,8 @@
         resultFormat="e4x"
         method="POST"
         result="handleAllergiesDestroyResult(event)"/>
+	
+	<mx:LinkButton label="{languageArray['Add New Allergy']}" color="#0000FF" click="showAllergyCreateBox()"/>
 	
 	<mx:DataGrid id="allergiesGrid" width="100%" height="100%" textAlign="center" 
    			dataProvider="{allergies}" wordWrap="true" variableRowHeight="true">						

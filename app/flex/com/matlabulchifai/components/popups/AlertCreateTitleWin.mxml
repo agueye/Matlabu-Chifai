@@ -117,10 +117,10 @@
 				<mx:TextArea id="notesTI" width="300" height="100" change="validateForm(event);"/>
 			</mx:FormItem>
 			
-		<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
-			<mx:Button label="OK" id="OKBtn" click="processAlertCreate()" enabled="{formIsValid}" />
-			<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
-		</mx:HBox>
+			<mx:HBox horizontalAlign="center" verticalAlign="middle" width="70%" height="15%">
+				<mx:Button label="OK" id="OKBtn" click="processAlertCreate()" enabled="{formIsValid}" />
+				<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
+			</mx:HBox>
 			
 		</mx:Form>
 	</mx:VBox>	

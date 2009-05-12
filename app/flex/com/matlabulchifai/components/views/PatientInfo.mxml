@@ -660,7 +660,7 @@
 	   		<mx:VBox label="{languageArray['Vaccinations']}" show="listVaccinations()" >
 	   			<mx:Panel title="{languageArray['Vaccination List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
-		   			<mx:LinkButton label="{languageArray['Add New Vaccination']}" color="#0000FF" 
+		   			<mx:LinkButton label="{languageArray['Add New Patient Vaccination']}" color="#0000FF" 
 		   				click="showVaccCreateTitleWin()"/>
 		   			<mx:DataGrid id="vaccinationsGrid" width="100%" height="100%" textAlign="center" 
 		   				dataProvider="{vaccinationsXLC}" wordWrap="true" variableRowHeight="true"

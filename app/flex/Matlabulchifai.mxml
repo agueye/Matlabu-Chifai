@@ -256,6 +256,7 @@
             
             var newAllergy:Object = new Object();
     		newAllergy.name = allergy.name;
+    		newAllergy.notes = allergy.notes;
     		newAllergy.id = allergy.id;
     		allergies.addItem(newAllergy);
             
@@ -278,6 +279,7 @@
             
             var newVaccination:Object = new Object();
         	newVaccination.name = vaccination.name;
+        	newVaccination.notes = vaccination.notes;
     		newVaccination.id = vaccination.id;
     		vaccinations.addItem(newVaccination);
             
@@ -299,6 +301,7 @@
             
             var newCondition:Object = new Object();
     		newCondition.name = condition.name;
+    		newCondition.notes = condition.notes;
     		newCondition.id = condition.id;
     		conditions.addItem(newCondition);
     		
@@ -320,6 +323,7 @@
             
             var newMedication:Object = new Object();
     		newMedication.name = medication.name;
+    		newMedication.notes = medication.notes;
     		newMedication.id = medication.id;
     		medications.addItem(newMedication);
     		
@@ -341,6 +345,7 @@
             
             var newVisitType:Object = new Object();
     		newVisitType.name = visitType.name;
+    		newVisitType.notes = visitType.notes;
     		newVisitType.id = visitType.id;
     		visitTypes.addItem(newVisitType);
     		
@@ -362,6 +367,7 @@
             
             var newDoctor:Object = new Object();
     		newDoctor.name = doctor.name;
+    		newDoctor.notes = doctor.notes;
     		newDoctor.id = doctor.id;
     		doctors.addItem(newDoctor);
     		
