@@ -4,7 +4,7 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
-	width="475" 
+	width="700" 
 	height="575"
 	title="{languageArray['Edit Visit']}"
 	showCloseButton="true"
@@ -344,28 +344,34 @@
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:Text text="Physicals" fontWeight="bold" />
-			<mx:FormItem label="Height">
-				<mx:TextInput id="HeightTI"/>
-			</mx:FormItem>
-			<mx:FormItem label="Weight">
-				<mx:TextInput id="WeightTI"/>
-			</mx:FormItem>
-			<mx:FormItem label="Systolic Blood Pressure">
-				<mx:TextInput id="SystolicTI"/>
-			</mx:FormItem>
-			<mx:FormItem label="Diastolic Blood Pressure">
-				<mx:TextInput id="DiastolicTI"/>
-			</mx:FormItem>
-			<mx:FormItem label="Pulse">
-				<mx:TextInput id="PulseTI"/>
-			</mx:FormItem>
-			<mx:FormItem label="Temperature">
-				<mx:TextInput id="TemperatureTI"/>
-			</mx:FormItem>
-			<mx:Spacer height="5" />
-			<mx:FormItem label="Notes">
-				<mx:TextArea id="visitNotesTI" width="200" height="100" />
-			</mx:FormItem>
+			<mx:HBox>
+				<mx:VBox horizontalAlign="right">
+					<mx:FormItem label="Height">
+						<mx:TextInput id="HeightTI"/>
+					</mx:FormItem>
+					<mx:FormItem label="Weight">
+						<mx:TextInput id="WeightTI"/>
+					</mx:FormItem>
+					<mx:FormItem label="Systolic Blood Pressure">
+						<mx:TextInput id="SystolicTI"/>
+					</mx:FormItem>
+					<mx:FormItem label="Diastolic Blood Pressure">
+						<mx:TextInput id="DiastolicTI"/>
+					</mx:FormItem>
+				</mx:VBox>
+				<mx:VBox horizontalAlign="right">
+					<mx:FormItem label="Pulse">
+						<mx:TextInput id="PulseTI"/>
+					</mx:FormItem>
+					<mx:FormItem label="Temperature">
+						<mx:TextInput id="TemperatureTI"/>
+					</mx:FormItem>
+					<mx:Spacer height="5" />
+					<mx:FormItem label="Notes">
+						<mx:TextArea id="visitNotesTI" width="200" height="100" />
+					</mx:FormItem>		
+				</mx:VBox>
+			</mx:HBox>
 		</mx:Form>
 	</mx:HBox>
 	

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="vertical" 
-	width="550" 
+	width="900" 
 	height="500"
 	title="{languageArray['Edit Patient Information']}"
 	showCloseButton="true"
@@ -170,88 +170,96 @@
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold" defaultButton="{OKBtn}">
-				<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
-					<mx:TextInput id="medicalrecordTI" change="validateForm(event);"/>
-				</mx:FormItem>
+			<mx:HBox>
+				<mx:VBox>
+					<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
+						<mx:TextInput id="medicalrecordTI" change="validateForm(event);"/>
+					</mx:FormItem>
+					
+					<mx:FormItem required="true" label="{languageArray['First Name']}">
+						<mx:TextInput id="firstnameTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Middle Name']}">
+						<mx:TextInput id="middlenameTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem required="true" label="{languageArray['Last Name']}">
+						<mx:TextInput id="lastnameTI" change="validateForm(event);"/>
+					</mx:FormItem>
+					
+					<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
+						<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" 
+							minYear="1930" maxYear="{currDate.getFullYear()}" change="validateForm(event);"/>
+					</mx:FormItem>
+					
+					<mx:FormItem required="true" label="{languageArray['Date of Birth']}">
+						<mx:DateField id="birthdateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" 
+							displayedMonth="0" displayedYear="1990" showToday="false" />
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Gender']}">
+						<mx:ComboBox id="genderTI" dataProvider="{genders}" change="validateForm(event);"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Address']}">
+						<mx:TextInput id="addressTI"/>
+					</mx:FormItem>
+		
+					<mx:FormItem label="{languageArray['City']}">
+						<mx:TextInput id="cityTI"/>
+					</mx:FormItem>
+					
+					
+					<mx:FormItem label="{languageArray['State']}">
+						<mx:TextInput id="stateTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Zip']}">
+						<mx:TextInput id="zipTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Telephone']}">
+						<mx:TextInput id="telephoneTI"/>
+					</mx:FormItem>
+				</mx:VBox>
+				<mx:VBox>
+					<mx:FormItem label="{languageArray['Father First Name']}">
+						<mx:TextInput id="fatherfirstnameTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Father Last Name']}">
+						<mx:TextInput id="fatherlastnameTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Mother First Name']}">
+						<mx:TextInput id="motherfirstnameTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Mother Last Name']}">
+						<mx:TextInput id="motherlastnameTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Emergency Contact Name']}">
+						<mx:TextInput id="emergencycontactnameTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Emergency Contact Relationship']}">
+						<mx:TextInput id="emergencycontactrelationshipTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Emergency Contact Number']}">
+						<mx:TextInput id="emergencycontactnumberTI"/>
+					</mx:FormItem>
+					
+					<mx:FormItem label="{languageArray['Patient Remarks']}">
+						<mx:TextArea id="notesTI" width="200" height="100"/>
+					</mx:FormItem>
+				</mx:VBox>
+			</mx:HBox>
 				
-				<mx:FormItem required="true" label="{languageArray['First Name']}">
-					<mx:TextInput id="firstnameTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Middle Name']}">
-					<mx:TextInput id="middlenameTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem required="true" label="{languageArray['Last Name']}">
-					<mx:TextInput id="lastnameTI" change="validateForm(event);"/>
-				</mx:FormItem>
-				
-				<mx:FormItem required="true" label="{languageArray['Arrival Date']}">
-					<mx:DateField id="arrivaldateTI" yearNavigationEnabled="true" 
-						minYear="1930" maxYear="{currDate.getFullYear()}" change="validateForm(event);"/>
-				</mx:FormItem>
-				
-				<mx:FormItem required="true" label="{languageArray['Date of Birth']}">
-					<mx:DateField id="birthdateTI" yearNavigationEnabled="true" minYear="1930" maxYear="{currDate.getFullYear()}" 
-						displayedMonth="0" displayedYear="1990" showToday="false" />
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Gender']}">
-					<mx:ComboBox id="genderTI" dataProvider="{genders}" change="validateForm(event);"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Address']}">
-					<mx:TextInput id="addressTI"/>
-				</mx:FormItem>
-	
-				<mx:FormItem label="{languageArray['City']}">
-					<mx:TextInput id="cityTI"/>
-				</mx:FormItem>
 				
 				
-				<mx:FormItem label="{languageArray['State']}">
-					<mx:TextInput id="stateTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Zip']}">
-					<mx:TextInput id="zipTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Telephone']}">
-					<mx:TextInput id="telephoneTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Father First Name']}">
-					<mx:TextInput id="fatherfirstnameTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Father Last Name']}">
-					<mx:TextInput id="fatherlastnameTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Mother First Name']}">
-					<mx:TextInput id="motherfirstnameTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Mother Last Name']}">
-					<mx:TextInput id="motherlastnameTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Emergency Contact Name']}">
-					<mx:TextInput id="emergencycontactnameTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Emergency Contact Relationship']}">
-					<mx:TextInput id="emergencycontactrelationshipTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Emergency Contact Number']}">
-					<mx:TextInput id="emergencycontactnumberTI"/>
-				</mx:FormItem>
-				
-				<mx:FormItem label="{languageArray['Patient Remarks']}">
-					<mx:TextArea id="notesTI" width="200" height="100"/>
-				</mx:FormItem>
 				
 		</mx:Form>
 	</mx:VBox>
