@@ -130,10 +130,11 @@
 		
 		private function displayPatientPicture():void {
 			var photoURL:String = patient.photo_file_name;
+			Matlabulchifai.debug("Photo_file_name: " + photoURL);
 			if (photoURL != "")
 				patientImage.source =  "/patients/photos/" + patient.id +  "/medium" + patient.photo_file_name;
 			else //NO PATH WILL MATCH - HENCE DEAFULT PICTURE WILL BE RETURNED
-				patientImage.source = "/patients/photos/1/original_missing.jpg"; 
+				patientImage.source = "/patients/photos/missing_photo.jpg"; 
 		}
 		
 		

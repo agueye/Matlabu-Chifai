@@ -53,7 +53,7 @@
 				serverSideScript = "/patients/" + patientID + authToken;
 				urlRequest = new URLRequest(serverSideScript);
 				var params:URLVariables = new URLVariables();
-				//params.authenticity_token = Application.application.parameters.authenticityToken;
+				params.authenticity_token = Application.application.parameters.authenticityToken;
 				params.action = "update";
 				params.commit = "Update";
 				params._method = "put";

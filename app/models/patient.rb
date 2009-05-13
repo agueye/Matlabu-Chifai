@@ -2,7 +2,7 @@ class Patient < ActiveRecord::Base
  APP_LOGGER_LOG.info "In Patient Model" 
   has_attached_file :photo,
       :url => "/:class/:attachment/:id/:style_:basename.:extension",
-      #:default_url => "/:class/:attachment/missing.jpg",
+      #:default_url => "/:class/:attachment/missing_photo.jpg",
       :path => ":rails_root/public/:class/:attachment/:id/:style_:basename.:extension",
       :styles => {:thumb=> "100x100>", :small  => "150x150>", :tiny => "50x50#", :medium => "250x250>" }
       
