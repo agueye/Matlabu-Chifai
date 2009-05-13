@@ -57,9 +57,9 @@
 			<mx:Panel title="{languageArray['Accounts List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				
-				<mx:VBox width="100%" height="100%">
+				<mx:HBox width="100%" height="100%">
 					<mlc:AccountViewBox id="accountViewBox" languageArray="{languageArray}"/>
-				</mx:VBox>
+				</mx:HBox>
 			</mx:Panel>
 		</mx:VBox>
 		
@@ -67,12 +67,12 @@
 			<mx:Panel title="{languageArray['Doctors List']}" width="100%" height="100%" 
 				paddingTop="10" paddingLeft="5" paddingRight="5">
 				
-				<mx:VBox width="100%" height="100%">
+				<mx:HBox width="100%" height="100%">
 					<mlc:DoctorViewBox id="doctorsBox" 
 						languageArray="{languageArray}"
 						doctorIdMap="{doctorIdMap}"
 						doctors="{doctors}"/>
-				</mx:VBox>
+				</mx:HBox>
 			</mx:Panel>
 		</mx:VBox>
 		
