@@ -447,8 +447,7 @@
 		
 		[Bindable]
 		public var heights:ArrayCollection;
-		public function handlePhysicalHeight(event:ResultEvent):void{
-			
+		public function handlePhysicalHeight(event:ResultEvent):void{			
     		heights = new ArrayCollection();
 			var heightsCursor:IViewCursor =
 		            heightsXLC.createCursor();
@@ -460,6 +459,9 @@
 		    		heights.addItem(newHeight);
 		            heightsCursor.moveNext();
 		        }
+		 	if (heights.length == 1){
+		 		heights.addItem(heights.getItemAt(0));
+		 	}
 		}
 		[Bindable]
 		public var weights:ArrayCollection;
@@ -475,6 +477,9 @@
 		    		weights.addItem(newWeight);
 		            weightsCursor.moveNext();
 		        }
+		    if (weights.length == 1){
+		 		weights.addItem(weights.getItemAt(0));
+		 	}
 		}
 		[Bindable]
 		public var pulses:ArrayCollection;
@@ -491,6 +496,9 @@
 		            pulsesCursor.moveNext();
 		        }
 	   		
+		    if (pulses.length == 1){
+		 		pulses.addItem(pulses.getItemAt(0));
+		 	}
 		}
 		[Bindable]
 		public var temps:ArrayCollection;
@@ -506,6 +514,9 @@
 		    		temps.addItem(newTemp);
 		            tempsCursor.moveNext();
 		        }
+		    if (temps.length == 1){
+		 		temps.addItem(temps.getItemAt(0));
+		 	}
 		}
 		[Bindable]
 		public var bps:ArrayCollection;
@@ -524,6 +535,9 @@
 		    		bps.addItem(newbps);
 		            bpsCursor.moveNext();
 		        }
+		    if (bps.length == 1){
+		 		bps.addItem(bps.getItemAt(0));
+		 	}
 		   
 		}
 
