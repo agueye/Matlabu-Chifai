@@ -1,81 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="vertical" 
-	width="500" 
-	height="300"
-	title="{languageArray['Upload Image']}"
+<!--
+/** *******************************************************************
+ * MySnippets
+ * Free for use
+ *
+ * @author  Jonnie Spratley
+ * @contact jonniespratley@gmail.com
+ ******************************************************************* */
+-->
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*" 
+	title="Upload a File" 
 	showCloseButton="true"
-    close="PopUpManager.removePopUp(this)">
-	 <mx:Script>
-        <![CDATA[
-        	import flash.net.FileReference;
-   			import flash.net.URLRequestHeader;
-        	import mx.managers.PopUpManager;
-        	
-        	[Bindable]
+	creationComplete="init()"
+	 width="450" 
+	 height="200" 
+	 close="PopUpManager.removePopUp( this )" >
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.*;
+        	import mx.core.*;
+            private var fileRef:FileReference;
+            
+            [Bindable]
 			public var patient:XML;
 			[Bindable]
 			public var patientID:Number;
 			
 			[Bindable]
 			public var languageArray:Object;
+			private var rnd:int;
 			
-			private var uploadFileRefList:FileReference = new FileReference();
-   			private var uploadURLReq:URLRequest;
-   			private var URLString:String="/patient_photos/" + patientID + ".xml?authenticity_token=" +
-							mx.core.Application.application.parameters.authenticityToken;
-   			
- 
- 
-  private function uploadFiles():void
-  {
-   		uploadFileRefList.addEventListener(Event.SELECT, uploadSelectHandler);
-   		try {
-           var success:Boolean = uploadFileRefList.browse();
-   		} catch (error:Error) {
-           trace("Unable to browse for files. " + error);
-   		}
-   }
-   
-   private function doUpload(file:FileReference):void
-   {
-       uploadURLReq = new URLRequest(URLString);
-       file.addEventListener(Event.COMPLETE, uploadCompleteHandler);
-       file.addEventListener(IOErrorEvent.IO_ERROR, uploadIoErrorHandler);
-       file.addEventListener(ProgressEvent.PROGRESS, uploadProgressHandler);
-       try
-       {
-           file.upload(uploadURLReq);
-       } catch (error:Error) {
-           trace("Unable to upload file. " + error);
-       }
-   }
-   private function uploadSelectHandler(event:Event):void
-   {
-       doUpload(uploadFileRefList);
-   }
-   private function uploadProgressHandler (event:ProgressEvent):void
-   {
-       //upload_btn.enabled=false;
-       trace(Math.floor((event.bytesLoaded/event.bytesTotal)*100) + "% complete");
-   }
-   private function uploadIoErrorHandler (event:Event):void
-   {
-       trace("Upload failed: " + event);
-   }
-   private function uploadCompleteHandler (event:Event):void
-   {
-       //upload_btn.enabled=true;
-       trace("Upload successfull: ");
-   }
-   
+			private var urlRequest:URLRequest;
+			//private var fileReferenceList:FileReferenceList;
+			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
+			//private var authToken:String = "&authenticity_token=" + Application.application.parameters.authenticityToken;
+			private var serverSideScript:String;
+		
+			private function init():void {
+				//fileReferenceList = new FileReferenceList();
+				//fileReferenceList.addEventListener(Event.SELECT, fileSelectedHandler);
+				//REPLACEMENT
+				fileRef = new FileReference();
+				fileRef.addEventListener(Event.SELECT, fileSelectedHandler);
+				//END REPLACEMENT
+				patientID = Application.application.patientInfoBox.patientID;
+				patient = Application.application.patientInfoBox.patient;
+				languageArray = Application.application.patientInfoBox.languageArray;
+				//serverSideScript = "/uploadPic" + authToken + "&id=" + patientID;
+				//serverSideScript = "/patient_photos_update/" + patientID + authToken;
+				serverSideScript = "/patients/" + patientID + authToken;
+				urlRequest = new URLRequest(serverSideScript);
+				var params:URLVariables = new URLVariables();
+				//params.authenticity_token = Application.application.parameters.authenticityToken;
+				params.action = "update";
+				params.commit = "Update";
+				params._method = "put";
+				urlRequest.data = params;
+				urlRequest.method = URLRequestMethod.POST;
+			}
+			
+			private function uploadFile():void {
+				//fileReferenceList.browse();
+				fileRef.browse([new FileFilter("Image Files","*.jpg;*.gif;*.png")]);
+			}
+			
+			private function fileSelectedHandler(event:Event):void {
+				fileRef.addEventListener(Event.COMPLETE, uploadCompleteHandler);
+				try{
+				fileRef.upload(urlRequest,"patient[photo]");
+				}catch(error:Error){
+					statusText.text = "Unable to upload file.";
+					trace("Unable to upload file.");
+					return;
+				}
+				
+				// update the status text
+				statusText.text = "Uploading...";
+			}
+			
+			private function uploadCompleteHandler(event:Event):void {
+				statusText.text = "File Uploaded: " + event.target.name;
+			}
+			
+			/*
+			private function fileSelectedHandler(event:Event):void {
+				var fileReference:FileReference;
+				var fileReferenceList:FileReferenceList = FileReferenceList(event.target);
+				var fileList:Array = fileReferenceList.fileList;
 
-        ]]>
-    </mx:Script>
-    <mx:NumberFormatter id="numberFormatter" />
-	<mx:ApplicationControlBar>
-	    <mx:Button label="Upload file" click="uploadFiles();" />
-	    <mx:Label id="message" />
-	    <mx:ProgressBar id="progressBar" mode="manual" visible="true" />
-	</mx:ApplicationControlBar>
+				// get the first file that the user chose
+				fileReference = FileReference(fileList[0]);
+				
+				// upload the file to the server side script
+				fileReference.addEventListener(Event.COMPLETE, uploadCompleteHandler);
+				//ADD THE RANDOM STRNIG
+				//rnd = Math.round(Math.random()*1000);
+				//serverSideScript += "&rnd=" + rnd;
+				try{
+				fileReference.upload(urlRequest);
+				}catch(error:Error){
+					trace("Unable to upload file.");
+				}
+				
+				// update the status text
+				statusText.text = "Uploading...";
+			}
+			
+			private function uploadCompleteHandler(event:Event):void {
+				statusText.text = "File Uploaded: " + event.target.name;
+			}*/
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label text="Upload Profile Picture" fontWeight="bold"/>
+	<mx:Label text="Choose a file..." id="statusText"/>
+	<mx:Button click="uploadFile();" label="Upload File"/>
 </mx:TitleWindow>

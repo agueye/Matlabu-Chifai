@@ -62,6 +62,7 @@ class PatientsController < ApplicationController
   # POST /patients.xml
   def create
 #create a new patient object from information submitted through new patient form
+    APP_LOGGER_LOG.info "In Create in Patient Controller" 
     @patientNew = Patient.new(params[:patient])
 
     #get user's id from cookie and look up user in the db
@@ -128,6 +129,7 @@ class PatientsController < ApplicationController
   # PUT /patients/1
   # PUT /patients/1.xml
   def update
+      APP_LOGGER_LOG.info "In Update in Patient Controller" 
      @patient = Patient.find(params[:id])
 	
 	

@@ -130,13 +130,10 @@
 		
 		private function displayPatientPicture():void {
 			var photoURL:String = patient.photo_file_name;
-			
-			if (photoURL != null) {
-				patientImage.source =  "/patients/photos/" + patient.id + 
-									   "/medium_" + patient.photo_file_name;
-			} else {
-				patientImage.source = "/patients/photos/missing.jpg";
-			}
+			if (photoURL != "")
+				patientImage.source =  "/patients/photos/" + patient.id +  "/medium" + patient.photo_file_name;
+			else //NO PATH WILL MATCH - HENCE DEAFULT PICTURE WILL BE RETURNED
+				patientImage.source = "/patients/photos/1/original_missing.jpg"; 
 		}
 		
 		
