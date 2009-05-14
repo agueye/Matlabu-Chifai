@@ -48,28 +48,63 @@
 				patientID = Application.application.patientInfoBox.patientID;
 				patient = Application.application.patientInfoBox.patient;
 				languageArray = Application.application.patientInfoBox.languageArray;
-				//serverSideScript = "/uploadPic" + authToken + "&id=" + patientID;
+				serverSideScript = "/uploadPic" + authToken + "&id=" + patientID;
 				//serverSideScript = "/patient_photos_update/" + patientID + authToken;
-				serverSideScript = "/patients/" + patientID + authToken;
+				//serverSideScript = "/patients/" + patientID;
 				urlRequest = new URLRequest(serverSideScript);
 				var params:URLVariables = new URLVariables();
+				/*
 				params.authenticity_token = Application.application.parameters.authenticityToken;
 				params.action = "update";
 				params.commit = "Update";
 				params._method = "put";
+				*/
+				//params.sessionID = Application.application.parameters.session_key;
+				//PATIENT DATA
+				/*
+				params.decode("patient[medical_record_number]=" + patient['medical_record_number']);
+				params.decode("patient[first_name]=" + patient['first_name']);
+				params.decode("patient[middle_name]=" + patient['middle_name']);
+				params.decode("patient[last_name]=" + patient['last_name']);
+				params.decode("patient[arrival_date(1i)]=" + patient['arrival_date(1i)']);
+				params.decode("patient[arrival_date(2i)]=" + patient['arrival_date(2i)']);
+				params.decode("patient[arrival_date(3i)]=" + patient['arrival_date(3i)']);
+				params.decode("patient[date_of_birth(1i)]=" + patient['date_of_birth(1i)']);
+				params.decode("patient[date_of_birth(2i)]=" + patient['date_of_birth(2i)']);
+				params.decode("patient[date_of_birth(3i)]=" + patient['date_of_birth(3i)']);
+				params.decode("patient[gender]=" + patient['gender']);
+				params.decode("patient[address]=" + patient['address']);
+				params.decode("patient[city]=" + patient['city']);
+				params.decode("patient[state]=" + patient['state']);
+				params.decode("patient[zip]=" + patient['zip']);
+				params.decode("patient[father_first_name]=" + patient['father_first_name']);
+				params.decode("patient[father_middle_name]=" + patient['father_middle_name']);
+				params.decode("patient[father_last_name]=" + patient['father_last_name']);
+				params.decode("patient[mother_first_name]=" + patient['mother_first_name']);
+				params.decode("patient[mother_middle_name]=" + patient['mother_middle_name']);
+				params.decode("patient[mother_last_name]=" + patient['mother_last_name']);
+				params.decode("patient[telephone]=" + patient['telephone']);
+				params.decode("patient[emergency_contact_name]=" + patient['emergency_contact_name']);
+				params.decode("patient[emergency_contact_relationship]=" + patient['emergency_contact_relationship']);
+				params.decode("patient[notes]=" + patient['notes']);
+				*/				
+				//END PATIENT DATA
 				urlRequest.data = params;
 				urlRequest.method = URLRequestMethod.POST;
+				urlRequest.contentType = "text/html;charset=UTF-8";
 			}
 			
 			private function uploadFile():void {
 				//fileReferenceList.browse();
 				fileRef.browse([new FileFilter("Image Files","*.jpg;*.gif;*.png")]);
+				//fileRef.browse([new FileFilter("Image Files","*.jpg")]);
 			}
 			
 			private function fileSelectedHandler(event:Event):void {
 				fileRef.addEventListener(Event.COMPLETE, uploadCompleteHandler);
 				try{
-				fileRef.upload(urlRequest,"patient[photo]");
+				//fileRef.upload(urlRequest,"patient[photo]");
+				fileRef.upload(urlRequest);
 				}catch(error:Error){
 					statusText.text = "Unable to upload file.";
 					trace("Unable to upload file.");
@@ -82,6 +117,7 @@
 			
 			private function uploadCompleteHandler(event:Event):void {
 				statusText.text = "File Uploaded: " + event.target.name;
+				Application.application.patientInfoBox.refreshPatientPicture();
 			}
 			
 			/*

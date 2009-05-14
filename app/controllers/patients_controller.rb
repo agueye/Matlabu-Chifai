@@ -1,4 +1,9 @@
 class PatientsController < ApplicationController
+  require 'ftools'
+  require 'fileutils'
+  APP_LOGGER_LOG.info "It Made it here" 
+  #skip_before_filter :verify_authenticity_token
+  #skip_before_filter :login_required
   # GET /patients
   # GET /patients.xml
   def index
@@ -55,14 +60,13 @@ class PatientsController < ApplicationController
 
   # GET /patients/1/edit
   def edit
-    @patient = Patient.find(params[:id])
   end
 
   # POST /patients
   # POST /patients.xml
   def create
 #create a new patient object from information submitted through new patient form
-    APP_LOGGER_LOG.info "In Create in Patient Controller" 
+    APP_LOGGER_LOG.info "In Create in Patient Controller Patient - " + params[:patient].to_s 
     @patientNew = Patient.new(params[:patient])
 
     #get user's id from cookie and look up user in the db
@@ -109,10 +113,21 @@ class PatientsController < ApplicationController
 	#@patient.date_of_birth=@masterKey.encrypt(@patient.date_of_birth.to_s)
 	#@decrypted=@key.decrypt(@encrypted)
     #assert "clear text", @decrypted
-
+    
 
     respond_to do |format|
       if @patient.save
+      	#CREATE BLANK PROFILE PIC - ADDED BY UPINDER
+    	@patientID = @patient.id.to_s
+    	APP_LOGGER_LOG.info "PatientID: " + @patientID
+    	@target_directory = File.join(RAILS_ROOT,"public/patients/photos")
+    	@target_directory = File.join(@target_directory,@patientID)
+    	@target_path = File.join(@target_directory,"pic.jpg")
+    	@source_path = File.join(RAILS_ROOT,"public/patients/photos")
+    	@source_path = File.join(@source_path,"missing_photo.jpg")
+    	Dir::mkdir(@target_directory)
+		File.copy(@source_path,@target_path)    	
+    	#END BLANK PROFILE PIC
         flash[:notice] = 'Patient was successfully created.'
         
         APP_LOGGER_LOG.info "PATIENT CREATED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
@@ -132,10 +147,9 @@ class PatientsController < ApplicationController
       APP_LOGGER_LOG.info "In Update in Patient Controller" 
      @patient = Patient.find(params[:id])
 	
-	
 	#get user's id from cookie and look up user in the db
     @user = User.find_by_id(cookies[:userID])
-
+    APP_LOGGER_LOG.info "In Update in Patient Controller" 
 	#get master key using cookieSalt and password 
     @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
 	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
@@ -163,6 +177,13 @@ class PatientsController < ApplicationController
   def destroy
     @patient = Patient.find(params[:id])
     @patient.destroy
+    
+    #DELETE PROFILE PIC - ADDED BY UPINDER
+    @patientID = params[:id]
+    @directory = File.join(RAILS_ROOT,"public/patients/photos")
+    @directory = File.join(@directory,@patientID)
+    Upload.delete(@directory)
+    #END DELETE PROFILE PIC
     
     APP_LOGGER_LOG.info "PATIENT DELETED - for PATIENT ID " + @patient[:medical_record_number] + " by USER " + self.current_user[:login]
     

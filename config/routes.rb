@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.flex '/matlabulchifai', :controller => "flex", :action => "index"
-  
+  map.upload_pic '/uploadPic', :controller => "upload", :action => "index"
   map.patient_search '/patients/search.:format', :controller => "patients", :action => "find"  
   map.allergy_search '/patient_allergies/search.:format', :controller => "patient_allergies", :action => "find"
   map.vaccination_search '/patient_vaccinations/search.:format', :controller => "patient_vaccinations", :action => "find"

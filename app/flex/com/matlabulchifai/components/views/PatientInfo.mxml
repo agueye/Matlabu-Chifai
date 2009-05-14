@@ -88,8 +88,8 @@
 		[Bindable]
 		public var patient:XML;
 		
+		private var photoURL;
 		private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
-		private var rnd:Number;
 		private var vaccPopUp:PatientVaccinationCreateTitleWin;
 		private var medicationPopUp:PatientMedicationCreateTitleWin;
 		private var vaccinationUpdatePopUp:PatientVaccinationUpdateTitleWin;
@@ -120,21 +120,25 @@
 			Matlabulchifai.debug("patient: " + patient);
 			Matlabulchifai.debug("Patient ID: " + patient.id);
 			patientID = patient.id;
-			rnd = Math.round(Math.random()*1000);
 			alertVbox.listAlerts();
 			patientInfoMain.selectedIndex = 0;
 			Matlabulchifai.debug("Leaving init in PatientInfo");		
-			
-			displayPatientPicture();
+			photoURL = "/patients/photos/" + patient.id + "/pic.jpg";
+			//photoURL = "/downloadPic" + authToken + "&id=" + patientID;
+			patientImage.source = photoURL;
 		}
 		
-		private function displayPatientPicture():void {
-			var photoURL:String = patient.photo_file_name;
-			Matlabulchifai.debug("Photo_file_name: " + photoURL);
-			if (photoURL != "")
-				patientImage.source =  "/patients/photos/" + patient.id +  "/medium" + patient.photo_file_name;
-			else //NO PATH WILL MATCH - HENCE DEAFULT PICTURE WILL BE RETURNED
-				patientImage.source = "/patients/photos/missing_photo.jpg"; 
+		public function refreshPatientPicture():void {
+			Matlabulchifai.debug("PhotoURL: " + photoURL);
+			patientImage.load(photoURL);
+			/*
+			if (photoURL != ""){
+				//patientImage.source =  "/patients/photos/" + patient.id + "//" +   patient.photo_file_name;
+				patientImage.load("/patients/photos/" + patient.id + "/pic.jpg" + "?rnd=" + rnd);
+				Matlabulchifai.debug("Photo Path: " + "/patients/photos/" + patient.id + "/pic.jpg" + "?rnd=" + rnd);
+			}else{ //NO PATH WILL MATCH - HENCE DEAFULT PICTURE WILL BE RETURNED
+				patientImage.load("/patients/photos/missing_photo.jpg"); 
+			}*/
 		}
 		
 		
