@@ -430,12 +430,12 @@
 		if(user.is_admin == 1) {
 			mainMenu.dataProvider = adminMenu;
 			this.setStyle('backgroundGradientColors',[0xCCCC00, 0xFFFFFF]);
-			mainMenu.setStyle("fillColors", [0x007D0B, 0xFFFFFF]);
+			mainMenu.setStyle("backgroundcolor", 0x007D0B);
 		}
 		else {
 			mainMenu.dataProvider = userMenu;
 			this.setStyle('backgroundGradientColors',[0x007D0B, 0xFFFFFF]);
-			mainMenu.setStyle("fillColors", [0x0000FF, 0xFFFFFF]);
+			mainMenu.setStyle("backgroundcolor", 0x0000FF);
 		}
 		listPatients();
 	}
@@ -658,7 +658,7 @@
 				</mx:HBox>
 		</mx:Canvas>
 		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false"
-			fontWeight="bold" fontSize="14">
+			fontWeight="bold" fontSize="14" color="black">
 
 		</mx:MenuBar>
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
