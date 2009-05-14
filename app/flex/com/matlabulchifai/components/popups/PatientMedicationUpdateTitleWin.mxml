@@ -83,9 +83,9 @@
     		{                    
         		focusedFormControl = event.target as DisplayObject;                
         	  	formIsValid = true;            
-    	      	validate(medicationNameValidator);    	      	  
-    	      	validate(conditionNameValidator);
-    	      	validate(doctorNameValidator);
+    	      	//validate(medicationNameValidator);    	      	  
+    	      	//validate(conditionNameValidator);
+    	      	//validate(doctorNameValidator);
     	      	validate(dosageValidator);
     	      	validate(frequencyValidator);
     	      	validate(dateGivenValidator);
@@ -93,9 +93,11 @@
 
 	    	private function validate(validator:Validator):Boolean
     		{                
+    			
         	 	var validatorSource:DisplayObject = validator.source as DisplayObject;
          		var suppressEvents:Boolean = (validatorSource != focusedFormControl);
-         		var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+         		var event:ValidationResultEvent = validator.validate(null, suppressEvents);
+         		        		
          		var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
          		formIsValid = formIsValid && currentControlIsValid;                 
         		return currentControlIsValid;
@@ -288,6 +290,7 @@
         minLength="2"
     />
     
+       
     <mx:StringValidator 
         id="conditionNameValidator"
         source="{searchConditionTI}" 

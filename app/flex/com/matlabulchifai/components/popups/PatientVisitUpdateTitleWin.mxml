@@ -63,7 +63,7 @@
 			[Bindable]
 			private var conditionSearchStr:String;
 			[Bindable]
-    		public var formIsValid:Boolean = false;
+    		public var formIsValid:Boolean = true;
     		
 			private var focusedFormControl:DisplayObject;
 			
@@ -85,9 +85,9 @@
     		{                    
         		focusedFormControl = event.target as DisplayObject;                
         	  	formIsValid = true;            
-    	      	validate(visitTypeValidator);    	      	  
-    	      	validate(conditionNameValidator);
-    	      	validate(doctorNameValidator);
+    	      	//validate(visitTypeValidator);    	      	  
+    	      	//validate(conditionNameValidator);
+    	      	//validate(doctorNameValidator);
     	      	validate(dateGivenValidator);
 	     	}
 
@@ -284,26 +284,7 @@
 			</doctor>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:StringValidator 
-        id="visitTypeValidator"
-        source="{searchVisitTypeTI}" 
-        property="text"
-        minLength="2"
-    />
-    
-    <mx:StringValidator 
-        id="conditionNameValidator"
-        source="{searchConditionTI}" 
-        property="text"
-        minLength="2"
-    />
-    
-    <mx:StringValidator 
-        id="doctorNameValidator"
-        source="{searchDoctorTI}" 
-        property="text"
-        minLength="2"
-    />
+	
     
     <mx:DateValidator 
         id="dateGivenValidator"

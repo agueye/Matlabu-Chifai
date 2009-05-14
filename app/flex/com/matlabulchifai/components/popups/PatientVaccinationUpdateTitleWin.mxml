@@ -53,7 +53,7 @@
     		{                    
         		focusedFormControl = event.target as DisplayObject;                
         	  	formIsValid = true;            
-    	      	validate(vaccValidator);    	      	  
+    	      	//validate(vaccValidator);    	      	  
     	      	validate(vaccDateValidator);
 	     	}
 
@@ -144,12 +144,7 @@
 		</mx:request>
 	</mx:HTTPService>
 	
-	<mx:StringValidator 
-        id="vaccValidator"
-        source="{searchVaccinationTI}" 
-        property="text"
-        minLength="2"
-    />
+	
     
     <mx:DateValidator 
         id="vaccDateValidator"
