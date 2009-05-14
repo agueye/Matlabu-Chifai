@@ -8,7 +8,8 @@ class CreatePatientVisits < ActiveRecord::Migration
       t.date :visit_date
       t.string :height
       t.string :weight
-      t.string :blood_pressure
+      t.string :systolic
+      t.string :diastolic
       t.string :pulse
       t.string :temperature
       t.text :notes

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090510053146) do
+ActiveRecord::Schema.define(:version => 20090510220305) do
 
   create_table "allergies", :force => true do |t|
     t.string   "name"
@@ -26,10 +26,10 @@ ActiveRecord::Schema.define(:version => 20090510053146) do
   end
 
   create_table "doctors", :force => true do |t|
+    t.string   "name"
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
   end
 
   create_table "medications", :force => true do |t|
@@ -79,11 +79,6 @@ ActiveRecord::Schema.define(:version => 20090510053146) do
     t.datetime "updated_at"
   end
 
-  create_table "patient_pictures", :force => true do |t|
-    t.integer "patient_id"
-    t.binary  "picture"
-  end
-
   create_table "patient_vaccinations", :force => true do |t|
     t.integer  "patient_id"
     t.integer  "vaccination_id"
@@ -101,13 +96,13 @@ ActiveRecord::Schema.define(:version => 20090510053146) do
     t.date     "visit_date"
     t.string   "height"
     t.string   "weight"
+    t.string   "systolic"
+    t.string   "diastolic"
     t.string   "pulse"
     t.string   "temperature"
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "systolic"
-    t.string   "diastolic"
   end
 
   create_table "patients", :force => true do |t|
@@ -131,27 +126,26 @@ ActiveRecord::Schema.define(:version => 20090510053146) do
     t.string   "emergency_contact_relationship"
     t.string   "emergency_contact_number"
     t.text     "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string   "photo_file_name"
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|
-    t.string   "login",                                    :null => false
+    t.string   "login",                                   :null => false
     t.string   "crypted_password",          :limit => 40
     t.string   "salt",                      :limit => 40
-    t.string   "first_name",                :limit => 80,  :null => false
-    t.string   "last_name",                 :limit => 80,  :null => false
+    t.string   "first_name",                :limit => 80, :null => false
+    t.string   "last_name",                 :limit => 80, :null => false
+    t.integer  "is_admin"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
-    t.string   "encryptedKey",              :limit => nil
-    t.string   "cookieSalt",                :limit => nil
-    t.string   "encryptedPassword",         :limit => nil
-    t.integer  "is_admin"
+    t.string   "encryptedKey"
+    t.string   "cookieSalt"
   end
 
   create_table "vaccinations", :force => true do |t|

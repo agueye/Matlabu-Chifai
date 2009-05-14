@@ -21,6 +21,9 @@ class CreatePatients < ActiveRecord::Migration
       t.string :emergency_contact_relationship
       t.string :emergency_contact_number
       t.text :notes
+      t.string :photo_file_name
+      t.string :photo_content_type
+      t.integer :photo_file_size
 
       t.timestamps
     end
@@ -30,3 +33,4 @@ class CreatePatients < ActiveRecord::Migration
     drop_table :patients
   end
 end
+

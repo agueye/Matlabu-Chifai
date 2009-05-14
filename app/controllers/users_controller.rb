@@ -28,14 +28,21 @@ class UsersController < ApplicationController
     # uncomment at your own risk
     # reset_session
 	
-	@user = User.find_by_id(cookies[:userID])
-	#get master key using cookieSalt and password 
-    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	@first_user = User.find(:first)
 	
-    @user = User.new(params[:user])    
-    @encrypted=EzCrypto::Key.encrypt_with_password @user.password, "system salt",@masterKey
-    @user.encryptedKey = @encrypted
+	#if this is not the first user
+	if @first_user.nil?
+		@user = User.new(params[:user])
+	else
+		@user = User.find_by_id(cookies[:userID])
+		#get master key using cookieSalt and password 
+    	@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
+		@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
+	
+ 	    @user = User.new(params[:user])    
+    	@encrypted=EzCrypto::Key.encrypt_with_password @user.password, "system salt",@masterKey
+    	@user.encryptedKey = @encrypted
+    end
 
     @user.save!
     
