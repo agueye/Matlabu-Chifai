@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 
     @user.save!
     
-    APP_LOGGER_LOG.info "USER CREATED - " + @user[:login]
+    APP_LOGGER_LOG.info "USER CREATED - " + @user[:login] + " by USER " + self.current_user[:login]
 
     self.current_user = @user
     respond_to do |format|

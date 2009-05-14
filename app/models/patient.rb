@@ -1,5 +1,5 @@
 class Patient < ActiveRecord::Base
- APP_LOGGER_LOG.info "In Patient Model" 
+ 
   has_attached_file :photo,
       :url => "/:class/:attachment/:id/:style_:basename.:extension",
       :path => ":rails_root/public/:class/:attachment/:id/:style_:basename.*.*",

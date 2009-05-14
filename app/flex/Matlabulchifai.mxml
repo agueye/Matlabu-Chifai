@@ -12,12 +12,14 @@
 	paddingBottom="0" 
 	width="100%"
 	height="100%"
+	minHeight="768"
+	minWidth="1024"
 	historyManagementEnabled="false"
 	creationComplete="init();"
 	preinitialize="langUpdate('ENGLISH');">  
 	
 	<mx:Style>
-		VDividedBox{
+		VBox{
 			fontSize: 12;
 		}
 		
@@ -120,8 +122,7 @@
 
 
 	public static function debug(str:String):void {
-		application.debugPanel.addMessage(
-		new DebugMessage(str));
+		//application.debugPanel.addMessage(new DebugMessage(str));
 	}		
 	
 	private function langUpdate(lang:String):void{
@@ -647,14 +648,18 @@
 	<mx:XMLListCollection id="doctorsXLC"
         source="{XMLList(svcDoctorsList.lastResult.children())}"/>	
         
-<mx:VDividedBox width="100%" height="100%">
 	<mx:VBox height="100%" width="100%">
 		<mx:Canvas width="100%" height="75">
 				<mx:HBox height="100%" width="80%" horizontalAlign="center">
-					<mx:Text height="100%" width="100%" fontFamily="Comic Sans MS" fontSize="55" color="white" text="Matlabul Chifai"/>
-					<mx:Button click="langUpdate('FRENCH');" label="Français" />
-					<mx:Button click="langUpdate('ENGLISH');" label="English" />
-					<mx:Button click="langUpdate('HINDI');" label="HHindi" />
+					<mx:HBox height="100%" width="90%" horizontalAlign="left" verticalAlign="middle">
+						<mx:Text height="100%" width="75%" fontFamily="Comic Sans MS" fontSize="55" color="white" text="Matlabul Chifai"/>
+					</mx:HBox>
+					<mx:HBox height="100%" width="10%" horizontalAlign="right">
+						<mx:Button click="langUpdate('FRENCH');" label="Français" />
+						<mx:Button click="langUpdate('ENGLISH');" label="English" />
+						<mx:Button click="langUpdate('HINDI');" label="Hindi" />
+					</mx:HBox>
+					
 				</mx:HBox>
 		</mx:Canvas>
 		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false"
@@ -671,7 +676,7 @@
 				patients="{patients}"
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}" 
-				width="70%" height="90%" horizontalAlign="left"/>
+				width="70%" height="90%" horizontalAlign="left" minWidth="1024"/>
 			<mlc:SearchBox id="searchBox"
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}"
@@ -685,7 +690,7 @@
 				allergies="{allergies}"
 				vaccinations="{vaccinations}"
 				conditions="{conditions}"
-				medications="{medications}"/>
+				medications="{medications}" minWidth="1024"/>
 			<mlc:AdminBox id="adminBox" 
 				languageArray="{languageArray}"
 				allergyIdMap="{allergyIdMap}"
@@ -718,10 +723,9 @@
 				patientConditionCreate="handleConditionCreateEvent(event)"
 				visitTypeCreate="handleVisitTypeCreateEvent(event)"
 				patientAllergyCreate="handleAllergyCreateEvent(event)"
-				patientVaccinationCreate="handleVaccinationCreateEvent(event)" />
+				patientVaccinationCreate="handleVaccinationCreateEvent(event)" minWidth="1024"/>
 		</mx:ViewStack>
 	</mx:VBox>
-	<mlc:DebugPanel id="debugPanel" width="100%" height="0%"/>
-</mx:VDividedBox>
+	<!--<mlc:DebugPanel id="debugPanel" width="100%" height="0%" visible="false"/>-->
 	
 </mx:Application>

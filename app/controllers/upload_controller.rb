@@ -3,7 +3,6 @@ class UploadController < ApplicationController
  skip_before_filter :verify_authenticity_token
 
  def index
-   APP_LOGGER_LOG.info "UPLOAD CONTROLLER CALLED"
    @fileData = params[:Filedata]
    @fileName = params[:Filename].to_s
    #NOT USED
@@ -14,7 +13,7 @@ class UploadController < ApplicationController
    @newFileName = "pic.jpg"
    #END NOT USED
    @patientID = params[:id].to_s
-   APP_LOGGER_LOG.info "Upload Photo IS CALLED - FileName: " + @fileName + " Patient ID: " + @patientID
+   APP_LOGGER_LOG.info "PHOTO UPLOADED - FileName: " + @fileName + " Patient ID: " + @patientID
    @directory = File.join(RAILS_ROOT,"public/patients/photos")
    @directory = File.join(@directory,@patientID)
    post = Upload.save(@fileData,@newFileName,@patientID,@directory)
