@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
-	height="100%"
-	label="{languageArray['Notes']}" 
+	height="100%" 
 	show="listNotes()">
 	   			
 	<mx:Script>
@@ -20,7 +19,7 @@
 			private var authToken:String = "?authenticity_token=" + Application.application.parameters.authenticityToken;
 			
 			[Bindable]
-			public var languageArray:Object = Application.application.languageArray;
+			public var languageArray:Object;
 			
 			[Bindable]
 			public var patientID:Number;

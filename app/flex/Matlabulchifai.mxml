@@ -652,9 +652,9 @@
 		<mx:Canvas width="100%" height="75">
 				<mx:HBox height="100%" width="80%" horizontalAlign="center">
 					<mx:Text height="100%" width="100%" fontFamily="Comic Sans MS" fontSize="55" color="white" text="Matlabul Chifai"/>
-					<mx:Button click="langUpdate('FRENCH');" label="Use French" />
-					<mx:Button click="langUpdate('ENGLISH');" label="Use English" />
-					<mx:Button click="langUpdate('HINDI');" label="Use Hindi" />
+					<mx:Button click="langUpdate('FRENCH');" label="Français" />
+					<mx:Button click="langUpdate('ENGLISH');" label="English" />
+					<mx:Button click="langUpdate('HINDI');" label="HHindi" />
 				</mx:HBox>
 		</mx:Canvas>
 		<mx:MenuBar id="mainMenu" width="100%" labelField="@label" visible="false"

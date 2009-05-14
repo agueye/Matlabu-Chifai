@@ -2,7 +2,7 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
 	height="100%"
-	label="{languageArray['General Information']}">
+	>
 	
 	<mx:Script>
 		<![CDATA[
@@ -14,7 +14,7 @@
 			private var patientUpdatePopUp:PatientUpdateTitleWin;
 			
 			[Bindable]
-			private var languageArray:Object = Application.application.languageArray;
+			public var languageArray:Object;
 			
 			[Bindable]
 			public var patient:XML;

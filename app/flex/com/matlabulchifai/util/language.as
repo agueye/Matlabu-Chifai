@@ -151,7 +151,15 @@ public function languageInit(str:String):void{
 			"You do not have permission to view this page.":"You do not have permission to view this page.",
 			
 			"Upload Image" : "Upload Image",
-			"Error:  This patient has been deleted." : "Error:  This patient has been deleted." 
+			"Error:  This patient has been deleted." : "Error:  This patient has been deleted.",
+		  'Data Graphs':'Data Graphs',
+		  'Height':'Height',
+		  'Weight':'Weight',
+		  'Systolic Blood Pressure':'Systolic Blood pressure',
+		  'Diastolic Blood Pressure':'Diastolic Blood Pressure',
+		  'Blood Pressure':'Blood Pressure',
+		  'Temperature':'Temperature',
+		  'Pulse':'Pulse'
 		}
 	}
 	if(str == "FRENCH"){
@@ -320,7 +328,15 @@ public function languageInit(str:String):void{
 		  'Doctors':'Doctors(French)',
 		  'Doctors List':'Doctors List(French)',
 		  'Delete Doctor':'Delete Doctor(French)',
-		  "Cannot delete admin account.":"Cannot delete admin account."
+		  "Cannot delete admin account.":"Cannot delete admin account.(French)",
+		  'Data Graphs':'Data Graphs(French)',
+		  'Height':'Height(French)',
+		  'Weight':'Weight(French)',
+		  'Systolic Blood Pressure':'Systolic Blood pressure(French)',
+		  'Diastolic Blood Pressure':'Diastolic Blood Pressure(French)',
+		  'Blood Pressure':'Blood Pressure(French)',
+		  'Temperature':'Temperature(French)',
+		  'Pulse':'Pulse(French)'
 		 
 		  
 		  

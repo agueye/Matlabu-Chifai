@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
-	height="100%"
-	label="{languageArray['Allergies']}" 
+	height="100%"	
 	show="listPatientAllergies()">
 	   			
 	<mx:Script>
@@ -24,7 +23,7 @@
 			private var allergyUpdatePopUp:PatientAllergyUpdateTitleWin;
 			
 			[Bindable]
-			public var languageArray:Object = Application.application.languageArray;
+			public var languageArray:Object;
 			[Bindable]
 			public var patientID:Number;
 			[Bindable]

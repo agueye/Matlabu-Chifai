@@ -2,7 +2,6 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="100%" 
 	height="100%"
-	label="{languageArray['Alerts']}"
 	show="listAlerts()"
     creationComplete="init()">
 	   			
@@ -24,7 +23,7 @@
 			import com.matlabulchifai.events.patient.PatientAlertEvent;
 			
 			[Bindable]
-			public var languageArray:Object = Application.application.languageArray;
+			public var languageArray:Object;
 			
 			[Bindable]
 			public var patientID:Number;
