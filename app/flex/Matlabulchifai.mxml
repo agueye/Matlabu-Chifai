@@ -673,8 +673,8 @@
 		<mx:ViewStack id="mainStack" width="100%" height="100%" change="updateUrl()">
 			<mx:VBox id="loginBox">
 				<mlc:LoginBox id="loginFormBox" languageArray="{languageArray}" login="handleLogin(event)"/>
-				<mx:Button click="bypassLogin()" label="Bypass Login"/>	
-				<mx:Button click="bypassLoginAdmin()" label="Bypass Login (Admin)"/>			
+				<!--<mx:Button click="bypassLogin()" label="Bypass Login"/>	
+				<mx:Button click="bypassLoginAdmin()" label="Bypass Login (Admin)"/>	-->		
 			</mx:VBox>
 			<mlc:AlertGridBox id="alertBox"
 				patients="{patients}"
