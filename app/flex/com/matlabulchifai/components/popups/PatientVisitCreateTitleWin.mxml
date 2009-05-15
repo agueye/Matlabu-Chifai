@@ -3,8 +3,8 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
-	width="700" 
-	height="575"
+	width="750" 
+	height="565"
 	title="{languageArray['Add New Visit']}"
 	showCloseButton="true"
 	creationComplete="init()"
@@ -326,34 +326,53 @@
 			<mx:Text text="Physicals" fontWeight="bold" />
 			<mx:HBox>
 				<mx:VBox horizontalAlign="right">
-					<mx:FormItem label="Height">
-						<mx:TextInput id="HeightTI" width="100%"/>
-					</mx:FormItem>			
-					<mx:FormItem label="Weight">
-						<mx:TextInput id="WeightTI" width="100%"/>
-					</mx:FormItem>
-					<mx:FormItem label="Systolic Blood Pressure">
-						<mx:TextInput id="SystolicTI"/>
-					</mx:FormItem>
-					<mx:FormItem label="Diastolic Blood Pressure">
-						<mx:TextInput id="DiastolicTI"/>
-					</mx:FormItem>
+					<mx:HBox>
+						<mx:FormItem label="Height">
+							<mx:TextInput id="HeightTI" width="100%"/>
+						</mx:FormItem>
+						<mx:Text text="cm" />
+					</mx:HBox>
+					<mx:HBox>
+						<mx:FormItem label="Weight">
+							<mx:TextInput id="WeightTI" width="100%"/>
+						</mx:FormItem>
+						<mx:Text text="kg" />
+					</mx:HBox>
+					<mx:HBox>
+						<mx:FormItem label="Systolic Blood Pressure">
+							<mx:TextInput id="SystolicTI"/>
+						</mx:FormItem>
+						<mx:Text text="mmHg" />
+					</mx:HBox>
+					
+					<mx:HBox>
+						<mx:FormItem label="Diastolic Blood Pressure">
+							<mx:TextInput id="DiastolicTI"/>
+						</mx:FormItem>
+						<mx:Text text="mmHg"/>
+					</mx:HBox>
+					
 				</mx:VBox>
 				<mx:VBox horizontalAlign="right">
-					<mx:FormItem label="Pulse">
-						<mx:TextInput id="PulseTI" width="100%"/>
-					</mx:FormItem>
-					<mx:FormItem label="Temperature">
-						<mx:TextInput id="TemperatureTI" width="100%"/>
-					</mx:FormItem>
+					<mx:HBox>
+						<mx:FormItem label="Pulse">
+							<mx:TextInput id="PulseTI" width="100%"/>
+						</mx:FormItem>
+						<mx:Text text="bpm" />
+					</mx:HBox>
+					
+					<mx:HBox>
+						<mx:FormItem label="Temperature">
+							<mx:TextInput id="TemperatureTI" width="100%"/>
+						</mx:FormItem>
+						<mx:Text text="°C" />
+					</mx:HBox>
 					<mx:Spacer height="5" />
 					<mx:FormItem label="Notes">
 						<mx:TextArea id="visitNotesTA" width="200" height="100" />
 					</mx:FormItem>
 				</mx:VBox>
 			</mx:HBox>
-			
-			
 		</mx:Form>
 	</mx:VBox>
 	
