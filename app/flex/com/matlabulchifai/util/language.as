@@ -159,7 +159,14 @@ public function languageInit(str:String):void{
 		  'Diastolic Blood Pressure':'Diastolic Blood Pressure',
 		  'Blood Pressure':'Blood Pressure',
 		  'Temperature':'Temperature',
-		  'Pulse':'Pulse'
+		  'Pulse':'Pulse',
+		  
+		  'The decimal separator occur only once.':'The decimal separator occur only once.',
+		  'The number must be an integer.':'The number must be an integer.',
+		  'This field is required.':'This field is required.',
+		  'The amount entered is too small.':'The amount entered is too small.',
+		  'The input contains invalid characters.':'The input contains invalid characters.',
+		  'The amount may not be negative.':'The amount may not be negative.'
 		}
 	}
 	if(str == "FRENCH"){
@@ -336,11 +343,15 @@ public function languageInit(str:String):void{
 		  'Diastolic Blood Pressure':'Diastolic Blood Pressure(French)',
 		  'Blood Pressure':'Blood Pressure(French)',
 		  'Temperature':'Temperature(French)',
-		  'Pulse':'Pulse(French)'
+		  'Pulse':'Pulse(French)',
 		 
-		  
-		  
-		  
+		 
+		 'The amount may not be negative.':'The amount may not be negative.(French)',
+		 'The decimal separator occur only once.':'The decimal separator occur only once.(French)',
+		 'The number must be an integer.':'The number must be an integer.(French)',
+		  'This field is required.':'This field is required.(French)',
+		  'The amount entered is too small.':'The amount entered is too small.(French)',
+		  'The input contains invalid characters.':'The input contains invalid characters.(French)'
 		  
 			}
 		return;

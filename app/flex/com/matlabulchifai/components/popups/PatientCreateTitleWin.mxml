@@ -146,7 +146,16 @@
 		</mx:request>
 	</mx:HTTPService>
 	
-	
+	<mx:NumberValidator id="medIDV" 
+        source="{medicalrecordTI}" property="text" 
+        domain="int" allowNegative="false"
+        invalidCharError="{languageArray['The input contains invalid characters.']}" 
+        negativeError="{languageArray['The amount may not be negative.']}"
+        requiredFieldError="{languageArray['This field is required.']}"
+        lowerThanMinError="{languageArray['The amount is too small.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"
+        integerError="{languageArray['The number must be an integer.']}"/>
+        
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold" defaultButton="{OKBtn}">
 			<mx:HBox>
@@ -154,7 +163,7 @@
 					<mx:FormItem required="true" label="{languageArray['Medical Record ID']}">
 						<mx:TextInput id="medicalrecordTI" change="validateForm(event);"/>
 					</mx:FormItem>
-					
+
 					<mx:FormItem label="{languageArray['First Name']}">
 						<mx:TextInput id="firstnameTI"/>
 					</mx:FormItem>
