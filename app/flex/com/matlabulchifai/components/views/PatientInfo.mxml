@@ -612,7 +612,7 @@
 	<mx:VBox label="Main" height="100%" width="20%">
 		<mx:Label text="{patient['first_name']} {patient['last_name']}" fontSize="36" color="#171712"/>
 		<mx:Image id="patientImage" minHeight="150" minWidth="150" maxHeight="250" maxWidth="250"/>		
-		<mx:Button id="uploadButton" label="Upload Image" click="showuploadImageWindow()"/> <!-- TODO: Add to Language Array-->
+		<mx:Button id="uploadButton" label="{languageArray['Upload Image']}" click="showuploadImageWindow()"/> <!-- TODO: Add to Language Array-->
 	</mx:VBox>
    	<mx:VBox height="100%" width="80%" verticalGap="0">
    		<mx:Label id="errorMessage" text="{languageArray['Error:  This patient has been deleted.']}" fontSize="36" color="#171712"/>

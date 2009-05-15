@@ -61,7 +61,7 @@
 				noteUpdatePopUp = PatientNoteUpdateTitleWin(PopUpManager.createPopUp(this, PatientNoteUpdateTitleWin, true));
 				noteUpdatePopUp.patient = patient;
 				noteUpdatePopUp.note = note;			
-				noteUpdatePopUp.languageArray = languageArray;
+				noteUpdatePopUp.languageArray = this.languageArray;
 				PopUpManager.centerPopUp(noteUpdatePopUp);
 				noteUpdatePopUp.addEventListener(NoteEvent.NOTE_UPDATE, handleNoteUpdateEvent);
 			}

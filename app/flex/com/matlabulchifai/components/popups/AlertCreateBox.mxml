@@ -6,7 +6,7 @@
 	layout="vertical" 
 	width="500" 
 	height="350"
-	title="{languageArray['Add Alert']}"
+	title="{languageArray['Add New Alert']}"
 	showCloseButton="true"
     close="PopUpManager.removePopUp(this)">
 	
@@ -130,11 +130,11 @@
 
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
-		<mx:Form id="createAlertForm" defaultButton="{createAlertButton}">
+		<mx:Form id="createAlertForm" defaultButton="{createAlertButton}" labelWidth="100">
 			<mx:FormItem required="true" label="{languageArray['Patient']}">
 				<hc:AdvancedAutoComplete id="patientsCB" dataProvider="{patients}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
-					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					showBrowseButton="true" browserFields="name" browseLabel="{languageArray['Browse']}" enableClearIcon="true" width="275" 
 					allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false" 
 					change="validateForm(event);"/>
         	</mx:FormItem>

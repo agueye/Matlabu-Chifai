@@ -108,14 +108,14 @@
     />
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
-		<mx:Form defaultButton="{OKBtn}">
+		<mx:Form defaultButton="{OKBtn}" labelWidth="100" >
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />		
 			
-			<mx:FormItem label="Notes" required="true">
+			<mx:FormItem label="{languageArray['Notes']}" required="true">
 				<mx:TextArea id="NotesTI" width="300" height="100" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date" required="true">
+			<mx:FormItem label="{languageArray['Date']}" required="true">
 				<mx:DateField id="noteDateDF" yearNavigationEnabled="true" minYear="1980"
 					creationComplete="noteDateDF.selectedDate = new Date();" change="validateForm(event);"/>
 			</mx:FormItem>

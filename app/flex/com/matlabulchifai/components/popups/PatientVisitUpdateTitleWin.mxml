@@ -393,85 +393,87 @@
         tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
 	
 	<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
-		<mx:Form defaultButton="{OKBtn}">
+		<mx:Form defaultButton="{OKBtn}" labelWidth="120">
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Visit Type" required="true">
+			<mx:FormItem label="{languageArray['Visit Type']}" required="true">
 				<hc:AdvancedAutoComplete id="searchVisitTypeTI" dataProvider="{visitTypes}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
 					searchChange="validateForm(event)"/>
 			</mx:FormItem>	
-			<mx:FormItem label="Condition Name" required="true">
+			<mx:FormItem label="{languageArray['Condition Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
 					searchChange="validateForm(event)"/>
 			</mx:FormItem>
-			<mx:FormItem label="Doctor Name" required="true">
+			<mx:FormItem label="{languageArray['Doctor Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
 					searchChange="validateForm(event)"/>
 			</mx:FormItem>
-			<mx:FormItem label="Visit Date" required="true">
+			<mx:FormItem label="{languageArray['Visit Date']}" required="true">
 				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"
 				change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:Text text="Physicals" fontWeight="bold" />
+			<mx:Text text="{languageArray['Physicals']}" fontWeight="bold" />
 			<mx:HBox>
 				<mx:VBox horizontalAlign="right">
 					<mx:HBox>
-						<mx:FormItem label="Height">
+						<mx:FormItem label="{languageArray['Height']}">
 							<mx:TextInput id="HeightTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="cm" />
 					</mx:HBox>
 					<mx:HBox>
-						<mx:FormItem label="Weight">
+						<mx:FormItem label="{languageArray['Weight']}">
 							<mx:TextInput id="WeightTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="kg" />
-					</mx:HBox>
-					<mx:HBox>
-						<mx:FormItem label="Systolic Blood Pressure">
-							<mx:TextInput id="SystolicTI" change="validateForm(event);"/>
-						</mx:FormItem>
-						<mx:Text text="mmHg" />
-					</mx:HBox>
-					
-					<mx:HBox>
-						<mx:FormItem label="Diastolic Blood Pressure">
-							<mx:TextInput id="DiastolicTI" change="validateForm(event);"/>
-						</mx:FormItem>
-						<mx:Text text="mmHg"/>
 					</mx:HBox>
 					
 				</mx:VBox>
 				<mx:VBox horizontalAlign="right">
 					<mx:HBox>
-						<mx:FormItem label="Pulse">
+						<mx:FormItem label="{languageArray['Pulse']}">
 							<mx:TextInput id="PulseTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="bpm" />
 					</mx:HBox>
 					
 					<mx:HBox>
-						<mx:FormItem label="Temperature">
+						<mx:FormItem label="{languageArray['Temperature']}">
 							<mx:TextInput id="TemperatureTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="°C" />
 					</mx:HBox>
-					<mx:Spacer height="5" />
-					<mx:FormItem label="Notes">
-						<mx:TextArea id="visitNotesTA" width="200" height="100" />
-					</mx:FormItem>
+					
 				</mx:VBox>
 			</mx:HBox>
+			<mx:Label text="{languageArray['Blood Pressure']}"/>
+			<mx:HBox>
+				<mx:FormItem label="{languageArray['Systolic']}">
+					<mx:TextInput id="SystolicTI" change="validateForm(event);"/>
+				</mx:FormItem>
+				<mx:Text text="mmHg" />
+			</mx:HBox>
+			
+			<mx:HBox>
+				<mx:FormItem label="{languageArray['Diastolic']}">
+					<mx:TextInput id="DiastolicTI" change="validateForm(event);"/>
+				</mx:FormItem>
+				<mx:Text text="mmHg"/>
+			</mx:HBox>
+			<mx:Spacer height="5" />
+			<mx:FormItem label="{languageArray['Notes']}">
+				<mx:TextArea id="visitNotesTA" width="200" height="100" />
+			</mx:FormItem>
 		</mx:Form>
 	</mx:HBox>
 	

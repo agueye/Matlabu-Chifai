@@ -3,7 +3,7 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
-	width="475" 
+	width="500" 
 	height="450"
 	title="{languageArray['Add New Vaccination']}"
 	showCloseButton="true"
@@ -160,10 +160,10 @@
 	
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
-		<mx:Form defaultButton="{OKBtn}">
+		<mx:Form defaultButton="{OKBtn}" labelWidth="140">
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Vaccine Name" required="true">
+			<mx:FormItem label="{languageArray['Vaccination Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchVaccinationTI" dataProvider="{vaccinations}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
@@ -171,13 +171,13 @@
 					change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date Administered" required="true">
+			<mx:FormItem label="{languageArray['Date Administered']}" required="true">
 				<mx:DateField id="vaccDateDF" yearNavigationEnabled="true" minYear="1980"
 					creationComplete="vaccDateDF.selectedDate = new Date();" 
 					change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Notes">
+			<mx:FormItem label="{languageArray['Notes']}">
 				<mx:TextArea id="vaccNotesTA" width="200" height="150" />
 			</mx:FormItem>
 		</mx:Form>

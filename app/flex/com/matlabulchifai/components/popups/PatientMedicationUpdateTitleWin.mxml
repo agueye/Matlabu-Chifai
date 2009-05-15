@@ -4,7 +4,7 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"  
 	layout="vertical" 
-	width="475" 
+	width="500" 
 	height="525"
 	title="{languageArray['Edit Medication']}"
 	showCloseButton="true"
@@ -327,24 +327,24 @@
 	
 	
 	<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
-		<mx:Form defaultButton="{OKBtn}">
+		<mx:Form defaultButton="{OKBtn}" labelWidth="140">
 			<mx:Label text="{patient['last_name']}, {patient['first_name']}" fontWeight="bold" />
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Medication Name" required="true">
+			<mx:FormItem label="{languageArray['Medication Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchMedicationTI" dataProvider="{medications}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
 					change="validateForm(event);"/>
 			</mx:FormItem>			
-			<mx:FormItem label="Condition Name" required="true">
+			<mx:FormItem label="{languageArray['Condition Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
 					change="validateForm(event);"/>
 			</mx:FormItem>
-			<mx:FormItem label="Doctor Name" required="true">
+			<mx:FormItem label="{languageArray['Doctor Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
@@ -352,20 +352,20 @@
 					change="validateForm(event);"/>	
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Dosage" required="true">
+			<mx:FormItem label="{languageArray['Dosage']}" required="true">
 				<mx:TextInput id="DosageTI" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Frequency" required="true">
+			<mx:FormItem label="{languageArray['Frequency']}" required="true">
 				<mx:TextInput id="FrequencyTI" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Date Given" required="true">
+			<mx:FormItem label="{languageArray['Date Given']}" required="true">
 				<mx:DateField id="medicationDateDF" yearNavigationEnabled="true" minYear="1980"
 					change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
-			<mx:FormItem label="Notes">
+			<mx:FormItem label="{languageArray['Notes']}">
 				<mx:TextArea id="medicationNotesTI" width="200" height="100" />
 			</mx:FormItem>
 		</mx:Form>
