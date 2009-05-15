@@ -67,7 +67,7 @@
 			
 			private function init():void {
 				resetFocus();	
-				validateForm(new Event("blank"));
+				callLater(validateForm, [new Event("blank")]);
 			}
 			private function validateForm(event:Event):void 
     		{                    
@@ -400,21 +400,21 @@
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
-					searchChange="validateForm(event)"/>
+					searchChange="validateForm(event)" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:FormItem label="{languageArray['Condition Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
-					searchChange="validateForm(event)"/>
+					searchChange="validateForm(event)" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:FormItem label="{languageArray['Doctor Name']}" required="true">
 				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
-					searchChange="validateForm(event)"/>
+					searchChange="validateForm(event)" change="validateForm(event);"/>
 			</mx:FormItem>
 			<mx:FormItem label="{languageArray['Visit Date']}" required="true">
 				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"

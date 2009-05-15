@@ -97,26 +97,31 @@
         source="{lastNameTI}" 
         property="text"
         minLength="2"
-    />
+        requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
+        
     <mx:StringValidator 
         id="loginValidator"
         source="{loginTI}" 
         property="text"
-        minLength="2"
-    />
+        minLength="5"
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
     
     <mx:StringValidator 
         id="passwordValidator"
         source="{passwordTI}" 
         property="text"
-        minLength="2"
-    />
+        minLength="5"
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
     <mx:StringValidator 
         id="confirmValidator"
         source="{confirmPasswordTI}" 
         property="text"
-        minLength="2"
-    />
+        minLength="5"
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
 
 	<mx:VBox>
 		<mx:Form id="accountCreateForm" textAlign="left" labelWidth="120" defaultButton="{createAccountBtn}">

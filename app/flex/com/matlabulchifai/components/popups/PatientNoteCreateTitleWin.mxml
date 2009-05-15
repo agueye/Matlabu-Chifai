@@ -99,13 +99,16 @@
         source="{NotesTI}" 
         property="text"
         minLength="2"
-    />
+        required="true"
+        requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/> 
     
     <mx:DateValidator 
         id="noteDateValidator"
         source="{noteDateDF}" 
-        property="text"        
-    />
+        property="text"    
+        required="true"
+        requiredFieldError="{languageArray['This field is required.']}"/>    
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form defaultButton="{OKBtn}" labelWidth="100" >

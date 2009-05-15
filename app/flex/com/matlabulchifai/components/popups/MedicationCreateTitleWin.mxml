@@ -17,12 +17,31 @@
 			
 			[Bindable]
 			public var languageArray:Object;
+			[Bindable]
+    		public var formIsValid:Boolean = false;
+    		
+    		private var focusedFormControl:DisplayObject;
 			
 			private function init():void{
 				resetFocus();    
 			}
 			    
-
+			private function validateForm(event:Event):void 
+		    {                    
+		          focusedFormControl = event.target as DisplayObject;                
+		          formIsValid = true;            
+		          validate(medicationValidator);
+		     }
+		
+		    private function validate(validator:Validator):Boolean
+		    {                
+		         var validatorSource:DisplayObject = validator.source as DisplayObject;
+		         var suppressEvents:Boolean = (validatorSource != focusedFormControl);
+		         var event:ValidationResultEvent = validator.validate(null, suppressEvents); 
+		         var currentControlIsValid:Boolean = (event.type == ValidationResultEvent.VALID);
+		         formIsValid = formIsValid && currentControlIsValid;                 
+		         return currentControlIsValid;
+		    }
 	    	
     		private function resetFocus():void
     		{
@@ -69,13 +88,20 @@
 		</mx:request>
 	</mx:HTTPService>
 	
-
+	<mx:StringValidator 
+        id="medicationValidator"
+        source="{nameTI}" 
+        property="text"
+        minLength="2"
+        requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
+        
 	<mx:VBox>
 		<mx:Form id="medicationCreateForm" textAlign="left" labelWidth="125">
 			<mx:Label text="New Medication" fontWeight="bold" />	
 			<mx:Spacer height="5" />
 			<mx:FormItem required="true" label="{languageArray['Medication Name']}">
-				<mx:TextInput id="nameTI"/>
+				<mx:TextInput id="nameTI" change="validateForm(event)"/>
 			</mx:FormItem>
 			
 			<mx:Spacer height="5" />
@@ -86,7 +112,7 @@
 			<mx:Spacer height="5" />
 			<mx:FormItem>
 				<mx:HBox>
-					<mx:Button label="OK" id="OKBtn" click="createMedication()" />
+					<mx:Button label="OK" id="OKBtn" click="createMedication()" enabled="{formIsValid}"/>
 					<mx:Button label="Cancel" id="CancelBtn" click="PopUpManager.removePopUp(this)" />
 				</mx:HBox>
 			</mx:FormItem>

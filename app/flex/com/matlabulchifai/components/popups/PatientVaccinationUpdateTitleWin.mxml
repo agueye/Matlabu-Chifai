@@ -47,13 +47,14 @@
 				vaccinationDateDF.selectedDate = DateUtil.parseW3CDTF(vaccination.date_admined);				
 				vaccinationNotesTI.text = vaccination.notes;
 				resetFocus();
+				callLater(validateForm, [new Event("blank")]);
 			}
 			
 			private function validateForm(event:Event):void 
     		{                    
         		focusedFormControl = event.target as DisplayObject;                
         	  	formIsValid = true;            
-    	      	//validate(vaccValidator);    	      	  
+    	      	validate(vaccValidator);    	      	  
     	      	validate(vaccDateValidator);
 	     	}
 
@@ -151,7 +152,13 @@
         source="{vaccinationDateDF}" 
         property="text"        
     />
-	
+	<mx:StringValidator
+    	id="vaccValidator"
+    	source="{searchVaccinationTI}"
+    	property="text"
+    	required="true"
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form defaultButton="{OKBtn}" labelWidth="140">
@@ -162,7 +169,7 @@
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
-					change="validateForm(event);"/>
+					searchChange="validateForm(event)" change="validateForm(event)"/>
 			</mx:FormItem>
 			<mx:Spacer height="5" />
 			<mx:FormItem label="{languageArray['Date Administered']}" required="true">

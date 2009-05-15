@@ -111,21 +111,22 @@
         source="{noteTA}" 
         property="text"
         minLength="2"
-    />
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
     
     <mx:StringValidator 
         id="patientValidator"
         source="{patientsCB}" 
         property="text"
         minLength="2"
-    />
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
     
     <mx:DateValidator 
         id="alertDateValidator"
         source="{dateTI}" 
         property="text"        
-    />
-    
+    	requiredFieldError="{languageArray['This field is required.']}"/>
     
 
 	
