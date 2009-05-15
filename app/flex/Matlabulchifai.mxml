@@ -119,6 +119,8 @@
  	private var browserManager:IBrowserManager;
  	
  	private var parsing:Boolean;
+ 	
+ 	private var currentLang:String = 'ENGLISH';
 
 
 	public static function debug(str:String):void {
@@ -126,6 +128,7 @@
 	}		
 	
 	private function langUpdate(lang:String):void{
+		currentLang = lang;
 		languageInit(lang);
 		
 		if(_user){
@@ -429,15 +432,16 @@
 	private function login(user:XML):void{
 		_user = user;
 		if(user.is_admin == 1) {
-			mainMenu.dataProvider = adminMenu;
+			mainMenu.dataProvider = adminMenuXLC;
 			this.setStyle('backgroundGradientColors',[0xCCCC00, 0xFFFFFF]);
 			mainMenu.setStyle("backgroundcolor", 0x007D0B);
 		}
 		else {
-			mainMenu.dataProvider = userMenu;
+			mainMenu.dataProvider = userMenuXLC;
 			this.setStyle('backgroundGradientColors',[0x007D0B, 0xFFFFFF]);
 			mainMenu.setStyle("backgroundcolor", 0x0000FF);
 		}
+		langUpdate(currentLang);
 		listPatients();
 	}
 	
