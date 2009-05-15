@@ -80,15 +80,23 @@
 				TemperatureTI.text = visit.temperature;
 				visitNotesTA.text = visit.notes;
 				resetFocus();
+				validateForm(new Event("blank"));
 			}
 			private function validateForm(event:Event):void 
     		{                    
         		focusedFormControl = event.target as DisplayObject;                
         	  	formIsValid = true;            
-    	      	//validate(visitTypeValidator);    	      	  
-    	      	//validate(conditionNameValidator);
-    	      	//validate(doctorNameValidator);
+    	      	validate(visitTypeValidator);    	      	  
+    	      	validate(conditionNameValidator);
+    	      	validate(doctorNameValidator);
     	      	validate(dateGivenValidator);
+    	      	validate(dateGivenValidator);
+    	      	validate(weightV);
+    	      	validate(heightV);
+    	      	validate(systolicV);
+    	      	validate(diastolicV);
+    	      	validate(temperatureV);
+    	      	validate(pulseV);
 	     	}
 
 	    	private function validate(validator:Validator):Boolean
@@ -292,7 +300,97 @@
         property="text"        
     />
 	
-	
+    <mx:NumberValidator
+    	id="heightV"
+    	source="{HeightTI}"
+    	property="text" 
+    	domain="real"
+    	required="false"
+        allowNegative="false"
+        negativeError="{languageArray['The amount may not be negative.']}"
+        invalidCharError="{languageArray['The input contains invalid characters.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"/>
+    <mx:NumberValidator
+    	id="weightV"
+    	source="{WeightTI}"
+    	domain="real"
+    	property="text" 
+    	required="false"
+        allowNegative="false"
+        negativeError="{languageArray['The amount may not be negative.']}"
+        invalidCharError="{languageArray['The input contains invalid characters.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"/>
+        
+    <mx:NumberValidator
+    	id="systolicV"
+    	source="{SystolicTI}"
+        domain="int"
+    	property="text" 
+    	required="false"
+        allowNegative="false"
+        negativeError="{languageArray['The amount may not be negative.']}"
+        invalidCharError="{languageArray['The input contains invalid characters.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"
+        integerError="{languageArray['The number must be an integer.']}"
+        lowerThanMinError="{languageArray['The amount is too small.']}"/>
+    <mx:NumberValidator
+    	id="diastolicV"
+    	source="{DiastolicTI}"
+    	domain="int"
+    	property="text" 
+    	required="false"
+        allowNegative="false"
+        negativeError="{languageArray['The amount may not be negative.']}"
+        invalidCharError="{languageArray['The input contains invalid characters.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"
+        integerError="{languageArray['The number must be an integer.']}"
+        lowerThanMinError="{languageArray['The amount is too small.']}"/>
+        
+    <mx:NumberValidator
+    	id="pulseV"
+    	source="{PulseTI}"
+    	domain="int"
+    	property="text" 
+    	required="false"
+        allowNegative="false"
+        negativeError="{languageArray['The amount may not be negative.']}"
+        invalidCharError="{languageArray['The input contains invalid characters.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"
+        integerError="{languageArray['The number must be an integer.']}"
+        lowerThanMinError="{languageArray['The amount is too small.']}"/>
+        
+    <mx:NumberValidator
+    	id="temperatureV"
+    	source="{TemperatureTI}"
+    	property="text" 
+        domain="real"
+    	required="false"
+        allowNegative="false"
+        negativeError="{languageArray['The amount may not be negative.']}"
+        invalidCharError="{languageArray['The input contains invalid characters.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"/>
+        
+    <mx:StringValidator
+    	id="visitTypeValidator"
+    	source="{searchVisitTypeTI}"
+    	property="text"
+    	required="true"
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
+    <mx:StringValidator
+    	id="doctorNameValidator"
+    	source="{searchDoctorTI}"
+    	property="text"
+    	required="true"
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
+    <mx:StringValidator
+    	id="conditionNameValidator"
+    	source="{searchConditionTI}"
+    	property="text"
+    	required="true"
+    	requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"/>
 	
 	<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="90%">
 		<mx:Form defaultButton="{OKBtn}">
@@ -303,21 +401,21 @@
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
-					change="validateForm(event);"/>
+					searchChange="validateForm(event)"/>
 			</mx:FormItem>	
 			<mx:FormItem label="Condition Name" required="true">
 				<hc:AdvancedAutoComplete id="searchConditionTI" dataProvider="{conditions}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
-					change="validateForm(event);"/>
+					searchChange="validateForm(event)"/>
 			</mx:FormItem>
 			<mx:FormItem label="Doctor Name" required="true">
 				<hc:AdvancedAutoComplete id="searchDoctorTI" dataProvider="{doctors}" 
 					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
 					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
 					allowNewValues="true" backspaceAction="remove" autoSelectEnabled="false"
-					change="validateForm(event);"/>
+					searchChange="validateForm(event)"/>
 			</mx:FormItem>
 			<mx:FormItem label="Visit Date" required="true">
 				<mx:DateField id="visitDateDF" yearNavigationEnabled="true" minYear="1980"
@@ -329,26 +427,26 @@
 				<mx:VBox horizontalAlign="right">
 					<mx:HBox>
 						<mx:FormItem label="Height">
-							<mx:TextInput id="HeightTI" width="100%"/>
+							<mx:TextInput id="HeightTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="cm" />
 					</mx:HBox>
 					<mx:HBox>
 						<mx:FormItem label="Weight">
-							<mx:TextInput id="WeightTI" width="100%"/>
+							<mx:TextInput id="WeightTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="kg" />
 					</mx:HBox>
 					<mx:HBox>
 						<mx:FormItem label="Systolic Blood Pressure">
-							<mx:TextInput id="SystolicTI"/>
+							<mx:TextInput id="SystolicTI" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="mmHg" />
 					</mx:HBox>
 					
 					<mx:HBox>
 						<mx:FormItem label="Diastolic Blood Pressure">
-							<mx:TextInput id="DiastolicTI"/>
+							<mx:TextInput id="DiastolicTI" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="mmHg"/>
 					</mx:HBox>
@@ -357,14 +455,14 @@
 				<mx:VBox horizontalAlign="right">
 					<mx:HBox>
 						<mx:FormItem label="Pulse">
-							<mx:TextInput id="PulseTI" width="100%"/>
+							<mx:TextInput id="PulseTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="bpm" />
 					</mx:HBox>
 					
 					<mx:HBox>
 						<mx:FormItem label="Temperature">
-							<mx:TextInput id="TemperatureTI" width="100%"/>
+							<mx:TextInput id="TemperatureTI" width="100%" change="validateForm(event);"/>
 						</mx:FormItem>
 						<mx:Text text="°C" />
 					</mx:HBox>

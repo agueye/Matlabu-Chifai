@@ -40,7 +40,9 @@
         		focusedFormControl = event.target as DisplayObject;                
         	  	formIsValid = true;            
     	      	validate(lastnameValidator);
-    	      	validate(medicalrecordValidator);  
+    	      	validate(medIDV);  
+    	      	validate(emPhoneV);
+    	      	validate(phoneV);
 	     	}
 
 	    	private function validate(validator:Validator):Boolean
@@ -158,15 +160,30 @@
         source="{lastnameTI}" 
         property="text"
         minLength="2"
+        requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"
     />
-    <mx:StringValidator 
-        id="medicalrecordValidator"
-        source="{medicalrecordTI}" 
-        property="text"
-        minLength="2"
-    />
-    
 	
+	<mx:PhoneNumberValidator id="phoneV" required="false"
+        source="{telephoneTI}" property="text"
+        invalidCharError="{languageArray['Your telephone number contains invalid characters.']}"
+        wrongLengthError="{languageArray['Your telephone number must contain at least 10 digits.']}"
+        />
+        
+    <mx:PhoneNumberValidator id="emPhoneV" required="false"
+        source="{emergencycontactnumberTI}" property="text"
+        invalidCharError="{languageArray['Your telephone number contains invalid characters.']}"
+        wrongLengthError="{languageArray['Your telephone number must contain at least 10 digits.']}"/>
+
+	<mx:NumberValidator id="medIDV" 
+        source="{medicalrecordTI}" property="text" 
+        domain="int" allowNegative="false"
+        invalidCharError="{languageArray['The input contains invalid characters.']}" 
+        negativeError="{languageArray['The amount may not be negative.']}"
+        requiredFieldError="{languageArray['This field is required.']}"
+        lowerThanMinError="{languageArray['The amount is too small.']}"
+        decimalPointCountError="{languageArray['The decimal separator occur only once.']}"
+        integerError="{languageArray['The number must be an integer.']}"/>
 	
 	<mx:VBox verticalAlign="middle" horizontalAlign="center" width="100%" height="85%">
 		<mx:Form id="patientForm" textAlign="left" labelWidth="200" fontWeight="bold" defaultButton="{OKBtn}">
@@ -220,7 +237,7 @@
 					</mx:FormItem>
 					
 					<mx:FormItem label="{languageArray['Telephone']}">
-						<mx:TextInput id="telephoneTI"/>
+						<mx:TextInput id="telephoneTI" change="validateForm(event)"/>
 					</mx:FormItem>
 				</mx:VBox>
 				<mx:VBox>
@@ -249,7 +266,7 @@
 					</mx:FormItem>
 					
 					<mx:FormItem label="{languageArray['Emergency Contact Number']}">
-						<mx:TextInput id="emergencycontactnumberTI"/>
+						<mx:TextInput id="emergencycontactnumberTI" change="validateForm(event)"/>
 					</mx:FormItem>
 					
 					<mx:FormItem label="{languageArray['Patient Remarks']}">

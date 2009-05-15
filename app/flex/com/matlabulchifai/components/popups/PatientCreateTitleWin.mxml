@@ -146,7 +146,10 @@
     />
 	
 	<mx:PhoneNumberValidator id="phoneV" required="false"
-        source="{telephoneTI}" property="text"/>
+        source="{telephoneTI}" property="text"
+        invalidCharError="{languageArray['Your telephone number contains invalid characters.']}"
+        wrongLengthError="{languageArray['Your telephone number must contain at least 10 digits.']}"
+        />
         
     <mx:PhoneNumberValidator id="emPhoneV" required="false"
         source="{emergencycontactnumberTI}" property="text"
