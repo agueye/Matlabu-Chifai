@@ -129,7 +129,7 @@
 		languageInit(lang);
 		
 		if(_user){
-			if(_user.is_admin){
+			if(_user.is_admin == 1){
 				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Alerts']+"'/>"),0);
 				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),1);
 				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Administration']+"'/>"),2);
@@ -139,7 +139,7 @@
 			else{
 				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Alerts']+"'/>"),0);
 				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),1);
-				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),3);
+				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),2);
 				mainMenu.dataProvider = userMenuXLC;
 			}
 		}
