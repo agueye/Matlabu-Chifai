@@ -623,7 +623,7 @@
    		<mx:ViewStack 
    			id="patientInfoMain" 
    			width="100%" 
-   			height="65%">
+   			height="60%">
 	   		<patient:PatientAlertViewBox width="100%" languageArray="{languageArray}" label="{languageArray['Alerts']}" id="alertVbox" patient="{patient}" patientID="{patientID}"/>
 	   			
 	   		<patient:PatientGeneralViewBox width="100%" languageArray="{languageArray}"  label="{languageArray['General Information']}" id="generalVbox" patient="{patient}" patientIdMap="{patientIdMap}"/>
