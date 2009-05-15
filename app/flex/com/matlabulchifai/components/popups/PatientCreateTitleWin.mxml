@@ -39,7 +39,9 @@
         		focusedFormControl = event.target as DisplayObject;                
         	  	formIsValid = true;            
     	      	validate(lastnameValidator);
-    	      	validate(medicalrecordValidator);  
+    	      	validate(medIDV);  
+    	      	validate(emPhoneV);
+    	      	validate(phoneV);
 	     	}
 
 	    	private function validate(validator:Validator):Boolean
@@ -100,19 +102,7 @@
 			}
 		]]>
 	</mx:Script>
-	<mx:StringValidator 
-        id="lastnameValidator"
-        source="{lastnameTI}" 
-        property="text"
-        minLength="2"
-    />
-    <mx:StringValidator 
-        id="medicalrecordValidator"
-        source="{medicalrecordTI}" 
-        property="text"
-        minLength="2"
-    />
-    
+
 	<mx:HTTPService
 		id="svcPatientCreate"
 		url="/patients.xml?authenticity_token={Application.application.parameters.authenticityToken}"
@@ -146,6 +136,23 @@
 		</mx:request>
 	</mx:HTTPService>
 	
+	<mx:StringValidator 
+        id="lastnameValidator"
+        source="{lastnameTI}" 
+        property="text"
+        minLength="2"
+        requiredFieldError="{languageArray['This field is required.']}"
+        tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"
+    />
+	
+	<mx:PhoneNumberValidator id="phoneV" required="false"
+        source="{telephoneTI}" property="text"/>
+        
+    <mx:PhoneNumberValidator id="emPhoneV" required="false"
+        source="{emergencycontactnumberTI}" property="text"
+        invalidCharError="{languageArray['Your telephone number contains invalid characters.']}"
+        wrongLengthError="{languageArray['Your telephone number must contain at least 10 digits.']}"/>
+
 	<mx:NumberValidator id="medIDV" 
         source="{medicalrecordTI}" property="text" 
         domain="int" allowNegative="false"
@@ -188,7 +195,7 @@
 							displayedMonth="0" displayedYear="1990" showToday="false" />
 					</mx:FormItem>
 					
-					<mx:FormItem required="true" label="{languageArray['Gender']}">
+					<mx:FormItem label="{languageArray['Gender']}">
 						<mx:ComboBox id="genderTI" dataProvider="{genders}" change="validateForm(event);"/>
 					</mx:FormItem>
 					
@@ -210,7 +217,7 @@
 					</mx:FormItem>
 					
 					<mx:FormItem label="{languageArray['Telephone']}">
-						<mx:TextInput id="telephoneTI"/>
+						<mx:TextInput id="telephoneTI" change="validateForm(event)"/>
 					</mx:FormItem>
 				</mx:VBox>
 				<mx:VBox>
@@ -239,7 +246,7 @@
 					</mx:FormItem>
 					
 					<mx:FormItem label="{languageArray['Emergency Contact Number']}">
-						<mx:TextInput id="emergencycontactnumberTI"/>
+						<mx:TextInput id="emergencycontactnumberTI" change="validateForm(event)"/>
 					</mx:FormItem>
 					
 					<mx:FormItem label="{languageArray['Patient Remarks']}">

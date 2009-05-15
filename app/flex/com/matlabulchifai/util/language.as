@@ -161,6 +161,9 @@ public function languageInit(str:String):void{
 		  'Temperature':'Temperature',
 		  'Pulse':'Pulse',
 		  
+		  'Your telephone number contains invalid characters.':'Your telephone number contains invalid characters.',
+		  'Your telephone number must contain at least 10 digits.':'Your telephone number must contain at least 10 digits.',
+		  'This field is shorter than the minimum allowed length.':'This field is shorter than the minimum allowed length.',
 		  'The decimal separator occur only once.':'The decimal separator occur only once.',
 		  'The number must be an integer.':'The number must be an integer.',
 		  'This field is required.':'This field is required.',
@@ -345,7 +348,9 @@ public function languageInit(str:String):void{
 		  'Temperature':'Temperature(French)',
 		  'Pulse':'Pulse(French)',
 		 
-		 
+		 'Your telephone number contains invalid characters.':'Your telephone number contains invalid characters.(French)',
+		 'Your telephone number must contain at least 10 digits.':'Your telephone number must contain at least 10 digits.(French)',
+		 'This field is shorter than the minimum allowed length.':'This field is shorter than the minimum allowed length.(French)',
 		 'The amount may not be negative.':'The amount may not be negative.(French)',
 		 'The decimal separator occur only once.':'The decimal separator occur only once.(French)',
 		 'The number must be an integer.':'The number must be an integer.(French)',
