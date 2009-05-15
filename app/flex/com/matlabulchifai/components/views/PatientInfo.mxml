@@ -623,22 +623,22 @@
    		<mx:ViewStack 
    			id="patientInfoMain" 
    			width="100%" 
-   			height="100%">
-	   		<patient:PatientAlertViewBox languageArray="{languageArray}" label="{languageArray['Alerts']}" id="alertVbox" patient="{patient}" patientID="{patientID}"/>
+   			height="65%">
+	   		<patient:PatientAlertViewBox width="100%" languageArray="{languageArray}" label="{languageArray['Alerts']}" id="alertVbox" patient="{patient}" patientID="{patientID}"/>
 	   			
-	   		<patient:PatientGeneralViewBox languageArray="{languageArray}"  label="{languageArray['General Information']}" id="generalVbox" patient="{patient}" patientIdMap="{patientIdMap}"/>
+	   		<patient:PatientGeneralViewBox width="100%" languageArray="{languageArray}"  label="{languageArray['General Information']}" id="generalVbox" patient="{patient}" patientIdMap="{patientIdMap}"/>
 	   		
-	   		<patient:PatientNotesViewBox languageArray="{languageArray}"  label="{languageArray['Notes']}" id="notesVbox" patient="{patient}" patientID="{patientID}"/>
+	   		<patient:PatientNotesViewBox width="100%" languageArray="{languageArray}"  label="{languageArray['Notes']}" id="notesVbox" patient="{patient}" patientID="{patientID}"/>
 	   		
-	   		<patient:PatientAllergyViewBox languageArray="{languageArray}"  label="{languageArray['Allergies']}" id="allergyVbox" patient="{patient}" patientID="{patientID}" 
+	   		<patient:PatientAllergyViewBox width="100%" languageArray="{languageArray}"  label="{languageArray['Allergies']}" id="allergyVbox" patient="{patient}" patientID="{patientID}" 
 	   			allergies="{allergies}" allergyIdMap="{allergyIdMap}"/>
 	   		
-	   		<patient:VisitsConditionsViewBox languageArray="{languageArray}"  label="{languageArray['Visits-Conditions']}" id="visitsConditionsVbox" patient="{patient}" patientID="{patientID}"
+	   		<patient:VisitsConditionsViewBox width="100%" languageArray="{languageArray}"  label="{languageArray['Visits-Conditions']}" id="visitsConditionsVbox" patient="{patient}" patientID="{patientID}"
 	   		    visitTypeIdMap="{visitTypeIdMap}" visitTypes="{visitTypes}" doctorIdMap="{doctorIdMap}"
 	   		    doctors="{doctors}" conditionIdMap="{conditionIdMap}" conditions="{conditions}"
 	   		    visitPopUp="{visitPopUp}" visitUpdatePopUp="{visitUpdatePopUp}"/>
 	   			
-	   		<mx:VBox label="{languageArray['Prescriptions']}" show="listMedications()">
+	   		<mx:VBox width="100%" label="{languageArray['Prescriptions']}" show="listMedications()">
 	   			<mx:Panel title="{languageArray['Prescription List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 		   			<mx:LinkButton label="{languageArray['Add New Prescription']}" color="#0000FF" 
@@ -674,7 +674,7 @@
 		   			</mx:DataGrid>
 	   			</mx:Panel>
 	   		</mx:VBox>
-	   		<mx:VBox label="{languageArray['Vaccinations']}" show="listVaccinations()" >
+	   		<mx:VBox width="100%" label="{languageArray['Vaccinations']}" show="listVaccinations()" >
 	   			<mx:Panel title="{languageArray['Vaccination List']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 		   			<mx:LinkButton label="{languageArray['Add New Patient Vaccination']}" color="#0000FF" 
@@ -702,7 +702,7 @@
 	   			</mx:Panel>
 	   		</mx:VBox>
 
-	   		<mx:VBox label="Physical Data" show="listPhysicals();graphPan.title='Height';graphChart.dataProvider=heights;catAxis.dataProvider=heights;lineSeries1.displayName='Height';lineSeries2.visible=false;">
+	   		<mx:VBox width="100%" label="Physical Data" show="listPhysicals();graphPan.title='Height';graphChart.dataProvider=heights;catAxis.dataProvider=heights;lineSeries1.displayName='Height';lineSeries2.visible=false;">
 	   			<mx:Panel title="{languageArray['Data Graphs']}" width="100%" height="100%" 
 	   				paddingTop="5" paddingLeft="5" paddingRight="5">
 	   				<mx:HBox width="100%" height="100%">
