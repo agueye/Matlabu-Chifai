@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:mlc="com.matlabulchifai.components.views.*"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	width="100%" 
+	height="100%"
+    verticalGap="0"
+    label="{languageArray['Patients']}"
+    show="init()">
+    
+<mx:Script>
+<![CDATA[
+	import mx.collections.ArrayCollection;
+	import mx.events.ListEvent;
+	import mx.messaging.channels.StreamingAMFChannel;
+	import mx.collections.IViewCursor;
+	import mx.binding.utils.BindingUtils;
+	import mx.containers.ViewStack;
+    import mx.controls.Alert;
+    import mx.rpc.events.ResultEvent;
+    import mx.collections.XMLListCollection;
+    import mx.managers.PopUpManager;
+    import com.matlabulchifai.events.patient.PatientEvent;
+    import com.matlabulchifai.components.popups.PatientCreateTitleWin;
+    import mx.core.Application;
+    
+	[Bindable]
+	public var languageArray:Object;
+	[Bindable]        
+    public var patientIdMap:Object;
+    [Bindable]
+	public var patients:ArrayCollection;
+    
+    private var authToken:String;    
+	private var rnd:Number;
+    private var patientPopUp:PatientCreateTitleWin;
+	
+    
+    private function init():void {
+    	showAllPatients();
+    	rnd = Math.round(Math.random()*1000);
+    	authToken = "?authenticity_token=" + Application.application.parameters.authenticityToken;
+    }
+	
+	private function showAllPatients():void {
+    	searchPatientTI.selectedItem = null;
+    	focusManager.setFocus(searchPatientTI);
+    	svcPatientsList.url = "/patients.xml?rnd=" + rnd;
+	    svcPatientsList.send();
+    }
+    
+    private function handleShowAllPatients(event:ResultEvent):void {
+    	this.enabled = true;
+    }
+	
+    
+	public function selectPatient(record:XML):void {
+		var patient:XML;
+		if(record.hasOwnProperty("patient_id")) {
+			patient = patientIdMap[record.patient_id];
+			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_SELECT, patient));
+		} else {
+			dispatchEvent(new PatientEvent(PatientEvent.PATIENT_SELECT, record));
+		}		
+	}
+	
+	public function deletePatient(patient:XML):void {
+		this.enabled = false;
+		svcPatientDestroy.url = "/patients/" + patient.id + ".xml" + authToken;
+		svcPatientDestroy.send({_method:"DELETE"});
+    }
+	
+	private function getMedicalRecordNumber(item:Object, column:DataGridColumn):String {     	
+    	var patient:XML = patientIdMap[item.patient_id];
+    	return patient.medical_record_number;
+    }
+    
+    private function getPatientName(item:Object, column:DataGridColumn):String {
+    	var patient:XML = patientIdMap[item.patient_id];
+    	return patient.first_name + " " + patient.middle_name + " " + patient.last_name;
+    }
+    
+    private function showPatientCreateTitleWin():void {
+		patientPopUp = 
+			PatientCreateTitleWin(PopUpManager.createPopUp(this, PatientCreateTitleWin, true));
+		patientPopUp.languageArray = languageArray;
+		PopUpManager.centerPopUp(patientPopUp);
+		patientPopUp.move(patientPopUp.x, patientPopUp.y-65);
+		
+		
+		//add event listener to SearchBox.mxml for patient create
+		patientPopUp.addEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreate);
+	}
+	
+	private function handlePatientCreate(evt:PatientEvent):void {
+		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_CREATE, null));
+		showAllPatients();
+		removePatientEventListener();
+	}
+	
+	private function removePatientEventListener():void {
+		if (patientPopUp.hasEventListener(PatientEvent.PATIENT_CREATE)) {
+			patientPopUp.removeEventListener(PatientEvent.PATIENT_CREATE, handlePatientCreate);
+		}
+	}
+	
+	private function handlePatientDestroyResult(event:ResultEvent):void {
+		dispatchEvent(new PatientEvent(PatientEvent.PATIENT_DESTROY, null));
+		showAllPatients();
+	}
+
+	private function handlePatientAutoCompleteChange():void {
+		var patient:Object = searchPatientTI.selectedItem;
+		if (patient != null) {
+			svcPatientsList.url = "/patients/search.xml?rnd=" + rnd;
+			svcPatientsList.send({search: patient.id});	
+		}else {
+			svcPatientsList.url = "/patients.xml?rnd=" + rnd;
+			svcPatientsList.send();
+		}
+	}
+
+	private function patientClicked(event:ListEvent):void{
+		if (event.columnIndex != event.currentTarget.columns.length-1){
+			selectPatient(XML(event.currentTarget.selectedItem));
+		}
+	}
+]]>
+</mx:Script>
+	<mx:HTTPService
+        id="svcPatientDestroy"
+        resultFormat="e4x"
+        method="POST"
+        result="handlePatientDestroyResult(event)"/>
+    <mx:HTTPService
+        id="svcPatientsList"
+        resultFormat="e4x"
+        result="handleShowAllPatients(event)"/>
+	<mx:XMLListCollection id="patientsXLC"
+        source="{XMLList(svcPatientsList.lastResult.children())}"/>    
+	
+
+   	<mx:VBox label="{languageArray['Patients']}" show="showAllPatients()" width="100%" height="100%">				
+   		<mx:Panel title="{languageArray['Patient List']}" width="100%" height="100%" 
+   			paddingTop="10" paddingLeft="5" paddingRight="5">
+			<mx:HBox>
+				<mx:Label fontWeight="bold" text="{languageArray['Search by Patient Name']}: "></mx:Label>
+				<hc:AdvancedAutoComplete id="searchPatientTI" dataProvider="{patients}" 
+					labelField="name" selectedItemStyleName="facebook" matchType="anyPart" 
+					showBrowseButton="true" browserFields="name" enableClearIcon="true" width="275" 
+					allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"
+					change="handlePatientAutoCompleteChange()"/>					
+				<mx:Button id="showAllPatientsButton" label="{languageArray['Show All']}" click="showAllPatients()"/>
+			<mx:Spacer height="1" />
+			</mx:HBox>
+			<mx:Spacer height="1" />
+			<mx:LinkButton label="{languageArray['Add New Patient']}" color="#0000FF" click="showPatientCreateTitleWin()"/>
+			
+			<mx:DataGrid id="patientGrid" width="100%" height="100%" itemClick="patientClicked(event)" textAlign="center" 
+				dataProvider="{patientsXLC}">
+		        <mx:columns>
+					<mx:DataGridColumn headerText="{languageArray['Medical Record ID']}" width="115"
+		                dataField="medical_record_number"/>
+		        	<mx:DataGridColumn headerText="{languageArray['First Name']}" width="100"
+		                dataField="first_name"/>
+					<mx:DataGridColumn headerText="{languageArray['Middle Name']}" width="100"
+		                dataField="middle_name"/>
+		            <mx:DataGridColumn headerText="{languageArray['Last Name']}" width="100"
+		                dataField="last_name"/>
+		        	<mx:DataGridColumn headerText="{languageArray['Gender']}" width="100"
+		                dataField="gender"/>
+		    		<mx:DataGridColumn headerText="{languageArray['Date of Birth']}" width="100"
+		                dataField="date_of_birth"/>
+		            <mx:DataGridColumn headerText="{languageArray['Arrival Date']}" width="100"
+		                dataField="arrival_date"/>	 	 		  
+					<mx:DataGridColumn headerText="" width="110" editable="false">
+		                    <mx:itemRenderer>
+		                        <mx:Component>
+		                            <mx:Button label="{outerDocument.languageArray['Delete Patient']}" click="outerDocument.deletePatient(XML(data))"/>
+		                        </mx:Component>	                                           
+		                    </mx:itemRenderer>
+					</mx:DataGridColumn>	       	                
+		        </mx:columns>
+		    </mx:DataGrid>
+		</mx:Panel>
+	</mx:VBox>
+</mx:VBox>

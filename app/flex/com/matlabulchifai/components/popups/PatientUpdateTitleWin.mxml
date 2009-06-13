@@ -41,8 +41,6 @@
         	  	formIsValid = true;            
     	      	validate(lastnameValidator);
     	      	validate(medIDV);  
-    	      	validate(emPhoneV);
-    	      	validate(phoneV);
 	     	}
 
 	    	private function validate(validator:Validator):Boolean
@@ -163,17 +161,6 @@
         requiredFieldError="{languageArray['This field is required.']}"
         tooShortError="{languageArray['This field is shorter than the minimum allowed length.']}"
     />
-	
-	<mx:PhoneNumberValidator id="phoneV" required="false"
-        source="{telephoneTI}" property="text"
-        invalidCharError="{languageArray['Your telephone number contains invalid characters.']}"
-        wrongLengthError="{languageArray['Your telephone number must contain at least 10 digits.']}"
-        />
-        
-    <mx:PhoneNumberValidator id="emPhoneV" required="false"
-        source="{emergencycontactnumberTI}" property="text"
-        invalidCharError="{languageArray['Your telephone number contains invalid characters.']}"
-        wrongLengthError="{languageArray['Your telephone number must contain at least 10 digits.']}"/>
 
 	<mx:NumberValidator id="medIDV" 
         source="{medicalrecordTI}" property="text" 

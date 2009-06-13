@@ -96,6 +96,7 @@
 	
  	private var userMenu:XMLList = <>
  		<menuitem label="Alerts"/>
+ 		<menuitem label="Patients"/>
  		<menuitem label="Search"/>
  		<menuitem label="Logout"/>
  	</>;
@@ -105,6 +106,7 @@
  	
  	private var adminMenu:XMLList = <>
  		<menuitem label="Alerts"/>
+ 		<menuitem label="Patients"/>
  		<menuitem label="Search"/>
  		<menuitem label="Administration"/>
  		<menuitem label="Logout"/>
@@ -134,15 +136,17 @@
 		if(_user){
 			if(_user.is_admin == 1){
 				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Alerts']+"'/>"),0);
-				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),1);
-				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Administration']+"'/>"),2);
-				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),3);
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Patients']+"'/>"),1);
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),2);
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Administration']+"'/>"),3);
+				adminMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),4);
 				mainMenu.dataProvider = adminMenuXLC;
 			}
 			else{
 				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Alerts']+"'/>"),0);
-				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),1);
-				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),2);
+				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Patients']+"'/>"),1);
+				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Search']+"'/>"),2);
+				userMenuXLC.setItemAt(XML("<menuitem label='"+languageArray['Logout']+"'/>"),3);
 				mainMenu.dataProvider = userMenuXLC;
 			}
 		}
@@ -399,10 +403,10 @@
  		parsing = true;
  		debug("ParseURL called");
    		var o:Object = URLUtil.stringToObject(browserManager.fragment);
-   		if(o.a == 2){
+   		if(o.a == 3){
    			this.searchBox.searchMain.selectedIndex = o.b;
    		}
-   		if(o.a == 4){
+   		if(o.a == 5){
    			var patient:XML = patientIdMap[o.b];
    			this.patientInfoBox.patient = patient;
    		}
@@ -419,11 +423,11 @@
      		return;
  		var currentIndex:int = mainStack.selectedIndex;
  		var toStore:String = "a=" + currentIndex;
- 		if(currentIndex == 2){
+ 		if(currentIndex == 3){
  			toStore+=";b=" + this.searchBox.searchMain.selectedIndex;
  			debug("Selected Index: " + searchBox.searchMain.selectedIndex);
  		}
- 		if(currentIndex == 4){
+ 		if(currentIndex == 5){
  			toStore+= ";b="+ this.patientInfoBox.patientID;
  		}
    		browserManager.setFragment(toStore);
@@ -475,25 +479,31 @@
 		if(_user["is_admin"] == 1){
 			if(e.currentTarget.selectedIndex == 0) {
 				mainStack.selectedChild = alertBox;				
-			}			
+			}
 			else if(e.currentTarget.selectedIndex == 1) {				
+				mainStack.selectedChild = patientBox;			
+			}
+			else if(e.currentTarget.selectedIndex == 2) {				
 				mainStack.selectedChild = searchBox;			
 			}			
-			else if(e.currentTarget.selectedIndex == 2) {
+			else if(e.currentTarget.selectedIndex == 3) {
 				mainStack.selectedChild = adminBox;				
 			}			
-			else if(e.currentTarget.selectedIndex == 3) {				
+			else if(e.currentTarget.selectedIndex == 4) {				
 				handleLogout();							
 			}
 		}
 		else{
 			if(e.currentTarget.selectedIndex == 0) {
 				mainStack.selectedChild = alertBox;				
-			}			
+			}
 			else if(e.currentTarget.selectedIndex == 1) {				
-				mainStack.selectedChild = searchBox;			
+				mainStack.selectedChild = patientBox;			
 			}			
 			else if(e.currentTarget.selectedIndex == 2) {				
+				mainStack.selectedChild = searchBox;			
+			}			
+			else if(e.currentTarget.selectedIndex == 3) {				
 				handleLogout();							
 			}
 			
@@ -681,6 +691,11 @@
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}" 
 				width="70%" height="90%" horizontalAlign="left" minWidth="1024"/>
+			<mlc:PatientBox id="patientBox"
+				languageArray="{languageArray}"
+				patientIdMap="{patientIdMap}"
+				patients="{patients}"
+				width="70%" height="90%" minWidth="1024"/>
 			<mlc:SearchBox id="searchBox"
 				languageArray="{languageArray}"
 				patientIdMap="{patientIdMap}"

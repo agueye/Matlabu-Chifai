@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox 
+<mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:mlc="com.matlabulchifai.components.views.*"
 	xmlns:hc="com.hillelcoren.components.*"
@@ -299,8 +299,6 @@
 						allowNewValues="false" backspaceAction="remove" autoSelectEnabled="false"
 						change="handlePatientAutoCompleteChange()"/>					
 					<mx:Button id="showAllPatientsButton" label="{languageArray['Show All']}" click="showAllPatients()"/>
-					<mx:Spacer width="20" />
-					<mx:LinkButton label="{languageArray['Add New Patient']}" color="#0000FF" click="showPatientCreateTitleWin()"/>
 				</mx:HBox>
 				
 				<mx:Spacer height="5" />

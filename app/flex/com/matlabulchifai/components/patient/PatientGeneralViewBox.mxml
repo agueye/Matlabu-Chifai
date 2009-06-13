@@ -27,6 +27,7 @@
 				patientUpdatePopUp.patient = this.patient;
 				patientUpdatePopUp.languageArray = this.languageArray;
 				PopUpManager.centerPopUp(patientUpdatePopUp);
+				patientUpdatePopUp.move(patientUpdatePopUp.x-130, patientUpdatePopUp.y-80);
 			}
 			
 			public function handlePatientUpdateEvent(event:PatientEvent):void {
