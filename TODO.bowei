@@ -1,0 +1,9 @@
+?? fix log messages
+remove encryption code
+figure how to global setting to control whether or not the data is encrypted
+
+Seeding the database with initial data:
+http://stackoverflow.com/questions/984479/ruby-on-rails-is-seeding-data-with-fixtures-dangerous
+
+and http://railspikes.com/2008/2/1/loading-seed-data
+
