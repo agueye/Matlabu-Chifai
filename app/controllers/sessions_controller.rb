@@ -16,26 +16,17 @@ class SessionsController < ApplicationController
     if logged_in?
       if params[:remember_me] == "1"
         current_user.remember_me unless current_user.remember_token?
-        cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
+        cookies[:auth_token] = { 
+          :value   => self.current_user.remember_token , 
+          :expires => self.current_user.remember_token_expires_at 
+        }
       end
       
-	#@user = User.find_by_login(params[:login])
-	#@masterKey = EzCrypto::Key.decrypt_with_password params[:password], "system salt", @user.encryptedKey
-	#@masterKey = EzCrypto::Key.decode @masterKey
-	#@user.enter_password @masterKey
-
-	@cookieSalt = EzCrypto::Key.generate
-	@cookieSalt = @cookieSalt.to_s
-	@encryptedPassword=EzCrypto::Key.encrypt_with_password @cookieSalt, "system salt", params[:password]
-	@user = User.find_by_login(params[:login])
-	#current_user.cookieSalt = "blah"  #@cookieSalt
-	  #cookies[:login]=params[:login]
-      cookies[:userID] = @user.id.to_s
-	@user.cookieSalt = @cookieSalt
-	@user.save!
-	cookies[:encryptedPassword] = @encryptedPassword
-
-      APP_LOGGER_LOG.info "SESSION CREATED - USER " + self.current_user[:login]
+      @user = User.find_by_login(params[:login])
+      @user.cookieSalt = "dummy"
+      @user.save!
+      
+      APP_LOGGER_LOG.info "SESSION CREATED - USER #{self.current_user[:login]}"
       
       respond_to do |format|
         format.html do
@@ -59,8 +50,7 @@ class SessionsController < ApplicationController
     cookies.delete :auth_token
     reset_session
     
-    APP_LOGGER_LOG.info "SESSION DELETED - USER " + self.current_user[:login]
-    
+    APP_LOGGER_LOG.info "SESSION DELETED - USER #{self.current_user[:login]}"
     flash[:notice] = "You have been logged out."
     #redirect_back_or_default('/')
     respond_to do |format|

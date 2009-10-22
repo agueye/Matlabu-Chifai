@@ -5,8 +5,6 @@ class PatientNote < ActiveRecord::Base
   validates_presence_of :note_date
   validates_presence_of :body
   
-  encrypt :body
-  
   validates_length_of   :body, 
                         :maximum => 10000, :allow_blank => true  
   

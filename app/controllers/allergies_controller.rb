@@ -1,18 +1,10 @@
 class AllergiesController < ApplicationController
   # GET /allergies
   # GET /allergies.xml
-  def index
-    
+  def index    
     @user = User.find_by_id(cookies[:userID])
-    #get master key using cookieSalt and password 
-    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
     
     @allergies = Allergy.find(:all)
-    for @allergy in @allergies
-        @allergy.enter_password @masterKey
-    end
-      
     @allergies.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
@@ -25,12 +17,6 @@ class AllergiesController < ApplicationController
   # GET /allergies/1.xml
   def show
     @allergy = Allergy.find(params[:id])
-    #@user = User.find_by_id(cookies[:userID])
-    #get master key using cookieSalt and password 
-    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-    #@allergy.enter_password @masterKey
-    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @allergy }
@@ -56,16 +42,9 @@ class AllergiesController < ApplicationController
   # POST /allergies
   # POST /allergies.xml
   def create
-	@allergy = Allergy.new(params[:allergy])
-	#@allergy = Allergy.new
-	@user = User.find_by_id(cookies[:userID])
-	#get master key using cookieSalt and password 
-  @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-	@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-	@allergy.enter_password @masterKey
-	
-	
-	
+    @allergy = Allergy.new(params[:allergy])
+    @user = User.find_by_id(cookies[:userID])	
+    
     respond_to do |format|
       if @allergy.save
         flash[:notice] = 'Allergy was successfully created.'
@@ -80,12 +59,12 @@ class AllergiesController < ApplicationController
       end
     end
   end
-
+  
   # PUT /allergies/1
   # PUT /allergies/1.xml
   def update
     @allergy = Allergy.find(params[:id])
-
+    
     respond_to do |format|
       if @allergy.update_attributes(params[:allergy])
         flash[:notice] = 'Allergy was successfully updated.'
@@ -108,7 +87,7 @@ class AllergiesController < ApplicationController
     @allergy.destroy
     
     APP_LOGGER_LOG.info "ALLERGY DELETED - " + @allergy[:name] + " by USER " + self.current_user[:login]
-
+    
     respond_to do |format|
       format.html { redirect_to(allergies_url) }
       format.xml  { head :ok }

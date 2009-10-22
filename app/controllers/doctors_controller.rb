@@ -2,17 +2,7 @@ class DoctorsController < ApplicationController
   # GET /doctors
   # GET /doctors.xml
   def index
-    
-    @user = User.find_by_id(cookies[:userID])
-    #get master key using cookieSalt and password 
-    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-    
     @doctors = Doctor.find(:all)
-    for @doctor in @doctors
-        @doctor.enter_password @masterKey
-    end
-    
     @doctors.sort! {|x, y| x.name <=> y.name}
 
     respond_to do |format|
@@ -52,14 +42,6 @@ class DoctorsController < ApplicationController
   # POST /doctors.xml
   def create
     @doctor = Doctor.new(params[:doctor])
-    @user = User.find_by_id(cookies[:userID])
-    #get master key using cookieSalt and password 
-    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-    @doctor.enter_password @masterKey
-  
-  
-    
     APP_LOGGER_LOG.info "DOCTOR CREATED - " + @doctor[:name] + "by USER " + self.current_user[:login]
     
     respond_to do |format|

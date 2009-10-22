@@ -4,7 +4,6 @@ class PatientVisit < ActiveRecord::Base
   belongs_to  :visit_type
   belongs_to  :condition
   
-  encrypt :notes
   validates_presence_of :patient
   validates_presence_of :doctor
   validates_presence_of :visit_type
@@ -18,6 +17,4 @@ class PatientVisit < ActiveRecord::Base
   validates_length_of   :pulse, :maximum => 100, :allow_blank => true
   validates_length_of   :temperature, :maximum => 100, :allow_blank => true
   validates_length_of   :notes, :maximum => 10000, :allow_blank => true
-  
-  #validates_date  :visit_date, :allow_nil => true
 end

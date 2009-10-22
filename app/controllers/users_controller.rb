@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   def index
     @users = User.find(:all)
     @users.sort! {|x, y| x.login <=> y.login}
-
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @users }
@@ -28,26 +28,17 @@ class UsersController < ApplicationController
     # uncomment at your own risk
     # reset_session
 	
-	@first_user = User.find(:first)
-	
-	#if this is not the first user
-	if @first_user.nil?
-		@user = User.new(params[:user])
-	else
-		@user = User.find_by_id(cookies[:userID])
-		#get master key using cookieSalt and password 
-    	@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-		@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-	
- 	    @user = User.new(params[:user])    
-    	@encrypted=EzCrypto::Key.encrypt_with_password @user.password, "system salt",@masterKey
-    	@user.encryptedKey = @encrypted
+    @first_user = User.find(:first)
+    if @first_user.nil?
+      @user = User.new(params[:user])
+    else
+      @user = User.find_by_id(cookies[:userID])
     end
-
+    
     @user.save!
     
-    APP_LOGGER_LOG.info "USER CREATED - " + @user[:login] + " by USER " + self.current_user[:login]
-
+    APP_LOGGER_LOG.info "USER CREATED - #{@user[:login]} by USER #{self.current_user[:login]}"
+    
     self.current_user = @user
     respond_to do |format|
       format.html do
@@ -70,12 +61,11 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.destroy
     
-    APP_LOGGER_LOG.info "USER DELETED - " + @user[:login] + " by USER " + self.current_user[:login]
+    APP_LOGGER_LOG.info "USER DELETED - #{@user[:login]} by USER #{self.current_user[:login]}"
         
     respond_to do |format|
       format.html { redirect_to(users_url) }
       format.xml  { head :ok }
     end
   end
-
 end

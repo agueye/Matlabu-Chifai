@@ -4,9 +4,7 @@ class Condition < ActiveRecord::Base
   has_many :visit_patients, :through => :patient_visits
   has_many :medication_patients, :through => :patient_medications
   
-  encrypt :name, :notes
   validates_presence_of :name
-  
   validates_uniqueness_of :name, 
         :message => 'is already in our database. Please enter a unique condition name.'
   

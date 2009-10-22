@@ -1,6 +1,8 @@
 ?? fix log messages
 remove encryption code
 figure how to global setting to control whether or not the data is encrypted
+bug with the photo attachment code (attachment already exists?)
+problems with error handling...
 
 Seeding the database with initial data:
 http://stackoverflow.com/questions/984479/ruby-on-rails-is-seeding-data-with-fixtures-dangerous

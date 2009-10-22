@@ -22,16 +22,6 @@ class User < ActiveRecord::Base
     u && u.authenticated?(password) ? u : nil
   end
 
-  # Encrypts some data with the salt.
-  def self.encrypt(password, salt)
-    Digest::SHA1.hexdigest("--#{salt}--#{password}--")
-  end
-
-  # Encrypts the password with the user salt
-  def encrypt(password)
-    self.class.encrypt(password, salt)
-  end
-
   def authenticated?(password)
     crypted_password == encrypt(password)
   end
@@ -82,5 +72,9 @@ class User < ActiveRecord::Base
       return if self.is_admin == 1
       self.is_admin = 0
     end
-    
+
+  private
+  def encrypt(password)
+    Digest::SHA1.hexdigest("#{password}")
+  end
 end

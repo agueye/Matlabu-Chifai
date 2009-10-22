@@ -4,24 +4,11 @@ class PatientMedicationsController < ApplicationController
   # GET /patient_medications
   # GET /patient_medications.xml
   def index
-    
-    @user = User.find_by_id(cookies[:userID])
-    #get master key using cookieSalt and password 
-    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-    
-  	if (params[:patient_id])
-    	@patient_medications = @patient.patient_medications
-      for @patient_medication in @patient_medications
-        @patient_medication.enter_password @masterKey
-      end
-      
-    	@patient_medications.sort! {|y, x| x.date_given <=> y.date_given}
+    if (params[:patient_id])
+      @patient_medications = @patient.patient_medications
+      @patient_medications.sort! {|y, x| x.date_given <=> y.date_given}
     else
-    	@patient_medications = PatientMedication.find(:all, :order => "date_given DESC")
-      for @patient_medication in @patient_medications
-        @patient_medication.enter_password @masterKey
-      end
+      @patient_medications = PatientMedication.find(:all, :order => "date_given DESC")
     end
 
     respond_to do |format|
@@ -43,14 +30,7 @@ class PatientMedicationsController < ApplicationController
   # GET /patient_medications/1
   # GET /patient_medications/1.xml
   def show
-    @patient_medication = PatientMedication.find(params[:id])
-    @user = User.find_by_id(cookies[:userID])
-    #get master key using cookieSalt and password 
-    @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-    @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-    
-    @patient_medication.enter_password @masterKey
-    
+    @patient_medication = PatientMedication.find(params[:id])    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @patient_medication }
@@ -76,39 +56,32 @@ class PatientMedicationsController < ApplicationController
   # POST /patient_medications
   # POST /patient_medications.xml
   def create
-	name = params["patient_medication"].delete("name")
-	patient = params["patient_medication"].delete("patient_id")
-	condition_n = params["patient_medication"].delete("condition")
-	doctor_n = params["patient_medication"].delete("doctor")
-  @patient_medication = PatientMedication.new(params[:patient_medication])
+    name = params["patient_medication"].delete("name")
+    patient = params["patient_medication"].delete("patient_id")
+    condition_n = params["patient_medication"].delete("condition")
+    doctor_n = params["patient_medication"].delete("doctor")
+    @patient_medication = PatientMedication.new(params[:patient_medication])
     
-  @user = User.find_by_id(cookies[:userID])
-  #get master key using cookieSalt and password 
-  @password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-  @masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
-  name = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", name
-  condition_n = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", condition_n
-  doctor_n = EzCrypto::Key.encrypt_with_password @masterKey, "onetwothree", doctor_n
+    medication = Medication.find_by_name(name)
+    condition = Condition.find_by_name(condition_n)
+    doctor = Doctor.find_by_name(doctor_n)
+    @patient_medication.medication = medication
+    @patient_medication.condition = condition
+    @patient_medication.doctor = doctor
+    @patient_medication.patient = Patient.find(patient)
   
-	medication = Medication.find_by_name(name)
-	condition = Condition.find_by_name(condition_n)
-	doctor = Doctor.find_by_name(doctor_n)
-	@patient_medication.medication = medication
-	@patient_medication.condition = condition
-	@patient_medication.doctor = doctor
-	@patient_medication.patient = Patient.find(patient)
-  
-  @patient_medication.enter_password @masterKey
-
-    
     respond_to do |format|
       if @patient_medication.save
         flash[:notice] = "The patient's medication was successfully created."
         
-        APP_LOGGER_LOG.info "MEDICATION CREATED - for PATIENT ID " + @patient_medication.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
-            
+        APP_LOGGER_LOG.info "MEDICATION CREATED - for PATIENT ID " + 
+          @patient_medication.patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
         format.html { }
-        format.xml  { render :xml => @patient_medication, :status => :created, :location => @patient_medication }
+        format.xml  { 
+          render :xml => @patient_medication, 
+          :status => :created, 
+          :location => @patient_medication 
+        }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @patient_medication.errors, :status => :unprocessable_entity }
@@ -125,7 +98,8 @@ class PatientMedicationsController < ApplicationController
       if @patient_medication.update_attributes(params[:patient_medication])
         flash[:notice] = "The patient's medication was successfully updated."
         get_patient_by_medication
-        APP_LOGGER_LOG.info "MEDICATION UPDATED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
+        APP_LOGGER_LOG.info "MEDICATION UPDATED - for PATIENT ID " + 
+          @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
             
         format.html { }
         format.xml  { render :xml => @patient_medication }
@@ -142,7 +116,8 @@ class PatientMedicationsController < ApplicationController
     @patient_medication = PatientMedication.find(params[:id])
     @patient_medication.destroy
     get_patient_by_medication
-    APP_LOGGER_LOG.info "MEDICATION DELETED - for PATIENT ID " + @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
+    APP_LOGGER_LOG.info "MEDICATION DELETED - for PATIENT ID " + 
+      @patient[:medical_record_number].to_s + " by USER " + self.current_user[:login]
     
     respond_to do |format|
       format.html { }
@@ -151,19 +126,13 @@ class PatientMedicationsController < ApplicationController
   end
   
   private
+  def get_patient
+    if (params[:patient_id])
+      @patient = Patient.find(params[:patient_id])
+    end
+  end
   
-	def get_patient
-		if (params[:patient_id])
-			@patient = Patient.find(params[:patient_id])
-		end
-	end
-
   def get_patient_by_medication
-    #@user = User.find_by_id(cookies[:userID])
-    #get master key using cookieSalt and password 
-    #@password = EzCrypto::Key.decrypt_with_password @user.cookieSalt, "system salt",cookies[:encryptedPassword]
-    #@masterKey = EzCrypto::Key.decrypt_with_password @password, "system salt",@user.encryptedKey
     @patient = Patient.find(@patient_medication[:patient_id])
-    #@patient.enter_password @masterKey
   end
 end
