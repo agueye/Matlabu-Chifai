@@ -8,7 +8,8 @@ one:
   visit_date: 2009-04-25
   height: MyString
   weight: MyString
-  blood_pressure: MyString
+  systolic: 100
+  diastolic: 101
   pulse: MyString
   temperature: MyString
   notes: MyText
@@ -21,7 +22,8 @@ two:
   visit_date: 2009-04-25
   height: MyString
   weight: MyString
-  blood_pressure: MyString
+  systolic: 100
+  diastolic: 101
   pulse: MyString
   temperature: MyString
   notes: MyText
