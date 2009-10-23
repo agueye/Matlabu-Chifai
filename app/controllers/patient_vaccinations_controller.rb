@@ -73,10 +73,7 @@ class PatientVaccinationsController < ApplicationController
       if @patient_vaccination.save
         flash[:notice] = "The patient's vaccination was successfully created."
         format.html { redirect_to(patient_patient_vaccinations_path(@patient)) }
-        format.xml  { render 
-          :xml => @patient_vaccination, 
-          :status => :created, 
-          :location => @patient_vaccination }
+        format.xml { render :xml => @patient_vaccination, :status => :created, :location => @patient_vaccination }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @patient_vaccination.errors, :status => :unprocessable_entity }
