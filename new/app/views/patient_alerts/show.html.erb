@@ -1,0 +1,18 @@
+<p>
+  <b>Patient:</b>
+  <%=h @patient_alerts.patient %>
+</p>
+
+<p>
+  <b>Alert date:</b>
+  <%=h @patient_alerts.alert_date %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @patient_alerts.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_patient_alerts_path(@patient_alerts) %> |
+<%= link_to 'Back', patient_alerts_path %>

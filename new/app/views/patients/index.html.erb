@@ -1,0 +1,64 @@
+<h1>Listing patients</h1>
+
+<table>
+  <tr>
+    <th>Medical record number</th>
+    <th>First name</th>
+    <th>Middle name</th>
+    <th>Last name</th>
+    <th>Arrival date</th>
+    <th>Dob</th>
+    <th>Gender</th>
+    <th>Address</th>
+    <th>City</th>
+    <th>State</th>
+    <th>Zip</th>
+    <th>Father first name</th>
+    <th>Father last name</th>
+    <th>Mother first name</th>
+    <th>Mother last name</th>
+    <th>Telephone</th>
+    <th>Emergency contact name</th>
+    <th>Emergency contact relation</th>
+    <th>Emergency contact number</th>
+    <th>Notes</th>
+    <th>Photo file url</th>
+    <th>Photo content type</th>
+    <th>Photo file size</th>
+  </tr>
+
+<% @patients.each do |patient| %>
+  <tr>
+    <td><%=h patient.medical_record_number %></td>
+    <td><%=h patient.first_name %></td>
+    <td><%=h patient.middle_name %></td>
+    <td><%=h patient.last_name %></td>
+    <td><%=h patient.arrival_date %></td>
+    <td><%=h patient.dob %></td>
+    <td><%=h patient.gender %></td>
+    <td><%=h patient.address %></td>
+    <td><%=h patient.city %></td>
+    <td><%=h patient.state %></td>
+    <td><%=h patient.zip %></td>
+    <td><%=h patient.father_first_name %></td>
+    <td><%=h patient.father_last_name %></td>
+    <td><%=h patient.mother_first_name %></td>
+    <td><%=h patient.mother_last_name %></td>
+    <td><%=h patient.telephone %></td>
+    <td><%=h patient.emergency_contact_name %></td>
+    <td><%=h patient.emergency_contact_relation %></td>
+    <td><%=h patient.emergency_contact_number %></td>
+    <td><%=h patient.notes %></td>
+    <td><%=h patient.photo_file_url %></td>
+    <td><%=h patient.photo_content_type %></td>
+    <td><%=h patient.photo_file_size %></td>
+    <td><%= link_to 'Show', patient %></td>
+    <td><%= link_to 'Edit', edit_patient_path(patient) %></td>
+    <td><%= link_to 'Destroy', patient, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New patient', new_patient_path %>

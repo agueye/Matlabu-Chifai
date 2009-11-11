@@ -1,0 +1,28 @@
+<h1>Editing patient_vaccination</h1>
+
+<% form_for(@patient_vaccination) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :patient %><br />
+    <%= f.text_field :patient %>
+  </p>
+  <p>
+    <%= f.label :vaccination %><br />
+    <%= f.text_field :vaccination %>
+  </p>
+  <p>
+    <%= f.label :date_admined %><br />
+    <%= f.datetime_select :date_admined %>
+  </p>
+  <p>
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @patient_vaccination %> |
+<%= link_to 'Back', patient_vaccinations_path %>

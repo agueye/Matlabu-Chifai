@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  patient: 
+  note_date: 2009-11-06 18:36:07
+  body: MyText
+
+two:
+  patient: 
+  note_date: 2009-11-06 18:36:07
+  body: MyText

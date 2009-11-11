@@ -1,0 +1,44 @@
+<h1>Editing patient_medications</h1>
+
+<% form_for(@patient_medications) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :medication %><br />
+    <%= f.text_field :medication %>
+  </p>
+  <p>
+    <%= f.label :patient %><br />
+    <%= f.text_field :patient %>
+  </p>
+  <p>
+    <%= f.label :doctor %><br />
+    <%= f.text_field :doctor %>
+  </p>
+  <p>
+    <%= f.label :condition %><br />
+    <%= f.text_field :condition %>
+  </p>
+  <p>
+    <%= f.label :date_given %><br />
+    <%= f.datetime_select :date_given %>
+  </p>
+  <p>
+    <%= f.label :dosage %><br />
+    <%= f.text_field :dosage %>
+  </p>
+  <p>
+    <%= f.label :frequency %><br />
+    <%= f.text_field :frequency %>
+  </p>
+  <p>
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @patient_medications %> |
+<%= link_to 'Back', patient_medications_path %>

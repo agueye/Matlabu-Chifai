@@ -1,0 +1,23 @@
+<p>
+  <b>Patient:</b>
+  <%=h @patient_vaccination.patient %>
+</p>
+
+<p>
+  <b>Vaccination:</b>
+  <%=h @patient_vaccination.vaccination %>
+</p>
+
+<p>
+  <b>Date admined:</b>
+  <%=h @patient_vaccination.date_admined %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @patient_vaccination.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_patient_vaccination_path(@patient_vaccination) %> |
+<%= link_to 'Back', patient_vaccinations_path %>

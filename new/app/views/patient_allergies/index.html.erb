@@ -1,0 +1,30 @@
+<h1>Listing patient_allergies</h1>
+
+<table>
+  <tr>
+    <th>Allergy</th>
+    <th>Patient</th>
+    <th>Date observed</th>
+    <th>Severity</th>
+    <th>Reaction</th>
+    <th>Notes</th>
+  </tr>
+
+<% @patient_allergies.each do |patient_allergies| %>
+  <tr>
+    <td><%=h patient_allergies.allergy %></td>
+    <td><%=h patient_allergies.patient %></td>
+    <td><%=h patient_allergies.date_observed %></td>
+    <td><%=h patient_allergies.severity %></td>
+    <td><%=h patient_allergies.reaction %></td>
+    <td><%=h patient_allergies.notes %></td>
+    <td><%= link_to 'Show', patient_allergies %></td>
+    <td><%= link_to 'Edit', edit_patient_allergies_path(patient_allergies) %></td>
+    <td><%= link_to 'Destroy', patient_allergies, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New patient_allergies', new_patient_allergies_path %>

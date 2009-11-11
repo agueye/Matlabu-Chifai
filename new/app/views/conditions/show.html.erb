@@ -1,0 +1,13 @@
+<p>
+  <b>Name:</b>
+  <%=h @condition.name %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @condition.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_condition_path(@condition) %> |
+<%= link_to 'Back', conditions_path %>

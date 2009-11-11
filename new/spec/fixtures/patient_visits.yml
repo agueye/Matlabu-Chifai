@@ -1,0 +1,29 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  patient: 
+  doctor: 
+  visit_type: 
+  condition: 
+  visit_date: 2009-11-06 18:38:11
+  height: MyString
+  weight: MyString
+  systolic: MyString
+  diastolic: MyString
+  pulse: MyString
+  temperature: MyString
+  notes: MyText
+
+two:
+  patient: 
+  doctor: 
+  visit_type: 
+  condition: 
+  visit_date: 2009-11-06 18:38:11
+  height: MyString
+  weight: MyString
+  systolic: MyString
+  diastolic: MyString
+  pulse: MyString
+  temperature: MyString
+  notes: MyText

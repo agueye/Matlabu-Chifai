@@ -1,0 +1,60 @@
+<h1>Editing patient_visit</h1>
+
+<% form_for(@patient_visit) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :patient %><br />
+    <%= f.text_field :patient %>
+  </p>
+  <p>
+    <%= f.label :doctor %><br />
+    <%= f.text_field :doctor %>
+  </p>
+  <p>
+    <%= f.label :visit_type %><br />
+    <%= f.text_field :visit_type %>
+  </p>
+  <p>
+    <%= f.label :condition %><br />
+    <%= f.text_field :condition %>
+  </p>
+  <p>
+    <%= f.label :visit_date %><br />
+    <%= f.datetime_select :visit_date %>
+  </p>
+  <p>
+    <%= f.label :height %><br />
+    <%= f.text_field :height %>
+  </p>
+  <p>
+    <%= f.label :weight %><br />
+    <%= f.text_field :weight %>
+  </p>
+  <p>
+    <%= f.label :systolic %><br />
+    <%= f.text_field :systolic %>
+  </p>
+  <p>
+    <%= f.label :diastolic %><br />
+    <%= f.text_field :diastolic %>
+  </p>
+  <p>
+    <%= f.label :pulse %><br />
+    <%= f.text_field :pulse %>
+  </p>
+  <p>
+    <%= f.label :temperature %><br />
+    <%= f.text_field :temperature %>
+  </p>
+  <p>
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @patient_visit %> |
+<%= link_to 'Back', patient_visits_path %>
