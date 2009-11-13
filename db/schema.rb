@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(:version => 20090427032545) do
     t.string   "salt",                      :limit => 40
     t.string   "first_name",                :limit => 80, :null => false
     t.string   "last_name",                 :limit => 80, :null => false
+    t.string   "email",                     :limit => 80, :null => false
     t.integer  "is_admin"
     t.datetime "created_at"
     t.datetime "updated_at"

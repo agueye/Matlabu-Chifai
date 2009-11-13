@@ -6,6 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.column :salt,                      :string, :limit => 40
       t.column :first_name,                :string, :limit => 80, :null => false
       t.column :last_name,                 :string, :limit => 80, :null => false
+      t.column :email,                     :string, :limit => 80, :null => false
       t.column :is_admin,                  :integer
       t.column :created_at,                :datetime
       t.column :updated_at,                :datetime
