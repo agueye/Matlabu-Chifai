@@ -1,0 +1,357 @@
+# Logfile created on Thu Jun 03 11:14:49 -0700 2010
+
+Processing PatientsController#index (for 127.0.0.1 at 2010-06-03 14:10:21) [GET]
+  Parameters: {"action"=>"index", "controller"=>"patients"}
+Redirected to /session/new
+Filter chain halted as [:login_required] rendered_or_redirected.
+Completed in 2ms (DB: 0) | 302 Found [http://localhost/]
+
+
+Processing SessionsController#new (for 127.0.0.1 at 2010-06-03 14:10:23) [GET]
+  Parameters: {"action"=>"new", "controller"=>"sessions"}
+Rendering sessions/new
+Completed in 10ms (View: 6, DB: 0) | 200 OK [http://localhost/session/new]
+
+
+Processing SessionsController#create (for 127.0.0.1 at 2010-06-03 14:10:28) [POST]
+  Parameters: {"commit"=>"Log in", "action"=>"create", "authenticity_token"=>"04d56bf0ce8417458f236b6e26a991ba0c61d0f3", "controller"=>"sessions", "login"=>"admin", "password"=>"[FILTERED]"}
+
+
+ActiveRecord::StatementInvalid (Could not find table 'users'):
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:29:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/core_ext/object/misc.rb:39:in `returning'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:28:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite_adapter.rb:189:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1220:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1233:in `column_names'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1246:in `column_methods_hash'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:382:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1778:in `method_missing'
+    /app/models/user.rb:21:in `authenticate'
+    /app/controllers/sessions_controller.rb:15:in `create'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `perform_action_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:617:in `call_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/rescue.rb:136:in `perform_action_without_caching'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:13:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:12:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:606:in `process_without_session_management_support'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/session_management.rb:134:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:392:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:183:in `handle_request'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:110:in `dispatch_unlocked'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:123:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:132:in `dispatch_cgi'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:39:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:159:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:282:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:128:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/command.rb:212:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:281
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load_without_new_constant_marking'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/servers/mongrel.rb:64
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/server.rb:49
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script/server:3
+
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_trace (94.0ms)
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_request_and_response (1.0ms)
+Rendering C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing FlexController#index (for 127.0.0.1 at 2010-06-03 14:10:41) [GET]
+  Parameters: {"action"=>"index", "controller"=>"flex"}
+Rendering flex/index
+Completed in 39ms (View: 36, DB: 0) | 200 OK [http://localhost/matlabulchifai]
+
+
+Processing SessionsController#create to xml (for 127.0.0.1 at 2010-06-03 14:10:50) [POST]
+  Parameters: {"format"=>"xml", "action"=>"create", "authenticity_token"=>"04d56bf0ce8417458f236b6e26a991ba0c61d0f3", "controller"=>"sessions", "password"=>"[FILTERED]", "login"=>"admin"}
+
+
+ActiveRecord::StatementInvalid (Could not find table 'users'):
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:29:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/core_ext/object/misc.rb:39:in `returning'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:28:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite_adapter.rb:189:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1220:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1233:in `column_names'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1246:in `column_methods_hash'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:382:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1778:in `method_missing'
+    /app/models/user.rb:21:in `authenticate'
+    /app/controllers/sessions_controller.rb:15:in `create'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `perform_action_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:617:in `call_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/rescue.rb:136:in `perform_action_without_caching'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:13:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:12:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:606:in `process_without_session_management_support'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/session_management.rb:134:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:392:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:183:in `handle_request'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:110:in `dispatch_unlocked'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:123:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:132:in `dispatch_cgi'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:39:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:159:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:282:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:128:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/command.rb:212:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:281
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load_without_new_constant_marking'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/servers/mongrel.rb:64
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/server.rb:49
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script/server:3
+
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_trace (179.0ms)
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_request_and_response (2.0ms)
+Rendering C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing SessionsController#create to xml (for 127.0.0.1 at 2010-06-03 14:28:02) [POST]
+  Parameters: {"format"=>"xml", "action"=>"create", "authenticity_token"=>"04d56bf0ce8417458f236b6e26a991ba0c61d0f3", "controller"=>"sessions", "password"=>"[FILTERED]", "login"=>"admin"}
+
+
+ActiveRecord::StatementInvalid (Could not find table 'users'):
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:29:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/core_ext/object/misc.rb:39:in `returning'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:28:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite_adapter.rb:189:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1220:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1233:in `column_names'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1246:in `column_methods_hash'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:382:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1778:in `method_missing'
+    /app/models/user.rb:21:in `authenticate'
+    /app/controllers/sessions_controller.rb:15:in `create'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `perform_action_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:617:in `call_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/rescue.rb:136:in `perform_action_without_caching'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:13:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:12:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:606:in `process_without_session_management_support'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/session_management.rb:134:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:392:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:183:in `handle_request'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:110:in `dispatch_unlocked'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:123:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:132:in `dispatch_cgi'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:39:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:159:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:282:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:128:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/command.rb:212:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:281
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load_without_new_constant_marking'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/servers/mongrel.rb:64
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/server.rb:49
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script/server:3
+
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_trace (91.0ms)
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_request_and_response (1.0ms)
+Rendering C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing FlexController#index (for 127.0.0.1 at 2010-06-03 14:29:55) [GET]
+  Parameters: {"action"=>"index", "controller"=>"flex"}
+Rendering flex/index
+Completed in 16ms (View: 12, DB: 0) | 200 OK [http://localhost/matlabulchifai]
+
+
+Processing SessionsController#create to xml (for 127.0.0.1 at 2010-06-03 14:30:14) [POST]
+  Parameters: {"format"=>"xml", "action"=>"create", "authenticity_token"=>"04d56bf0ce8417458f236b6e26a991ba0c61d0f3", "controller"=>"sessions", "password"=>"[FILTERED]", "login"=>"admin"}
+
+
+ActiveRecord::StatementInvalid (Could not find table 'users'):
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:29:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/core_ext/object/misc.rb:39:in `returning'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite3_adapter.rb:28:in `table_structure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/sqlite_adapter.rb:189:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1220:in `columns'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1233:in `column_names'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1246:in `column_methods_hash'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:382:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1860:in `all_attributes_exists?'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/base.rb:1778:in `method_missing'
+    /app/models/user.rb:21:in `authenticate'
+    /app/controllers/sessions_controller.rb:15:in `create'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:1253:in `perform_action_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:617:in `call_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:610:in `perform_action_without_benchmark'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/rescue.rb:136:in `perform_action_without_caching'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:13:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/connection_adapters/abstract/query_cache.rb:34:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/caching/sql_cache.rb:12:in `perform_action'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `send'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/filters.rb:606:in `process_without_session_management_support'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/session_management.rb:134:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/base.rb:392:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:183:in `handle_request'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:110:in `dispatch_unlocked'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:123:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:122:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:132:in `dispatch_cgi'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/dispatcher.rb:39:in `dispatch'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:159:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:158:in `process_client'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:285:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `initialize'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `new'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel.rb:268:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:282:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `each'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/configurator.rb:281:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:128:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/lib/mongrel/command.rb:212:in `run'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.5-x86-mswin32-60/bin/mongrel_rails:281
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load_without_new_constant_marking'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:142:in `load'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/servers/mongrel.rb:64
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:521:in `new_constants_in'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:153:in `require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/rails-2.2.2/lib/commands/server.rb:49
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script/server:3
+
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_trace (97.0ms)
+Rendered C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/_request_and_response (2.0ms)
+Rendering C:/Users/agueye/Documents/AfricaResearch/MedicalRecordSystem/InstantRails/ruby/lib/ruby/gems/1.8/gems/actionpack-2.2.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)

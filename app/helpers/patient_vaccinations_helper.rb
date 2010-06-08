@@ -1,3 +1,3 @@
 module PatientVaccinationsHelper
-% just testing how git will behave
+#% just testing how git will behave
 end
