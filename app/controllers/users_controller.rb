@@ -7,14 +7,27 @@ class UsersController < ApplicationController
   # GET /users/new.xml
   # render new.rhtml
   def new
-  end
+@user = User.new
+respond_to do |format|
+format.html # new.html.erb
+format.xml { render :xml => @user }
+end
+end
 
+  def show
+@user = User.find(params[:id])
+@users.sort! {|x, y| x.login <=> y.login}
+respond_to do |format|
+format.html # show.html.erb
+format.xml { render :xml => @user }
+end
+end
+  
   # GET /users
   # GET /users.xml
   def index
     @users = User.find(:all)
     @users.sort! {|x, y| x.login <=> y.login}
-    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @users }
@@ -31,9 +44,12 @@ class UsersController < ApplicationController
     @first_user = User.find(:first)
     if @first_user.nil?
       @user = User.new(params[:user])
+	  #@user = User.new(:username => "admin", :password => "admin")
+      #@user.is_admin = 1
     else
       @user = User.find_by_id(cookies[:userID])
     end
+	
     
     @user.save!
     
