@@ -10,11 +10,11 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :login,    :within => 3..80
   validates_uniqueness_of   :login, :case_sensitive => false
-  before_save :encrypt_password, :set_admin
+  before_save :encrypt_password
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :password, :password_confirmation, :first_name, :last_name, :encryptedKey, :email
+  attr_accessible :login, :password, :password_confirmation, :first_name, :last_name, :encryptedKey, :email, :is_admin
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
@@ -71,19 +71,14 @@ class User < ActiveRecord::Base
     def password_required?
       crypted_password.blank? || !password.blank?
     end
-    
-    def set_admin
-      return if self.is_admin == 1
-      self.is_admin = 0
-    end
 	
   private
   def encrypt(password)
     Digest::SHA1.hexdigest("#{password}")
   end
 
-  
-  
+
+
   end
 # 
 
