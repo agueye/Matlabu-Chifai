@@ -1,9 +1,17 @@
-body { background-color: #fff; color: #333; }
+html {
+	height: 100%;
+}
+
+body { 
+		background: -moz-linear-gradient(top, #007D0B, white); 
+		background-repeat: no-repeat;
+		color: #333; }
 
 body, p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size:   13px;
   line-height: 18px;
+  
 }
 
 pre {
@@ -12,14 +20,83 @@ pre {
   font-size: 11px;
 }
 
-a { color: #000; }
+/* a { color: #000; }
 a:visited { color: #666; }
-a:hover { color: #fff; background-color:#000; }
+a:hover { color: #fff; background-color:#000; } */
+
+
 
 .fieldWithErrors {
   padding: 2px;
   background-color: red;
   display: table;
+}
+
+a, span {
+	display: block;
+	height: 21px;
+	float: left;
+	text-decoration: none;
+	color: black;
+}
+
+.buttons {
+	display: block;
+}
+
+.left {
+	width: 15px;
+	background-image:url(../images/buttonleft2.png);
+	background-repeat: no-repeat;
+}
+
+.middle {
+	padding: 0px 5px;
+	background-image:url(../images/buttonc.png);
+	background-repeat: repeat-x;
+}
+
+.right {
+	width: 15px;
+	background-image:url(../images/buttonright.png);
+	background-repeat: no-repeat;
+}
+
+#header {
+	height: 100%;
+	width: 100%;
+	
+}
+
+#canvas {
+	height: 75px;
+	width: 100%;
+}
+
+#innercanvas {
+	height: 100%;
+	width: 100%;
+}
+
+#title {
+	height: 100%;
+	width: 90%;
+	font-family: comic sans ms;
+	font-size: 55px;
+	color: #FFFFFF;
+	float: left;
+	position: relative;
+	top: 30%;
+}
+
+#buttons {
+	position: absolute;
+	left: 65%;
+}
+
+#loginbox {
+	position: absolute;
+	left: 40%;
 }
 
 #errorExplanation {
