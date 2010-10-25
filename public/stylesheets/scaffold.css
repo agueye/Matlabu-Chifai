@@ -1,9 +1,11 @@
 html {
 	height: 100%;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#007D0B', endColorstr='#FFFFFF');
 }
 
 body { 
-		background: -moz-linear-gradient(top, #007D0B, white); 
+		background: -moz-linear-gradient(top, #007D0B, white);
+		background: -webkit-gradient(linear, left top, left bottom, from(#007D0B), to(#FFFFFF));
 		background-repeat: no-repeat;
 		color: #333; }
 
