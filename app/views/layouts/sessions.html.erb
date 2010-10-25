@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>Patients: <%= controller.action_name %></title>
+  <%= stylesheet_link_tag 'scaffold' %>
+</head>
+<body>
+<div id = "header">
+	<div id = "canvas">
+		<div id = "innercanvas">
+			<div id = "title">Matlabul Chifai</div>
+			<div id = "buttons"> <a href ="#" class = "buttons">
+								 <span class="left"></span>
+								 <span class="middle">Francais</span>
+								 <span class="right"></span></a>
+								 <a href ="#" class = "buttons">
+								 <span class="left"></span>
+								 <span class="middle">English</span>
+								 <span class="right"></span></a>
+								 <a href ="#" class = "buttons">
+								 <span class="left"></span>
+								 <span class="middle">Hindi</span>
+								 <span class="right"></span></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= yield  %>
+
+</body>
+</html>
