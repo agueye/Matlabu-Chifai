@@ -1,11 +1,11 @@
-<h1>New patient_alert</h1>
+<h1>New patient alert</h1>
 
 <% form_for([@patient,@patient_alert])  do |f| %>
   <%= f.error_messages %>
 
   <p>
-    <%= f.label :patient_id %><br />
-    <%= f.text_field :patient_id %>
+    <%= f.label :patient %><br />
+    <%= f.text_field :patient %>
   </p>
   <p>
     <%= f.label :alert_date %><br />

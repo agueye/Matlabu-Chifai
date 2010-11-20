@@ -1,9 +1,13 @@
-<h1>Listing patient_alerts</h1>
+<h1>Alert List</h1>
+
+<%= link_to 'Add New Alert', new_patient_alert_path %>
+
+<br />
 
 <table>
   <tr>
-    <th>Patient</th>
-    <th>Alert date</th>
+    <th>Patient Name</th>
+    <th>Alert Date</th>
     <th>Notes</th>
   </tr>
 
@@ -20,5 +24,3 @@
 </table>
 
 <br />
-
-<%= link_to 'New patient_alert', new_patient_alert_path %>
