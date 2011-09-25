@@ -1,3 +1,11 @@
 * get rid of all the layout files except one which contains the major layout from flex and works properly
 * logout doesn't work
 * translate doesn't work
+
+LONG TERM
+
+* remove all flex
+  * rework logic into Rails models, views, and controllers
+  * write pretty css to make it nice
+* charting: SVG over canvas (check with Scott and Prof. Brewer and Assane)
+
