@@ -52,10 +52,6 @@ class SessionsController < ApplicationController
     
     APP_LOGGER_LOG.info "SESSION DELETED - USER #{self.current_user[:login]}"
     flash[:notice] = "You have been logged out."
-    #redirect_back_or_default('/')
-    respond_to do |format|
-        format.html { render :text => 'logout' }
-        format.xml { render :text => 'logout' }
-    end
+    redirect_back_or_default('/')
   end
 end

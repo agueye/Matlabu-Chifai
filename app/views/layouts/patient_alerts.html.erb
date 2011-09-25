@@ -34,7 +34,7 @@
 	<span class="link"><%= link_to 'Patients', patients_path, :class => "navi" %></span>
 	<span class="link"><%= link_to 'Search', patient_alerts_path, :class => "navi" %></span>
 	<span class="link"><%= link_to 'Administration', patient_alerts_path, :class => "navi" %></span>
-	<span class="link"><%= link_to 'Logout', root_path, :class => "navi" %></span>
+	<span class="link"><%= link_to 'Logout', :controller => :sessions, :action => 'destroy' %></span>
 </div>
 
 <!-- <%= flash[:notice] %> -->
