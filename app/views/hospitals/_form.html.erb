@@ -1,10 +1,10 @@
-<%= form_for(@institution) do |f| %>
-  <% if @institution.errors.any? %>
+<%= form_for(@hospital) do |f| %>
+  <% if @hospital.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@institution.errors.count, "error") %> prohibited this institution from being saved:</h2>
+      <h2><%= pluralize(@hospital.errors.count, "error") %> prohibited this hospital from being saved:</h2>
 
       <ul>
-      <% @institution.errors.full_messages.each do |msg| %>
+      <% @hospital.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>

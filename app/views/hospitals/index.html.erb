@@ -1,0 +1,25 @@
+<h1>Listing hospitals</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Notes</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @hospitals.each do |hospital| %>
+  <tr>
+    <td><%= hospital.name %></td>
+    <td><%= hospital.notes %></td>
+    <td><%= link_to 'Show', hospital %></td>
+    <td><%= link_to 'Edit', edit_hospital_path(hospital) %></td>
+    <td><%= link_to 'Destroy', hospital, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hospital', new_hospital_path %>

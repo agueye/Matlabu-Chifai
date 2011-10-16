@@ -1,6 +1,6 @@
-class CreateInstitutions < ActiveRecord::Migration
+class CreateHospitals < ActiveRecord::Migration
   def change
-    create_table :institutions do |t|
+    create_table :hospitals do |t|
       t.string :name
       t.text :notes
 

@@ -1,4 +1,6 @@
 MatlabuChifai::Application.routes.draw do
+  resources :hospitals
+
   resources :institutions
 
   # The priority is based upon order of creation:
