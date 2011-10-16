@@ -10,6 +10,10 @@
   <%= @hospital.notes %>
 </p>
 
+<p>
+  <b>Institution:</b>
+  <%= @hospital.institution.name %>
+</p>
 
 <%= link_to 'Edit', edit_hospital_path(@hospital) %> |
 <%= link_to 'Back', hospitals_path %>

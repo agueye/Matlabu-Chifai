@@ -13,15 +13,16 @@
 ActiveRecord::Schema.define(:version => 20111016213639) do
 
   create_table "hospitals", :force => true do |t|
-    t.string   "name"
+    t.integer  "institution_id", :null => false
+    t.string   "name",           :null => false
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "institutions", :force => true do |t|
-    t.string   "name"
-    t.string   "notes"
+    t.string   "name",       :null => false
+    t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

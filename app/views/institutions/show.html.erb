@@ -10,6 +10,15 @@
   <%= @institution.notes %>
 </p>
 
+<p>
+  <b>Hospitals:</b>
+  <ul>
+    <% for hospital in @institution.hospitals %>
+      <li><%= hospital.name %></li>
+    <% end %>
+  </ul>
+  
+</p>
 
 <%= link_to 'Edit', edit_institution_path(@institution) %> |
 <%= link_to 'Back', institutions_path %>
