@@ -1,0 +1,25 @@
+<%= form_for(@vaccine) do |f| %>
+  
+  <div class="field">
+   <h3>Conditions<h3>
+  <% for condition in Condition.find(:all) %>
+  <div>
+    <%= check_box_tag "vaccine_id[]", condition.id, @vaccine.conditions.include?(condition) %>
+    <%= condition.name %>
+  </div>
+  <%end %>
+
+  </div>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

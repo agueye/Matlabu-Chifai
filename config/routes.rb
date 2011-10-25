@@ -1,4 +1,8 @@
 MatlabuChifai::Application.routes.draw do
+  resources :conditions
+
+  resources :vaccines
+
   resources :hospitals
 
   resources :institutions
