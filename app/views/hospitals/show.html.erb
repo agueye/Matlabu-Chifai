@@ -12,7 +12,7 @@
 
 <p>
   <b>Institution:</b>
-  <%= @hospital.institution.name %>
+  <%= link_to @hospital.institution.name, @hospital.institution %>
 </p>
 
 <%= link_to 'Edit', edit_hospital_path(@hospital) %> |
