@@ -1,4 +1,6 @@
 MatlabuChifai::Application.routes.draw do
+  resources :patients
+
   resources :doctors
 
   resources :hospitals
