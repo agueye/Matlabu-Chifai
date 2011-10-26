@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Patient:</b>
+  <%= link_to @alert.patient.name, @alert.patient %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @alert.title %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @alert.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_alert_path(@alert) %> |
+<%= link_to 'Back', alerts_path %>

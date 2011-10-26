@@ -65,6 +65,14 @@
   <%= @patient.emergency_contact_telephone %>
 </p>
 
+<p>
+  <b>Alerts:</b>
+  <ul>
+    <% for alert in @patient.alerts %>
+      <li><%= link_to alert.title, alert %></li>
+    <% end %>
+  </ul>
+</p>
 
 <%= link_to 'Edit', edit_patient_path(@patient) %> |
 <%= link_to 'Back', patients_path %>

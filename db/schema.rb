@@ -10,7 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111026084054) do
+ActiveRecord::Schema.define(:version => 20111026085508) do
+
+  create_table "alerts", :force => true do |t|
+    t.integer  "patient_id", :null => false
+    t.string   "title"
+    t.text     "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "doctors", :force => true do |t|
     t.integer  "institution_id", :null => false
