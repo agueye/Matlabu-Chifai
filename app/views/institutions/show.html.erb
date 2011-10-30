@@ -14,10 +14,18 @@
   <b>Hospitals:</b>
   <ul>
     <% for hospital in @institution.hospitals %>
-      <li><%= hospital.name %></li>
+      <li><%= link_to hospital.name, hospital %></li>
     <% end %>
   </ul>
-  
+</p>
+
+<p>
+  <b>Doctors:</b>
+  <ul>
+    <% for doctor in @institution.doctors %>
+      <li><%= link_to doctor.name, doctor %></li>
+    <% end %>
+  </ul>
 </p>
 
 <%= link_to 'Edit', edit_institution_path(@institution) %> |

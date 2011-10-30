@@ -1,12 +1,15 @@
 MatlabuChifai::Application.routes.draw do
+<<<<<<< HEAD
   resources :conditions
 
   resources :vaccines
+=======
   resources :alerts
 
   resources :patients
 
   resources :doctors
+>>>>>>> 71d1e5f5cd15137e2bdce2fae4af0da09b42cc74
 
   resources :hospitals
 

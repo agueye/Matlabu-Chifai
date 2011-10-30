@@ -1,0 +1,27 @@
+<h1>Listing alerts</h1>
+
+<table>
+  <tr>
+    <th>Patient</th>
+    <th>Title</th>
+    <th>Notes</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @alerts.each do |alert| %>
+  <tr>
+    <td><%= link_to alert.patient.name, alert.patient %></td>
+    <td><%= alert.title %></td>
+    <td><%= alert.notes %></td>
+    <td><%= link_to 'Show', alert %></td>
+    <td><%= link_to 'Edit', edit_alert_path(alert) %></td>
+    <td><%= link_to 'Destroy', alert, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Alert', new_alert_path %>
