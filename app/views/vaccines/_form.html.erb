@@ -1,10 +1,25 @@
 <%= form_for(@vaccine) do |f| %>
+
+  <% if @vaccine.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@vaccine.errors.count, "error") %> prohibited this vaccine from being saved:</h2>
+
+      <ul>
+      <% @vaccine.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
   
   <div class="field">
    <h3>Conditions<h3>
   <% for condition in Condition.find(:all) %>
   <div>
-    <%= check_box_tag "vaccine_id[]", condition.id, @vaccine.conditions.include?(condition) %>
+    <%= check_box_tag "vaccine_id[]", condition.id, 
+        @vaccine.conditions.include?(condition) %>
     <%= condition.name %>
   </div>
   <%end %>
