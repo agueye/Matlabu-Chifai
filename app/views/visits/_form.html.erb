@@ -20,6 +20,14 @@
     <%= f.collection_select(:visit_type_id, VisitType.all, :id, :name) %>
   </div>
   <div class="field">
+    <%= f.label :doctor_id %><br />
+    <%= f.collection_select(:doctor_id, Doctor.all, :id, :name) %>
+  </div>
+  <div class="field">
+    <%= f.label :patient_id %><br />
+    <%= f.collection_select(:patient_id, Patient.all, :id, :name) %>
+  </div>
+  <div class="field">
     <%= f.label :height %><br />
     <%= f.text_field :height %>
   </div>

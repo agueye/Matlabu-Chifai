@@ -4,6 +4,8 @@
   <tr>
     <th>Date</th>
     <th>Type</th>
+    <th>Doctor</th>
+    <th>Patient</th>
     <th>Notes</th>
     <th>Height</th>
     <th>Weight</th>
@@ -20,6 +22,8 @@
   <tr>
     <td><%= visit.date %></td>
     <td><%= link_to visit.visit_type.name, visit.visit_type%></td>
+    <td><%= link_to visit.doctor.name, visit.doctor%></td>
+    <td><%= link_to visit.patient.name, visit.patient%></td>
     <td><%= visit.notes %></td>
     <td><%= visit.height %></td>
     <td><%= visit.weight %></td>

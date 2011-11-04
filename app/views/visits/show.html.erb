@@ -11,6 +11,16 @@
 </p>
 
 <p>
+  <b>Doctor:</b>
+  <%= link_to @visit.doctor.name, @visit.doctor %>
+</p>
+
+<p>
+  <b>Patient:</b>
+  <%= link_to @visit.patient.name, @visit.patient %>
+</p>
+
+<p>
   <b>Height:</b>
   <%= @visit.height %>
 </p>

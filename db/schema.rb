@@ -69,7 +69,9 @@ ActiveRecord::Schema.define(:version => 20111104122548) do
   end
 
   create_table "visits", :force => true do |t|
-    t.integer  "visit_type_id"
+    t.integer  "visit_type_id", :null => false
+    t.integer  "doctor_id",     :null => false
+    t.integer  "patient_id",    :null => false
     t.date     "date"
     t.text     "notes"
     t.decimal  "height"
