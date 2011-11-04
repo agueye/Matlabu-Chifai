@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Date:</b>
+  <%= @visit.date %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= link_to @visit.visit_type.name, @visit.visit_type %>
+</p>
+
+<p>
+  <b>Height:</b>
+  <%= @visit.height %>
+</p>
+
+<p>
+  <b>Weight:</b>
+  <%= @visit.weight %>
+</p>
+
+<p>
+  <b>Systolic:</b>
+  <%= @visit.systolic %>
+</p>
+
+<p>
+  <b>Diastolic:</b>
+  <%= @visit.diastolic %>
+</p>
+
+<p>
+  <b>Pulse:</b>
+  <%= @visit.pulse %>
+</p>
+
+<p>
+  <b>Temperature:</b>
+  <%= @visit.temperature %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @visit.notes %>
+</p>
+
+<%= link_to 'Edit', edit_visit_path(@visit) %> |
+<%= link_to 'Back', visits_path %>

@@ -1,0 +1,39 @@
+<h1>Listing visits</h1>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Type</th>
+    <th>Notes</th>
+    <th>Height</th>
+    <th>Weight</th>
+    <th>Systolic</th>
+    <th>Diastolic</th>
+    <th>Pulse</th>
+    <th>Temperature</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @visits.each do |visit| %>
+  <tr>
+    <td><%= visit.date %></td>
+    <td><%= link_to visit.visit_type.name, visit.visit_type%></td>
+    <td><%= visit.notes %></td>
+    <td><%= visit.height %></td>
+    <td><%= visit.weight %></td>
+    <td><%= visit.systolic %></td>
+    <td><%= visit.diastolic %></td>
+    <td><%= visit.pulse %></td>
+    <td><%= visit.temperature %></td>
+    <td><%= link_to 'Show', visit %></td>
+    <td><%= link_to 'Edit', edit_visit_path(visit) %></td>
+    <td><%= link_to 'Destroy', visit, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Visit', new_visit_path %>

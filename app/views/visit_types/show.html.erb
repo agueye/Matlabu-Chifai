@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @visit_type.name %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @visit_type.notes %>
+</p>
+
+<p>
+  <b>Visits:</b>
+  <ul>
+    <% for visit in @visit_type.visits %>
+      <li><%= link_to visit.date, visit %></li>
+    <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Edit', edit_visit_type_path(@visit_type) %> |
+<%= link_to 'Back', visit_types_path %>
