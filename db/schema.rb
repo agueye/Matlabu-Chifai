@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103084353) do
+ActiveRecord::Schema.define(:version => 20111105105213) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "patient_id", :null => false
@@ -48,6 +48,16 @@ ActiveRecord::Schema.define(:version => 20111103084353) do
     t.datetime "updated_at"
   end
 
+  create_table "conditions_pateints", :id => false, :force => true do |t|
+    t.integer "condition_id"
+    t.integer "patient_id"
+  end
+
+  create_table "conditions_patients", :id => false, :force => true do |t|
+    t.integer "condition_id"
+    t.integer "patient_id"
+  end
+
   create_table "conditions_vaccines", :id => false, :force => true do |t|
     t.integer "condition_id"
     t.integer "vaccine_id"
@@ -82,6 +92,11 @@ ActiveRecord::Schema.define(:version => 20111103084353) do
     t.datetime "updated_at"
   end
 
+  create_table "medications_prescriptions", :id => false, :force => true do |t|
+    t.integer "medication_id"
+    t.integer "prescriptions_id"
+  end
+
   create_table "patients", :force => true do |t|
     t.integer  "hospital_id",                    :null => false
     t.string   "name"
@@ -109,6 +124,11 @@ ActiveRecord::Schema.define(:version => 20111103084353) do
     t.string   "frequency"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "prescriptions_conditions", :id => false, :force => true do |t|
+    t.integer "condition_id"
+    t.integer "prescription_id"
   end
 
   create_table "vaccines", :force => true do |t|

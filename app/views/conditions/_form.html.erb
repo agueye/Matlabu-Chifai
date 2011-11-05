@@ -16,10 +16,20 @@
     <h3>Vaccines<h3>
    <% for vaccine in Vaccine.find(:all) %>
      <div>
-       <%= check_box_tag "condition_id[]", vaccine.id, 
+       <%= check_box_tag "condition_id[] ||= []", vaccine.id, 
            @condition.vaccines.include?(vaccine) %>
        <%= vaccine.name %>
      </div>
+   <% end %>
+  </div>
+ <div class ="field">
+ <h3>Patients<h3>
+   <% for patient in Patient.find(:all) %>
+     <div>
+       <%= check_box_tag "condition_id[] ||= []", patient.id,
+           @condition.patients.include?(patient) %>
+       <%= patient.name %>
+    </div>
    <% end %>
   </div>
 
