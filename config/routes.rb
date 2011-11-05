@@ -12,6 +12,13 @@ MatlabuChifai::Application.routes.draw do
 
   resources :institutions
 
+  resources :allergies
+  
+  resources :allergens
+
+  resources :medications
+
+  resources :prescriptions
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

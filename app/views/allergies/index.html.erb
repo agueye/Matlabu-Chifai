@@ -1,0 +1,25 @@
+<h1>Listing allergies</h1>
+
+<table>
+  <tr>
+    <th>Reaction</th>
+    <th>Recorded</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @allergies.each do |allergy| %>
+  <tr>
+    <td><%= allergy.reaction %></td>
+    <td><%= allergy.recorded %></td>
+    <td><%= link_to 'Show', allergy %></td>
+    <td><%= link_to 'Edit', edit_allergy_path(allergy) %></td>
+    <td><%= link_to 'Destroy', allergy, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Allergy', new_allergy_path %>

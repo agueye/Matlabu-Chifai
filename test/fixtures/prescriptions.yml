@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  notes: MyText
+  prescibed: 2011-11-03
+  start: 2011-11-03
+  end: 2011-11-03
+  dosage: MyString
+  frequency: MyString
+
+two:
+  notes: MyText
+  prescibed: 2011-11-03
+  start: 2011-11-03
+  end: 2011-11-03
+  dosage: MyString
+  frequency: MyString
