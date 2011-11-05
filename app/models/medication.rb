@@ -1,4 +1,4 @@
-class Medication < ActiveRecord::Base
+class Medication < ActiveRecord::Base 
  
   has_many :prescriptions
 
