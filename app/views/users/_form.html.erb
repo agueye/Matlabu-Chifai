@@ -27,6 +27,10 @@
     <%= f.label :admin %><br />
     <%= f.number_field :admin %>
   </div>
+  <div class="field">
+    <%= f.label :institution_id %><br />
+    <%= f.collection_select(:institution_id, Institution.all, :id, :name) %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

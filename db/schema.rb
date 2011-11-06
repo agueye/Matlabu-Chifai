@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20111106045726) do
   end
 
   create_table "users", :force => true do |t|
+    t.integer  "institution_id", :null => false
     t.string   "email"
     t.string   "password_hash"
     t.string   "name"

@@ -28,5 +28,14 @@
   </ul>
 </p>
 
+<p>
+  <b>Users:</b>
+  <ul>
+    <% for user in @institution.users %>
+      <li><%= link_to user.name, user %></li>
+    <% end %>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_institution_path(@institution) %> |
 <%= link_to 'Back', institutions_path %>

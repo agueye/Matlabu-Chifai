@@ -20,6 +20,10 @@
   <%= @user.admin %>
 </p>
 
+<p>
+  <b>Institution:</b>
+  <%= link_to @user.institution.name, @user.institution %>
+</p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

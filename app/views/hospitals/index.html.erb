@@ -14,7 +14,7 @@
   <tr>
     <td><%= hospital.name %></td>
     <td><%= hospital.notes %></td>
-    <td><%= hospital.institution.name %></td>
+    <td><%= link_to hospital.institution.name, hospital.institution %></td>
     <td><%= link_to 'Show', hospital %></td>
     <td><%= link_to 'Edit', edit_hospital_path(hospital) %></td>
     <td><%= link_to 'Destroy', hospital, :confirm => 'Are you sure?', :method => :delete %></td>
