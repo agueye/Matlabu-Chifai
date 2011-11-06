@@ -1,4 +1,6 @@
 MatlabuChifai::Application.routes.draw do
+  resources :encrypted_connections
+
   resources :visits
 
   resources :visit_types

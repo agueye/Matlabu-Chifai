@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111104122548) do
+ActiveRecord::Schema.define(:version => 20111106044132) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "patient_id", :null => false
@@ -24,6 +24,13 @@ ActiveRecord::Schema.define(:version => 20111104122548) do
     t.integer  "institution_id", :null => false
     t.string   "name",           :null => false
     t.text     "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "encrypted_connections", :force => true do |t|
+    t.string   "public_key"
+    t.string   "private_key"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
