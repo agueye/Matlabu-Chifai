@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111106044132) do
+ActiveRecord::Schema.define(:version => 20111106045726) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "patient_id", :null => false
@@ -64,6 +64,15 @@ ActiveRecord::Schema.define(:version => 20111106044132) do
     t.string   "emergency_contact_name"
     t.string   "emergency_contact_relationship"
     t.string   "emergency_contact_telephone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "email"
+    t.string   "password_hash"
+    t.string   "name"
+    t.integer  "admin"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
