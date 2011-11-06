@@ -2,6 +2,8 @@ require 'bcrypt'
 
 class User < ActiveRecord::Base
 
+  @@admin_status = {0 => 'No', 1 => 'Yes'}
+
   include BCrypt
   
   belongs_to :institution
@@ -20,14 +22,8 @@ class User < ActiveRecord::Base
     errors[:base] << ("Password can't be blank") if password_hash.nil?
   end
 
-  def authenticate(encrypted_password, public_key)
-    #TODO implement this
-    raise NotImplementedError
-  end
-
-  def self.create_random_password
-    chars = [('a'..'z'),(0..9)].map{|i| i.to_a}.flatten
-    return (0..12).map{ chars[rand(chars.length)] }.join
+  def admin_in_words
+    return @@admin_status[admin]
   end
 
   def password
@@ -37,6 +33,16 @@ class User < ActiveRecord::Base
   def password=(new_password)
     @password = Password.create(new_password)
     self.password_hash = @password
+  end
+
+  def authenticate(encrypted_password, public_key)
+    #TODO implement this
+    raise NotImplementedError
+  end
+
+  def self.create_random_password
+    chars = [('a'..'z'),(0..9)].map{|i| i.to_a}.flatten
+    return (0..12).map{ chars[rand(chars.length)] }.join
   end
 
   def change_password(encrypted_new_password, public_key)

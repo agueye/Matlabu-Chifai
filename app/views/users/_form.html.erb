@@ -25,7 +25,7 @@
   </div>
   <div class="field">
     <%= f.label :admin %><br />
-    <%= f.number_field :admin %>
+    <%= f.select(:admin, options_for_select([['Yes', 1],['No', 0]], 0)) %>
   </div>
   <div class="field">
     <%= f.label :institution_id %><br />
