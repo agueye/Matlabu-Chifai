@@ -3,6 +3,7 @@ require 'test_helper'
 class EncryptedConnectionsControllerTest < ActionController::TestCase
   setup do
     @encrypted_connection = encrypted_connections(:one)
+    @encrypted_connection.public_key = 'unique'
   end
 
   test "should get index" do

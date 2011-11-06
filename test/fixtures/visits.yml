@@ -1,6 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
+  visit_type: one
+  doctor: one
+  patient: one
   date: 2011-11-04
   notes: MyText
   height: 9.99
@@ -11,6 +14,9 @@ one:
   temperature: 
 
 two:
+  visit_type: one
+  doctor: one
+  patient: one
   date: 2011-11-04
   notes: MyText
   height: 9.99
