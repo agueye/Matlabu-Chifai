@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  public_key: MyString
+  public_key: MyString1
   private_key: MyString
 
 two:
-  public_key: MyString
+  public_key: MyString2
   private_key: MyString
