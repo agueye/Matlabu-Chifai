@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   end
 
   def authenticate(encrypted_password, public_key)
+    #TODO implement this
     raise NotImplementedError
   end
 
@@ -39,10 +40,12 @@ class User < ActiveRecord::Base
   end
 
   def change_password(encrypted_new_password, public_key)
+    #TODO implement this
     raise NotImplementedError
   end
 
   def send_reset_password_email
+    #TODO implement this
     raise NotImplementedError
   end
 

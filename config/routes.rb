@@ -17,6 +17,10 @@ MatlabuChifai::Application.routes.draw do
 
   resources :institutions
 
+  match "/login" => "users#login"
+  match "/logout" => "users#logout"
+  match "/forgot_password" => "users#forgot_password"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
