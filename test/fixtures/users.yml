@@ -2,14 +2,14 @@
 
 one:
   institution: one
-  email: MyString1
+  email: MyString
   password_hash: MyString
-  name: MyString1
+  username: MyString1
   admin: 0
 
 two:
   institution: one
-  email: MyString2
+  email: MyString
   password_hash: MyString
-  name: MyString2
+  username: MyString2
   admin: 1

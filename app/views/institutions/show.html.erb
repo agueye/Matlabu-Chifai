@@ -32,7 +32,7 @@
   <b>Users:</b>
   <ul>
     <% for user in @institution.users %>
-      <li><%= link_to user.name, user %></li>
+      <li><%= link_to user.username, user %></li>
     <% end %>
   </ul>
 </p>

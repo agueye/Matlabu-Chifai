@@ -6,8 +6,8 @@ class User < ActiveRecord::Base
   
   belongs_to :institution
 
-  validates_presence_of :email, :name
-  validates_uniqueness_of :email, :name, :scope => [:institution_id]
+  validates_presence_of :email, :username
+  validates_uniqueness_of :username, :scope => [:institution_id]
   validates_numericality_of :admin, :only_integer => true
   validate :presence_of_password
   validate :admin_has_legal_value
@@ -43,7 +43,6 @@ class User < ActiveRecord::Base
   end
 
   def send_reset_password_email
-    #TODO: implement this (iteration 3)
     raise NotImplementedError
   end
 

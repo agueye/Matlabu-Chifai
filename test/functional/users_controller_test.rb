@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   setup do
     @institution = Institution.create(:name => "testInstitution")
-    @user = User.new(:name => "testUser", :email => "testEmail", :institution => @institution, :admin => 0)
+    @user = User.new(:username => "testUser", :email => "testEmail", :institution => @institution, :admin => 0)
     @user.password = "testPassword"
     @user.save!
   end
@@ -21,7 +21,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test "should create user" do
     assert_difference('User.count') do
-      @user = User.new(:name => "testUser1", :email => "unique", :institution => @institution, :admin => 0)
+      @user = User.new(:username => "testUser1", :email => "unique", :institution => @institution, :admin => 0)
       post :create, :user => @user.attributes, :password => "testPassword"
     end
 

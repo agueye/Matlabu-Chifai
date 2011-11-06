@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(:version => 20111106045726) do
     t.integer  "institution_id", :null => false
     t.string   "email"
     t.string   "password_hash"
-    t.string   "name"
+    t.string   "username"
     t.integer  "admin"
     t.datetime "created_at"
     t.datetime "updated_at"

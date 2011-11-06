@@ -4,22 +4,22 @@ class UserTest < ActiveSupport::TestCase
 
   def setup
     @institution = Institution.create(:name => "testInstitution")
-    @user = User.new(:name => "testUser", :email => "testEmail", :institution => @institution, :admin => 0)
+    @user = User.new(:username => "testUser", :email => "testEmail", :institution => @institution, :admin => 0)
     @user.password = "testPassword"
     @user.save!
   end
 
   test "name must not be null" do
-    test_attribute_may_not_be_null @user, :name
+    test_attribute_may_not_be_null @user, :username
   end
 
   test "email must not be null" do
     test_attribute_may_not_be_null @user, :email
   end
 
-  test "name and email must be unique" do
+  test "username must be unique" do
     @user = User.new(@user.attributes)
-    test_attributes_must_be_unique @user, :name, :email
+    test_attribute_must_be_unique @user, :username
   end
 
   test "password hash must not be null" do
