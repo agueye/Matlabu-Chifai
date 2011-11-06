@@ -7,10 +7,10 @@
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
 
 tier = Institution.create(:name => 'TIER')
-user = User.new(:institution => tier, :email => 'brianmaissy@berkeley.edu', :username => 'brian', :admin => 1)
+user = User.new(:institution => tier, :email => 'dummyEmail', :username => 'admin', :admin => 1)
 user.password = "password"
 user.save
-user = User.new(:institution => tier, :email => 'brianmaissy@berkeley.edu', :username => 'user', :admin => 0)
+user = User.new(:institution => tier, :email => 'dummyEmail', :username => 'user', :admin => 0)
 user.password = "password"
 user.save
 sdm = Hospital.create(:name => 'Sutardja Dai Memorial', :institution => tier)
