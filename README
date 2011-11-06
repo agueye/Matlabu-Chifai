@@ -15,7 +15,7 @@ Hussein Kadiri
 
 To run the server:
 bundle install
-rake bootstrap (The rake bookstrap task sets up the database and loads it with some sample data, from seeds.rb)
+rake bootstrap (sets up the database and loads it with some sample data, from seeds.rb)
 rails server
 
 Then navigate to: localhost:3000/
