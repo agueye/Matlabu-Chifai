@@ -35,19 +35,9 @@ class User < ActiveRecord::Base
     self.password_hash = @password
   end
 
-  def authenticate(encrypted_password, public_key)
-    #TODO implement this
-    raise NotImplementedError
-  end
-
   def self.create_random_password
     chars = [('a'..'z'),(0..9)].map{|i| i.to_a}.flatten
     return (0..12).map{ chars[rand(chars.length)] }.join
-  end
-
-  def change_password(encrypted_new_password, public_key)
-    #TODO implement this
-    raise NotImplementedError
   end
 
   def send_reset_password_email
