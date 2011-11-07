@@ -68,7 +68,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to :action => "login"
   end
 
-  test "should not be able to access encrypted_connections when logged out" do
+  test "should not be able to access index when logged out" do
     get :logout
     get :index
     assert_redirected_to :action => "login"
