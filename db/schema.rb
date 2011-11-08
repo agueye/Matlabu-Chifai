@@ -42,15 +42,10 @@ ActiveRecord::Schema.define(:version => 20111105105213) do
   end
 
   create_table "conditions", :force => true do |t|
-    t.string   "name"
+    t.string   "name",       :null => false
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "conditions_pateints", :id => false, :force => true do |t|
-    t.integer "condition_id"
-    t.integer "patient_id"
   end
 
   create_table "conditions_patients", :id => false, :force => true do |t|
@@ -92,11 +87,6 @@ ActiveRecord::Schema.define(:version => 20111105105213) do
     t.datetime "updated_at"
   end
 
-  create_table "medications_prescriptions", :id => false, :force => true do |t|
-    t.integer "medication_id"
-    t.integer "prescriptions_id"
-  end
-
   create_table "patients", :force => true do |t|
     t.integer  "hospital_id",                    :null => false
     t.string   "name"
@@ -122,17 +112,15 @@ ActiveRecord::Schema.define(:version => 20111105105213) do
     t.date     "end"
     t.string   "dosage"
     t.string   "frequency"
+    t.integer  "doctor_id"
+    t.integer  "condition_id"
+    t.integer  "medication_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "prescriptions_conditions", :id => false, :force => true do |t|
-    t.integer "condition_id"
-    t.integer "prescription_id"
-  end
-
   create_table "vaccines", :force => true do |t|
-    t.string   "name"
+    t.string   "name",       :null => false
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"

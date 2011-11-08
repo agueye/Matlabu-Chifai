@@ -11,6 +11,20 @@
     </div>
   <% end %>
 
+ <div class ="field">
+ <h3>Conditions<h3>
+   <% for condition in Condition.find(:all)
+                    #    :conditions => [@patient.id = condition.patient_id]) %>
+     <div>
+       <%= check_box_tag "patient_id[] ||= []", condition.id,
+           @patient.conditions.include?(condition) %>
+       <%= condition.name %>
+    </div>
+   <% end %>
+  </div>
+
+
+
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
