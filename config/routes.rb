@@ -24,6 +24,13 @@ MatlabuChifai::Application.routes.draw do
   match "/logout" => "users#logout"
   match "/forgot_password" => "users#forgot_password"
 
+  resources :allergies
+  
+  resources :allergens
+
+  resources :medications
+
+  resources :prescriptions
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

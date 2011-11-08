@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 20111022073322) do
     t.string   "name"
 ActiveRecord::Schema.define(:version => 20111026085508) do
 ActiveRecord::Schema.define(:version => 20111106045726) do
+ActiveRecord::Schema.define(:version => 20111105105213) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "patient_id", :null => false
@@ -26,9 +27,43 @@ ActiveRecord::Schema.define(:version => 20111106045726) do
     t.datetime "updated_at"
   end
 
+  create_table "allergens", :force => true do |t|
+    t.string   "name"
+    t.text     "notes"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "allergens_allergies", :id => false, :force => true do |t|
+    t.integer "allergen_id"
+    t.integer "allergy_id"
+  end
+
+  create_table "allergies", :force => true do |t|
+    t.text     "reaction"
+    t.date     "recorded"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "conditions", :force => true do |t|
+    t.string   "name",       :null => false
+    t.text     "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "conditions_patients", :id => false, :force => true do |t|
+    t.integer "condition_id"
+    t.integer "patient_id"
+  end
+
   create_table "conditions_vaccines", :id => false, :force => true do |t|
     t.integer "condition_id"
     t.integer "vaccine_id"
+  end
+
   create_table "doctors", :force => true do |t|
     t.integer  "institution_id", :null => false
     t.string   "name",           :null => false
@@ -52,9 +87,12 @@ ActiveRecord::Schema.define(:version => 20111106045726) do
     t.datetime "updated_at"
   end
 
-  create_table "vaccines", :force => true do |t|
-    t.string   "name"
-    t.text     "notes"
+  create_table "medications", :force => true do |t|
+    t.text     "side_effect"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "patients", :force => true do |t|
     t.integer  "hospital_id",                    :null => false
     t.string   "name"
@@ -86,6 +124,16 @@ ActiveRecord::Schema.define(:version => 20111106045726) do
   create_table "visit_types", :force => true do |t|
     t.string   "name"
     t.text     "notes"
+  create_table "prescriptions", :force => true do |t|
+    t.text     "notes"
+    t.date     "prescibed"
+    t.date     "start"
+    t.date     "end"
+    t.string   "dosage"
+    t.string   "frequency"
+    t.integer  "doctor_id"
+    t.integer  "condition_id"
+    t.integer  "medication_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -102,6 +150,9 @@ ActiveRecord::Schema.define(:version => 20111106045726) do
     t.decimal  "diastolic"
     t.decimal  "pulse"
     t.decimal  "temperature"
+  create_table "vaccines", :force => true do |t|
+    t.string   "name",       :null => false
+    t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

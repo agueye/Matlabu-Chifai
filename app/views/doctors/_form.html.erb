@@ -11,6 +11,17 @@
     </div>
   <% end %>
 
+ <div class ="field">
+ <h3>Prescriptions<h3>
+   <% for prescription in Prescription.find(:all) %>
+     <div>
+       <%= check_box_tag "doctor_id[] ||= []", prescription.id,
+           @doctor.prescriptions.include?(prescription) %>
+       <%= prescription.name %>
+    </div>
+   <% end %>
+  </div>
+
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>

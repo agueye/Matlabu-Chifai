@@ -3,5 +3,7 @@ class Patient < ActiveRecord::Base
   has_many :alerts, :dependent => :destroy
   has_many :visits, :dependent => :destroy
   
+  has_and_belongs_to_many :conditions  
+
   validates_presence_of :name
 end

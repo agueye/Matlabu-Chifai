@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Reaction:</b>
+  <%= @allergy.reaction %>
+</p>
+
+<p>
+  <b>Recorded:</b>
+  <%= @allergy.recorded %>
+</p>
+
+
+<%= link_to 'Edit', edit_allergy_path(@allergy) %> |
+<%= link_to 'Back', allergies_path %>

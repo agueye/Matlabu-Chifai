@@ -1,0 +1,23 @@
+<h1>Listing medications</h1>
+
+<table>
+  <tr>
+    <th>Side effect</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @medications.each do |medication| %>
+  <tr>
+    <td><%= medication.side_effect %></td>
+    <td><%= link_to 'Show', medication %></td>
+    <td><%= link_to 'Edit', edit_medication_path(medication) %></td>
+    <td><%= link_to 'Destroy', medication, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Medication', new_medication_path %>
