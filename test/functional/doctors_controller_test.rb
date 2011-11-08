@@ -3,6 +3,7 @@ require 'test_helper'
 class DoctorsControllerTest < ActionController::TestCase
   setup do
     @doctor = doctors(:one)
+    @doctor.name = 'unique'
   end
 
   test "should get index" do

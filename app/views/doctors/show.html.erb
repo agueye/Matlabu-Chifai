@@ -15,5 +15,14 @@
   <%= link_to @doctor.institution.name, @doctor.institution %>
 </p>
 
+<p>
+  <b>Visits:</b>
+  <ul>
+    <% for visit in @doctor.visits %>
+      <li><%= link_to visit, visit %></li>
+    <% end %>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_doctor_path(@doctor) %> |
 <%= link_to 'Back', doctors_path %>

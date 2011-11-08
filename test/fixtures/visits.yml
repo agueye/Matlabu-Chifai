@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  visit_type: one
+  doctor: one
+  patient: one
+  date: 2011-11-04
+  notes: MyText
+  height: 9.99
+  weight: 9.99
+  systolic: 9.99
+  diastolic: 9.99
+  pulse: 9.99
+  temperature: 
+
+two:
+  visit_type: one
+  doctor: one
+  patient: one
+  date: 2011-11-04
+  notes: MyText
+  height: 9.99
+  weight: 9.99
+  systolic: 9.99
+  diastolic: 9.99
+  pulse: 9.99
+  temperature: 

@@ -3,6 +3,7 @@
 <table>
   <tr>
     <th>Patient</th>
+    <th>Date</th>
     <th>Title</th>
     <th>Notes</th>
     <th></th>
@@ -13,6 +14,7 @@
 <% @alerts.each do |alert| %>
   <tr>
     <td><%= link_to alert.patient.name, alert.patient %></td>
+    <td><%= alert.updated_at.strftime("%m/%d/%Y") %></td>
     <td><%= alert.title %></td>
     <td><%= alert.notes %></td>
     <td><%= link_to 'Show', alert %></td>

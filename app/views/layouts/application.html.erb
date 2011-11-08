@@ -8,6 +8,14 @@
 </head>
 <body>
 
+<div style="position: absolute; top: 10px; right: 10px;">
+    <% if @logged_user %>
+        Logged in as <%= @logged_user.username %>. <a class="headerlistitem" href="/logout">Logout</a>
+    <% else %>
+      <a class="headerlistitem" href="/login">Login</a>
+    <% end %>
+</div>
+
 <%= yield %>
 
 </body>

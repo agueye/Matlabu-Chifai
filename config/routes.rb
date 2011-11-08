@@ -2,6 +2,14 @@ MatlabuChifai::Application.routes.draw do
   resources :conditions
 
   resources :vaccines
+  resources :users
+
+  resources :encrypted_connections
+
+  resources :visits
+
+  resources :visit_types
+
   resources :alerts
 
   resources :patients
@@ -11,6 +19,10 @@ MatlabuChifai::Application.routes.draw do
   resources :hospitals
 
   resources :institutions
+
+  match "/login" => "users#login"
+  match "/logout" => "users#logout"
+  match "/forgot_password" => "users#forgot_password"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

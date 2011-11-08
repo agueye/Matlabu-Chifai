@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Login</h2>
+
+<%= form_tag do %>
+    <%= label_tag :username %>:
+    <%= text_field_tag :username%><br />
+    <%= label_tag :password %>:
+    <%= password_field_tag :password %><br />
+    <%= submit_tag "Login" %>
+<% end %>
+
+<p>
+    <a href="/forgot_password">Forgot Password?</a>
+</p>

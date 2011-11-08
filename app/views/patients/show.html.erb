@@ -74,5 +74,14 @@
   </ul>
 </p>
 
+<p>
+  <b>Visits:</b>
+  <ul>
+    <% for visit in @patient.visits %>
+      <li><%= link_to visit, visit %></li>
+    <% end %>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_patient_path(@patient) %> |
 <%= link_to 'Back', patients_path %>

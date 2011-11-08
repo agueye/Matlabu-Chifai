@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
+  institution: one
+  name: MyString1
   notes: MyText
 
 two:
-  name: MyString
+  institution: one
+  name: MyString2
   notes: MyText

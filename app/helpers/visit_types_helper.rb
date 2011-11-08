@@ -1,0 +1,2 @@
+module VisitTypesHelper
+end

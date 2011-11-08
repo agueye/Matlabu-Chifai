@@ -24,7 +24,7 @@
   <tr>
     <td><%= patient.name %></td>
     <td><%= patient.notes %></td>
-    <td><%= patient.hospital.name %></td>
+    <td><%= link_to patient.hospital.name, patient.hospital%></td>
     <td><%= patient.arrival_date %></td>
     <td><%= patient.date_of_birth %></td>
     <td><%= patient.gender %></td>
