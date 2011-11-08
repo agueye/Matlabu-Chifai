@@ -11,13 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111022073322) do
-
-  create_table "conditions", :force => true do |t|
-    t.string   "name"
-ActiveRecord::Schema.define(:version => 20111026085508) do
 ActiveRecord::Schema.define(:version => 20111106045726) do
-ActiveRecord::Schema.define(:version => 20111105105213) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "patient_id", :null => false
@@ -111,19 +105,6 @@ ActiveRecord::Schema.define(:version => 20111105105213) do
     t.datetime "updated_at"
   end
 
-  create_table "users", :force => true do |t|
-    t.integer  "institution_id", :null => false
-    t.string   "email"
-    t.string   "password_hash"
-    t.string   "username"
-    t.integer  "admin"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "visit_types", :force => true do |t|
-    t.string   "name"
-    t.text     "notes"
   create_table "prescriptions", :force => true do |t|
     t.text     "notes"
     t.date     "prescibed"
@@ -134,6 +115,30 @@ ActiveRecord::Schema.define(:version => 20111105105213) do
     t.integer  "doctor_id"
     t.integer  "condition_id"
     t.integer  "medication_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.integer  "institution_id", :null => false
+    t.string   "email"
+    t.string   "password_hash"
+    t.string   "username"
+    t.integer  "admin"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "vaccines", :force => true do |t|
+    t.string   "name",       :null => false
+    t.text     "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "visit_types", :force => true do |t|
+    t.string   "name"
+    t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -150,9 +155,6 @@ ActiveRecord::Schema.define(:version => 20111105105213) do
     t.decimal  "diastolic"
     t.decimal  "pulse"
     t.decimal  "temperature"
-  create_table "vaccines", :force => true do |t|
-    t.string   "name",       :null => false
-    t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
