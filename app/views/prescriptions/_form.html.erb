@@ -22,6 +22,10 @@
   <%end %>
 
   </div>
+<div class="field">
+    <%= f.label :doctor_id %><br />
+    <%= f.collection_select(:doctor_id, Doctor.all, :id, :name) %>
+  </div>
 
 
 
