@@ -1,5 +1,3 @@
-class Medication < ActiveRecord::Base 
-  has_many :prescriptions 
+class Medication < Allergen 
 
-   validates_presence_of :side_effect 
 end

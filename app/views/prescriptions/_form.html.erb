@@ -12,6 +12,20 @@
   <% end %>
 
   <div class="field">
+   <h3>Conditions<h3>
+  <% for condition in Condition.find(:all) %>
+  <div>
+    <%= check_box_tag "prescription_id[]", condition.id,
+        @prescription.conditions.include?(condition) %>
+    <%= condition.name %>
+  </div>
+  <%end %>
+
+  </div>
+
+
+
+  <div class="field">
     <%= f.label :notes %><br />
     <%= f.text_area :notes %>
   </div>
