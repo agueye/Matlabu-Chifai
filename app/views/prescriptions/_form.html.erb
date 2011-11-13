@@ -28,10 +28,6 @@
   </div>
 
 
-<div class="field">
-    <%= f.label :patient_id %><br />
-    <%= f.collection_select(:patient_id, Patient.all, :id, :name) %>
-  </div>
   <div class="field">
     <%= f.label :notes %><br />
     <%= f.text_area :notes %>
