@@ -21,12 +21,20 @@
   </div>
   <%end %>
 
-  </div>
-<div class="field">
+  <div class="field">
     <%= f.label :doctor_id %><br />
     <%= f.collection_select(:doctor_id, Doctor.all, :id, :name) %>
   </div>
 
+  <div class="field">
+    <%= f.label :patient_id %><br />
+    <%= f.collection_select(:patient_id, Patient.all, :id, :name) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :medication_id %><br />
+    <%= f.collection_select(:medication_id, Medication.all, :id, :name) %>
+  </div>
 
   <div class="field">
     <%= f.label :notes %><br />

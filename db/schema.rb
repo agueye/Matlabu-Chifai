@@ -87,12 +87,6 @@ ActiveRecord::Schema.define(:version => 20111111212126) do
     t.datetime "updated_at"
   end
 
-  create_table "medications", :force => true do |t|
-    t.text     "side_effect"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "patients", :force => true do |t|
     t.integer  "hospital_id",                    :null => false
     t.string   "name"
@@ -121,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20111111212126) do
     t.integer  "doctor_id"
     t.integer  "condition_id"
     t.integer  "medication_id"
+    t.integer  "patient_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

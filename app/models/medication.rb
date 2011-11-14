@@ -1,3 +1,3 @@
-class Medication < Allergen 
+class Medication < Allergen
 
 end
