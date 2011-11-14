@@ -26,7 +26,7 @@ class ActiveSupport::TestCase
     assert model.valid?
   end
 
-  def test_attributes_must_be_unique(model, *attributes)
+  def do_test_attributes_must_be_unique(model, *attributes)
     for attribute in attributes
       assert model.invalid?
       model[attribute] = "unique"
