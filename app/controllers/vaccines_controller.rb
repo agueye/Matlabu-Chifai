@@ -1,5 +1,5 @@
 class VaccinesController < ApplicationController
-  
+
   def add_condition
     @vaccine = Vaccine.find(params[:vaccine_id])
     @condition = Condition.find(params[:condition_id])
@@ -12,8 +12,8 @@ class VaccinesController < ApplicationController
         format.json { render json: @vaccine.errors, status: :unprocessable_entity }
       end
     end
-  end 
-
+  end
+  
   # GET /vaccines
   # GET /vaccines.json
   def index

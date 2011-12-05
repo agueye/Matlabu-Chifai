@@ -3,6 +3,7 @@ require 'test_helper'
 class ConditionsControllerTest < ActionController::TestCase
   setup do
     @condition = conditions(:one)
+    @condition.name = 'testcondition'
   end
 
   test "should get index" do

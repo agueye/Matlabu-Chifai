@@ -3,6 +3,7 @@ require 'test_helper'
 class VaccinesControllerTest < ActionController::TestCase
   setup do
     @vaccine = vaccines(:one)
+    @vaccine = 'testvaccine'
   end
 
   test "should get index" do
