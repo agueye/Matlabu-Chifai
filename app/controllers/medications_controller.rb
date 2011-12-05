@@ -1,4 +1,4 @@
-class MedicationsController < ApplicationController
+class MedicationsController < AllergensController
   # GET /medications
   # GET /medications.json
   def index
