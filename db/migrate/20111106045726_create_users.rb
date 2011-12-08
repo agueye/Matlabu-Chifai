@@ -6,7 +6,9 @@ class CreateUsers < ActiveRecord::Migration
       t.string :password_hash
       t.string :username
       t.integer :admin
-
+      t.string :password_reset_token
+      t.datetime :token_expiration
+      
       t.timestamps
     end
   end

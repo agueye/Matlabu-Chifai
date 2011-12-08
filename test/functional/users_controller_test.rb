@@ -74,22 +74,82 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to :action => "login"
   end
 
-  test "user should be able to access index but not show" do
+  test "user should be able to access index but not edit" do
     get :logout
     post :login, :username => 'testUser', :password => 'testPassword'
     get :index
     assert_response :success
-    get :show, :id => @user.to_param
+    get :edit, :id => @user.to_param
     assert_redirected_to :action => "login"
   end
 
-  test "admin should be able to access index and show" do
+  test "admin should be able to access index and edit" do
     get :logout
     post :login, :username => 'testAdmin', :password => 'testPassword'
     get :index
     assert_response :success
-    get :show, :id => @user.to_param
+    get :edit, :id => @user.to_param
     assert_response :success
+  end
+
+    test "changing password" do
+    get :logout
+    user = User.new(:institution => @institution, :username => "testUser2", :email => "testEmail2", :admin => 0)
+    user.password = "testPassword"
+    user.save!
+    post :login, :username => "testUser2", :password => "testPassword"
+    post :change_password, :id => user.to_param, :current_password => 'wrong', :new_password => 'new', :confirm_new_password => 'new'
+    get :logout
+    post :login, :username => "testUser2", :password => "testPassword"
+    assert_redirected_to :action => :show, :id => user.to_param
+
+    post :change_password, :id => user.to_param, :current_password => 'testPassword', :new_password => 'new', :confirm_new_password => 'different'
+    get :logout
+    post :login, :username => "testUser2", :password => "testPassword"
+    assert_redirected_to :action => :show, :id => user.to_param
+
+    post :change_password, :id => user.to_param, :current_password => 'testPassword', :new_password => '', :confirm_new_password => ''
+    get :logout
+    post :login, :username => "testUser2", :password => "testPassword"
+    assert_redirected_to :action => :show, :id => user.to_param
+
+    post :change_password, :id => user.to_param, :current_password => 'testPassword', :new_password => 'new', :confirm_new_password => 'new'
+    get :logout
+    post :login, :username => "testUser2", :password => "new"
+    assert_redirected_to :action => :show, :id => user.to_param
+  end
+
+  test "resetting password" do
+    get :logout
+    user = User.new(:institution => @institution, :username => "testUser2", :email => "testEmail2", :admin => 0)
+    user.password = "testPassword"
+    user.save!
+
+    post :forgot_password, :username => "testUser2", :email => "wrong"
+    user.reload
+
+    post :reset_password, :id => user.to_param, :password_reset_token => user.password_reset_token, :new_password => 'new', :confirm_new_password => 'new'
+    post :login, :username => "testUser2", :password => "testPassword"
+    assert_redirected_to :action => :show, :id => user.to_param
+
+    post :forgot_password, :email => "testEmail2", :username => "testUser2"
+    user.reload
+
+    post :reset_password, :id => user.to_param, :password_reset_token => 'wrong', :new_password => 'new', :confirm_new_password => 'new'
+    post :login, :username => "testUser2", :password => "testPassword"
+    assert_redirected_to :action => :show, :id => user.to_param
+
+    post :reset_password, :id => user.to_param, :password_reset_token => user.password_reset_token, :new_password => 'new', :confirm_new_password => 'different'
+    post :login, :username => "testUser2", :password => "testPassword"
+    assert_redirected_to :action => :show, :id => user.to_param
+
+    post :reset_password, :id => user.to_param, :password_reset_token => user.password_reset_token, :new_password => '', :confirm_new_password => ''
+    post :login, :username => "testUser2", :password => "testPassword"
+    assert_redirected_to :action => :show, :id => user.to_param
+
+    post :reset_password, :id => user.to_param, :password_reset_token => user.password_reset_token, :new_password => 'new', :confirm_new_password => 'new'
+    post :login, :username => "testUser2", :password => "new"
+    assert_redirected_to :action => :show, :id => user.to_param
   end
 
 end

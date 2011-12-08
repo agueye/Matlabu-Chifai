@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   
   belongs_to :institution
 
+  after_initialize :initialize_defaults
+
   validates_presence_of :email, :username
   validates_uniqueness_of :username, :scope => [:institution_id]
   validates_numericality_of :admin, :only_integer => true
@@ -19,11 +21,17 @@ class User < ActiveRecord::Base
   end
 
   def presence_of_password
-    errors[:base] << ("Password can't be blank") if password_hash.nil?
+    errors[:base] << ("Password can't be blank") if password.nil? or password == ""
   end
 
   def admin_in_words
     return @@admin_status[admin]
+  end
+
+  def initialize_defaults
+    if new_record?
+      self.admin = 0 if self.admin.blank?
+    end
   end
 
   def password
@@ -35,14 +43,18 @@ class User < ActiveRecord::Base
     self.password_hash = @password
   end
 
-  def self.create_random_password
-    chars = [('a'..'z'),(0..9)].map{|i| i.to_a}.flatten
-    return (0..12).map{ chars[rand(chars.length)] }.join
-  end
-
   def send_reset_password_email
-    #TODO implement this
-    raise NotImplementedError
+    self.password_reset_token = ActionController::HttpAuthentication::Digest.nonce(password_hash, Time.now)[1,20]
+    self.token_expiration = Time.now.advance(:hours => 24)
+    self.save!
+    begin
+      UserMailer.password_reset_email(self).deliver
+    rescue Net::SMTPError
+      self.token_expiration = Time.now
+      self.save!
+      return false
+    end
+    return true
   end
 
 end

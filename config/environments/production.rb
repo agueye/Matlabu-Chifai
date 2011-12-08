@@ -57,4 +57,19 @@ MatlabuChifai::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # to send email
+  config.action_mailer.raise_delivery_errors = true
+  # set delivery method to :smtp, :sendmail or :test
+  config.action_mailer.delivery_method = :smtp
+  # these options are only needed if you choose smtp delivery
+  config.action_mailer.smtp_settings = {
+      :address              => 'smtp.gmail.com',
+      :port                 => 587,
+      :domain               => 'gmail.com',
+      :user_name            => 'mc.notifier@gmail.com',
+      :password             => '!S3ndmail',
+      :authentication       => 'login',
+      :enable_starttls_auto => true
+    }
 end

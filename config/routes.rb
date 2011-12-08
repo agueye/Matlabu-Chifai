@@ -22,7 +22,9 @@ MatlabuChifai::Application.routes.draw do
 
   match "/login" => "users#login"
   match "/logout" => "users#logout"
+  match "/users/:id/change_password/" => "users#change_password"
   match "/forgot_password" => "users#forgot_password"
+  match "/reset_password" => "users#reset_password"
 
   resources :allergies
   
