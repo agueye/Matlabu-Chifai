@@ -1,19 +1,18 @@
 class MedicationsController < AllergensController
   # GET /medications
   # GET /medications.json
-  def index
-    @medications = Medication.all
+ def index
+      @medications = Allergen.find_all_by_type('medication')
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @medications }
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json { render json: @medications }
+      end
     end
-  end
-
   # GET /medications/1
   # GET /medications/1.json
   def show
-    @medication = Medication.find(params[:id])
+    @medication = Allergen.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,6 +24,7 @@ class MedicationsController < AllergensController
   # GET /medications/new.json
   def new
     @medication = Medication.new
+    @medication.type = 'Medication'
 
     respond_to do |format|
       format.html # new.html.erb
@@ -34,13 +34,14 @@ class MedicationsController < AllergensController
 
   # GET /medications/1/edit
   def edit
-    @medication = Medication.find(params[:id])
+    @medication = Allergen.find(params[:id])
   end
 
   # POST /medications
   # POST /medications.json
   def create
     @medication = Medication.new(params[:medication])
+    @medication.type = 'Medication'
 
     respond_to do |format|
       if @medication.save
@@ -56,7 +57,7 @@ class MedicationsController < AllergensController
   # PUT /medications/1
   # PUT /medications/1.json
   def update
-    @medication = Medication.find(params[:id])
+    @medication = Allergen.find(params[:id])
 
     respond_to do |format|
       if @medication.update_attributes(params[:medication])
@@ -72,7 +73,7 @@ class MedicationsController < AllergensController
   # DELETE /medications/1
   # DELETE /medications/1.json
   def destroy
-    @medication = Medication.find(params[:id])
+    @medication = Allergen.find(params[:id])
     @medication.destroy
 
     respond_to do |format|

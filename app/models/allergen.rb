@@ -4,9 +4,8 @@ class Allergen < ActiveRecord::Base
   validate :val_side_effect
 
   def val_side_effect 
-    unless side_effect == nil || type == "Medication" || side_effect == ""
-       errors[:base] << "Type is not a Medication and should not access Side effect" 
-   end
+      errors[:base] << "Type is not a Medication and should not access
+                        side_effect" unless side_effect == nil or side_effect =="" or :type == "Medication"
   end 
 
 
