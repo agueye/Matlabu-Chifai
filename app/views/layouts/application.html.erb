@@ -16,6 +16,10 @@
     <% end %>
 </div>
 
+<% if not flash[:notice].blank? -%>
+  <div id="notice"><%= flash[:notice] %></div>
+<% end -%>
+
 <%= yield %>
 
 </body>
