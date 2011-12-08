@@ -2,7 +2,7 @@ class MedicationsController < AllergensController
   # GET /medications
   # GET /medications.json
  def index
-      @medications = Allergen.find_all_by_type('medication')
+      @medications = Allergen.find_all_by_type('Medication')
 
       respond_to do |format|
         format.html # index.html.erb
