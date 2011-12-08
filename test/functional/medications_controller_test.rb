@@ -2,7 +2,7 @@ require 'test_helper'
 
 class MedicationsControllerTest < ActionController::TestCase
   setup do
-    @medication = medications(:one)
+    @medication = allergens(:three)
   end
 
   test "should get index" do

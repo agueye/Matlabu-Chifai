@@ -9,3 +9,15 @@ two:
   name: MyString
   notes: MyText
   type: 
+
+three:
+  name: MyString
+  notes: MyText
+  type: Medication
+  side_effect: MyText
+
+four:
+  name: MyString
+  notes: MyText
+  type: Medication
+  side_effect: MyText
