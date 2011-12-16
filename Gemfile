@@ -23,6 +23,9 @@ gem 'jquery-rails'
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
 
+# Asynchronous task scheduling
+gem 'rufus-scheduler'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

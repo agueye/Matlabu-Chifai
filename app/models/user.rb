@@ -1,7 +1,9 @@
 require 'bcrypt'
+require 'rufus-scheduler'
 
 class User < ActiveRecord::Base
 
+  @@scheduler = Rufus::Scheduler.start_new
   @@admin_status = {0 => 'No', 1 => 'Yes'}
 
   include BCrypt
@@ -54,12 +56,14 @@ class User < ActiveRecord::Base
     self.password_reset_token = ActionController::HttpAuthentication::Digest.nonce(password_hash, Time.now)[1,20]
     self.token_expiration = Time.now.advance(:hours => 24)
     self.save!
-    begin
-      UserMailer.password_reset_email(self).deliver
-    rescue Net::SMTPError
-      self.token_expiration = Time.now
-      self.save!
-      return false
+    @@scheduler.in '1s' do
+      begin
+        UserMailer.password_reset_email(self).deliver
+      rescue Net::SMTPError
+        self.token_expiration = Time.now
+        self.save!
+        return false
+      end
     end
     return true
   end

@@ -133,12 +133,9 @@ class UsersController < ApplicationController
       else
         @user = User.find_by_username(params[:username])
         if @user and @user.email == params[:email]
-          if @user.send_reset_password_email
-            flash.now[:notice] = "An email has been sent to you with a password reset token. Enter that token here along with a new password."
-            render :action => :reset_password
-          else
-            flash.now[:notice] = "There was an error sending email to #{params[:email]}, please contact your system administrator."
-          end
+          @user.send_reset_password_email
+          flash.now[:notice] = "An email has been sent to you with a password reset token. Enter that token here along with a new password."
+          render :action => :reset_password
         else
           flash.now[:notice] = "User #{params[:username]} with email #{params[:email]} not found."
         end
