@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
 
   def setup
     @institution = Institution.create(:name => "testInstitution")
-    @user = User.new(:username => "testUser", :email => "testEmail", :institution => @institution, :admin => 0)
+    @user = User.new(:username => "testUser", :email => "testEmail@fake.fake", :institution => @institution, :admin => 0)
     @user.password = "testPassword"
     @user.save!
   end
@@ -13,8 +13,10 @@ class UserTest < ActiveSupport::TestCase
     test_attribute_may_not_be_null @user, :username
   end
 
-  test "email must not be null" do
-    test_attribute_may_not_be_null @user, :email
+  test "email must be valid" do
+    assert @user.valid?
+    @user.email = "notavalidemail@whatever.toolongtobeatld"
+    assert @user.invalid?
   end
 
   test "username must be unique" do

@@ -3,10 +3,10 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   setup do
     @institution = Institution.create(:name => "testInstitution")
-    @user = User.new(:username => "testUser", :email => "testEmail", :institution => @institution, :admin => 0)
+    @user = User.new(:username => "testUser", :email => "testEmail@fake.fake", :institution => @institution, :admin => 0)
     @user.password = "testPassword"
     @user.save!
-    @admin = User.new(:username => "testAdmin", :email => "testEmail", :institution => @institution, :admin => 1)
+    @admin = User.new(:username => "testAdmin", :email => "testEmail@fake.fake", :institution => @institution, :admin => 1)
     @admin.password = "testPassword"
     @admin.save!
     post :login, :username => 'testAdmin', :password => 'testPassword'
@@ -25,7 +25,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test "should create user" do
     assert_difference('User.count') do
-      @user = User.new(:username => "testUser1", :email => "unique", :institution => @institution, :admin => 0)
+      @user = User.new(:username => "testUser1", :email => "unique@fake.fake", :institution => @institution, :admin => 0)
       post :create, :user => @user.attributes, :password => "testPassword"
     end
 
@@ -94,7 +94,7 @@ class UsersControllerTest < ActionController::TestCase
 
     test "changing password" do
     get :logout
-    user = User.new(:institution => @institution, :username => "testUser2", :email => "testEmail2", :admin => 0)
+    user = User.new(:institution => @institution, :username => "testUser2", :email => "testEmail2@fake.fake", :admin => 0)
     user.password = "testPassword"
     user.save!
     post :login, :username => "testUser2", :password => "testPassword"
@@ -121,7 +121,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test "resetting password" do
     get :logout
-    user = User.new(:institution => @institution, :username => "testUser2", :email => "testEmail2", :admin => 0)
+    user = User.new(:institution => @institution, :username => "testUser2", :email => "testEmail2@fake.fake", :admin => 0)
     user.password = "testPassword"
     user.save!
 
@@ -132,7 +132,7 @@ class UsersControllerTest < ActionController::TestCase
     post :login, :username => "testUser2", :password => "testPassword"
     assert_redirected_to :action => :show, :id => user.to_param
 
-    post :forgot_password, :email => "testEmail2", :username => "testUser2"
+    post :forgot_password, :email => "testEmail2@fake.fake", :username => "testUser2"
     user.reload
 
     post :reset_password, :id => user.to_param, :password_reset_token => 'wrong', :new_password => 'new', :confirm_new_password => 'new'

@@ -2,14 +2,14 @@
 
 one:
   institution: one
-  email: MyString
+  email: MyString@fake.fake
   password_hash: MyString
   username: MyString1
   admin: 0
 
 two:
   institution: one
-  email: MyString
+  email: MyString@fake.fake
   password_hash: MyString
   username: MyString2
   admin: 1

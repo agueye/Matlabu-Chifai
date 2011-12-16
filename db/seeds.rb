@@ -7,8 +7,8 @@
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
 
 tier = Institution.create(:name => 'TIER')
-User.create(:institution => tier, :username => 'user', :email => 'userEmail', :password => 'pass')
-User.create(:institution => tier, :username => 'admin', :email => 'adminEmail', :password => 'pass', :admin => 1)
+User.create(:institution => tier, :username => 'user', :email => 'userEmail@fake.fake', :password => 'pass')
+User.create(:institution => tier, :username => 'admin', :email => 'adminEmail@fake.fake', :password => 'pass', :admin => 1)
 sdm = Hospital.create(:name => 'Sutardja Dai Memorial', :institution => tier)
 brian = Doctor.create(:name => 'Brian Maissy', :institution => tier)
 hussein = Doctor.create(:name => 'Hussein Kadiri', :institution => tier)

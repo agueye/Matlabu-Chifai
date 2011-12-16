@@ -10,14 +10,21 @@ class User < ActiveRecord::Base
 
   after_initialize :initialize_defaults
 
-  validates_presence_of :email, :username
+  validates_presence_of :username
   validates_uniqueness_of :username, :scope => [:institution_id]
   validates_numericality_of :admin, :only_integer => true
   validate :presence_of_password
+  validate :email_is_valid
   validate :admin_has_legal_value
 
   def admin_has_legal_value
     errors.add(:admin, 'must be 0 or 1' ) if not [0, 1].include? admin
+  end
+
+  def email_is_valid
+    # This regex is from http://www.regular-expressions.info/email.html, read there for more information
+    re = Regexp.new("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$", Regexp::IGNORECASE)
+    errors.add(:email, 'must be a valid email' ) if not re.match email
   end
 
   def presence_of_password
