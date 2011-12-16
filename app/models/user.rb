@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   end
 
   def presence_of_password
-    errors[:base] << ("Password can't be blank") if password.nil? or password == ""
+    errors[:base] << ("Password can't be blank") if password_hash.blank? or password.nil? or password == ""
   end
 
   def admin_in_words
