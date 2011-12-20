@@ -3,11 +3,9 @@
 <table>
   <tr>
     <th>Patient</th>
-    <th>Date</th>
+    <th>Last Updated</th>
     <th>Title</th>
     <th>Notes</th>
-    <th></th>
-    <th></th>
     <th></th>
   </tr>
 
@@ -15,10 +13,8 @@
   <tr>
     <td><%= link_to alert.patient.name, alert.patient %></td>
     <td><%= alert.updated_at.strftime("%m/%d/%Y") %></td>
-    <td><%= alert.title %></td>
-    <td><%= alert.notes %></td>
-    <td><%= link_to 'Show', alert %></td>
-    <td><%= link_to 'Edit', edit_alert_path(alert) %></td>
+    <td><%= best_in_place alert, :title %></td>
+    <td><%= best_in_place alert, :notes, :type => :textarea, :display_as => :display_notes%></td>
     <td><%= link_to 'Destroy', alert, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>

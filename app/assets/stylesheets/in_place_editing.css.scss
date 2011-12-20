@@ -1,10 +1,16 @@
 .purr {
-  position: fixed;
-  top: 30px;
-  right: 100px;
-  width: 250px;
-  padding: 20px;
-  background-color: #FCC;
-  border: solid 2px #666;
-  &:first-letter { text-transform: uppercase };
+    position: fixed;
+    top: 30px;
+    right: 100px;
+    width: 250px;
+    padding: 20px;
+    background-color: #FCC;
+    border: solid 2px #666;
+    &:first-letter { text-transform: uppercase };
+}
+
+a.delete_button {
+    color: red;
+    font-weight: bold;
+    text-decoration: none;
 }

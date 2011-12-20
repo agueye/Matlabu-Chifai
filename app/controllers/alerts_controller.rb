@@ -44,7 +44,7 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       if @alert.save
-        format.html { redirect_to @alert, :notice => 'Alert was successfully created.' }
+        format.html { redirect_to :alerts, :notice => 'Alert was successfully created.' }
         format.json { render :json => @alert, :status => :created, :location => @alert }
       else
         format.html { render :action => "new" }
@@ -60,11 +60,11 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       if @alert.update_attributes(params[:alert])
-        format.html { redirect_to @alert, :notice => 'Alert was successfully updated.' }
-        format.json { head :ok }
+        format.html { redirect_to :alerts, :notice => 'Alert was successfully updated.' }
+        format.json { respond_with_bip(@alert) }
       else
         format.html { render :action => "edit" }
-        format.json { render :json => @alert.errors, :status => :unprocessable_entity }
+        format.json { respond_with_bip(@alert) }
       end
     end
   end
