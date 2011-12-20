@@ -21,7 +21,7 @@ class AlertsControllerTest < ActionController::TestCase
       post :create, :alert => @alert.attributes
     end
 
-    assert_redirected_to alert_path(assigns(:alert))
+    assert_redirected_to alerts_path
   end
 
   test "should show alert" do
@@ -36,7 +36,7 @@ class AlertsControllerTest < ActionController::TestCase
 
   test "should update alert" do
     put :update, :id => @alert.to_param, :alert => @alert.attributes
-    assert_redirected_to alert_path(assigns(:alert))
+    assert_redirected_to alerts_path
   end
 
   test "should destroy alert" do
