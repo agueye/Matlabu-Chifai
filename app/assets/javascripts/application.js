@@ -10,3 +10,17 @@
 //= require jquery.purr
 //= require best_in_place
 //= require_tree .
+
+$(document).ready(function() {
+    /* Activating Best In Place */
+    jQuery(".best_in_place").best_in_place();
+
+    /* Fading the flash */
+    $('#notice').delay(2500).fadeOut();
+
+    /* When deleted, things go away */
+    $('.delete_button').bind('ajax:success', function() {
+        $(this).closest('tr').fadeOut();
+    });
+});
+
