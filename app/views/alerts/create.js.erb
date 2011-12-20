@@ -1,0 +1,12 @@
+<% if @alert.errors.none? %>
+	$('#new_item_line').before('<tr>\
+												 				<td><%= link_to @alert.patient.name, @alert.patient %></td>\
+												 				<td><%= @alert.updated_at.strftime("%m/%d/%Y") %></td>\
+																<td><%= escape_javascript best_in_place @alert, :title %></td>\
+																<td><%= escape_javascript best_in_place @alert, :notes, :type => :textarea, :display_as => :display_notes %></td>\
+																<td><%= link_to 'x', @alert, :confirm => 'Are you sure you want to delete this alert?', :method => :delete, :remote => true, :class => 'delete_button' %></td>\
+															</tr>')
+	$('#new_alert')[0].reset()
+	setup()
+<% end %>
+refresh_flash('<%= escape_javascript flash[:notice] %>')

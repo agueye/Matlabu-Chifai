@@ -1,25 +1,40 @@
-<h1>Listing alerts</h1>
+<h1>Patient Alerts</h1>
 
-<table>
-  <tr>
-    <th>Patient</th>
-    <th>Last Updated</th>
-    <th>Title</th>
-    <th>Notes</th>
-    <th></th>
-  </tr>
+<%= form_for(@alert, :remote => true) do |f| %>
+	<table id="item_list">
+		<tr>
+			<th>Patient</th>
+			<th>Last Updated</th>
+			<th>Title</th>
+			<th>Notes</th>
+			<th></th>
+		</tr>
 
-<% @alerts.each do |alert| %>
-  <tr>
-    <td><%= link_to alert.patient.name, alert.patient %></td>
-    <td><%= alert.updated_at.strftime("%m/%d/%Y") %></td>
-    <td><%= best_in_place alert, :title %></td>
-    <td><%= best_in_place alert, :notes, :type => :textarea, :display_as => :display_notes%></td>
-    <td><%= link_to 'x', alert, :confirm => 'Are you sure you want to delete this alert?', :method => :delete, :remote => true, :class => 'delete_button' %></td>
-  </tr>
+		<% @alerts.each do |alert| %>
+			<tr>
+				<td><%= link_to alert.patient.name, alert.patient %></td>
+				<td><%= alert.updated_at.strftime("%m/%d/%Y") %></td>
+				<td><%= best_in_place alert, :title %></td>
+				<td><%= best_in_place alert, :notes, :type => :textarea, :display_as => :display_notes%></td>
+				<td><%= link_to 'x', alert, :confirm => 'Are you sure you want to delete this alert?', :method => :delete, :remote => true, :class => 'delete_button' %></td>
+			</tr>
+		<% end %>
+
+		<tr id="new_item_line">
+			<td class="field">
+				<%= f.collection_select(:patient_id, Patient.all, :id, :name) %>
+			</td>
+			<td></td>
+			<td class="field">
+				<%= f.text_field :title %>
+			</td>
+			<td class="field">
+				<%= f.text_area :notes, :rows => 3 %>
+			</td>
+			<td class="actions">
+				<%= f.submit "Create" %>
+			</td>
+		</tr>
+
+	</table>
 <% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Alert', new_alert_path %>

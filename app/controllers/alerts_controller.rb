@@ -3,6 +3,7 @@ class AlertsController < ApplicationController
   # GET /alerts.json
   def index
     @alerts = Alert.all
+    @alert = Alert.new
 
     respond_to do |format|
       format.html # index.html.erb
@@ -44,11 +45,15 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       if @alert.save
-        format.html { redirect_to :alerts, :notice => 'Alert was successfully created.' }
+        flash.now[:notice] = 'Alert was successfully created.'
+        format.html { redirect_to :alerts }
         format.json { render :json => @alert, :status => :created, :location => @alert }
+        format.js
       else
-        format.html { render :action => "new" }
+        flash.now[:notice] = @alert.errors.full_messages.join "<br>"
+        format.html { render :action => "index" }
         format.json { render :json => @alert.errors, :status => :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -63,7 +68,7 @@ class AlertsController < ApplicationController
         format.html { redirect_to :alerts, :notice => 'Alert was successfully updated.' }
         format.json { respond_with_bip(@alert) }
       else
-        format.html { render :action => "edit" }
+        format.html { render :action => "index" }
         format.json { respond_with_bip(@alert) }
       end
     end
@@ -76,9 +81,10 @@ class AlertsController < ApplicationController
     @alert.destroy
 
     respond_to do |format|
-      format.html { redirect_to alerts_url }
+      flash.now[:notice] = 'Alert was successfully deleted.'
+      format.html { render :action => "index" }
       format.json { head :ok }
-      format.js   { render :nothing => true }
+      format.js { render :js => 'refresh_flash("' + flash[:notice] + '")' }
     end
   end
 end
