@@ -8,5 +8,7 @@
 															</tr>')
 	$('#new_alert')[0].reset()
 	setup()
+	flash_green('<%= escape_javascript flash[:notice] %>')
+<% else %>
+	flash_red('<%= escape_javascript flash[:notice] %>')
 <% end %>
-refresh_flash('<%= escape_javascript flash[:notice] %>')

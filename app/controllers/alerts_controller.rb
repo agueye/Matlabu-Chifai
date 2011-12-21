@@ -45,7 +45,7 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       if @alert.save
-        flash.now[:notice] = 'Alert was successfully created.'
+        flash.now[:notice] = 'Alert created'
         format.html { redirect_to :alerts }
         format.json { render :json => @alert, :status => :created, :location => @alert }
         format.js
@@ -81,10 +81,10 @@ class AlertsController < ApplicationController
     @alert.destroy
 
     respond_to do |format|
-      flash.now[:notice] = 'Alert was successfully deleted.'
+      flash.now[:notice] = 'Alert deleted'
       format.html { render :action => "index" }
       format.json { head :ok }
-      format.js { render :js => 'refresh_flash("' + flash[:notice] + '")' }
+      format.js { render :js => 'flash_green("' + flash[:notice] + '")' }
     end
   end
 end

@@ -11,14 +11,6 @@
 //= require best_in_place
 //= require_tree .
 
-$(document).ready(function(){
-    setup()
-    /* Hiding the flash if empty */
-    $('#notice:empty').hide()
-    /* Fading the flash */
-    $('#notice').delay(2500).fadeOut()
-})
-
 function setup() {
     /* Activating Best In Place */
     $(".best_in_place").best_in_place()
@@ -28,8 +20,24 @@ function setup() {
     })
 }
 
+$(document).ready(function(){
+    setup()
+    /* Hiding the flash if empty */
+    $('#notice:empty').hide()
+    /* Fading the flash */
+    $('#notice').delay(2500).fadeOut()
+})
+
 function refresh_flash(flash){
-  $('#notice').html(flash)
-	$('#notice').show()
-	$('#notice').delay(2500).fadeOut()
+    $('#notice').html(flash)
+    $('#notice').show()
+    $('#notice').delay(2500).fadeOut()
+}
+function flash_green(flash){
+    $('#notice').css('backgroundColor', '#CFC')
+    refresh_flash(flash)
+}
+function flash_red(flash){
+    $('#notice').css('backgroundColor', '#FCC')
+    refresh_flash(flash)
 }
