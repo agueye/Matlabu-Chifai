@@ -20,18 +20,24 @@ function setup() {
     })
 }
 
-$(document).ready(function(){
-    setup()
-    /* Hiding the flash if empty */
-    $('#notice:empty').hide()
+function show_flash() {
+    /* Showing the flash if nonempty */
+    $('#notice:not(:empty)').show()
     /* Fading the flash */
     $('#notice').delay(2500).fadeOut()
+}
+
+$(document).ready(function(){
+    setup()
+    show_flash()
 })
+
+// these are called by javascript views which are returned by ajax calls
+// since the page is not loaded, we need to show the flash manually if we want to
 
 function refresh_flash(flash){
     $('#notice').html(flash)
-    $('#notice').show()
-    $('#notice').delay(2500).fadeOut()
+    show_flash()
 }
 function flash_green(flash){
     $('#notice').css('backgroundColor', '#CFC')
