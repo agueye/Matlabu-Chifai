@@ -50,7 +50,7 @@ class AlertsController < ApplicationController
         format.json { render :json => @alert, :status => :created, :location => @alert }
         format.js
       else
-        flash.now[:notice] = @alert.errors.full_messages.join "<br>"
+        flash.now[:notice] = ('<ul><li>' + (@alert.errors.full_messages.join "</li><li>") + '</li></ul>').html_safe
         format.html { render :action => "index" }
         format.json { render :json => @alert.errors, :status => :unprocessable_entity }
         format.js
