@@ -82,7 +82,7 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       flash.now[:notice] = 'Alert deleted'
-      format.html { render :action => "index" }
+      format.html { redirect_to :action => "index" }
       format.json { head :ok }
       format.js { render :js => 'flash_green("' + flash[:notice] + '")' }
     end
