@@ -2,7 +2,7 @@
 
 one:
   hospital: one
-  name: MyString
+  name: Jane Smithson
   notes: MyText
   arrival_date: 2011-10-26
   date_of_birth: 2011-10-26
@@ -17,7 +17,7 @@ one:
 
 two:
   hospital: one
-  name: MyString
+  name: Bob Smith
   notes: MyText
   arrival_date: 2011-10-26
   date_of_birth: 2011-10-26

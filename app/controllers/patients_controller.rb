@@ -2,7 +2,7 @@ class PatientsController < ApplicationController
   # GET /patients
   # GET /patients.json
   def index
-    @patients = Patient.all
+    @patients = Patient.search(params[:search])
 
     respond_to do |format|
       format.html # index.html.erb

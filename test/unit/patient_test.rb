@@ -10,4 +10,10 @@ class PatientTest < ActiveSupport::TestCase
     test_attribute_may_not_be_null @patient, :name
   end
 
+  test "search" do
+    assert_equal 1, Patient.search("Bob").size
+    assert_equal 2, Patient.search("smith").size
+    assert_equal 0, Patient.search("none").size
+  end
+
 end
