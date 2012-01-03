@@ -2,6 +2,7 @@ class PatientsController < ApplicationController
   # GET /patients
   # GET /patients.json
   def index
+    params[:search] = nil if params[:clear]
     @patients = Patient.search(params[:search])
 
     respond_to do |format|
